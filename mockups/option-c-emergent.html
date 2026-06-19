@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option C — Emergent Systems</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #07070F;
+    --bg2: #0C0C1A;
+    --surface: #111126;
+    --border: rgba(124,58,237,0.18);
+    --border-subtle: rgba(255,255,255,0.07);
+    --primary: #7C3AED;
+    --accent: #A78BFA;
+    --accent2: #C4B5FD;
+    --glow: rgba(124,58,237,0.35);
+    --text: #EDE9FE;
+    --muted: #7C7A99;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── KEYFRAMES ─── */
+
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes glowBreathe {
+    0%, 100% { opacity: 0.18; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 0.28; transform: translate(-50%, -50%) scale(1.12); }
+  }
+
+  /* Particle system */
+  @keyframes particleRise {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 0.6; }
+    100% { transform: translateY(-100vh) translateX(var(--dx, 0px)); opacity: 0; }
+  }
+
+  @keyframes gradientFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes nodeOrbit {
+    from { transform: translate(-50%, -50%) rotate(0deg) translateX(var(--r, 90px)) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg) translateX(var(--r, 90px)) rotate(-360deg); }
+  }
+
+  @keyframes ringPulse {
+    0%, 100% { opacity: 0.12; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 0.06; transform: translate(-50%, -50%) scale(1.06); }
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lineGrow {
+    from { width: 0; }
+    to   { width: 100%; }
+  }
+
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @keyframes statReveal {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes borderSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(7,7,15,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    animation: heroFadeUp 0.6s var(--ease-out) both;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 900;
+    color: white;
+  }
+
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul li a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 160ms ease-out;
+  }
+  nav ul li a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary), #6D28D9);
+    color: white;
+    padding: 9px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 180ms ease-out, transform 160ms ease-out, box-shadow 200ms ease-out;
+  }
+  .nav-cta:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 20px var(--glow);
+    transform: translateY(-1px);
+  }
+  .nav-cta:active { transform: scale(0.97); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 60px 80px;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  /* Central glow */
+  .hero-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.08) 40%, transparent 70%);
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: glowBreathe 6s ease-in-out infinite;
+  }
+
+  /* Rings */
+  .ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    border-radius: 50%;
+    border: 1px solid rgba(124,58,237,0.15);
+    pointer-events: none;
+    animation: ringPulse 8s ease-in-out infinite;
+  }
+  .ring-1 { width: 300px; height: 300px; animation-delay: 0s; }
+  .ring-2 { width: 500px; height: 500px; animation-delay: 1.5s; }
+  .ring-3 { width: 700px; height: 700px; animation-delay: 3s; }
+
+  /* Orbiting nodes */
+  .orbit-node {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--glow);
+    will-change: transform;
+  }
+  .orbit-node-1 { --r: 150px; animation: nodeOrbit 12s linear infinite; }
+  .orbit-node-2 { --r: 250px; animation: nodeOrbit 20s linear infinite reverse; background: var(--accent2); }
+  .orbit-node-3 { --r: 150px; animation: nodeOrbit 12s linear 6s infinite; opacity: 0.5; }
+
+  /* Particle canvas */
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    bottom: 0;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: var(--accent);
+    will-change: transform, opacity;
+  }
+  /* Each particle gets different positions and speeds via inline styles set below */
+  .p1  { left: 8%;   --dx: 12px;  animation: particleRise 8s  linear 0s    infinite; }
+  .p2  { left: 15%;  --dx: -8px;  animation: particleRise 11s linear 2s    infinite; opacity: 0.6; }
+  .p3  { left: 22%;  --dx: 15px;  animation: particleRise 9s  linear 4s    infinite; }
+  .p4  { left: 30%;  --dx: -10px; animation: particleRise 13s linear 1s    infinite; opacity: 0.5; }
+  .p5  { left: 38%;  --dx: 8px;   animation: particleRise 7s  linear 5s    infinite; }
+  .p6  { left: 45%;  --dx: -15px; animation: particleRise 10s linear 0.5s  infinite; opacity: 0.7; }
+  .p7  { left: 52%;  --dx: 12px;  animation: particleRise 12s linear 3s    infinite; }
+  .p8  { left: 60%;  --dx: -6px;  animation: particleRise 8s  linear 6.5s  infinite; opacity: 0.5; }
+  .p9  { left: 68%;  --dx: 18px;  animation: particleRise 14s linear 2.5s  infinite; }
+  .p10 { left: 75%;  --dx: -12px; animation: particleRise 9s  linear 4.5s  infinite; opacity: 0.6; }
+  .p11 { left: 82%;  --dx: 6px;   animation: particleRise 11s linear 1.5s  infinite; }
+  .p12 { left: 90%;  --dx: -18px; animation: particleRise 10s linear 7s    infinite; opacity: 0.4; }
+  .p13 { left: 5%;   --dx: 20px;  animation: particleRise 15s linear 3.5s  infinite; }
+  .p14 { left: 95%;  --dx: -8px;  animation: particleRise 8s  linear 0.8s  infinite; opacity: 0.6; }
+  .p15 { left: 33%;  --dx: 14px;  animation: particleRise 12s linear 5.5s  infinite; }
+  .p16 { left: 72%;  --dx: -16px; animation: particleRise 9s  linear 2.2s  infinite; opacity: 0.5; }
+
+  /* Hero content */
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    animation: heroFadeUp 0.7s var(--ease-out) 0.15s both;
+  }
+  .eyebrow-line {
+    width: 32px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent));
+  }
+  .eyebrow-line-r {
+    width: 32px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    animation: heroFadeUp 0.8s var(--ease-out) 0.3s both;
+  }
+
+  .hero h1 .grad {
+    background: linear-gradient(135deg, #A78BFA, #7C3AED, #C4B5FD, #A78BFA);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientFlow 4s ease-in-out infinite;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 44px;
+    line-height: 1.7;
+    animation: heroFadeUp 0.8s var(--ease-out) 0.45s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    animation: heroFadeUp 0.8s var(--ease-out) 0.6s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--primary), #6D28D9);
+    color: white;
+    padding: 15px 32px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 180ms ease-out, transform 160ms ease-out, box-shadow 200ms ease-out;
+  }
+  .btn-primary:hover {
+    opacity: 0.88;
+    box-shadow: 0 8px 28px var(--glow);
+    transform: translateY(-2px);
+  }
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 15px 32px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 180ms ease-out, box-shadow 200ms ease-out, transform 160ms ease-out;
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(124,58,237,0.2);
+  }
+  .btn-ghost:active { transform: scale(0.97); }
+
+  /* ─── STATS ─── */
+  .stats-section {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: center;
+    background: var(--bg2);
+  }
+
+  .stat-block {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+    padding: 36px 24px;
+    border-right: 1px solid var(--border-subtle);
+    animation: statReveal 0.6s var(--ease-out) both;
+  }
+  .stat-block:last-child { border-right: none; }
+  .stat-block:nth-child(1) { animation-delay: 0.2s; }
+  .stat-block:nth-child(2) { animation-delay: 0.35s; }
+  .stat-block:nth-child(3) { animation-delay: 0.5s; }
+  .stat-block:nth-child(4) { animation-delay: 0.65s; }
+
+  .stat-num {
+    font-size: 44px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 96px 60px;
+  }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  h2 {
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* Expertise cards */
+  .exp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .exp-card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 200ms ease-out, box-shadow 200ms ease-out, transform 200ms ease-out;
+    animation: cardIn 0.6s var(--ease-out) both;
+  }
+  .exp-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(124,58,237,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 250ms ease-out;
+    pointer-events: none;
+  }
+  .exp-card:hover {
+    border-color: var(--border);
+    box-shadow: 0 8px 32px rgba(124,58,237,0.12);
+    transform: translateY(-2px);
+  }
+  .exp-card:hover::before { opacity: 1; }
+
+  .exp-card:nth-child(1) { animation-delay: 0.05s; }
+  .exp-card:nth-child(2) { animation-delay: 0.1s; }
+  .exp-card:nth-child(3) { animation-delay: 0.15s; }
+  .exp-card:nth-child(4) { animation-delay: 0.2s; }
+  .exp-card:nth-child(5) { animation-delay: 0.25s; }
+  .exp-card:nth-child(6) { animation-delay: 0.3s; }
+
+  .exp-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(124,58,237,0.12);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    transition: background 200ms ease-out;
+  }
+  .exp-card:hover .exp-icon { background: rgba(124,58,237,0.2); }
+  .exp-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .exp-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .exp-tag {
+    font-size: 10px;
+    color: var(--accent);
+    border: 1px solid rgba(124,58,237,0.3);
+    background: rgba(124,58,237,0.08);
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  /* Trust section */
+  .trust-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .trust-items { display: flex; flex-direction: column; gap: 0; }
+  .trust-item {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .trust-item:last-child { border-bottom: none; }
+
+  .trust-bullet {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(124,58,237,0.12);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-top: 2px;
+    transition: background 200ms ease-out;
+  }
+  .trust-item:hover .trust-bullet { background: rgba(124,58,237,0.2); }
+
+  .trust-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .trust-text p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+  .trust-right { display: flex; flex-direction: column; gap: 16px; }
+
+  .quote-panel {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--accent2));
+  }
+  .quote-q {
+    font-size: 40px;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .quote-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    margin-bottom: 16px;
+    opacity: 0.85;
+  }
+  .quote-source { font-size: 12px; color: var(--muted); }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .stat-mini {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
+  }
+  .stat-mini:hover { border-color: var(--border); box-shadow: 0 4px 16px rgba(124,58,237,0.1); }
+  .stat-mini-num {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .stat-mini-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Ticker */
+  .ticker-wrap {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 14px 0;
+    background: var(--bg2);
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: tickerScroll 30s linear infinite;
+  }
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 32px;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+  }
+  .ticker-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+  /* Divider */
+  .divider {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 100px 60px;
+    overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute;
+    bottom: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 { margin-bottom: 16px; position: relative; z-index: 1; }
+  .cta-section p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border-subtle);
+    padding: 32px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; transition: color 150ms; }
+  footer a:hover { color: var(--accent); }
+  .footer-links { display: flex; gap: 28px; }
+
+  /* ─── REDUCED MOTION ─── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">M</div>
+    Manfred Seow
+  </div>
+  <ul>
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Expertise</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">GitHub</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Contact →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Background elements -->
+  <div class="hero-glow"></div>
+  <div class="ring ring-1"></div>
+  <div class="ring ring-2"></div>
+  <div class="ring ring-3"></div>
+  <div class="orbit-node orbit-node-1"></div>
+  <div class="orbit-node orbit-node-2"></div>
+  <div class="orbit-node orbit-node-3"></div>
+  <div class="particles">
+    <div class="particle p1"></div><div class="particle p2"></div>
+    <div class="particle p3"></div><div class="particle p4"></div>
+    <div class="particle p5"></div><div class="particle p6"></div>
+    <div class="particle p7"></div><div class="particle p8"></div>
+    <div class="particle p9"></div><div class="particle p10"></div>
+    <div class="particle p11"></div><div class="particle p12"></div>
+    <div class="particle p13"></div><div class="particle p14"></div>
+    <div class="particle p15"></div><div class="particle p16"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="hero-eyebrow">
+    <span class="eyebrow-line"></span>
+    Solution Architect &amp; Engineer
+    <span class="eyebrow-line-r"></span>
+  </div>
+
+  <h1>
+    Systems built to<br>
+    <span class="grad">last under pressure.</span>
+  </h1>
+
+  <p class="hero-sub">
+    I design architecture and write the code myself — from mission-critical
+    defence platforms to personal engineering projects. 4+ years building
+    software that doesn't break when it matters most.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">View My Work ↗</a>
+    <a href="#" class="btn-ghost">GitHub →</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stat-block">
+    <div class="stat-num">15+</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">4+</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">2d</div>
+    <div class="stat-label">Sprint Cycles</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Production Uptime</div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-dot"></span>Solution Architecture</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>React · TypeScript</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Azure Cloud</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Power Platform</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>.NET · C#</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Domain Modelling</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Defence &amp; Public Sector</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>SBOM · Security</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>CI/CD · DevOps</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>System Design</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Solution Architecture</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>React · TypeScript</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Azure Cloud</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Power Platform</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>.NET · C#</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Domain Modelling</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Defence &amp; Public Sector</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>SBOM · Security</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>CI/CD · DevOps</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>System Design</div>
+  </div>
+</div>
+
+<!-- EXPERTISE -->
+<div class="section">
+  <div class="section-tag">Core Expertise</div>
+  <h2>Architecture + Engineering.<br>Not one or the other.</h2>
+  <p class="section-sub">
+    Most architects step back once the design is done. I stay through delivery — writing code, making decisions, keeping the system coherent from concept to production.
+  </p>
+
+  <div class="exp-grid">
+    <div class="exp-card">
+      <div class="exp-icon">⬡</div>
+      <h3>Solution Architecture</h3>
+      <p>Complex requirements translated into documented, stakeholder-aligned system designs. ADRs included.</p>
+      <div class="exp-tags"><span class="exp-tag">Domain Modelling</span><span class="exp-tag">ADRs</span><span class="exp-tag">Alignment</span></div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-icon">⚙</div>
+      <h3>Full-Stack Engineering</h3>
+      <p>React frontends, .NET backends, Azure infra. I implement the architecture I design — end to end.</p>
+      <div class="exp-tags"><span class="exp-tag">React</span><span class="exp-tag">TypeScript</span><span class="exp-tag">.NET</span></div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-icon">◈</div>
+      <h3>Enterprise Integration</h3>
+      <p>Connecting APIs, legacy systems, and cloud-native services with integration patterns that don't rot.</p>
+      <div class="exp-tags"><span class="exp-tag">Azure</span><span class="exp-tag">REST</span><span class="exp-tag">Event-Driven</span></div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-icon">🛡</div>
+      <h3>Defence-Grade Systems</h3>
+      <p>Classified environments, ITAR constraints, SBOM requirements. Security is structural, not a checklist.</p>
+      <div class="exp-tags"><span class="exp-tag">RAiD</span><span class="exp-tag">SBOM</span><span class="exp-tag">Secure Design</span></div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-icon">△</div>
+      <h3>DevOps &amp; Automation</h3>
+      <p>CI/CD, infrastructure-as-code, and observability from day one. Not bolted on at the end.</p>
+      <div class="exp-tags"><span class="exp-tag">GitHub Actions</span><span class="exp-tag">IaC</span><span class="exp-tag">Monitoring</span></div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-icon">⚡</div>
+      <h3>Rapid Delivery</h3>
+      <p>Two-day sprint cycles. Speed comes from clarity of design, not from cutting corners on quality.</p>
+      <div class="exp-tags"><span class="exp-tag">Power Platform</span><span class="exp-tag">Iteration</span><span class="exp-tag">Low-Code</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TRUST -->
+<div class="section">
+  <div class="section-tag">Trust Signals</div>
+  <h2>Why teams bring me<br>into hard problems.</h2>
+
+  <div class="trust-grid">
+    <div class="trust-items">
+      <div class="trust-item">
+        <div class="trust-bullet">✓</div>
+        <div class="trust-text">
+          <h4>I build what I architect</h4>
+          <p>No hand-off between designer and builder. The person who designs the system writes the code.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-bullet">✓</div>
+        <div class="trust-text">
+          <h4>Explicit decisions, documented trade-offs</h4>
+          <p>Architecture records are written. Your team won't be guessing when I'm not in the room.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-bullet">✓</div>
+        <div class="trust-text">
+          <h4>Fluent in both business and engineering</h4>
+          <p>I translate between executive requirements and technical specs — in the same meeting, in real time.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-bullet">✓</div>
+        <div class="trust-text">
+          <h4>Battle-tested in mission-critical environments</h4>
+          <p>Defence and public sector delivery where failure can't be fixed by a next-day hotfix.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-right">
+      <div class="quote-panel">
+        <div class="quote-q">"</div>
+        <p class="quote-body">
+          Manfred consistently bridges the gap between what the business needs and what engineering can realistically deliver — and then delivers it faster than expected.
+        </p>
+        <div class="quote-source">Senior Stakeholder · RAiD PPCOE</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-mini">
+          <div class="stat-mini-num">15+</div>
+          <div class="stat-mini-label">Systems Shipped</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-num">4+</div>
+          <div class="stat-mini-label">Years Architecting</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-num">0</div>
+          <div class="stat-mini-label">Critical Incidents</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-num">2d</div>
+          <div class="stat-mini-label">Delivery Cadence</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-tag" style="justify-content:center;">Get In Touch</div>
+  <h2>Ready to build something<br>that holds up?</h2>
+  <p>Architecture review, greenfield system design, or someone who can both plan and execute — let's talk.</p>
+  <a href="#" class="btn-primary">Start a Conversation ↗</a>
+</div>
+
+<footer>
+  <span>© 2026 Manfred Seow</span>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+    <a href="#">Resume</a>
+  </div>
+  <span style="opacity:.4;">Solution Architect &amp; Engineer</span>
+</footer>
+
+</body>
+</html>

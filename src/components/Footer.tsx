@@ -1,42 +1,60 @@
+import { Github, Linkedin, Mail } from "lucide-react";
+
+const SOCIAL = [
+  { icon: Github,   label: "GitHub",   href: "https://github.com/ElfredSeow" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/manfred-siew-25b4762aa" },
+  { icon: Mail,     label: "Email",    href: "mailto:Manfredsiew@hotmail.sg" },
+];
+
 export function Footer() {
   return (
-    <footer className="py-12 bg-[#fafafa] dark:bg-[#0A0A0A] border-t border-black/10 dark:border-white/10 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <span className="font-mono font-bold text-xl tracking-tighter text-gray-900 dark:text-white">
-              MANFRED SIEW
-            </span>
-            <p className="micro-label mt-3">
-              TRANSITIONING: AEROSPACE → AI ENG.
-            </p>
-          </div>
+    <footer className="relative border-t border-bp-border-subtle mt-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
 
-          <div className="flex gap-4">
-            <a
-              href="https://linkedin.com/in/manfred-siew-25b4762aa"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs font-mono font-bold tracking-widest text-gray-500 dark:text-white/50 hover:text-[#4ea8de] dark:hover:text-[#4ea8de] transition-colors uppercase border border-black/10 dark:border-white/10 px-4 py-2 hover:bg-black/5 dark:hover:bg-[#4ea8de]/10"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="mailto:Manfredsiew@hotmail.sg"
-              className="text-xs font-mono font-bold tracking-widest text-gray-500 dark:text-white/50 hover:text-[#4ea8de] dark:hover:text-[#4ea8de] transition-colors uppercase border border-black/10 dark:border-white/10 px-4 py-2 hover:bg-black/5 dark:hover:bg-[#4ea8de]/10"
-            >
-              Email
-            </a>
-          </div>
+        {/* Main CTA block */}
+        <div className="flex flex-col items-center text-center gap-6 mb-14">
+          <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bp-muted">
+            Available for collaboration
+          </p>
+          <h2 className="font-mono font-black text-4xl sm:text-5xl uppercase tracking-tight text-bp-text">
+            Manfred Siew
+          </h2>
+          <p className="font-mono text-[13px] tracking-[0.1em] text-bp-muted">
+            Solution Architect &nbsp;·&nbsp; RAiD PPCOE
+          </p>
+          <a
+            href="mailto:Manfredsiew@hotmail.sg"
+            className="bp-btn-primary inline-flex items-center gap-2 mt-2"
+          >
+            <Mail size={14} />
+            Get in Touch
+          </a>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-black/10 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="micro-label opacity-40">
-            © {new Date().getFullYear()} MANFRED SIEW
-          </p>
-          <p className="text-[10px] font-mono text-gray-400 dark:opacity-30 text-center md:text-right">
-            AEROSPACE ENGINEERING DIPLOMA / TEMASEK POLYTECHNIC
-          </p>
+        {/* Social links */}
+        <div className="flex items-center justify-center gap-4 mb-14">
+          {SOCIAL.map(({ icon: Icon, label, href }) => (
+            <a
+              key={label}
+              href={href}
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+              aria-label={label}
+              className="flex items-center justify-center w-10 h-10 border border-bp-border-subtle text-bp-muted hover:text-bp-accent hover:border-bp-border transition-colors duration-150"
+            >
+              <Icon size={16} />
+            </a>
+          ))}
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-bp-border-subtle">
+          <span className="font-mono text-[10px] tracking-[0.14em] text-bp-muted">
+            &copy; {new Date().getFullYear()} Manfred Siew &nbsp;·&nbsp; Built with React &amp; Vite
+          </span>
+          <span className="font-mono text-[10px] tracking-[0.14em] text-bp-muted">
+            Singapore / SG
+          </span>
         </div>
       </div>
     </footer>

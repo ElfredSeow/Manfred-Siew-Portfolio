@@ -1,113 +1,127 @@
-import * as motion from "motion/react-client";
-import { useTheme } from "./ThemeProvider";
-import { ArrowRight, Plane, Code, ArrowDownToLine, Bot } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
+
+const TECHS = [
+  "AWS", "Azure", "GCP", "Kubernetes", "Terraform", "React", "Node.js",
+  "Python", "Rust", "Go", "PostgreSQL", "Redis", "Kafka", "Docker",
+  "TypeScript", "GraphQL", "Istio", "ArgoCD",
+];
+
+const STATS = [
+  { value: "12 YRS", label: "EXPERIENCE",       cls: "bp-stat-1" },
+  { value: "50+",    label: "SYSTEMS DEPLOYED",  cls: "bp-stat-2" },
+  { value: "3",      label: "COUNTRIES",         cls: "bp-stat-3" },
+  { value: "RAiD",   label: "PPCOE",             cls: "bp-stat-4" },
+];
 
 export function Hero() {
-  const { timeOfDay } = useTheme();
-
   return (
-    <section className="relative pt-40 pb-20 lg:pt-56 lg:pb-32 overflow-hidden bg-[#fafafa] dark:bg-[#0A0A0A] transition-colors duration-300">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-[#4ea8de]/10 blur-[100px] opacity-60 translate-x-1/3 translate-y-1/3 mix-blend-screen" />
-        <div className="absolute bottom-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-[#4ea8de]/5 blur-[120px] opacity-40 -translate-x-1/3 translate-y-1/3 mix-blend-screen" />
-      </div>
+    <section id="hero" className="relative pt-32 pb-20 px-6 lg:px-10 max-w-7xl mx-auto">
+      {/* Corner decorations */}
+      <span className="bp-hero-corner-tl bp-enter-corner" />
+      <span className="bp-hero-corner-br bp-enter-corner" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center lg:items-center justify-between gap-12 lg:gap-8">
-          <div className="max-w-5xl lg:max-w-3xl flex-1 text-center lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8 hidden lg:block"
-            >
-              <span className="micro-label">
-                Transitioning: Aerospace → AI Engineering
-              </span>
-            </motion.div>
+      <div className="grid lg:grid-cols-2 gap-16 items-center">
+        {/* ── Left: Text ── */}
+        <div className="flex flex-col gap-7">
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="huge-text mb-8 uppercase"
-            >
-              MANFRED <br className="hidden lg:block" />
-              <span className="accent-text flex-col flex sm:inline-block mt-2 sm:mt-0">
-                SIEW.
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl md:text-2xl text-gray-700 dark:text-white/60 mb-12 font-medium max-w-2xl mx-auto lg:mx-0"
-            >
-              Aspiring{" "}
-              <strong className="text-black dark:text-white">AI & Software Engineer</strong>.
-              Currently innovating at <span className="accent-text">RAiD</span>{" "}
-              (RSAF Agile innovation Digital).
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start lg:items-stretch gap-6"
-            >
-              <div className="flex items-center gap-4 card-glass p-4 pr-6 shrink-0 h-[64px]">
-                <div className="flex justify-center items-start flex-col px-2 h-full">
-                  <span className="micro-label mb-[2px]">Focus</span>
-                  <div className="flex gap-4 items-center">
-                    <span className="text-xs sm:text-sm font-bold opacity-80 border-r border-black/20 dark:border-white/20 pr-4 text-gray-900 dark:text-white">
-                      AEROSPACE
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-[#4ea8de]" />
-                    <span className="text-xs sm:text-sm font-bold text-[#4ea8de] pl-1 sm:pl-2">
-                      AI ENG
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <a
-                href="#projects"
-                className="inline-flex h-[64px] items-center justify-center px-8 border border-[#4ea8de]/50 hover:bg-[#4ea8de]/10 transition-all font-bold text-sm tracking-widest text-[#4ea8de] uppercase shrink-0"
-              >
-                Technical Specs <ArrowDownToLine className="ml-2 w-4 h-4" />
-              </a>
-            </motion.div>
+          {/* Eyebrow */}
+          <div className="bp-section-eyebrow bp-enter-1">
+            <span className="bp-eyebrow-line" />
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-bp-muted">
+              Solution Architect · RAiD PPCOE
+            </span>
+            <span className="w-2 h-2 border border-bp-accent bg-bp-accent/20" />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative shrink-0 mx-auto lg:mx-0 w-64 h-64 md:w-80 md:h-80 lg:w-[420px] lg:h-[420px] xl:w-[480px] xl:h-[480px]"
-          >
-            <div className="w-full h-full rounded-full overflow-hidden border-2 border-white/10 p-2 relative z-10 flex items-center justify-center">
-              {/* Blurred underlay layer to predict/fill any gaps if image has letterboxing or transparency */}
-              <div className="absolute inset-0 rounded-full overflow-hidden z-0">
-                <img 
-                  src="/profile_picture.png" 
-                  alt="" 
-                  className="w-full h-full object-cover blur-2xl scale-[1.5] opacity-60 dark:opacity-40"
-                />
+          {/* Headline */}
+          <h1 className="bp-enter-2 font-mono font-black text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight text-bp-text uppercase">
+            Building<br />
+            Systems —<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-bp-accent to-sky-300">
+              That Scale
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="bp-enter-3 text-bp-body text-[15px] leading-relaxed max-w-md">
+            Manfred Siew is a Solution Architect at RAiD PPCOE designing
+            enterprise-grade systems for Singapore's defence and public sector —
+            cloud infrastructure, distributed platforms, and full-stack
+            engineering across AWS, Azure, and Kubernetes.
+          </p>
+
+          {/* CTAs */}
+          <div className="bp-enter-4 flex flex-wrap gap-3">
+            <a href="#projects" className="bp-btn-primary inline-flex items-center gap-2">
+              View Projects <ArrowRight size={14} />
+            </a>
+            <a href="#experience" className="bp-btn-ghost inline-flex items-center gap-2">
+              See My Story <ChevronRight size={14} />
+            </a>
+          </div>
+
+          {/* Stats bar */}
+          <div className="bp-stats-bar bp-enter-5">
+            {STATS.map((s) => (
+              <div key={s.label} className={`bp-stat-item ${s.cls}`}>
+                <span className="font-mono font-bold text-[22px] text-bp-accent leading-none">
+                  {s.value}
+                </span>
+                <span className="font-mono text-[9px] tracking-[0.18em] text-bp-muted uppercase mt-1">
+                  {s.label}
+                </span>
               </div>
-              
-              {/* Main Profile Image - Full Color */}
-              <div className="w-full h-full rounded-full overflow-hidden relative z-10">
-                <img 
-                  src="/profile_picture.png" 
-                  alt="Manfred Siew"
-                  className="w-full h-full object-cover scale-[1.02] hover:scale-[1.08] transition-transform duration-700"
-                />
-              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Right: Profile ── */}
+        <div className="bp-enter-3 relative flex items-center justify-center">
+          <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-[360px] lg:h-[360px]">
+            {/* Arch orbit ring */}
+            <div className="absolute inset-[-20px] border border-bp-border-subtle rounded-full bp-node-pulse opacity-40" />
+            <div className="absolute inset-[-44px] border border-bp-border-subtle rounded-full opacity-20" />
+
+            {/* Profile photo */}
+            <div className="w-full h-full overflow-hidden border border-bp-border">
+              <img
+                src="/profile_picture.png"
+                alt="Manfred Siew"
+                className="w-full h-full object-cover scale-[1.02] hover:scale-[1.06] transition-transform duration-700"
+              />
             </div>
-            {/* Outer ambient glow based on time of day */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] rounded-full bg-[#4ea8de]/20 blur-[60px] lg:blur-[100px] -z-10 mix-blend-screen transition-all duration-1000"></div>
-          </motion.div>
+
+            {/* Corner ticks on photo */}
+            <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-bp-accent" />
+            <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-bp-accent" />
+            <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-bp-accent" />
+            <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-bp-accent" />
+
+            {/* Floating node labels */}
+            <div className="bp-arch-node bp-arch-node-lit bp-node-float absolute -top-6 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.14em] text-bp-accent uppercase whitespace-nowrap px-2 py-1">
+              CLOUD INFRA
+            </div>
+            <div className="bp-arch-node bp-arch-node-lit bp-node-float-alt absolute top-1/2 -right-14 -translate-y-1/2 text-[8px] font-mono tracking-[0.14em] text-bp-accent uppercase whitespace-nowrap px-2 py-1">
+              API LAYER
+            </div>
+            <div className="bp-arch-node bp-arch-node-lit bp-node-float absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.14em] text-bp-accent uppercase whitespace-nowrap px-2 py-1">
+              UI SYSTEM
+            </div>
+            <div className="bp-arch-node bp-arch-node-lit bp-node-float-alt absolute top-1/2 -left-14 -translate-y-1/2 text-[8px] font-mono tracking-[0.14em] text-bp-accent uppercase whitespace-nowrap px-2 py-1">
+              SECURITY
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tech ticker */}
+      <div className="bp-ticker-wrap bp-enter-5 mt-16">
+        <div className="ticker-scroll flex gap-10">
+          {[...TECHS, ...TECHS].map((tech, i) => (
+            <span key={`${tech}-${i}`} className="bp-ticker-item">
+              {tech}
+            </span>
+          ))}
         </div>
       </div>
     </section>

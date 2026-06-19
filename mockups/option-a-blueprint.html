@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option A — Blueprint Architect</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #060C1A;
+    --surface: #0D1629;
+    --surface2: #111E35;
+    --border: #1E3A5F;
+    --primary: #2563EB;
+    --accent: #38BDF8;
+    --text: #E2EBF5;
+    --muted: #7A9EC0;
+    --grid: rgba(37,99,235,0.07);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Blueprint grid — breathes slowly */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+      linear-gradient(rgba(37,99,235,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.03) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridBreathe 7s ease-in-out infinite;
+  }
+
+  /* Scanline sweep across hero */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(56,189,248,0.25), transparent);
+    z-index: 0;
+    pointer-events: none;
+    animation: scanline 9s linear infinite;
+  }
+
+  /* ─── KEYFRAMES ─── */
+  @keyframes gridBreathe {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  @keyframes scanline {
+    0% { transform: translateY(-2px); }
+    100% { transform: translateY(100vh); }
+  }
+
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes nodeFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-7px); }
+  }
+
+  @keyframes nodeFloatAlt {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(5px); }
+  }
+
+  @keyframes nodePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0); }
+    50%       { box-shadow: 0 0 20px 4px rgba(56,189,248,0.15); }
+  }
+
+  @keyframes cornerReveal {
+    from { opacity: 0; transform: scale(0.75); }
+    to   { opacity: 0.35; transform: scale(1); }
+  }
+
+  @keyframes statPop {
+    0%  { transform: scale(0.85); opacity: 0; }
+    60% { transform: scale(1.04); }
+    100%{ transform: scale(1);    opacity: 1; }
+  }
+
+  @keyframes cardStagger {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SVG line draw-on */
+  @keyframes lineDraw {
+    from { stroke-dashoffset: 300; opacity: 0; }
+    10%  { opacity: 1; }
+    to   { stroke-dashoffset: 0; opacity: 1; }
+  }
+
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(6,12,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    animation: heroFadeUp 0.6s var(--ease-out) both;
+  }
+
+  .logo {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--muted); }
+
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul li a {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 180ms ease-out;
+  }
+  nav ul li a:hover { color: var(--accent); }
+
+  .nav-cta {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 8px 20px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 180ms ease-out, color 180ms ease-out;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+  .nav-cta:active { transform: scale(0.97); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 60px;
+    z-index: 1;
+  }
+
+  .corner {
+    position: absolute;
+    width: 36px; height: 36px;
+    animation: cornerReveal 0.8s var(--ease-out) 0.4s both;
+  }
+  .corner-tl { top: 120px; left: 40px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+  .corner-tr { top: 120px; right: 40px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+  .corner-bl { bottom: 60px; left: 40px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+  .corner-br { bottom: 60px; right: 40px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+
+  .hero-content { max-width: 680px; z-index: 2; }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    animation: heroFadeUp 0.7s var(--ease-out) 0.2s both;
+  }
+  .eyebrow-line { width: 40px; height: 1px; background: var(--accent); }
+  .eyebrow-text {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 5.5vw, 70px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    animation: heroFadeUp 0.8s var(--ease-out) 0.38s both;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    margin: 20px 0 40px;
+    line-height: 1.7;
+    max-width: 540px;
+    animation: heroFadeUp 0.8s var(--ease-out) 0.52s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    animation: heroFadeUp 0.8s var(--ease-out) 0.66s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 180ms ease-out, transform 160ms ease-out;
+  }
+  .btn-primary:hover { background: #1D4ED8; transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 14px 28px;
+    border-radius: 3px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 180ms ease-out, color 180ms ease-out, transform 160ms ease-out;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-ghost:active { transform: scale(0.97); }
+
+  /* Architecture diagram */
+  .hero-visual {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 380px;
+    opacity: 0;
+    animation: heroFadeUp 1s var(--ease-out) 0.8s both;
+  }
+
+  .arch-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .arch-lines line {
+    stroke: var(--border);
+    stroke-width: 1;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    opacity: 0;
+  }
+  .arch-lines line:nth-child(1) { animation: lineDraw 1.8s var(--ease-out) 1.2s both; }
+  .arch-lines line:nth-child(2) { animation: lineDraw 1.8s var(--ease-out) 1.4s both; }
+  .arch-lines line:nth-child(3) { animation: lineDraw 1.8s var(--ease-out) 1.6s both; }
+  .arch-lines line:nth-child(4) { animation: lineDraw 1.8s var(--ease-out) 1.8s both; }
+  .arch-lines circle {
+    stroke: var(--border);
+    stroke-dasharray: 301;
+    stroke-dashoffset: 301;
+    animation: lineDraw 2s var(--ease-out) 1.6s both;
+  }
+
+  .arch-node {
+    position: absolute;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 10px 16px;
+    gap: 6px;
+  }
+
+  .arch-node.n1 {
+    top: 6%; left: 33%;
+    animation: nodeFloat 5s ease-in-out infinite, nodePulse 4s ease-in-out 0.5s infinite;
+  }
+  .arch-node.n2 {
+    top: 53%; left: 4%;
+    animation: nodeFloatAlt 6s ease-in-out infinite, nodePulse 4s ease-in-out 1.2s infinite;
+  }
+  .arch-node.n3 {
+    top: 53%; left: 68%;
+    animation: nodeFloat 7s ease-in-out 1s infinite;
+  }
+  .arch-node.n4 {
+    top: 79%; left: 33%;
+    animation: nodeFloatAlt 5.5s ease-in-out 0.5s infinite;
+  }
+
+  .arch-node.lit { border-color: var(--primary); color: var(--accent); }
+  .arch-node-icon { font-size: 18px; }
+
+  .arch-node.center {
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: var(--accent);
+    background: rgba(37,99,235,0.12);
+    color: var(--accent);
+    font-weight: 700;
+    animation: nodePulse 3s ease-in-out infinite;
+  }
+
+  /* ─── TECH TICKER ─── */
+  .ticker-wrap {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 12px 0;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    width: max-content;
+    animation: tickerScroll 22s linear infinite;
+  }
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 32px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    border-right: 1px solid var(--border);
+  }
+  .ticker-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    justify-content: center;
+  }
+
+  .stat {
+    flex: 1;
+    max-width: 220px;
+    text-align: center;
+    padding: 32px 24px;
+    border-right: 1px solid var(--border);
+    animation: statPop 0.7s var(--ease-out) both;
+  }
+  .stat:nth-child(1) { animation-delay: 0.3s; }
+  .stat:nth-child(2) { animation-delay: 0.45s; }
+  .stat:nth-child(3) { animation-delay: 0.6s; }
+  .stat:nth-child(4) { animation-delay: 0.75s; border-right: none; }
+
+  .stat-num {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .stat-suffix { font-size: 24px; color: var(--muted); }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .section-num { font-size: 11px; letter-spacing: 0.2em; color: var(--primary); font-weight: 700; }
+  .section-line { width: 32px; height: 1px; background: var(--border); }
+  .section-name { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+
+  h2 {
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  /* Expertise grid */
+  .expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .expertise-card {
+    background: var(--surface);
+    padding: 36px 32px;
+    transition: background 200ms ease-out;
+    animation: cardStagger 0.7s var(--ease-out) both;
+  }
+  .expertise-card:nth-child(1) { animation-delay: 0.05s; }
+  .expertise-card:nth-child(2) { animation-delay: 0.1s; }
+  .expertise-card:nth-child(3) { animation-delay: 0.15s; }
+  .expertise-card:nth-child(4) { animation-delay: 0.2s; }
+  .expertise-card:nth-child(5) { animation-delay: 0.25s; }
+  .expertise-card:nth-child(6) { animation-delay: 0.3s; }
+  .expertise-card:hover { background: var(--surface2); }
+
+  .expertise-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--accent);
+    transition: border-color 200ms ease-out;
+  }
+  .expertise-card:hover .expertise-icon { border-color: var(--accent); }
+  .expertise-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .expertise-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary);
+    border: 1px solid rgba(37,99,235,0.35);
+    padding: 3px 8px;
+    border-radius: 2px;
+    background: rgba(37,99,235,0.08);
+  }
+
+  /* Trust section */
+  .trust-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-top: 48px;
+  }
+  .trust-points { display: flex; flex-direction: column; gap: 24px; }
+  .trust-point { display: flex; gap: 16px; align-items: flex-start; }
+
+  .trust-check {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border: 1px solid var(--primary);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(37,99,235,0.1);
+    margin-top: 2px;
+  }
+  .trust-point-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .trust-point-text p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .trust-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .trust-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+  .quote-mark { font-size: 48px; color: var(--border); line-height: 1; margin-bottom: 8px; }
+  .quote-text { font-size: 15px; line-height: 1.75; margin-bottom: 20px; }
+  .quote-attr { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 4px;
+    padding: 80px 60px;
+    margin: 0 60px 80px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(37,99,235,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 { margin-bottom: 16px; }
+  .cta-section p { color: var(--muted); max-width: 520px; margin: 0 auto 36px; font-size: 16px; line-height: 1.7; }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  footer a { color: var(--muted); text-decoration: none; transition: color 150ms; }
+  footer a:hover { color: var(--accent); }
+
+  .full-divider { position: relative; z-index: 1; border-top: 1px solid var(--border); }
+
+  /* ─── REDUCED MOTION ─── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">M<span>.</span>Seow <span>// Portfolio</span></div>
+  <ul>
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Expertise</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">GitHub</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Contact</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="hero-content">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Solution Architect &amp; Engineer</span>
+    </div>
+    <h1>
+      Building systems<br>
+      <span class="highlight">you can trust.</span>
+    </h1>
+    <p class="hero-subtitle">
+      I design and deliver enterprise-grade solutions — from system architecture to working software.
+      Grounded in engineering first principles, operating in defence and public sector environments.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">View My Work ↗</a>
+      <a href="#" class="btn-ghost">Download CV</a>
+    </div>
+  </div>
+
+  <!-- Architecture diagram -->
+  <div class="hero-visual">
+    <svg class="arch-lines" viewBox="0 0 400 380" fill="none">
+      <line x1="200" y1="90"  x2="200" y2="165" stroke="#1E3A5F"/>
+      <line x1="60"  y1="222" x2="162" y2="185" stroke="#1E3A5F"/>
+      <line x1="308" y1="222" x2="238" y2="185" stroke="#1E3A5F"/>
+      <line x1="188" y1="315" x2="192" y2="220" stroke="#1E3A5F"/>
+      <circle cx="200" cy="192" r="50" stroke="#1E3A5F" stroke-dasharray="6 4" fill="none"/>
+    </svg>
+    <div class="arch-node n1">
+      <span class="arch-node-icon">⬡</span>Frontend
+    </div>
+    <div class="arch-node n2 lit">
+      <span class="arch-node-icon">⬡</span>API Layer
+    </div>
+    <div class="arch-node n3 lit">
+      <span class="arch-node-icon">⬡</span>Data Store
+    </div>
+    <div class="arch-node n4">
+      <span class="arch-node-icon">⬡</span>Infra / IaC
+    </div>
+    <div class="arch-node center">
+      <span class="arch-node-icon">◈</span>Architect
+    </div>
+  </div>
+</div>
+
+<!-- TECH TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <!-- duplicated for seamless loop -->
+    <div class="ticker-item"><span class="ticker-dot"></span>Solution Architecture</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>React / TypeScript</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Azure Cloud</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Power Platform</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>.NET / C#</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Defence &amp; Public Sector</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>CI / CD</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Domain Modelling</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>System Design</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>API Design</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Solution Architecture</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>React / TypeScript</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Azure Cloud</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Power Platform</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>.NET / C#</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Defence &amp; Public Sector</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>CI / CD</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Domain Modelling</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>System Design</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>API Design</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">15<span class="stat-suffix">+</span></div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4<span class="stat-suffix">+</span></div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Day Delivery Cycles</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">100<span class="stat-suffix">%</span></div>
+    <div class="stat-label">Mission-Critical Uptime</div>
+  </div>
+</div>
+
+<div class="full-divider"></div>
+
+<!-- EXPERTISE -->
+<section>
+  <div class="section-label">
+    <span class="section-num">01</span>
+    <div class="section-line"></div>
+    <span class="section-name">Core Expertise</span>
+  </div>
+  <h2>Where architecture<br>meets execution.</h2>
+
+  <div class="expertise-grid">
+    <div class="expertise-card">
+      <div class="expertise-icon">⬡</div>
+      <h3>Solution Architecture</h3>
+      <p>Translating complex business requirements into coherent, scalable system designs. From RFP through go-live.</p>
+      <div class="tag-list">
+        <span class="tag">Domain Modelling</span><span class="tag">ADRs</span><span class="tag">Stakeholder Alignment</span>
+      </div>
+    </div>
+    <div class="expertise-card">
+      <div class="expertise-icon">⚙</div>
+      <h3>Engineering Delivery</h3>
+      <p>Full-stack implementation grounded in clean architecture. I don't just design — I build and ship.</p>
+      <div class="tag-list">
+        <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">.NET</span><span class="tag">Power Platform</span>
+      </div>
+    </div>
+    <div class="expertise-card">
+      <div class="expertise-icon">◈</div>
+      <h3>Platform Integration</h3>
+      <p>Designing integration patterns across enterprise APIs, legacy systems, and cloud-native services.</p>
+      <div class="tag-list">
+        <span class="tag">Azure</span><span class="tag">REST / GraphQL</span><span class="tag">Event-Driven</span>
+      </div>
+    </div>
+    <div class="expertise-card">
+      <div class="expertise-icon">◻</div>
+      <h3>Defence &amp; Public Sector</h3>
+      <p>Experience operating under ITAR, security classification, and mission-critical constraints.</p>
+      <div class="tag-list">
+        <span class="tag">RAiD/PPCOE</span><span class="tag">Secure Design</span><span class="tag">SBOM</span>
+      </div>
+    </div>
+    <div class="expertise-card">
+      <div class="expertise-icon">△</div>
+      <h3>DevOps &amp; Automation</h3>
+      <p>Pipeline-first thinking. CI/CD, IaC, and automated observability built in from day one.</p>
+      <div class="tag-list">
+        <span class="tag">GitHub Actions</span><span class="tag">IaC</span><span class="tag">Monitoring</span>
+      </div>
+    </div>
+    <div class="expertise-card">
+      <div class="expertise-icon">❖</div>
+      <h3>Product Mindset</h3>
+      <p>Bridging user needs and technical constraints. Two-day sprint delivery without sacrificing system integrity.</p>
+      <div class="tag-list">
+        <span class="tag">Rapid Delivery</span><span class="tag">User Research</span><span class="tag">Iteration</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- TRUST -->
+<section>
+  <div class="section-label">
+    <span class="section-num">02</span>
+    <div class="section-line"></div>
+    <span class="section-name">Why Work With Me</span>
+  </div>
+  <h2>Engineering rigour.<br>Business results.</h2>
+
+  <div class="trust-row">
+    <div class="trust-points">
+      <div class="trust-point">
+        <div class="trust-check">✓</div>
+        <div class="trust-point-text">
+          <h4>Architecture that scales with you</h4>
+          <p>Decisions are documented, trade-offs are explicit. No mystery systems that only I can maintain.</p>
+        </div>
+      </div>
+      <div class="trust-point">
+        <div class="trust-check">✓</div>
+        <div class="trust-point-text">
+          <h4>Shipped in production, not just designed</h4>
+          <p>Every architecture pattern I recommend comes from systems I've personally built and operated.</p>
+        </div>
+      </div>
+      <div class="trust-point">
+        <div class="trust-check">✓</div>
+        <div class="trust-point-text">
+          <h4>Clear communication at every level</h4>
+          <p>From C-suite requirements to developer tickets — I translate between business and engineering fluently.</p>
+        </div>
+      </div>
+      <div class="trust-point">
+        <div class="trust-check">✓</div>
+        <div class="trust-point-text">
+          <h4>Security and compliance built-in</h4>
+          <p>Operating in defence environments means security isn't an afterthought — it's the foundation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-panel">
+      <div class="quote-mark">"</div>
+      <p class="quote-text">
+        Manfred consistently bridges the gap between what the business needs and what engineering can realistically deliver —
+        and then delivers it faster than expected.
+      </p>
+      <div class="quote-attr">— Senior Stakeholder, RAiD PPCOE</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="section-label" style="justify-content:center; margin-bottom:24px;">
+    <span class="section-num">03</span>
+    <div class="section-line"></div>
+    <span class="section-name">Let's Build Something</span>
+  </div>
+  <h2>Ready to solve a hard problem?</h2>
+  <p>Whether you need architecture review, a new system designed from scratch, or someone who can straddle both worlds — let's talk.</p>
+  <a href="#" class="btn-primary">Get In Touch ↗</a>
+</div>
+
+<footer>
+  <span>© 2026 Manfred Seow</span>
+  <div style="display:flex; gap:32px;"><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">Resume</a></div>
+  <span style="font-size:11px; opacity:.5;">Solution Architect &amp; Engineer</span>
+</footer>
+
+</body>
+</html>
