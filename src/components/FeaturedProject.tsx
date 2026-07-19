@@ -6,16 +6,16 @@ export function FeaturedProject() {
   return (
     <section
       id="featured"
-      className="py-24 bg-[#fafafa] dark:bg-[#0A0A0A] border-t border-black/10 dark:border-white/10 relative overflow-hidden transition-colors duration-300"
+      className="py-24 border-t border-black/10 dark:border-white/10 relative overflow-hidden transition-colors duration-300"
     >
       <div className="absolute right-0 top-0 w-[800px] h-full bg-[#4ea8de]/5 blur-[150px] mix-blend-screen pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16"
         >
           <div className="micro-label mb-4">FEATURED WORK</div>
@@ -27,10 +27,10 @@ export function FeaturedProject() {
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-stretch">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="flex w-full"
           >
             <div className="card-glass p-2 flex flex-col w-full relative overflow-hidden group border-black/10 dark:border-white/20">
@@ -64,10 +64,10 @@ export function FeaturedProject() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="card-glass p-8 lg:p-12 flex flex-col"
           >
             <div className="flex justify-between items-start mb-6">

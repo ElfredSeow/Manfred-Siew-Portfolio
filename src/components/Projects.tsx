@@ -18,7 +18,7 @@ export function Projects() {
   return (
     <section
       id="projects"
-      className="py-24 bg-[#fafafa] dark:bg-[#0A0A0A] border-t border-black/10 dark:border-white/10 relative transition-colors duration-300"
+      className="py-24 border-t border-black/10 dark:border-white/10 relative transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">

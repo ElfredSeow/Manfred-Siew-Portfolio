@@ -26,15 +26,16 @@ export function ThreeCircles() {
   return (
     <section
       id="about"
-      className="py-24 bg-[#fafafa] dark:bg-[#0A0A0A] border-t border-black/10 dark:border-white/10 overflow-hidden transition-colors duration-300"
+      className="py-24 border-t border-black/10 dark:border-white/10 overflow-hidden transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16">
           <div className="micro-label mb-4">THE FRAMEWORK</div>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="text-4xl md:text-[80px] leading-[0.9] font-black uppercase tracking-tight mb-6 text-gray-900 dark:text-white"
           >
             Margin Of <br className="hidden sm:block" />
@@ -43,8 +44,8 @@ export function ThreeCircles() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="text-sm border-l border-black/20 dark:border-white/20 pl-4 text-gray-600 dark:text-white/60 max-w-2xl"
           >
             My tenure at RAiD is defined by a holistic approach safely
@@ -57,10 +58,14 @@ export function ThreeCircles() {
           {circles.map((circle, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 + idx * 0.1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{
+                duration: 0.7,
+                delay: 0.2 + idx * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="card-glass p-8 group hover:bg-[#4ea8de]/5 transition-colors relative border-black/10 dark:border-white/10"
             >
               <div className="text-[#4ea8de] mb-8 opacity-70 group-hover:opacity-100 transition-opacity">

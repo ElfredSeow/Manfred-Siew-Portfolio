@@ -4,6 +4,7 @@
  */
 
 import { ThemeProvider } from "./components/ThemeProvider";
+import { DepthAtmosphere } from "./components/DepthAtmosphere";
 import { Navigation } from "./components/Navigation";
 import { Hero } from "./components/Hero";
 import { Organizations } from "./components/Organizations";
@@ -16,9 +17,10 @@ import { Footer } from "./components/Footer";
 export default function App() {
   return (
     <ThemeProvider defaultTheme="dark">
-      <div className="min-h-screen bg-[#fafafa] dark:bg-[#0A0A0A] text-gray-900 dark:text-white font-sans selection:bg-[#4ea8de]/30 selection:text-white transition-colors duration-300">
+      <div className="relative min-h-screen bg-[#fafafa] dark:bg-[#0A0A0A] text-gray-900 dark:text-white font-sans selection:bg-[#4ea8de]/30 selection:text-white transition-colors duration-300">
+        <DepthAtmosphere />
         <Navigation />
-        <main>
+        <main className="relative z-10">
           <Hero />
           <Organizations />
           <FeaturedProject />

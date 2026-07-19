@@ -28,4 +28,12 @@
 
 html {
   scroll-behavior: smooth;
+  /* Keep anchor targets clear of the fixed navigation bar */
+  scroll-padding-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

@@ -5,13 +5,14 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="py-24 bg-[#fafafa] dark:bg-[#0A0A0A] border-t border-black/10 dark:border-white/10 transition-colors duration-300"
+      className="py-24 border-t border-black/10 dark:border-white/10 transition-colors duration-300"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16"
         >
           <div className="micro-label mb-4">HISTORY</div>
@@ -25,10 +26,14 @@ export function Experience() {
           {experience.map((exp, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{
+                duration: 0.7,
+                delay: idx * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="relative pl-6 md:pl-0"
             >
               <div className="md:grid md:grid-cols-4 md:gap-8 items-start py-8 border-l border-black/20 dark:border-white/20 md:border-none group">

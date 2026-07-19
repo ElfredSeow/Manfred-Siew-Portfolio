@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="py-12 bg-[#fafafa] dark:bg-[#0A0A0A] border-t border-black/10 dark:border-white/10 transition-colors duration-300">
+    <footer className="relative z-10 py-12 border-t border-black/10 dark:border-white/10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">

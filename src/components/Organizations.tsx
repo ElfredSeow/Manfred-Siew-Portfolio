@@ -1,6 +1,6 @@
 export function Organizations() {
   return (
-    <section className="py-12 border-y border-black/10 dark:border-white/10 bg-[#fafafa] dark:bg-[#0A0A0A] relative overflow-hidden transition-colors duration-300">
+    <section className="py-12 border-y border-black/10 dark:border-white/10 relative overflow-hidden transition-colors duration-300">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-12 bg-[#4ea8de]/10 blur-[100px] pointer-events-none rounded-full" />
       
