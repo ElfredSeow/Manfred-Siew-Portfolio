@@ -433,3 +433,84 @@ does not wait on the 3D work.
 9. Lighthouse LCP <2.5 s on a throttled mid-tier mobile profile.
 10. Tailwind runtime CDN removed and replaced with generated CSS.
 11. No jargon label from §10 remains in the markup.
+
+---
+
+## 15. Implementation deviations (recorded during Phases B and C)
+
+Each of these departs from the design above. They are listed so the spec
+stays the authority rather than quietly diverging from the file.
+
+### 15.1 Procedural geometry instead of a GLB (supersedes §7.1)
+
+The aircraft is built from three.js primitives — a lathe fuselage, one
+symmetric extruded wing planform, tailplane, fin, canopy, nozzle, intakes —
+rather than loaded from a CC0/CC-BY GLB.
+
+The licence and long-term availability of any third-party model cannot be
+verified from the implementation environment, and hotlinking one would put a
+silent dependency on someone else's CDN into a file whose entire premise is
+that it is self-contained. Procedural costs 0 bytes against the 1.2 MB
+budget, raises no attribution question, and satisfies §7.1's actual
+requirement — *generic, not a specific operational airframe*. `GLTFLoader`
+and `DRACOLoader` are consequently not imported.
+
+`buildAircraft()` is the only function that would change if a real GLB is
+wanted later; nothing else in the module knows what it built.
+
+### 15.2 No environment map, and low canopy metalness (supersedes §7.3)
+
+The 64px procedural gradient environment was dropped. Without it a metallic
+surface has nothing to reflect and renders black — the first pass proved
+this, with the canopy appearing as a solid dark blob. The canopy is now a
+tinted dielectric (metalness .08) lit by the hemisphere light instead.
+
+### 15.3 Stage-mode content sits on an opaque card (tightens §6.3)
+
+§6.3 described Stage mode as "a narrow column pinned to one side". It is
+implemented as a narrow column **on an opaque `.stage-card`**. This is
+strictly stronger, and it is what allows the sky ramp to reach its full
+specified depth (`#3D6FA8`, `#12244A`) without any text/background pair
+having to be re-argued. The rule is now enforced by stacking order —
+canvas at `z-index: 2`, every content bed inside `<main>` at `z-index: 10`.
+
+### 15.4 The hero canvas is held at zero until 1,500 ft (new)
+
+The hero is the only section with body copy and no bed of its own. Measured:
+a 28%-opacity aircraft behind it puts the darkest composited background at
+`rgb(182,188,194)`, and `--body #2C3E52` on that is **5.72:1** — under the
+7:1 body floor. The canvas therefore stays at 0 until the hero's copy has
+scrolled off, then ramps to full across Origin.
+
+**Cost:** the aircraft is not visible on first paint. **The alternative** is
+to give the hero its own stage card like every other section, which would
+buy it back at the price of changing the hero's look. That is an open
+design decision for the author.
+
+### 15.5 Altitude drives everything, not raw scroll progress (tightens §6.1)
+
+§6.1 specified scroll progress `0.0 → 1.0`. Implemented as **altitude**,
+resolved from the `data-alt` pair each section declares and its measured
+page offset. Sections sort by real offset, each leg's start equals the
+previous leg's end, and gaps between legs hold rather than interpolate — so
+monotonicity is structural, not incidental. The reference point slides from
+viewport-centre to viewport-bottom across the page so the altimeter reaches
+the 62,000 ft ceiling rather than stopping ~1,000 ft short.
+
+### 15.6 Name collisions — one resolved, one open (updates §9.1)
+
+- **Resolved by the author:** `SOAR Schedule App` is the Flight Simulator
+  Scheduling System. The codename is not published; the row is titled
+  "Flight Simulator Scheduling System".
+- **Still open:** `RAiD Facility Booking System`. §9.1 said to prefer the
+  modest description absent confirmation. The implementation instead
+  **merged** them — the six capabilities from the author's own existing page
+  plus the newer summary's "demonstrated to stakeholders in a dedicated
+  session" — on the grounds that both texts are the author's own claims.
+  This needs an explicit yes or no.
+
+### 15.7 Capability filters not yet applied (§9.2 remains Phase D)
+
+The project filters are still organisation-based (`RAiD` / `Temasek
+Polytechnic` / `Freelance`). §9.2's capability filters ship with the
+inventory merge in Phase D, since the two changes touch the same rows.
