@@ -1,962 +1,894 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manfred Siew — Technical Data Package</title>
-<meta name="description" content="Portfolio of Manfred Siew — Aerospace to AI Engineering. Power Platform Developer at RAiD (RSAF Agile innovation Digital).">
+<title>Manfred Siew — Ascent / Aerospace to AI Engineering</title>
+<meta name="description" content="Manfred Siew — Aerospace engineer converting to AI &amp; Software Engineering. Power Platform Developer at RAiD (RSAF Agile innovation Digital). 20 missions logged.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@400;600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        /* ── DAYLIGHT PALETTE ──────────────────────────────────────────
+           Every value below is measured against the two backgrounds text
+           can actually land on: --paper #F4F7FA and the darkest pale sky
+           band #C0DAF0. Ratios are noted so nothing gets "tidied" into a
+           failure later. Floors: body >=7:1, all other text >=4.5:1,
+           headings >=24px >=3:1.                                        */
+        paper:   '#F4F7FA',   // page base
+        surface: '#FFFFFF',   // panels, cards, opaque content beds
+        ink:     '#0B1420',   // headings          16.9:1 paper / 12.4:1 sky
+        body:    '#2C3E52',   // body copy         10.1:1 paper /  7.5:1 sky
+        muted:   '#4A5B6E',   // labels, captions   6.4:1 paper /  4.8:1 sky
+        warm:    '#9A3412',   // accent TEXT        6.8:1 paper /  5.0:1 sky
+        data:    '#0B5FA5',   // data + links       6.1:1 paper /  4.6:1 sky
+        line:    '#D3DEE9',   // hairline rules
+        rule:    '#A8BCCE',   // stronger dividers
+        wash:    '#FDF0E9',   // warm tint bed
+        'warm-strong': '#C2410C', // headings >=24px, borders  4.8:1 paper
+        signal:       '#FF6B1A', // FILLS ONLY — 2.9:1, never text
+        /* inverted pairings, used only in the dark Contact/footer band */
+        'sky-deep': '#12244A',
+        'warm-inv': '#FFB380',   // 4.8:1 on #2A4E7A
+        'data-inv': '#9FD4FF',   // 5.3:1 on #2A4E7A
+      },
+      fontFamily: {
+        display: ['"Big Shoulders"', 'Arial Narrow', 'sans-serif'],
+        body:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+        mono:    ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
+    },
+  },
+};
+</script>
+
 <style>
-/* ============================================================
-   DESIGN TOKENS — "Technical Data Package"
-   Paper: cool technical-manual white. Ink: blue-black.
-   Accent: International Orange #FF4F00 — the paint scheme of
-   flight-test aircraft. This portfolio documents a flight test:
-   the conversion of an aerospace engineer to an AI engineer.
-   ============================================================ */
+/* ══════════════════════════════════════════════════════════════
+   DAYLIGHT ASCENT — an immersive scrollytelling document.
+
+   The premise: this portfolio is a flight. You board on the ground
+   (aerospace) and climb into open sky (AI engineering). Scroll
+   position IS altitude — the sky behind the content brightens and
+   deepens as you climb, and the altimeter tape winds up.
+
+   Palette is daylight, deliberately: the reader may be older or
+   low-vision, so the base is paper #F4F7FA with near-black ink at
+   ~16:1. Warm #9A3412 carries accent TEXT; #FF6B1A is a fill only
+   and never sits under a glyph. Data and links are #0B5FA5.
+
+   Type floors, non-negotiable: body 18px, no text below 13px, and
+   Big Shoulders — a condensed face, and condensed type is harder
+   for low-vision readers — is banned below 24px.
+   ══════════════════════════════════════════════════════════════ */
+
 :root{
-  --paper:#F4F6F7;
-  --paper-2:#ECEFF1;
-  --ink:#101B24;
-  --ink-70:rgba(16,27,36,.72);
-  --ink-50:rgba(16,27,36,.52);
-  --ink-30:rgba(16,27,36,.30);
-  --rule:rgba(16,27,36,.16);
-  --rule-strong:#101B24;
-  --orange:#FF4F00;
-  --orange-soft:rgba(255,79,0,.08);
-  --steel:#4A6B8A;
-  --steel-soft:rgba(74,107,138,.10);
-
-  --font-display:"Big Shoulders","Arial Narrow",sans-serif;
-  --font-body:"Instrument Sans",system-ui,sans-serif;
-  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
-
-  --measure:64ch;
-  --pad:clamp(1rem,4vw,3rem);
+  --paper:#F4F7FA; --surface:#FFFFFF;
+  --ink:#0B1420;   --body:#2C3E52;  --muted:#4A5B6E;
+  --warm:#9A3412;  --warm-strong:#C2410C; --signal:#FF6B1A;
+  --data:#0B5FA5;  --line:#D3DEE9;  --rule:#A8BCCE;
+  --wash:#FDF0E9;  --sky-deep:#12244A;
+  --fs-body:1.125rem;   /* 18px */
+  --fs-label:.8125rem;  /* 13px — the floor */
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:4.5rem}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:5rem; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
 
 body{
+  margin:0;
   background:var(--paper);
-  color:var(--ink);
-  font-family:var(--font-body);
-  font-size:1rem;
-  line-height:1.6;
+  color:var(--body);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:var(--fs-body);
+  line-height:1.65;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
+::selection{ background:var(--signal); color:#FFFFFF; }
 
-::selection{background:var(--orange);color:#fff}
-
-a{color:inherit}
 a:focus-visible,button:focus-visible,summary:focus-visible{
-  outline:2px solid var(--orange);outline-offset:3px;
+  outline:3px solid var(--warm); outline-offset:3px; border-radius:2px;
 }
 
-img{max-width:100%;display:block}
-
-.wrap{max-width:1200px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
-
-/* mono field label used throughout — the document's utility voice */
-.field{
-  font-family:var(--font-mono);
-  font-size:.66rem;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:var(--ink-50);
-}
-.field b{color:var(--orange);font-weight:600}
-
-/* ============================================================
-   TITLE BLOCK — engineering-drawing header
-   ============================================================ */
-.titleblock{border-bottom:3px solid var(--rule-strong)}
-.titleblock .wrap{
-  display:grid;
-  grid-template-columns:1fr auto auto auto;
-  border-left:1px solid var(--rule);
-  border-right:1px solid var(--rule);
-}
-.tb-cell{
-  padding:.7rem 1rem;
-  border-right:1px solid var(--rule);
-  display:flex;flex-direction:column;gap:.15rem;justify-content:center;
-}
-.tb-cell:last-child{border-right:0}
-.tb-cell .val{font-family:var(--font-mono);font-size:.78rem;font-weight:600}
-.tb-name{
-  font-family:var(--font-display);
-  font-weight:800;font-size:1.35rem;letter-spacing:.04em;text-transform:uppercase;
-}
-@media (max-width:720px){
-  .titleblock .wrap{grid-template-columns:1fr 1fr}
-  .tb-cell:nth-child(2){border-right:0}
-}
-
-/* sticky nav strip */
-.navstrip{
-  position:sticky;top:0;z-index:50;
-  background:var(--paper);
-  border-bottom:1px solid var(--rule);
-}
-.navstrip .wrap{
-  display:flex;align-items:center;gap:.25rem;
-  overflow-x:auto;white-space:nowrap;
-  padding-top:.55rem;padding-bottom:.55rem;
-}
-.navstrip a{
-  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;
-  text-transform:uppercase;text-decoration:none;color:var(--ink-70);
-  padding:.35rem .65rem;border:1px solid transparent;
-}
-.navstrip a:hover{color:var(--orange);border-color:var(--rule)}
-.altimeter{
-  margin-left:auto;
-  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;
-  color:var(--steel);
-  display:none;
-}
-@media (min-width:900px){.altimeter{display:block}}
-
-/* ============================================================
-   SECTIONS — each a waypoint in the document
-   ============================================================ */
-section{border-bottom:1px solid var(--rule)}
-.sec{display:grid;grid-template-columns:5rem 1fr;min-height:100%}
-.sec-spine{
-  border-right:1px solid var(--rule);
-  padding:2rem 0;
-  display:flex;flex-direction:column;align-items:center;gap:1rem;
-}
-.sec-spine .wp{
-  font-family:var(--font-mono);font-size:.66rem;font-weight:600;
-  letter-spacing:.12em;color:var(--orange);
-  writing-mode:vertical-rl;transform:rotate(180deg);
-}
-.sec-spine .tick{width:.75rem;height:1px;background:var(--ink-30)}
-.sec-body{padding:clamp(2.5rem,6vw,4.5rem) 0;min-width:0}
-@media (max-width:720px){
-  .sec{grid-template-columns:1fr}
-  .sec-spine{
-    flex-direction:row;border-right:0;border-bottom:1px solid var(--rule);
-    padding:.6rem var(--pad);justify-content:flex-start;
-  }
-  .sec-spine .wp{writing-mode:horizontal-tb;transform:none}
-}
-
-.sec-head{margin-bottom:clamp(1.5rem,3vw,2.5rem)}
-.sec-head h2{
-  font-family:var(--font-display);
-  font-weight:800;font-size:clamp(2rem,5vw,3.4rem);
-  letter-spacing:.02em;line-height:1;text-transform:uppercase;
-}
-.sec-head .field{display:block;margin-bottom:.6rem}
-
-/* scroll reveal */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,1,.36,1)}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
-
-/* ============================================================
-   WP-01 IDENT — hero
-   ============================================================ */
-.ident-grid{
-  display:grid;grid-template-columns:1fr minmax(220px,320px);
-  gap:clamp(2rem,5vw,4rem);align-items:start;
-}
-@media (max-width:900px){.ident-grid{grid-template-columns:1fr}}
-
-.ident h1{
-  font-family:var(--font-display);
-  font-weight:800;
-  font-size:clamp(3.4rem,11vw,8.5rem);
-  line-height:.92;letter-spacing:.01em;text-transform:uppercase;
-}
-.ident h1 .conv{color:var(--orange)}
-.conversion{
-  display:inline-flex;align-items:center;gap:.75rem;
-  border:1px solid var(--rule-strong);
-  padding:.5rem .9rem;margin:1.4rem 0 1.6rem;
-  font-family:var(--font-mono);font-size:.72rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
-}
-.conversion .arrow{color:var(--orange)}
-.ident .lede{
-  font-size:clamp(1.05rem,1.6vw,1.3rem);
-  color:var(--ink-70);max-width:var(--measure);
-}
-.ident .lede strong{color:var(--ink)}
-.ident .lede .org{color:var(--orange);font-weight:600}
-
-.ident-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
-.btn{
-  display:inline-flex;align-items:center;gap:.5rem;
-  font-family:var(--font-mono);font-size:.72rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
-  padding:.85rem 1.4rem;border:1px solid var(--rule-strong);
-  background:var(--ink);color:var(--paper);
-  transition:background .2s,color .2s;
-}
-.btn:hover{background:var(--orange);border-color:var(--orange);color:#fff}
-.btn.ghost{background:transparent;color:var(--ink)}
-.btn.ghost:hover{background:var(--orange-soft);color:var(--orange)}
-
-/* ID plate — the photo treated like a personnel record photo */
-.idplate{border:1px solid var(--rule-strong);background:#fff}
-.idplate .photo{aspect-ratio:1/1;overflow:hidden;background:var(--paper-2)}
-.idplate .photo img{width:100%;height:100%;object-fit:cover;filter:none}
-.idplate dl{
-  display:grid;grid-template-columns:auto 1fr;
-  border-top:1px solid var(--rule-strong);
-}
-.idplate dt{
-  padding:.5rem .75rem;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);
-  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink-50);
-}
-.idplate dd{
-  padding:.5rem .75rem;border-bottom:1px solid var(--rule);
-  font-family:var(--font-mono);font-size:.72rem;font-weight:500;
-}
-.idplate dt:nth-last-of-type(1),.idplate dd:last-of-type{border-bottom:0}
-
-/* units served */
-.units{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2.2rem}
-.unit{
-  border:1px solid var(--rule);padding:.6rem 1rem;
-  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink-70);background:#fff;
-}
-.unit b{color:var(--ink);font-weight:600}
-
-/* ============================================================
-   WP-02 MISSION REPORT — featured project
-   ============================================================ */
-.mission{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.5rem,4vw,3rem)}
-@media (max-width:900px){.mission{grid-template-columns:1fr}}
-
-.report{border:1px solid var(--rule-strong);background:#fff}
-.report-head{
-  display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
-  padding:1rem 1.25rem;border-bottom:1px solid var(--rule-strong);
-  background:var(--paper-2);
-}
-.report-body{padding:1.25rem}
-.report h3{
-  font-family:var(--font-display);font-weight:700;font-size:1.7rem;
-  letter-spacing:.02em;text-transform:uppercase;margin-bottom:.6rem;
-}
-.report p{color:var(--ink-70);max-width:var(--measure)}
-
-.checklist{list-style:none;margin-top:1.25rem;border-top:1px solid var(--rule)}
-.checklist li{
-  display:flex;gap:.8rem;align-items:baseline;
-  padding:.65rem 0;border-bottom:1px solid var(--rule);
-  font-size:.92rem;
-}
-.checklist .box{
-  flex:none;width:.85rem;height:.85rem;border:1px solid var(--ink);
-  position:relative;top:.12rem;
-}
-.checklist .box::after{
-  content:"";position:absolute;inset:1px;
+/* ── ATMOSPHERE: the ascent. Each layer is one altitude band; GSAP
+      cross-fades them against scroll so the sky genuinely changes. ── */
+.sky{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.band{ position:absolute; inset:0; opacity:0; will-change:opacity; }
+/* The pale ramp is deliberately capped at #C0DAF0. Until Phase B gives
+   Document-mode sections their own opaque paper bed, body copy sits
+   straight on the sky — and #2C3E52 on #C0DAF0 is 7.5:1, just inside the
+   body floor. Anything deeper than this breaks that, so do not darken
+   these five values without landing the paper surfaces first.
+   Only .band-orbit goes dark, and only the Contact section and footer
+   are ever visible under it — both invert their text.                  */
+.band-hangar{
+  opacity:1;
   background:
-    linear-gradient(45deg,transparent 44%,var(--orange) 44%,var(--orange) 56%,transparent 56%),
-    linear-gradient(-45deg,transparent 44%,var(--orange) 44%,var(--orange) 56%,transparent 56%);
+    radial-gradient(120% 80% at 50% 110%, rgba(255,107,26,.10), transparent 64%),
+    linear-gradient(#F4F7FA, #EAF2F9);
+}
+.band-dawn{
+  background:
+    radial-gradient(140% 70% at 50% 106%, rgba(255,107,26,.13), transparent 60%),
+    linear-gradient(#EAF2F9, #DFEDF7);
+}
+.band-cruise{
+  background:linear-gradient(#DFEDF7, #D2E5F4);
+}
+.band-strato{
+  background:linear-gradient(#D2E5F4, #C0DAF0);
+}
+.band-orbit{
+  background:
+    radial-gradient(90% 60% at 50% 118%, rgba(11,95,165,.35), transparent 58%),
+    linear-gradient(#2A4E7A, #12244A);
+}
+/* Starfield is meaningless in daylight — JS ramps this from 0 only as
+   .band-orbit takes over. */
+#stars{ position:absolute; inset:0; width:100%; height:100%; opacity:0; }
+
+/* faint drafting grid — ink, not phosphor */
+.grid-overlay{
+  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.5;
+  background-image:
+    linear-gradient(rgba(11,20,32,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,20,32,.045) 1px, transparent 1px);
+  background-size:88px 88px;
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 50%, #000 20%, transparent 78%);
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 50%, #000 20%, transparent 78%);
 }
 
-.debrief{
-  border:1px solid var(--rule-strong);border-left:4px solid var(--orange);
-  background:var(--orange-soft);padding:1.25rem;margin-top:1.25rem;
-}
-.debrief p{color:var(--ink);font-size:.92rem;max-width:none}
+/* ── HUD: fixed cockpit glass. Corner brackets + live altitude tape. ── */
+.hud{ position:fixed; inset:0; z-index:40; pointer-events:none; }
+.bracket{ position:absolute; width:22px; height:22px; border:1px solid var(--rule); }
+.bracket.tl{ top:88px; left:20px; border-right:0; border-bottom:0; }
+.bracket.tr{ top:88px; right:20px; border-left:0;  border-bottom:0; }
+.bracket.bl{ bottom:20px; left:20px; border-right:0; border-top:0; }
+.bracket.br{ bottom:20px; right:20px; border-left:0; border-top:0; }
 
-.toolplate{border:1px solid var(--rule-strong);background:#fff}
-.toolplate .field{display:block;padding:.7rem 1rem;border-bottom:1px solid var(--rule-strong);background:var(--paper-2)}
-.toolplate ul{list-style:none}
-.toolplate li{
-  padding:.7rem 1rem;border-bottom:1px solid var(--rule);
-  font-family:var(--font-mono);font-size:.78rem;font-weight:500;
-  display:flex;justify-content:space-between;gap:1rem;
+.tape{ position:absolute; right:14px; top:50%; transform:translateY(-50%); text-align:right; }
+.tape-track{
+  position:relative; width:3px; height:180px; margin:.6rem 0 .6rem auto;
+  background:var(--line); overflow:hidden;
 }
-.toolplate li:last-child{border-bottom:0}
-.toolplate li span{color:var(--ink-30)}
-.delivery{
-  margin-top:1rem;border:1px dashed var(--orange);padding:1rem;
-  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--orange);text-align:center;font-weight:600;
+.tape-fill{
+  position:absolute; inset:0; transform-origin:top; transform:scaleY(0);
+  background:linear-gradient(var(--signal), var(--data));
 }
+.tape-ticks{
+  position:absolute; right:8px; top:0; height:100%;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.tape-ticks i{ display:block; width:7px; height:1px; background:var(--rule); }
 
-/* ============================================================
-   WP-03 DOCTRINE — Margin of Impact
-   ============================================================ */
-.doctrine-intro{
-  border-left:2px solid var(--rule-strong);padding-left:1.25rem;
-  color:var(--ink-70);max-width:var(--measure);margin-bottom:2rem;
-}
-.doctrine{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule-strong);background:#fff}
-@media (max-width:900px){.doctrine{grid-template-columns:1fr}}
-.doct{padding:1.5rem;border-right:1px solid var(--rule)}
-.doct:last-child{border-right:0}
-@media (max-width:900px){.doct{border-right:0;border-bottom:1px solid var(--rule)}.doct:last-child{border-bottom:0}}
-.doct h3{
-  font-family:var(--font-display);font-weight:700;font-size:1.35rem;
-  text-transform:uppercase;letter-spacing:.03em;margin:.8rem 0 .6rem;
-}
-.doct p{font-size:.92rem;color:var(--ink-70)}
+.tape .mono{ display:block; }
 
-/* ============================================================
-   WP-04 FLIGHT LOG — all projects
-   ============================================================ */
-.log-controls{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
-.log-controls button{
-  font-family:var(--font-mono);font-size:.66rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
-  padding:.55rem .9rem;border:1px solid var(--rule);
-  background:#fff;color:var(--ink-70);cursor:pointer;
+/* mono utility voice — every label on this page speaks in it.
+   13px is the floor, and tracking is .10em not .16em: wide letter-spacing
+   reads as "technical" but measurably hurts word recognition at small
+   sizes, which is the wrong place to spend style on this page. */
+.mono{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:var(--fs-label); letter-spacing:.10em; text-transform:uppercase;
+  color:var(--muted); line-height:1.5;
 }
-.log-controls button:hover{border-color:var(--ink)}
-.log-controls button[aria-pressed="true"]{
-  background:var(--ink);border-color:var(--ink);color:var(--paper);
-}
-.log-count{align-self:center;margin-left:auto}
+.mono b{ color:var(--warm); font-weight:600; }
+.mono.hudc{ color:var(--data); }
 
-.log{border-top:2px solid var(--rule-strong)}
-.entry{border-bottom:1px solid var(--rule)}
-.entry[hidden]{display:none}
-.entry summary{
-  list-style:none;cursor:pointer;
-  display:grid;grid-template-columns:4.5rem 1fr auto auto 1.5rem;
-  gap:1rem;align-items:baseline;
-  padding:1rem .5rem;
+/* ── TYPE: the condensed display face, restricted to >=24px ── */
+.mega{
+  font-family:"Big Shoulders",Arial Narrow,sans-serif;
+  font-weight:900; line-height:.84; letter-spacing:.01em;
+  text-transform:uppercase; color:var(--ink);
 }
-.entry summary::-webkit-details-marker{display:none}
-.entry summary:hover{background:#fff}
-.entry .no{font-family:var(--font-mono);font-size:.72rem;font-weight:600;color:var(--orange)}
-.entry .title{
-  font-family:var(--font-display);font-weight:700;font-size:1.2rem;
-  letter-spacing:.02em;text-transform:uppercase;line-height:1.15;
+.h-sec{
+  font-family:"Big Shoulders",Arial Narrow,sans-serif;
+  font-weight:800; line-height:.9; letter-spacing:.02em;
+  text-transform:uppercase; color:var(--ink);
+  font-size:clamp(2.4rem,6.5vw,5.5rem);
 }
-.entry .cat,.entry .org{
-  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink-50);white-space:nowrap;
+/* Accent text. Renamed from .glow-* — there is no glow on paper, and a
+   name that lies about what it does invites the wrong edit later. */
+.hi-warm{ color:var(--warm-strong); }
+.hi-data{ color:var(--data); }
+
+/* char-split rig for the hero headline. The nowrap is load-bearing: the
+   split makes every character an inline-block, so without it the line can
+   break between any two letters and the name renders as MANFRE / D. */
+.ch{ display:inline-block; will-change:transform,opacity; }
+#heroName [data-split]{ display:block; white-space:nowrap; }
+
+/* ── PANELS: instrument housings ── */
+/* Opaque, not glass. Backdrop-blur cost real frame time to simulate depth
+   that a plain shadow gives for free on a light base — and an opaque bed
+   is what keeps text off the sky. */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--line);
+  position:relative;
+  box-shadow:0 1px 2px rgba(11,20,32,.04);
 }
-.entry .cat{border:1px solid var(--rule);padding:.2rem .5rem}
-.entry .plus{
-  font-family:var(--font-mono);font-weight:500;color:var(--ink-50);
-  justify-self:end;transition:transform .25s;
+.panel::before{
+  content:""; position:absolute; left:-1px; top:-1px; width:9px; height:9px;
+  border-left:2px solid var(--warm-strong); border-top:2px solid var(--warm-strong);
 }
-.entry[open] .plus{transform:rotate(45deg);color:var(--orange)}
-.entry[open] summary{background:#fff;border-bottom:1px dashed var(--rule)}
+.panel-lit{ box-shadow:0 1px 2px rgba(11,20,32,.05), 0 18px 44px -24px rgba(11,20,32,.28); }
+
+/* ── HERO reticle around the portrait ── */
+.reticle{ position:relative; }
+.reticle .corner{ position:absolute; width:26px; height:26px; border:2px solid var(--warm-strong); }
+.reticle .c1{ top:-6px; left:-6px;  border-right:0; border-bottom:0; }
+.reticle .c2{ top:-6px; right:-6px; border-left:0;  border-bottom:0; }
+.reticle .c3{ bottom:-6px; left:-6px;  border-right:0; border-top:0; }
+.reticle .c4{ bottom:-6px; right:-6px; border-left:0;  border-top:0; }
+/* The luminosity blend existed to sink the portrait into a black page.
+   On paper it only drains the face, so it goes — a light grade instead. */
+.reticle img{ filter:contrast(1.03) saturate(.96); }
+.reticle:hover img{ filter:none; }
+
+/* callout leader-lines off the portrait */
+.callout{ position:absolute; display:flex; align-items:center; gap:.5rem; }
+.callout .line{ width:38px; height:1px; background:var(--warm-strong); }
+.callout .dot{ width:6px; height:6px; background:var(--warm-strong); border-radius:50%; }
+.callout-r{ right:-8px; transform:translateX(100%); }
+
+/* ── BUTTONS ── */
+/* Note the hover pair: ink on #FF6B1A is 6.4:1, but white on it is 2.65:1.
+   That is the whole reason --signal is a fill-only token. */
+.btn{
+  display:inline-flex; align-items:center; gap:.6rem;
+  font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); font-weight:600;
+  letter-spacing:.10em; text-transform:uppercase; text-decoration:none;
+  padding:1rem 1.6rem; border:2px solid var(--warm); color:var(--warm);
+  background:var(--wash); transition:.25s; position:relative; overflow:hidden;
+}
+.btn:hover{ background:var(--signal); border-color:var(--signal); color:var(--ink); }
+.btn.cool{ border-color:var(--data); color:var(--data); background:#EAF2FA; }
+.btn.cool:hover{ background:var(--data); border-color:var(--data); color:var(--paper); }
+
+/* ── FLIGHT LOG rows ── */
+.log-row{ border-bottom:1px solid var(--line); }
+.log-row[hidden]{ display:none; }
+.log-row summary{
+  list-style:none; cursor:pointer; padding:1.15rem .5rem;
+  display:grid; grid-template-columns:4rem 1fr auto auto 1.6rem;
+  gap:1.1rem; align-items:center; transition:background .2s;
+}
+.log-row summary::-webkit-details-marker{ display:none; }
+.log-row summary:hover{ background:#EAF2FA; }
+.log-row summary:hover .lt{ color:var(--warm); }
+.lno{ font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); font-weight:600; color:var(--warm); }
+/* Off the condensed face: at ~20px Big Shoulders is squarely inside the
+   range where condensation costs low-vision readers real legibility, and
+   ~28 project titles is exactly the text you cannot afford to make hard. */
+.lt{
+  font-family:"Instrument Sans",system-ui,sans-serif; font-weight:600; font-size:1.2rem;
+  letter-spacing:0; color:var(--ink);
+  line-height:1.3; transition:color .2s;
+}
+.lcat{
+  font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); letter-spacing:.10em;
+  text-transform:uppercase; color:var(--data);
+  border:1px solid var(--rule); padding:.22rem .55rem; white-space:nowrap;
+}
+.lorg{
+  font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); letter-spacing:.10em;
+  text-transform:uppercase; color:var(--muted); white-space:nowrap;
+}
+.lplus{ font-family:"IBM Plex Mono",monospace; font-size:1.1rem; color:var(--data); justify-self:end; transition:transform .3s,color .3s; }
+.log-row[open] .lplus{ transform:rotate(135deg); color:var(--warm); }
+.log-row[open] summary{ background:#EAF2FA; }
+.log-body{ padding:0 .5rem 1.75rem; display:grid; gap:1.1rem; }
+.log-body p{ color:var(--body); font-size:var(--fs-body); max-width:66ch; margin:0; line-height:1.65; }
+.learn{ border-left:3px solid var(--warm-strong); padding-left:1rem; color:var(--ink)!important; }
+.feat{ list-style:none; margin:0; padding:0; }
+.feat li{ position:relative; padding:.25rem 0 .25rem 1.2rem; font-size:var(--fs-body); color:var(--body); }
+.feat li::before{ content:""; position:absolute; left:0; top:1.15rem; width:7px; height:2px; background:var(--data); }
+.chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.chips span{
+  font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); letter-spacing:.06em;
+  text-transform:uppercase; padding:.32rem .6rem;
+  border:1px solid var(--line); color:var(--body);
+  background:var(--surface);
+}
 @media (max-width:720px){
-  .entry summary{grid-template-columns:3rem 1fr 1.25rem;row-gap:.35rem}
-  .entry .cat{grid-column:2;justify-self:start}
-  .entry .org{grid-column:2}
-  .entry .plus{grid-row:1;grid-column:3}
+  .log-row summary{ grid-template-columns:3.2rem 1fr 1.4rem; row-gap:.4rem; }
+  .lcat,.lorg{ grid-column:2; justify-self:start; }
+  .lplus{ grid-row:1; grid-column:3; }
 }
 
-.entry-body{background:#fff;padding:1.25rem 1.25rem 1.5rem;display:grid;gap:1rem}
-.entry-body p{color:var(--ink-70);font-size:.94rem;max-width:var(--measure)}
-.entry-body .field{margin-bottom:.25rem;display:block}
-.entry-body .learn{
-  border-left:3px solid var(--orange);padding-left:1rem;
-  font-size:.9rem;color:var(--ink);
+/* filter buttons */
+.filt{
+  font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); font-weight:600;
+  letter-spacing:.10em; text-transform:uppercase; cursor:pointer;
+  padding:.6rem 1rem; border:1px solid var(--rule);
+  background:var(--surface); color:var(--body); transition:.2s;
 }
-.entry-body .feat{list-style:none;font-size:.9rem;color:var(--ink-70)}
-.entry-body .feat li{padding:.2rem 0 .2rem 1.1rem;position:relative}
-.entry-body .feat li::before{content:"";position:absolute;left:0;top:.72rem;width:.45rem;height:.45rem;background:var(--steel)}
-.tools{display:flex;flex-wrap:wrap;gap:.4rem}
-.tools span{
-  font-family:var(--font-mono);font-size:.64rem;letter-spacing:.08em;
-  text-transform:uppercase;padding:.3rem .55rem;
-  border:1px solid var(--rule);background:var(--paper);
+.filt:hover{ border-color:var(--data); color:var(--data); }
+.filt[aria-pressed="true"]{
+  background:var(--signal); border-color:var(--signal); color:var(--ink);
 }
 
-/* ============================================================
-   WP-05 SERVICE RECORD — experience
-   ============================================================ */
-.record{border-top:2px solid var(--rule-strong)}
-.tour{
-  display:grid;grid-template-columns:minmax(180px,240px) 1fr;
-  gap:1.5rem;padding:1.75rem .5rem;border-bottom:1px solid var(--rule);
+/* ── EXPERIENCE timeline ── */
+.tl-line{
+  position:absolute; left:0; top:0; width:2px; height:100%;
+  background:var(--line);
 }
-@media (max-width:720px){.tour{grid-template-columns:1fr;gap:.5rem}}
-.tour .when{display:flex;flex-direction:column;gap:.3rem}
-.tour .when .period{font-family:var(--font-mono);font-size:.72rem;font-weight:600}
-.tour h3{
-  font-family:var(--font-display);font-weight:700;font-size:1.35rem;
-  text-transform:uppercase;letter-spacing:.02em;
+.tl-fill{
+  position:absolute; left:0; top:0; width:2px; height:100%;
+  background:linear-gradient(var(--signal),var(--data)); transform-origin:top; transform:scaleY(0);
 }
-.tour .co{font-family:var(--font-mono);font-size:.72rem;color:var(--steel);margin:.25rem 0 .6rem;font-weight:500}
-.tour p{color:var(--ink-70);font-size:.94rem;max-width:var(--measure)}
+.tl-node{
+  position:absolute; top:.5rem; left:-2rem; width:11px; height:11px; border-radius:50%;
+  background:var(--paper); border:2px solid var(--warm-strong);
+}
 
-/* ============================================================
-   WP-06 CONTACT — the "remove before flight" tag
-   ============================================================ */
-.contact-inner{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
-@media (max-width:900px){.contact-inner{grid-template-columns:1fr}}
-.contact h2{
-  font-family:var(--font-display);font-weight:800;
-  font-size:clamp(2.2rem,6vw,4.2rem);text-transform:uppercase;line-height:1;
-}
-.contact p{color:var(--ink-70);margin-top:.8rem;max-width:46ch}
-
+/* ── CONTACT tag. Keeps the luggage-tag silhouette — that is visual
+      flavour, which stays — while the wording goes plain. It sits over
+      the dark orbit band, so ink-on-signal (6.4:1) is the correct pair
+      and the punch-hole is a ring so it works over any background. ── */
 .rbf{
-  display:inline-flex;align-items:center;gap:1rem;text-decoration:none;
-  background:var(--orange);color:#fff;
-  padding:1.3rem 1.6rem 1.3rem 1.2rem;
-  font-family:var(--font-mono);font-weight:600;font-size:.8rem;
-  letter-spacing:.16em;text-transform:uppercase;
-  clip-path:polygon(0 50%,1.2rem 0,100% 0,100% 100%,1.2rem 100%);
-  transition:transform .2s;
+  display:inline-flex; align-items:center; gap:1rem; text-decoration:none;
+  background:var(--signal); color:var(--ink); padding:1.35rem 1.9rem 1.35rem 1.4rem;
+  font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:.9375rem;
+  letter-spacing:.12em; text-transform:uppercase;
+  clip-path:polygon(0 50%, 1.3rem 0, 100% 0, 100% 100%, 1.3rem 100%);
+  transition:transform .25s;
 }
-.rbf .hole{width:.7rem;height:.7rem;border-radius:50%;background:var(--paper);flex:none}
-.rbf:hover{transform:translateX(4px) rotate(-1deg)}
-@media (prefers-reduced-motion:reduce){.rbf:hover{transform:none}}
-.contact-links{display:flex;flex-direction:column;gap:.9rem;align-items:flex-start}
-.contact-links .alt{
-  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink-70);
+.rbf .hole{
+  width:.75rem; height:.75rem; border-radius:50%; flex:none;
+  background:transparent; border:2px solid rgba(11,20,32,.55);
 }
-.contact-links .alt a{color:var(--ink)}
-.contact-links .alt a:hover{color:var(--orange)}
+.rbf:hover{ transform:translateX(7px) rotate(-1.2deg); }
 
-/* footer */
-footer{border-top:3px solid var(--rule-strong)}
-footer .wrap{
-  display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
-  padding-top:1.25rem;padding-bottom:2.5rem;
+/* ── The dark Contact/footer band inverts. Checked against the lighter
+      end of the gradient (#2A4E7A), which is the worst case:
+      paper 7.8:1 · --warm-inv 4.8:1 · --data-inv 5.3:1.
+      #FF6B1A on that ground is 2.9:1, so it stays a fill here too. ── */
+.invert-band{ color:var(--paper); }
+.invert-band .mega,.invert-band .h-sec,.invert-band h2,.invert-band h3{ color:#FFFFFF; }
+.invert-band .hi-warm{ color:#FFB380; }
+.invert-band .hi-data{ color:#9FD4FF; }
+.invert-band .mono{ color:#C8DAEC; }
+.invert-band .mono b{ color:#FFB380; }
+.invert-band a:not(.rbf){ color:#FFFFFF; text-decoration-color:rgba(255,255,255,.5); }
+.invert-band a:not(.rbf):hover{ color:#FFB380; }
+.invert-band .body-inv{ color:#DCE8F4; }
+
+/* reduced motion: strip every transform/animation flourish */
+@media (prefers-reduced-motion:reduce){
+  .rbf:hover{ transform:none; }
+  *{ animation-duration:.001ms!important; animation-iteration-count:1!important; }
 }
-footer .field{font-size:.6rem}
 </style>
 </head>
-<body>
 
-<!-- ══════════ TITLE BLOCK ══════════ -->
-<header class="titleblock">
-  <div class="wrap">
-    <div class="tb-cell">
-      <span class="field">Airframe / Candidate</span>
-      <span class="tb-name">Manfred Siew</span>
+<body class="font-body">
+
+<!-- ══════════ ATMOSPHERE ══════════ -->
+<div class="sky" aria-hidden="true">
+  <div class="band band-hangar" data-band="hangar"></div>
+  <div class="band band-dawn"   data-band="dawn"></div>
+  <div class="band band-cruise" data-band="cruise"></div>
+  <div class="band band-strato" data-band="strato"></div>
+  <div class="band band-orbit"  data-band="orbit"></div>
+  <canvas id="stars"></canvas>
+</div>
+<div class="grid-overlay" aria-hidden="true"></div>
+
+<!-- ══════════ HUD GLASS ══════════ -->
+<div class="hud hidden lg:block" aria-hidden="true">
+  <span class="bracket tl"></span><span class="bracket tr"></span>
+  <span class="bracket bl"></span><span class="bracket br"></span>
+
+  <div class="tape">
+    <span class="mono hudc">ALT</span>
+    <div class="tape-track">
+      <div class="tape-fill" id="tapeFill"></div>
+      <div class="tape-ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </div>
-    <div class="tb-cell">
-      <span class="field">Document No.</span>
-      <span class="val">TDP-MS-2026</span>
-    </div>
-    <div class="tb-cell">
-      <span class="field">Revision</span>
-      <span class="val">2.4</span>
-    </div>
-    <div class="tb-cell">
-      <span class="field">Status</span>
-      <span class="val" style="color:var(--orange)">CONVERSION IN PROGRESS</span>
+    <div class="font-mono text-[.8125rem] font-semibold tracking-widest text-warm tabular-nums" id="altOut">00000</div>
+    <span class="mono hudc">FEET</span>
+
+    <div class="mt-6 border-t border-line pt-3">
+      <div class="mono hudc mb-1">Section</div>
+      <div class="font-mono text-[.8125rem] font-semibold uppercase leading-tight tracking-[.12em] text-data" id="phaseOut">Preflight</div>
     </div>
   </div>
-</header>
+</div>
 
-<nav class="navstrip" aria-label="Document sections">
-  <div class="wrap">
-    <a href="#ident">01 Ident</a>
-    <a href="#mission">02 Mission</a>
-    <a href="#doctrine">03 Doctrine</a>
-    <a href="#log">04 Flight Log</a>
-    <a href="#record">05 Service Record</a>
-    <a href="#contact">06 Contact</a>
-    <span class="altimeter" aria-hidden="true">ALT <span id="alt">00000</span> FT</span>
+<!-- ══════════ NAV ══════════ -->
+<nav class="fixed top-0 inset-x-0 z-50 border-b border-line bg-surface/90 backdrop-blur-xl" aria-label="Sections">
+  <div class="mx-auto flex max-w-[1140px] items-center gap-4 px-5 py-3.5 sm:px-8">
+    <a href="#ident" class="text-[1.15rem] font-bold tracking-tight text-ink no-underline">
+      Manfred Siew
+    </a>
+    <div class="ml-auto hidden items-center gap-1 md:flex">
+      <a href="#ident"    class="mono px-3 py-2 no-underline transition hover:text-warm">Home</a>
+      <a href="#mission"  class="mono px-3 py-2 no-underline transition hover:text-warm">Featured</a>
+      <a href="#log"      class="mono px-3 py-2 no-underline transition hover:text-warm">Projects</a>
+      <a href="#record"   class="mono px-3 py-2 no-underline transition hover:text-warm">Experience</a>
+    </div>
+    <a href="#contact" class="mono ml-auto border border-warm px-3.5 py-2 text-warm no-underline transition hover:bg-signal hover:text-ink md:ml-2">
+      Contact
+    </a>
   </div>
 </nav>
 
-<main>
+<main class="relative z-10">
 
-<!-- ══════════ WP-01 IDENT ══════════ -->
-<section id="ident">
-  <div class="wrap sec">
-    <div class="sec-spine" aria-hidden="true">
-      <span class="wp">WP-01 · IDENT</span>
-      <span class="tick"></span>
-    </div>
-    <div class="sec-body">
-      <div class="ident-grid">
-        <div class="ident reveal">
-          <span class="field"><b>REC</b> Personnel identification record</span>
-          <h1>Manfred<br>Siew<span class="conv">.</span></h1>
-          <div class="conversion">
-            <span>Aerospace</span><span class="arrow">→</span><span>AI Engineering</span>
+<!-- ══════════ 01 · IDENT ══════════ -->
+<section id="ident" class="relative flex min-h-screen items-center px-5 pb-24 pt-36 sm:px-8">
+  <div class="mx-auto w-full max-w-[1140px]">
+    <div class="grid items-center gap-14 lg:grid-cols-[1.25fr_.75fr]">
+
+      <div>
+        <div class="mono mb-6 flex items-center gap-3" data-hero="1">
+          <span class="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-signal"></span>
+          <b>Open to work</b> AI &amp; software engineering roles · Singapore
+        </div>
+
+        <!-- Cap is 10rem, not 11: "MANFRED" at 11rem measures ~693px against
+             a 677px column, which is what forced the mid-word break. -->
+        <h1 class="mega mb-2 text-[clamp(3rem,11.5vw,10rem)]" id="heroName">
+          <span class="block" data-split>Manfred</span>
+          <span class="block" data-split>Siew<span class="hi-warm">.</span></span>
+        </h1>
+
+        <div class="my-8 inline-flex flex-wrap items-center gap-4 border border-line bg-surface px-5 py-3 font-mono text-[.8125rem] font-semibold uppercase tracking-[.16em]" data-hero="2">
+          <span class="text-body">Aerospace</span>
+          <span class="hi-warm text-base leading-none">→</span>
+          <span class="hi-data">AI Engineering</span>
+        </div>
+
+        <p class="mb-10 max-w-[62ch] text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-body" data-hero="3">
+          Aspiring <strong class="font-semibold text-ink">AI &amp; Software Engineer</strong>.
+          Currently innovating at <span class="hi-warm font-semibold">RAiD</span>
+          (RSAF Agile innovation Digital) — an aircraft-maintenance-trained engineer
+          retraining mid-flight for AI-orchestrated software development.
+        </p>
+
+        <div class="flex flex-wrap gap-4" data-hero="4">
+          <a class="btn" href="#log">See all projects</a>
+          <a class="btn cool" href="#mission">Featured work</a>
+        </div>
+
+        <div class="mt-14 grid max-w-2xl grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4" data-hero="5">
+          <div class="bg-surface p-4">
+            <div class="font-display text-3xl font-extrabold text-ink" data-count="20">0</div>
+            <div class="mono mt-1">Projects</div>
           </div>
-          <p class="lede">
-            Aspiring <strong>AI &amp; Software Engineer</strong>. Currently innovating at
-            <span class="org">RAiD</span> (RSAF Agile innovation Digital) — an
-            aircraft-maintenance-trained engineer retraining mid-flight for
-            AI-orchestrated software development.
+          <div class="bg-surface p-4">
+            <div class="font-display text-3xl font-extrabold text-ink" data-count="2">0</div>
+            <div class="mono mt-1">Day build</div>
+          </div>
+          <div class="bg-surface p-4">
+            <div class="font-display text-3xl font-extrabold text-ink" data-count="35">0</div>
+            <div class="mono mt-1">People trained</div>
+          </div>
+          <div class="bg-surface p-4">
+            <div class="font-display text-3xl font-extrabold text-ink" data-count="3">0</div>
+            <div class="mono mt-1">Organisations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- portrait as a targeted instrument, not a decorative circle -->
+      <aside class="relative mx-auto w-full max-w-[340px]" data-hero="6" aria-label="Profile">
+        <div class="reticle" data-parallax="-40">
+          <span class="corner c1"></span><span class="corner c2"></span>
+          <span class="corner c3"></span><span class="corner c4"></span>
+          <div class="aspect-[4/5] overflow-hidden bg-line">
+            <img src="public/profile_picture.png" alt="Portrait of Manfred Siew"
+                 class="h-full w-full object-cover transition duration-700"
+                 onerror="this.closest('.reticle').classList.add('opacity-0')">
+          </div>
+          <span class="callout callout-r top-10 hidden 2xl:flex">
+            <span class="dot"></span><span class="line"></span><span class="mono whitespace-nowrap">RAiD · PPCoE</span>
+          </span>
+          <span class="callout callout-r bottom-14 hidden 2xl:flex">
+            <span class="dot"></span><span class="line"></span><span class="mono whitespace-nowrap">Singapore</span>
+          </span>
+        </div>
+        <dl class="panel mt-4 grid grid-cols-[auto_1fr] text-[.8125rem]">
+          <dt class="mono border-b border-r border-line px-3 py-2.5">Role</dt>
+          <dd class="m-0 border-b border-line px-3 py-2.5 font-mono text-body">AI &amp; Software Engineer (Trainee)</dd>
+          <dt class="mono border-b border-r border-line px-3 py-2.5">Team</dt>
+          <dd class="m-0 border-b border-line px-3 py-2.5 font-mono text-body">RAiD · PPCoE</dd>
+          <dt class="mono border-r border-line px-3 py-2.5">Education</dt>
+          <dd class="m-0 px-3 py-2.5 font-mono text-body">Aerospace Eng. Dip. (TP)</dd>
+        </dl>
+      </aside>
+
+    </div>
+
+    <!-- units served -->
+    <div class="mt-16 flex flex-wrap items-center gap-3" data-hero="7">
+      <span class="mono mr-2">Where I’ve worked</span>
+      <span class="mono border border-line bg-surface px-4 py-2.5"><b>RSAF</b> Republic of Singapore Air Force</span>
+      <span class="mono border border-line bg-surface px-4 py-2.5"><b>RAiD</b> Agile innovation Digital</span>
+      <span class="mono border border-line bg-surface px-4 py-2.5"><b>TP</b> Temasek Polytechnic</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 02 · MISSION ══════════ -->
+<section id="mission" class="relative px-5 py-28 sm:px-8 lg:py-40">
+  <div class="mx-auto max-w-[1140px]">
+
+    <div class="mb-14" data-reveal>
+      <div class="mono mb-4"><b>Featured work</b> Selected projects in depth</div>
+      <h2 class="h-sec">No-code <span class="hi-warm">→</span><br>AI-Ops.</h2>
+    </div>
+
+    <div class="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
+
+      <article class="panel panel-lit p-7 sm:p-10" data-reveal data-parallax="-24">
+        <div class="mb-7 flex flex-wrap items-center justify-between gap-3 border-b border-line pb-5">
+          <span class="mono">Work type · Internal tool</span>
+          <span class="mono"><b>Team</b> RAiD</span>
+        </div>
+
+        <h3 class="font-display text-[clamp(1.8rem,3.6vw,2.9rem)] font-extrabold uppercase leading-none tracking-wide text-ink">
+          RSAF Facility Booking App
+        </h3>
+        <p class="mt-4 max-w-[62ch] leading-relaxed text-body">
+          An enterprise-grade facility reservation platform on Microsoft Dataverse + React
+          to streamline operations for the entire RSAF.
+        </p>
+
+        <div class="mono mb-3 mt-9"><b>What it does</b> Six capabilities</div>
+        <ul class="m-0 list-none p-0" id="checklist">
+          <li class="flex items-start gap-3.5 border-b border-line py-3.5 text-[1.125rem] text-body">
+            <span class="chk mt-1 h-3.5 w-3.5 flex-none border border-rule"></span>Role-based access control (4-tier permissions)</li>
+          <li class="flex items-start gap-3.5 border-b border-line py-3.5 text-[1.125rem] text-body">
+            <span class="chk mt-1 h-3.5 w-3.5 flex-none border border-rule"></span>Approval workflows with end-to-end visibility</li>
+          <li class="flex items-start gap-3.5 border-b border-line py-3.5 text-[1.125rem] text-body">
+            <span class="chk mt-1 h-3.5 w-3.5 flex-none border border-rule"></span>Real-time availability &amp; conflict detection</li>
+          <li class="flex items-start gap-3.5 border-b border-line py-3.5 text-[1.125rem] text-body">
+            <span class="chk mt-1 h-3.5 w-3.5 flex-none border border-rule"></span>Recurring booking support for complex scheduling</li>
+          <li class="flex items-start gap-3.5 border-b border-line py-3.5 text-[1.125rem] text-body">
+            <span class="chk mt-1 h-3.5 w-3.5 flex-none border border-rule"></span>Comprehensive audit logging</li>
+          <li class="flex items-start gap-3.5 py-3.5 text-[1.125rem] text-body">
+            <span class="chk mt-1 h-3.5 w-3.5 flex-none border border-rule"></span>Multi-tenant-ready architecture using soft-delete patterns &amp; departmental isolation</li>
+        </ul>
+
+        <div class="mt-8 border border-warm-strong border-l-[3px] border-l-signal bg-wash p-6">
+          <div class="mono mb-2"><b>What changed</b></div>
+          <p class="m-0 text-[1.125rem] leading-relaxed text-body">
+            Used Specs-Driven Development to design and implement the application
+            end-to-end—delivering a full-stack experience across frontend UX, API
+            integration, and database design in just 2 days. This project demonstrated
+            the transition from no-code to AI-orchestrated engineering.
           </p>
-          <div class="ident-actions">
-            <a class="btn" href="#log">Open flight log</a>
-            <a class="btn ghost" href="#mission">Latest mission</a>
-          </div>
-          <div class="units" aria-label="Organizations">
-            <span class="unit"><b>RSAF</b> · Republic of Singapore Air Force</span>
-            <span class="unit"><b>RAiD</b> · Agile innovation Digital</span>
-            <span class="unit"><b>TP</b> · Temasek Polytechnic</span>
-          </div>
         </div>
+      </article>
 
-        <aside class="idplate reveal" aria-label="Identification plate">
-          <div class="photo">
-            <img src="public/profile_picture.png" alt="Portrait of Manfred Siew" onerror="this.parentElement.style.display='none'">
-          </div>
-          <dl>
-            <dt>Designation</dt><dd>AI &amp; Software Engineer (Trainee)</dd>
-            <dt>Current unit</dt><dd>RAiD · PPCoE</dd>
-            <dt>Base</dt><dd>Singapore</dd>
-            <dt>Qualification</dt><dd>Aerospace Eng. Dip. (TP)</dd>
-            <dt>Missions logged</dt><dd>020</dd>
-          </dl>
-        </aside>
+      <aside data-reveal data-parallax="34">
+        <div class="panel">
+          <div class="mono border-b border-line px-5 py-3.5"><b>Built with</b></div>
+          <ul class="m-0 list-none p-0">
+            <li class="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5 font-mono text-[.8125rem] text-body">Microsoft Dataverse <span class="mono">Data</span></li>
+            <li class="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5 font-mono text-[.8125rem] text-body">React <span class="mono">Frontend</span></li>
+            <li class="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5 font-mono text-[.8125rem] text-body">PowerApps Code Apps <span class="mono">Platform</span></li>
+            <li class="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5 font-mono text-[.8125rem] text-body">Gemini 3.1 <span class="mono">AI</span></li>
+            <li class="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5 font-mono text-[.8125rem] text-body">Claude Opus 4.6 <span class="mono">AI</span></li>
+            <li class="flex items-center justify-between gap-4 px-5 py-3.5 font-mono text-[.8125rem] text-body">Github Copilot <span class="mono">AI</span></li>
+          </ul>
+        </div>
+        <div class="mt-5 border border-dashed border-warm bg-wash p-6 text-center">
+          <div class="font-display text-[3.4rem] font-extrabold leading-none hi-warm" data-count="2">0</div>
+          <div class="mono mt-2">Days · spec to delivery</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- Doctrine section removed (spec D7). It was a second competing trio of
+     three, stated abstractly, and the Experience timeline below already
+     demonstrates the same three claims concretely. Its vertical space is
+     reserved for the Phase B waypoints. -->
+
+<!-- ══════════ 03 · ALL PROJECTS ══════════ -->
+<section id="log" class="relative px-5 py-28 sm:px-8 lg:py-40">
+  <div class="mx-auto max-w-[1140px]">
+
+    <div class="mb-10" data-reveal>
+      <div class="mono mb-4"><b>All projects</b> Every entry opens for detail</div>
+      <h2 class="h-sec">All Projects —<br><span class="hi-data" data-count="20">0</span> Total</h2>
+    </div>
+
+    <div class="mb-8 flex flex-wrap items-center gap-2.5" role="group" aria-label="Filter projects by organisation" data-reveal>
+      <button type="button" class="filt" data-org="all" aria-pressed="true">All entries</button>
+      <button type="button" class="filt" data-org="RAiD" aria-pressed="false">RSAF (RAiD)</button>
+      <button type="button" class="filt" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
+      <button type="button" class="filt" data-org="Freelance" aria-pressed="false">Freelance</button>
+      <span class="mono ml-auto" id="logCount">Showing all 20</span>
+    </div>
+
+    <div class="border-t-2 border-rule" id="logList">
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 001</span><span class="lt">Facility Booking App</span><span class="lcat">Enterprise</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>An enterprise-grade facility reservation platform to streamline operations for the entire RSAF.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Used Specs-Driven Development to design and implement the application end-to-end—delivering a full-stack experience in just 2 days.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>Gemini 3.1</span><span>Claude Opus 4.6</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 002</span><span class="lt">ASV Logbook &amp; Maintenance Web App</span><span class="lcat">Enterprise</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Customised web-based app for Air Specialist Vehicle (ASV) usage and maintenance records to track upcoming vehicle's servicing status.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 003</span><span class="lt">Singapore Airshow 2026 Charity Auction</span><span class="lcat">Enterprise</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Auction tool allowing RSAF personnel to bid for charity bears as part of a charity movement for the Singapore Airshow.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>FormSG</span><span>Plumber</span><span>Sharepoint</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 004</span><span class="lt">SOAR Schedule App</span><span class="lcat">Requested</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Calendar app to allocate pilot trainees for simulator training, generated using Code Apps.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>PowerApps</span><span>Github Copilot</span><span>Google Ai Studio</span><span>Lovable</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 005</span><span class="lt">SSB Loan Tracking System</span><span class="lcat">Requested</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>End to end workflow for SSB to track and approve the loaning of their logistic items.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>FormSG</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 006</span><span class="lt">SAGE Copilot AI</span><span class="lcat">Requested</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Integrating SAGE's ME5 Delta Agent into Copilot for training purposes using Open Source models.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Navigated license constraints creatively to replicate GPT 4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 007</span><span class="lt">R&amp;D for Vibe-Coding Code Apps</span><span class="lcat">R&amp;D</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Explored AI Vibe Coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 008</span><span class="lt">Documentation Generation Tool (PowerDocu)</span><span class="lcat">R&amp;D</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt about Cybersecurity Scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Github</span><span>PowerDocu</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 009</span><span class="lt">Improved App Brandings using SVG</span><span class="lcat">R&amp;D</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Created animated logos through SVG codes to improve app brandings, beneficial for marketing.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>SVG</span><span>UI/UX Design</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 010</span><span class="lt">1-Day Power Platform Bootcamp (815 SQN)</span><span class="lcat">Trainings</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Lovable</span><span>Power Platform</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD">
+        <summary><span class="lno">LOG 011</span><span class="lt">Comprehensive Guide for New Interns</span><span class="lcat">Trainings</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Documentation</span><span>Mentoring</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 012</span><span class="lt">App Development For Lead Ambassadors CCA</span><span class="lcat">Tools/Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Agile App Dev</span><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 013</span><span class="lt">National AI Student Challenge 2025 — Huawei Track</span><span class="lcat">Competitions</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Mobile app to improve Citizen Engagement and Civic Services, allowing them to report issues and track their progress of their requests.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Exposure to ML algorithms, various Cloud Technologies in Huawei's ecosystem, and MLOps. Introduced to AI development field.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>Cloud Tech</span><span>MLOps</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 014</span><span class="lt">Whitehacks 2025 (Cybersecurity CTF)</span><span class="lcat">Competitions</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Cybersecurity CTF Competition organised by SMU. Used tools such as Wireshark, John The Ripper, and Z-steg.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 015</span><span class="lt">App Development for Mindsports CCA</span><span class="lcat">Tools/Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Power Platform</span><span>Agile App Dev</span><span>UI Design</span><span>Data Visualization</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 016</span><span class="lt">Iron Viz Student Edition</span><span class="lcat">Competitions</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Freelance">
+        <summary><span class="lno">LOG 017</span><span class="lt">Workplace Check In/Out App</span><span class="lcat">Tools/Automation</span><span class="lorg">Freelance</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Developed a PowerApp to simplify and automate the administrative workflow for duty management for duty personnel in an RSAF Unit.</p>
+          <div><div class="mono mb-2"><b>What it does</b></div>
+            <ul class="feat">
+              <li>Geofencing for check in/out at designated locations</li>
+              <li>Logistics Accountability and tracking</li>
+              <li>Noticeboards for centralized announcements</li>
+              <li>Hand Over Features facilitating smooth transitions</li>
+            </ul></div>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span><span>Digitalisation</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 018</span><span class="lt">World Skills Training (Aircraft Maintenance)</span><span class="lcat">Aerospace</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Acquired technical skills essential for Aircraft Maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and ability to handle stress.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span><span>Stress Management</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 019</span><span class="lt">App Development for Poly Forum 2024 (SYLP)</span><span class="lcat">Tools/Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Agile App Dev</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic">
+        <summary><span class="lno">LOG 020</span><span class="lt">Google Collab Text to Flowchart Bot</span><span class="lcat">R&amp;D</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Created an AI tool using Python and ChatGPT 3.5 that generates flowcharts from text.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Explored prompt engineering and integrating python libraries together in a single notebook for workflow tools.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 05 · SERVICE RECORD ══════════ -->
+<section id="record" class="relative px-5 py-28 sm:px-8 lg:py-40">
+  <div class="mx-auto max-w-[1000px]">
+
+    <div class="mb-14" data-reveal>
+      <div class="mono mb-4"><b>Experience</b> Most recent first</div>
+      <h2 class="h-sec">Transition <span class="hi-warm">Path.</span></h2>
+    </div>
+
+    <div class="relative pl-8" id="timeline">
+      <span class="tl-line"></span>
+      <span class="tl-fill" id="tlFill"></span>
+
+      <div class="relative pb-14" data-reveal>
+        <span class="tl-node"></span>
+        <div class="mono mb-2">Oct 2025 — Present (7 months) · Singapore</div>
+        <h3 class="font-display text-[1.7rem] font-bold uppercase tracking-wide text-ink">Power Platform Developer, Student Intern</h3>
+        <div class="mt-1.5 font-mono text-[.8125rem] text-data">// RAiD (RSAF Agile innovation Digital)</div>
+        <p class="mt-4 max-w-[66ch] leading-relaxed text-body">
+          Specializing in Power Apps and Power Platform within the PPCoE team. Focus on
+          designing digital solutions that streamline processes, improve data quality,
+          and support data-driven decision-making.
+        </p>
+      </div>
+
+      <div class="relative pb-14" data-reveal>
+        <span class="tl-node"></span>
+        <div class="mono mb-2">Dec 2023 — Present · Singapore</div>
+        <h3 class="font-display text-[1.7rem] font-bold uppercase tracking-wide text-ink">PowerApp / Power Platform Developer</h3>
+        <div class="mt-1.5 font-mono text-[.8125rem] text-data">// Temasek Polytechnic</div>
+        <p class="mt-4 max-w-[66ch] leading-relaxed text-body">
+          Self-learnt PowerApps to automate admin work for various CCAs, enhancing club efficiency.
+        </p>
+      </div>
+
+      <div class="relative pb-14" data-reveal>
+        <span class="tl-node"></span>
+        <div class="mono mb-2">Dec 2024 — Oct 2025 · Singapore</div>
+        <h3 class="font-display text-[1.7rem] font-bold uppercase tracking-wide text-ink">Software Engineer (Power Platform)</h3>
+        <div class="mt-1.5 font-mono text-[.8125rem] text-data">// Freelance</div>
+        <p class="mt-4 max-w-[66ch] leading-relaxed text-body">
+          Leveraged low code tools like PowerApps and Power Automate to develop tailored
+          automation solutions.
+        </p>
+      </div>
+
+      <div class="relative" data-reveal>
+        <span class="tl-node"></span>
+        <div class="mono mb-2">Apr 2021 — Jan 2023 · Singapore</div>
+        <h3 class="font-display text-[1.7rem] font-bold uppercase tracking-wide text-ink">Freelance / Mini Start Up</h3>
+        <div class="mt-1.5 font-mono text-[.8125rem] text-data">// Personal Company</div>
+        <p class="mt-4 max-w-[66ch] leading-relaxed text-body">
+          Founded a business in the Anime industry animating 2D models using Live 2D Cubism,
+          building a portfolio with low-code platforms and practicing SEO strategies.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ WP-02 MISSION REPORT ══════════ -->
-<section id="mission">
-  <div class="wrap sec">
-    <div class="sec-spine" aria-hidden="true">
-      <span class="wp">WP-02 · MISSION</span>
-      <span class="tick"></span>
-    </div>
-    <div class="sec-body">
-      <div class="sec-head reveal">
-        <span class="field"><b>RPT</b> Featured mission report · No-code → AI-Ops</span>
-        <h2>RSAF Facility Booking App</h2>
+<!-- ══════════ 06 · CONTACT ══════════ -->
+<!-- This is the one section the sky goes dark behind (.band-orbit), so it
+     carries .invert-band and every pairing inside it is checked against the
+     lighter end of that gradient, #2A4E7A. -->
+<section id="contact" class="invert-band relative px-5 py-32 sm:px-8 lg:py-44">
+  <div class="mx-auto max-w-[1140px]">
+    <div class="grid items-center gap-14 lg:grid-cols-[1.15fr_.85fr]">
+      <div data-reveal>
+        <div class="mono mb-5"><b>Get in touch</b> Available for new roles</div>
+        <h2 class="mega text-[clamp(2.8rem,8.5vw,6.5rem)]">Ready for<br>what’s <span class="hi-warm">next.</span></h2>
+        <p class="body-inv mt-7 max-w-[50ch] text-lg leading-relaxed">
+          Open to AI engineering and software development opportunities.
+          Send me a note — I usually reply within a day.
+        </p>
       </div>
-
-      <div class="mission">
-        <article class="report reveal">
-          <div class="report-head">
-            <span class="field">Mission type · Enterprise</span>
-            <span class="field"><b>Unit</b> RAiD</span>
-          </div>
-          <div class="report-body">
-            <h3>Objective</h3>
-            <p>
-              An enterprise-grade facility reservation platform on Microsoft
-              Dataverse + React to streamline operations for the entire RSAF.
-            </p>
-
-            <span class="field" style="display:block;margin-top:1.5rem"><b>CHK</b> Capability inspection — all items verified</span>
-            <ul class="checklist">
-              <li><span class="box" aria-hidden="true"></span>Role-based access control (4-tier permissions)</li>
-              <li><span class="box" aria-hidden="true"></span>Approval workflows with end-to-end visibility</li>
-              <li><span class="box" aria-hidden="true"></span>Real-time availability &amp; conflict detection</li>
-              <li><span class="box" aria-hidden="true"></span>Recurring booking support for complex scheduling</li>
-              <li><span class="box" aria-hidden="true"></span>Comprehensive audit logging</li>
-              <li><span class="box" aria-hidden="true"></span>Multi-tenant-ready architecture using soft-delete patterns &amp; departmental isolation</li>
-            </ul>
-
-            <div class="debrief">
-              <span class="field" style="margin-bottom:.4rem;display:block"><b>DEBRIEF</b> Impact</span>
-              <p>
-                Used Specs-Driven Development to design and implement the
-                application end-to-end—delivering a full-stack experience across
-                frontend UX, API integration, and database design in just 2 days.
-                This project demonstrated the transition from no-code to
-                AI-orchestrated engineering.
-              </p>
-            </div>
-          </div>
-        </article>
-
-        <aside class="reveal">
-          <div class="toolplate" aria-label="Equipment list">
-            <span class="field"><b>EQP</b> Equipment fitted</span>
-            <ul>
-              <li>Microsoft Dataverse <span>DATA</span></li>
-              <li>React <span>FRONTEND</span></li>
-              <li>PowerApps Code Apps <span>PLATFORM</span></li>
-              <li>Gemini 3.1 <span>AI</span></li>
-              <li>Claude Opus 4.6 <span>AI</span></li>
-              <li>Github Copilot <span>AI</span></li>
-            </ul>
-          </div>
-          <div class="delivery">Sortie duration: 2 days · spec to delivery</div>
-        </aside>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ WP-03 DOCTRINE ══════════ -->
-<section id="doctrine">
-  <div class="wrap sec">
-    <div class="sec-spine" aria-hidden="true">
-      <span class="wp">WP-03 · DOCTRINE</span>
-      <span class="tick"></span>
-    </div>
-    <div class="sec-body">
-      <div class="sec-head reveal">
-        <span class="field"><b>DOC</b> Operating doctrine · The framework</span>
-        <h2>Margin of Impact</h2>
-      </div>
-      <p class="doctrine-intro reveal">
-        My tenure at RAiD is defined by a holistic approach safely navigating
-        large-scale enterprise complexities through three intersecting areas of
-        impact.
-      </p>
-      <div class="doctrine reveal">
-        <div class="doct">
-          <span class="field"><b>A</b> Direct</span>
-          <h3>Individual Impact</h3>
-          <p>Delivering direct value through technical expertise. Building enterprise solutions like RAiD Air 2.0 that replace legacy systems.</p>
-        </div>
-        <div class="doct">
-          <span class="field"><b>B</b> Force-wide</span>
-          <h3>Community Scaling</h3>
-          <p>Integrating best practices. Explored Vibe-Coding to reduce dev time to days, leveraging open-source tools to solve gaps.</p>
-        </div>
-        <div class="doct">
-          <span class="field"><b>C</b> Enduring</span>
-          <h3>Success Multiplication</h3>
-          <p>Empowering through Training and Consultancy. Delivered Bootcamps, consulted units RSAF-wide, and created guides.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ WP-04 FLIGHT LOG ══════════ -->
-<section id="log">
-  <div class="wrap sec">
-    <div class="sec-spine" aria-hidden="true">
-      <span class="wp">WP-04 · FLIGHT LOG</span>
-      <span class="tick"></span>
-    </div>
-    <div class="sec-body">
-      <div class="sec-head reveal">
-        <span class="field"><b>LOG</b> Complete mission history · every entry opens for full debrief</span>
-        <h2>Flight Log — 020 Entries</h2>
-      </div>
-
-      <div class="log-controls reveal" role="group" aria-label="Filter log by organization">
-        <button type="button" data-org="all" aria-pressed="true">All entries</button>
-        <button type="button" data-org="RAiD" aria-pressed="false">RSAF (RAiD)</button>
-        <button type="button" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
-        <button type="button" data-org="Freelance" aria-pressed="false">Freelance</button>
-        <span class="field log-count" id="logCount">020 / 020 shown</span>
-      </div>
-
-      <div class="log reveal">
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 001</span><span class="title">Facility Booking App</span><span class="cat">Enterprise</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>An enterprise-grade facility reservation platform to streamline operations for the entire RSAF.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Used Specs-Driven Development to design and implement the application end-to-end—delivering a full-stack experience in just 2 days.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Microsoft Dataverse</span><span>React</span><span>Gemini 3.1</span><span>Claude Opus 4.6</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 002</span><span class="title">ASV Logbook &amp; Maintenance Web App</span><span class="cat">Enterprise</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Customised web-based app for Air Specialist Vehicle (ASV) usage and maintenance records to track upcoming vehicle's servicing status.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 003</span><span class="title">Singapore Airshow 2026 Charity Auction</span><span class="cat">Enterprise</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Auction tool allowing RSAF personnel to bid for charity bears as part of a charity movement for the Singapore Airshow.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>FormSG</span><span>Plumber</span><span>Sharepoint</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 004</span><span class="title">SOAR Schedule App</span><span class="cat">Requested</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Calendar app to allocate pilot trainees for simulator training, generated using Code Apps.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>PowerApps</span><span>Github Copilot</span><span>Google Ai Studio</span><span>Lovable</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 005</span><span class="title">SSB Loan Tracking System</span><span class="cat">Requested</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>End to end workflow for SSB to track and approve the loaning of their logistic items.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>FormSG</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 006</span><span class="title">SAGE Copilot AI</span><span class="cat">Requested</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Integrating SAGE's ME5 Delta Agent into Copilot for training purposes using Open Source models.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Navigated license constraints creatively to replicate GPT 4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 007</span><span class="title">R&amp;D for Vibe-Coding Code Apps</span><span class="cat">R&amp;D</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Explored AI Vibe Coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 008</span><span class="title">Documentation Generation Tool (PowerDocu)</span><span class="cat">R&amp;D</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Learnt about Cybersecurity Scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Github</span><span>PowerDocu</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 009</span><span class="title">Improved App Brandings using SVG</span><span class="cat">R&amp;D</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Created animated logos through SVG codes to improve app brandings, beneficial for marketing.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>SVG</span><span>UI/UX Design</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 010</span><span class="title">1-Day Power Platform Bootcamp (815 SQN)</span><span class="cat">Trainings</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Lovable</span><span>Power Platform</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="RAiD">
-          <summary><span class="no">LOG 011</span><span class="title">Comprehensive Guide for New Interns</span><span class="cat">Trainings</span><span class="org">RAiD</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Documentation</span><span>Mentoring</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 012</span><span class="title">App Development For Lead Ambassadors CCA</span><span class="cat">Tools/Automation</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Agile App Dev</span><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 013</span><span class="title">National AI Student Challenge 2025 — Huawei Track</span><span class="cat">Competitions</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Mobile app to improve Citizen Engagement and Civic Services, allowing them to report issues and track their progress of their requests.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Exposure to ML algorithms, various Cloud Technologies in Huawei's ecosystem, and MLOps. Introduced to AI development field.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>Cloud Tech</span><span>MLOps</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 014</span><span class="title">Whitehacks 2025 (Cybersecurity CTF)</span><span class="cat">Competitions</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Cybersecurity CTF Competition organised by SMU. Used tools such as Wireshark, John The Ripper, and Z-steg.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 015</span><span class="title">App Development for Mindsports CCA</span><span class="cat">Tools/Automation</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Microsoft Power Platform</span><span>Agile App Dev</span><span>UI Design</span><span>Data Visualization</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 016</span><span class="title">Iron Viz Student Edition</span><span class="cat">Competitions</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Freelance">
-          <summary><span class="no">LOG 017</span><span class="title">Workplace Check In/Out App</span><span class="cat">Tools/Automation</span><span class="org">Freelance</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Developed a PowerApp to simplify and automate the administrative workflow for duty management for duty personnel in an RSAF Unit.</p>
-            <div><span class="field"><b>CHK</b> Key features</span>
-              <ul class="feat">
-                <li>Geofencing for check in/out at designated locations</li>
-                <li>Logistics Accountability and tracking</li>
-                <li>Noticeboards for centralized announcements</li>
-                <li>Hand Over Features facilitating smooth transitions</li>
-              </ul></div>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span><span>Digitalisation</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 018</span><span class="title">World Skills Training (Aircraft Maintenance)</span><span class="cat">Aerospace</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Acquired technical skills essential for Aircraft Maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and ability to handle stress.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span><span>Stress Management</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 019</span><span class="title">App Development for Poly Forum 2024 (SYLP)</span><span class="cat">Tools/Automation</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Microsoft Power Platform</span><span>UI Design</span><span>Agile App Dev</span></div></div>
-          </div>
-        </details>
-
-        <details class="entry" data-org="Temasek Polytechnic">
-          <summary><span class="no">LOG 020</span><span class="title">Google Collab Text to Flowchart Bot</span><span class="cat">R&amp;D</span><span class="org">Temasek Poly</span><span class="plus">+</span></summary>
-          <div class="entry-body">
-            <p>Created an AI tool using Python and ChatGPT 3.5 that generates flowcharts from text.</p>
-            <div><span class="field"><b>DEBRIEF</b> Key learnings</span>
-              <p class="learn">Explored prompt engineering and integrating python libraries together in a single notebook for workflow tools.</p></div>
-            <div><span class="field"><b>EQP</b> Tools</span>
-              <div class="tools"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
-          </div>
-        </details>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ WP-05 SERVICE RECORD ══════════ -->
-<section id="record">
-  <div class="wrap sec">
-    <div class="sec-spine" aria-hidden="true">
-      <span class="wp">WP-05 · SERVICE RECORD</span>
-      <span class="tick"></span>
-    </div>
-    <div class="sec-body">
-      <div class="sec-head reveal">
-        <span class="field"><b>SVC</b> Postings &amp; tours of duty · reverse chronological</span>
-        <h2>Service Record</h2>
-      </div>
-
-      <div class="record">
-        <div class="tour reveal">
-          <div class="when">
-            <span class="period">Oct 2025 — Present (7 months)</span>
-            <span class="field">Singapore</span>
-          </div>
-          <div>
-            <h3>Power Platform Developer, Student Intern</h3>
-            <div class="co">// RAiD (RSAF Agile innovation Digital)</div>
-            <p>Specializing in Power Apps and Power Platform within the PPCoE team. Focus on designing digital solutions that streamline processes, improve data quality, and support data-driven decision-making.</p>
-          </div>
-        </div>
-
-        <div class="tour reveal">
-          <div class="when">
-            <span class="period">Dec 2023 — Present</span>
-            <span class="field">Singapore</span>
-          </div>
-          <div>
-            <h3>PowerApp / Power Platform Developer</h3>
-            <div class="co">// Temasek Polytechnic</div>
-            <p>Self-learnt PowerApps to automate admin work for various CCAs, enhancing club efficiency.</p>
-          </div>
-        </div>
-
-        <div class="tour reveal">
-          <div class="when">
-            <span class="period">Dec 2024 — Oct 2025</span>
-            <span class="field">Singapore</span>
-          </div>
-          <div>
-            <h3>Software Engineer (Power Platform)</h3>
-            <div class="co">// Freelance</div>
-            <p>Leveraged low code tools like PowerApps and Power Automate to develop tailored automation solutions.</p>
-          </div>
-        </div>
-
-        <div class="tour reveal">
-          <div class="when">
-            <span class="period">Apr 2021 — Jan 2023</span>
-            <span class="field">Singapore</span>
-          </div>
-          <div>
-            <h3>Freelance / Mini Start Up</h3>
-            <div class="co">// Personal Company</div>
-            <p>Founded a business in the Anime industry animating 2D models using Live 2D Cubism, building a portfolio with low-code platforms and practicing SEO strategies.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ WP-06 CONTACT ══════════ -->
-<section id="contact" class="contact">
-  <div class="wrap sec">
-    <div class="sec-spine" aria-hidden="true">
-      <span class="wp">WP-06 · CONTACT</span>
-      <span class="tick"></span>
-    </div>
-    <div class="sec-body">
-      <div class="contact-inner">
-        <div class="reveal">
-          <span class="field"><b>ACT</b> This aircraft is cleared for tasking</span>
-          <h2>Ready for<br>the next sortie.</h2>
-          <p>Open to AI engineering and software development opportunities. Send a mission brief — response time is measured in hours, not days.</p>
-        </div>
-        <div class="contact-links reveal">
-          <a class="rbf" href="mailto:Manfredsiew@hotmail.sg">
-            <span class="hole" aria-hidden="true"></span>
-            Remove before flight — email me
-          </a>
-          <span class="alt">ALT FREQ · <a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer">LinkedIn / manfred-siew</a></span>
-          <span class="alt">MAIL · <a href="mailto:Manfredsiew@hotmail.sg">Manfredsiew@hotmail.sg</a></span>
-        </div>
+      <div class="flex flex-col items-start gap-6" data-reveal>
+        <a class="rbf" href="mailto:Manfredsiew@hotmail.sg">
+          <span class="hole" aria-hidden="true"></span>Get in touch — email me
+        </a>
+        <span class="mono">LinkedIn ·
+          <a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer"
+             class="underline underline-offset-4 transition">LinkedIn / manfred-siew</a>
+        </span>
+        <span class="mono">Email ·
+          <a href="mailto:Manfredsiew@hotmail.sg"
+             class="underline underline-offset-4 transition">Manfredsiew@hotmail.sg</a>
+        </span>
       </div>
     </div>
   </div>
@@ -964,65 +896,270 @@ footer .field{font-size:.6rem}
 
 </main>
 
-<footer>
-  <div class="wrap">
-    <span class="field">© 2026 Manfred Siew · TDP-MS-2026 REV 2.4</span>
-    <span class="field">Aerospace Engineering Diploma / Temasek Polytechnic</span>
-    <span class="field">End of document · <b>UNCLASSIFIED</b></span>
+<footer class="invert-band relative z-10 border-t border-white/20 px-5 py-10 sm:px-8">
+  <div class="mx-auto flex max-w-[1140px] flex-wrap justify-between gap-4">
+    <span class="mono">© 2026 Manfred Siew</span>
+    <span class="mono">Aerospace Engineering Diploma / Temasek Polytechnic</span>
+    <span class="mono">End of document</span>
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-// Altimeter — climbs with scroll (the ascent: aerospace → AI)
-(function(){
-  var el = document.getElementById('alt');
-  if(!el) return;
-  var ticking = false;
-  function update(){
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    var p = max > 0 ? window.scrollY / max : 0;
-    el.textContent = String(Math.round(p * 3500) * 10).padStart(5,'0');
-    ticking = false;
-  }
-  window.addEventListener('scroll', function(){
-    if(!ticking){ requestAnimationFrame(update); ticking = true; }
-  }, {passive:true});
-  update();
-})();
+(function () {
+  'use strict';
 
-// Flight log filter
-(function(){
-  var buttons = document.querySelectorAll('.log-controls button');
-  var entries = document.querySelectorAll('.entry');
-  var count = document.getElementById('logCount');
-  buttons.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      buttons.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
-      btn.setAttribute('aria-pressed','true');
-      var org = btn.dataset.org, shown = 0;
-      entries.forEach(function(e){
-        var show = org === 'all' || e.dataset.org === org;
-        e.hidden = !show;
-        if(show) shown++;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGSAP = typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
+
+  /* ─────────── 1. FLIGHT LOG FILTER (always on — content first) ─────────── */
+  (function () {
+    var buttons = document.querySelectorAll('.filt');
+    var rows = document.querySelectorAll('.log-row');
+    var count = document.getElementById('logCount');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        buttons.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        btn.setAttribute('aria-pressed', 'true');
+        var org = btn.dataset.org, shown = 0;
+        rows.forEach(function (r) {
+          var show = org === 'all' || r.dataset.org === org;
+          r.hidden = !show;
+          if (show) shown++;
+        });
+        count.textContent = shown === rows.length
+          ? 'Showing all ' + rows.length
+          : 'Showing ' + shown + ' of ' + rows.length;
+        if (hasGSAP && !reduce) ScrollTrigger.refresh();
       });
-      if(count) count.textContent = String(shown).padStart(3,'0') + ' / 020 shown';
+    });
+    // an entry opening changes page height — keep triggers honest
+    rows.forEach(function (r) {
+      r.addEventListener('toggle', function () {
+        if (hasGSAP && !reduce) ScrollTrigger.refresh();
+      });
+    });
+  })();
+
+  /* ─────────── 2. ALTIMETER + PHASE (cheap, runs even reduced) ─────────── */
+  (function () {
+    var out = document.getElementById('altOut');
+    var fill = document.getElementById('tapeFill');
+    var phase = document.getElementById('phaseOut');
+    if (!out) return;
+    /* Plain section names, not flight phases. The indicator now tells the
+       reader where they are instead of asking them to decode a metaphor. */
+    var phases = [
+      [0.00, 'Home'], [0.16, 'Featured work'], [0.40, 'All projects'],
+      [0.78, 'Experience'], [0.91, 'Get in touch']
+    ];
+    var queued = false;
+    function tick() {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      out.textContent = String(Math.round(p * 3800) * 10).padStart(5, '0');
+      if (fill) fill.style.transform = 'scaleY(' + p + ')';
+      if (phase) {
+        var label = phases[0][1];
+        for (var i = 0; i < phases.length; i++) if (p >= phases[i][0]) label = phases[i][1];
+        if (phase.textContent !== label) phase.textContent = label;
+      }
+      queued = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!queued) { requestAnimationFrame(tick); queued = true; }
+    }, { passive: true });
+    tick();
+  })();
+
+  /* ─────────── 3. STARFIELD (depth parallax; skipped if reduced) ─────────── */
+  if (!reduce) (function () {
+    var canvas = document.getElementById('stars');
+    var ctx = canvas && canvas.getContext('2d');
+    if (!ctx) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = 0, h = 0, motes = [], raf = 0, running = true, t = 0;
+
+    function build() {
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.min(150, Math.max(50, Math.floor(w / 11)));
+      motes = [];
+      for (var i = 0; i < n; i++) {
+        motes.push({
+          x: Math.random() * w, y: Math.random() * h,
+          r: 0.3 + Math.random() * 1.5,
+          depth: 0.08 + Math.random() * 0.55,        // parallax rate
+          drift: 0.02 + Math.random() * 0.12,
+          tw: Math.random() * Math.PI * 2,           // twinkle phase
+          a: 0.10 + Math.random() * 0.55
+        });
+      }
+    }
+
+    /* Stars in daylight are nonsense, so the whole canvas is gated on
+       scroll: invisible until .band-orbit starts taking over near the end,
+       then faded in over the last stretch. Below the gate we skip the draw
+       entirely rather than paint something nobody can see. */
+    var GATE_IN = 0.86, GATE_FULL = 0.97;
+    function frame() {
+      if (!running) return;
+      t += 0.01;
+      var sy = window.scrollY;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, sy / max)) : 0;
+      var vis = Math.min(1, Math.max(0, (p - GATE_IN) / (GATE_FULL - GATE_IN)));
+      if (canvas.style.opacity !== String(vis)) canvas.style.opacity = String(vis);
+      if (vis === 0) { raf = requestAnimationFrame(frame); return; }
+
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < motes.length; i++) {
+        var m = motes[i];
+        m.y += m.drift;
+        var y = ((m.y - sy * m.depth) % h + h) % h;
+        ctx.globalAlpha = m.a * (0.55 + 0.45 * Math.sin(t * 1.6 + m.tw));
+        ctx.fillStyle = m.depth > 0.4 ? '#FFFFFF' : '#9FD4FF';
+        ctx.beginPath();
+        ctx.arc(m.x, y, m.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(frame);
+    }
+
+    build();
+    raf = requestAnimationFrame(frame);
+    window.addEventListener('resize', build);
+    document.addEventListener('visibilitychange', function () {
+      var vis = document.visibilityState === 'visible';
+      if (vis && !running) { running = true; raf = requestAnimationFrame(frame); }
+      else if (!vis && running) { running = false; cancelAnimationFrame(raf); }
+    });
+  })();
+
+  /* ─────────── 4. GSAP SCROLLYTELLING ─────────── */
+  if (!hasGSAP || reduce) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  var mm = gsap.matchMedia();
+
+  /* 4a. THE ASCENT — sky bands cross-fade against total page progress.
+         This is the story: hangar → dawn takeoff → cruise → stratosphere → orbit. */
+  (function () {
+    var order = ['hangar', 'dawn', 'cruise', 'strato', 'orbit'];
+    var stops = [0, 0.22, 0.46, 0.70, 0.90];
+    var tl = gsap.timeline({
+      scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 }
+    });
+    order.forEach(function (name, i) {
+      var el = document.querySelector('[data-band="' + name + '"]');
+      if (!el || i === 0) return;
+      tl.to(el, { opacity: 1, ease: 'none', duration: 0.18 }, stops[i]);
+      var prev = document.querySelector('[data-band="' + order[i - 1] + '"]');
+      if (prev) tl.to(prev, { opacity: 0, ease: 'none', duration: 0.18 }, stops[i]);
+    });
+  })();
+
+  /* 4b. HERO — orchestrated page-load sequence, headline split per character */
+  (function () {
+    document.querySelectorAll('#heroName [data-split]').forEach(function (line) {
+      var text = line.textContent;
+      var accent = line.querySelector('.hi-warm');
+      var accentText = accent ? accent.textContent : '';
+      var base = accentText ? text.slice(0, text.length - accentText.length) : text;
+      line.innerHTML = '';
+      base.split('').forEach(function (c) {
+        var s = document.createElement('span');
+        s.className = 'ch'; s.textContent = c;
+        line.appendChild(s);
+      });
+      if (accentText) {
+        var a = document.createElement('span');
+        a.className = 'ch hi-warm'; a.textContent = accentText;
+        line.appendChild(a);
+      }
+    });
+
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from('#heroName .ch', { yPercent: 118, opacity: 0, duration: 1, stagger: 0.028 })
+      .from('[data-hero="1"]', { opacity: 0, y: 14, duration: .7 }, 0.15)
+      .from('[data-hero="2"]', { opacity: 0, y: 20, duration: .7 }, '-=.45')
+      .from('[data-hero="3"]', { opacity: 0, y: 20, duration: .7 }, '-=.55')
+      .from('[data-hero="4"]', { opacity: 0, y: 20, duration: .7 }, '-=.55')
+      .from('[data-hero="5"]', { opacity: 0, y: 20, duration: .7 }, '-=.55')
+      .from('[data-hero="6"]', { opacity: 0, scale: .94, duration: 1.1 }, 0.25)
+      .from('[data-hero="7"]', { opacity: 0, y: 16, duration: .7 }, '-=.6');
+  })();
+
+  /* 4c. GENERIC REVEALS */
+  gsap.utils.toArray('[data-reveal]').forEach(function (el) {
+    gsap.from(el, {
+      opacity: 0, y: 34, duration: .95, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 86%' }
     });
   });
-})();
 
-// Scroll reveal — skipped entirely under reduced motion
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if(!('IntersectionObserver' in window)){
-    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(items){
-    items.forEach(function(item){
-      if(item.isIntersecting){ item.target.classList.add('in'); io.unobserve(item.target); }
+  /* 4d. PARALLAX — foreground panels drift against the sky at their own rate */
+  mm.add('(min-width: 900px)', function () {
+    gsap.utils.toArray('[data-parallax]').forEach(function (el) {
+      gsap.to(el, {
+        y: parseFloat(el.dataset.parallax) || 0, ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: 1 }
+      });
     });
-  }, {rootMargin:'0px 0px -60px 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  });
+
+  /* 4e. COUNTERS — numbers spin up when their panel arrives */
+  gsap.utils.toArray('[data-count]').forEach(function (el) {
+    var target = parseFloat(el.dataset.count) || 0;
+    var pad = el.textContent.length > 1;
+    var obj = { v: 0 };
+    gsap.to(obj, {
+      v: target, duration: 1.5, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' },
+      onUpdate: function () {
+        var n = Math.round(obj.v);
+        el.textContent = pad ? String(n).padStart(2, '0') : n;
+      }
+    });
+  });
+
+  /* 4f. CHECKLIST — items tick one at a time as you read down. --signal is
+         a fill here, which is the only place it is allowed. */
+  gsap.utils.toArray('#checklist .chk').forEach(function (box, i) {
+    gsap.to(box, {
+      backgroundColor: '#FF6B1A', borderColor: '#C2410C',
+      duration: .3, ease: 'power2.out',
+      scrollTrigger: { trigger: box, start: 'top 78%' },
+      delay: i * 0.06
+    });
+  });
+
+  /* 4g. EXPERIENCE — the timeline draws itself as you scroll the roles */
+  (function () {
+    var fill = document.getElementById('tlFill');
+    if (!fill) return;
+    gsap.to(fill, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: '#timeline', start: 'top 72%', end: 'bottom 82%', scrub: .6 }
+    });
+  })();
+
+  /* 4h. PROJECT ROWS — entries stream past like a live feed */
+  gsap.utils.toArray('.log-row').forEach(function (row, i) {
+    gsap.from(row, {
+      opacity: 0, x: -22, duration: .6, ease: 'power2.out',
+      scrollTrigger: { trigger: row, start: 'top 94%' }
+    });
+  });
+
+  /* The pointer-glow reflection was removed: a soft additive light reads as
+     depth on a black page and as nothing but haze on paper. It cost a
+     pointermove listener and a permanent compositor layer to achieve that. */
+
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 })();
 </script>
 
