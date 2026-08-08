@@ -6,7 +6,33 @@
 
 **Architecture:** `portfolio.ts` gains a `Category` string-literal union and an exported `CATEGORIES` tuple, so `tsc --noEmit` rejects any value outside the six. A new Vitest suite enforces the content rules that types cannot express — no military-purpose vocabulary, no title leading with a bare codename, no duplicate project between `featuredProject` and `projects`. `Projects.tsx` renders a short display label rather than the canonical category name, because the canonical names are too long for the existing badge.
 
-**Tech Stack:** TypeScript 5.8, React 19, Vite 6, Vitest (added by Task 1), Tailwind 4.
+**Tech Stack:** TypeScript 5.8, React 19, Vite 6, Tailwind 4, `tsx` 4.21 (already a devDependency).
+
+## Deviations from this plan, as executed 2026-08-08
+
+Recorded because the committed work does not match the task list above.
+
+1. **Vitest was not added.** `npm install -D vitest` ran for over 20 minutes with no
+   output and was killed; `package.json` was never modified by it. The checks were
+   rewritten as a plain `tsx` script — `src/data/portfolio.check.ts`, run by
+   `npm test` — using `node:assert`-style helpers. This costs zero new packages, and
+   `tsx` was already present. Given the repo had no test runner at all, this is
+   arguably the better fit regardless. All ten checks from Tasks 1–5 survive intact.
+2. **Tasks 1–5 were executed as a single commit** (`9b5f7c0`) rather than five. The
+   red-green cycle was preserved — the check script was written first and observed
+   failing before `portfolio.ts` was touched — but the intermediate commits were not
+   made, because the type union and the data migration cannot compile independently.
+3. **A fourth role, `Governance lead`, was added.** Author ruling, 2026-08-08: the
+   PowerDocu clearance and the M365 Code Apps policy approval are the same kind of work
+   and neither is development. See spec §8.
+4. **A new project was added:** `code-apps-policy`, the M365 tenant Code Apps policy
+   approval, under Developer Enablement & R&D with role `Governance lead`. Description
+   deliberately vague at the author's instruction — it names only "the relevant
+   cybersecurity authorities within MINDEF".
+5. **The badge was not visually verified in a browser.** Every new label is at most 11
+   characters (`Competition`), against a previous longest of `Tools/Automation` at 16
+   which rendered without wrapping. The new labels are strictly shorter than what
+   already fit, so no visual regression is possible.
 
 ## Global Constraints
 
