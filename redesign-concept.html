@@ -347,6 +347,35 @@ html.sky-dark .bracket{ border-color:rgba(255,255,255,.42); }
   background:var(--signal); border-color:var(--signal); color:var(--ink);
 }
 
+/* ── CATEGORY DECK ──
+   The six groupings, ordered strongest-first. Each card is a filter button,
+   so the taxonomy is something you operate rather than something you read.
+   Cards carry the claim the category makes; that line is the whole reason
+   the grouping exists, and hiding it behind a hover would waste it. */
+.catdeck{ display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem; }
+@media (max-width:900px){ .catdeck{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .catdeck{ grid-template-columns:1fr; } }
+.catcard{
+  display:flex; flex-direction:column; gap:.45rem; text-align:left; width:100%;
+  padding:1rem 1.05rem 1.1rem; border:1px solid var(--rule);
+  background:var(--surface); cursor:pointer; transition:border-color .2s,background .2s;
+}
+.catcard:hover:not(:disabled){ border-color:var(--data); }
+.catcard[aria-pressed="true"]{ background:var(--wash); border-color:var(--signal); }
+.catcard[aria-pressed="true"] .cc-no{ color:var(--signal); }
+/* Two categories hold no published entry yet. Greying them is honest: an
+   empty filter that silently returns nothing reads as a broken control. */
+.catcard:disabled{ cursor:default; background:transparent; border-style:dashed; }
+.catcard:disabled .cc-name,.catcard:disabled .cc-claim{ color:var(--muted); }
+.cc-top{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
+.cc-no{ font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); font-weight:600; color:var(--warm); }
+.cc-n{ font-family:"IBM Plex Mono",monospace; font-size:var(--fs-label); color:var(--muted); white-space:nowrap; }
+.cc-name{
+  font-family:"Instrument Sans",system-ui,sans-serif; font-weight:600;
+  font-size:1.02rem; color:var(--ink); line-height:1.25;
+}
+.cc-claim{ font-size:.875rem; color:var(--body); line-height:1.5; }
+
 /* ── EXPERIENCE timeline ── */
 .tl-line{
   position:absolute; left:0; top:0; width:2px; height:100%;
@@ -1007,8 +1036,54 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
   <div class="mx-auto max-w-[1140px]">
 
     <div class="mb-10" data-reveal>
-      <div class="mono mb-4"><b>All projects</b> Every entry opens for detail</div>
+      <div class="mono mb-4"><b>All projects</b> Pick a category, or open any entry for detail</div>
       <h2 class="h-sec">All Projects —<br><span class="hi-data" data-count="20">0</span> Total</h2>
+    </div>
+
+    <!-- The six categories sit on one axis — scope of ownership — and are
+         ordered strongest-first, so the thin, strong groups are met before
+         the long tail rather than dug for. Organisation is a SEPARATE axis
+         below: a poly CCA app and an RSAF system can share a capability
+         while obviously differing in stakes, and showing that is stronger
+         than hiding the earlier work. The two filters combine. -->
+    <div class="catdeck mb-6" role="group" aria-label="Filter projects by category" data-reveal>
+
+      <button type="button" class="catcard" data-cat="simulation" aria-pressed="false" disabled>
+        <div class="cc-top"><span class="cc-no">01</span><span class="cc-n">In preparation</span></div>
+        <div class="cc-name">Simulation &amp; Decision Support</div>
+        <div class="cc-claim">I can model a domain I wasn’t trained in.</div>
+      </button>
+
+      <button type="button" class="catcard" data-cat="platform" aria-pressed="false" disabled>
+        <div class="cc-top"><span class="cc-no">02</span><span class="cc-n">In preparation</span></div>
+        <div class="cc-name">Full-Stack Platforms</div>
+        <div class="cc-claim">I own systems, not features.</div>
+      </button>
+
+      <button type="button" class="catcard" data-cat="enterprise" aria-pressed="false">
+        <div class="cc-top"><span class="cc-no">03</span><span class="cc-n">1 entry</span></div>
+        <div class="cc-name">Enterprise Applications</div>
+        <div class="cc-claim">I build with governance — access control, audit trails, approvals.</div>
+      </button>
+
+      <button type="button" class="catcard" data-cat="automation" aria-pressed="false">
+        <div class="cc-top"><span class="cc-no">04</span><span class="cc-n">8 entries</span></div>
+        <div class="cc-name">Process Automation</div>
+        <div class="cc-claim">I ship a working process in days, not quarters.</div>
+      </button>
+
+      <button type="button" class="catcard" data-cat="enablement" aria-pressed="false">
+        <div class="cc-top"><span class="cc-no">05</span><span class="cc-n">7 entries</span></div>
+        <div class="cc-name">Developer Enablement &amp; R&amp;D</div>
+        <div class="cc-claim">I scale the practice past myself.</div>
+      </button>
+
+      <button type="button" class="catcard" data-cat="competition" aria-pressed="false">
+        <div class="cc-top"><span class="cc-no">06</span><span class="cc-n">4 entries</span></div>
+        <div class="cc-name">Competitions &amp; Credentials</div>
+        <div class="cc-claim">Assessed by somebody other than me.</div>
+      </button>
+
     </div>
 
     <div class="mb-8 flex flex-wrap items-center gap-2.5" role="group" aria-label="Filter projects by organisation" data-reveal>
@@ -1021,7 +1096,11 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
 
     <div class="border-t-2 border-rule" id="logList">
 
-      <details class="log-row" data-org="RAiD">
+      <!-- Ordered by category, strongest-first, matching the deck above.
+           The numbering is therefore meaningful rather than arbitrary. -->
+
+      <!-- ── 03 · ENTERPRISE APPLICATIONS ── -->
+      <details class="log-row" data-org="RAiD" data-cat="enterprise">
         <summary><span class="lno">01</span><span class="lt">RAiD Facility Booking System</span><span class="lcat">Enterprise</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>A centralised facility reservation platform on Microsoft Dataverse and React, built as Developer and Product Owner.</p>
@@ -1039,8 +1118,9 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
         </div>
       </details>
 
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">02</span><span class="lt">ASV Logbook &amp; Maintenance Web App</span><span class="lcat">Enterprise</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+      <!-- ── 04 · PROCESS AUTOMATION ── -->
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary><span class="lno">02</span><span class="lt">ASV Logbook &amp; Maintenance Web App</span><span class="lcat">Automation</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>Customised web-based app for Air Specialist Vehicle (ASV) usage and maintenance records to track upcoming vehicle's servicing status.</p>
           <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
@@ -1048,8 +1128,8 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
         </div>
       </details>
 
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">03</span><span class="lt">Singapore Airshow 2026 Charity Auction</span><span class="lcat">Enterprise</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary><span class="lno">03</span><span class="lt">Singapore Airshow 2026 Charity Auction</span><span class="lcat">Automation</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>Auction tool allowing RSAF personnel to bid for charity bears as part of a charity movement for the Singapore Airshow.</p>
           <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
@@ -1057,8 +1137,8 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
         </div>
       </details>
 
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">04</span><span class="lt">Flight Simulator Scheduling System</span><span class="lcat">Requested</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary><span class="lno">04</span><span class="lt">Flight Simulator Scheduling System</span><span class="lcat">Automation</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>Scheduling system for reserving simulator resources for training and assessment — online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
           <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely.</p></div>
@@ -1066,8 +1146,8 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
         </div>
       </details>
 
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">05</span><span class="lt">SSB Loan Tracking System</span><span class="lcat">Requested</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary><span class="lno">05</span><span class="lt">SSB Loan Tracking System</span><span class="lcat">Automation</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>End to end workflow for SSB to track and approve the loaning of their logistic items.</p>
           <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
@@ -1075,101 +1155,8 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
         </div>
       </details>
 
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">06</span><span class="lt">SAGE Copilot AI</span><span class="lcat">Requested</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Integrating SAGE's ME5 Delta Agent into Copilot for training purposes using Open Source models.</p>
-          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Navigated license constraints creatively to replicate GPT 4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">07</span><span class="lt">R&amp;D for Vibe-Coding Code Apps</span><span class="lcat">R&amp;D</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Explored AI Vibe Coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
-          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">08</span><span class="lt">Documentation Generation Tool (PowerDocu)</span><span class="lcat">R&amp;D</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use.</p>
-          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt about Cybersecurity Scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Github</span><span>PowerDocu</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">09</span><span class="lt">Improved App Brandings using SVG</span><span class="lcat">R&amp;D</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Created animated logos through SVG codes to improve app brandings, beneficial for marketing.</p>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>SVG</span><span>UI/UX Design</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">10</span><span class="lt">1-Day Power Platform Bootcamp (815 SQN)</span><span class="lcat">Trainings</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials.</p>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Lovable</span><span>Power Platform</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="RAiD">
-        <summary><span class="lno">11</span><span class="lt">Comprehensive Guide for New Interns</span><span class="lcat">Trainings</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Documentation</span><span>Mentoring</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">12</span><span class="lt">App Development For Lead Ambassadors CCA</span><span class="lcat">Tools/Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Agile App Dev</span><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">13</span><span class="lt">National AI Student Challenge 2025 — Huawei Track</span><span class="lcat">Competitions</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Mobile app to improve Citizen Engagement and Civic Services, allowing them to report issues and track their progress of their requests.</p>
-          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Exposure to ML algorithms, various Cloud Technologies in Huawei's ecosystem, and MLOps. Introduced to AI development field.</p></div>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>Cloud Tech</span><span>MLOps</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">14</span><span class="lt">Whitehacks 2025 (Cybersecurity CTF)</span><span class="lcat">Competitions</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Cybersecurity CTF Competition organised by SMU. Used tools such as Wireshark, John The Ripper, and Z-steg.</p>
-          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">15</span><span class="lt">App Development for Mindsports CCA</span><span class="lcat">Tools/Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Power Platform</span><span>Agile App Dev</span><span>UI Design</span><span>Data Visualization</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">16</span><span class="lt">Iron Viz Student Edition</span><span class="lcat">Competitions</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
-        <div class="log-body">
-          <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
-        </div>
-      </details>
-
-      <details class="log-row" data-org="Freelance">
-        <summary><span class="lno">17</span><span class="lt">Workplace Check In/Out App</span><span class="lcat">Tools/Automation</span><span class="lorg">Freelance</span><span class="lplus">+</span></summary>
+      <details class="log-row" data-org="Freelance" data-cat="automation">
+        <summary><span class="lno">06</span><span class="lt">Workplace Check In/Out App</span><span class="lcat">Automation</span><span class="lorg">Freelance</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>Developed a PowerApp to simplify and automate the administrative workflow for duty management for duty personnel in an RSAF Unit.</p>
           <div><div class="mono mb-2"><b>What it does</b></div>
@@ -1184,29 +1171,128 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
         </div>
       </details>
 
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">18</span><span class="lt">World Skills Training (Aircraft Maintenance)</span><span class="lcat">Aerospace</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="automation">
+        <summary><span class="lno">07</span><span class="lt">App Development For Lead Ambassadors CCA</span><span class="lcat">Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
         <div class="log-body">
-          <p>Acquired technical skills essential for Aircraft Maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
-          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and ability to handle stress.</p></div>
-          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span><span>Stress Management</span></div></div>
+          <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Agile App Dev</span><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
         </div>
       </details>
 
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">19</span><span class="lt">App Development for Poly Forum 2024 (SYLP)</span><span class="lcat">Tools/Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="automation">
+        <summary><span class="lno">08</span><span class="lt">App Development for Mindsports CCA</span><span class="lcat">Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Power Platform</span><span>Agile App Dev</span><span>UI Design</span><span>Data Visualization</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="automation">
+        <summary><span class="lno">09</span><span class="lt">App Development for Poly Forum 2024 (SYLP)</span><span class="lcat">Automation</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
           <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Agile App Dev</span></div></div>
         </div>
       </details>
 
-      <details class="log-row" data-org="Temasek Polytechnic">
-        <summary><span class="lno">20</span><span class="lt">Google Collab Text to Flowchart Bot</span><span class="lcat">R&amp;D</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+      <!-- ── 05 · DEVELOPER ENABLEMENT & R&D ──
+           The policy approval leads this group deliberately: it is upstream of
+           every Code Apps project on this page. Before it, none of them could
+           have been deployed at all. -->
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary><span class="lno">10</span><span class="lt">Code Apps Policy Approval (M365 Tenant)</span><span class="lcat">Enablement</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Led the case to unlock Microsoft Power Apps Code Apps across the organisation's M365 environment, working through the relevant cybersecurity authorities within MINDEF.</p>
+          <div><div class="mono mb-2"><b>What changed</b></div><p class="learn">Every Code Apps project in this portfolio was built after this approval. Before it, Code Apps could not be deployed in the environment at all.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Power Platform Governance</span><span>M365 Administration</span><span>Security Review</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary><span class="lno">11</span><span class="lt">R&amp;D for Vibe-Coding Code Apps</span><span class="lcat">Enablement</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Explored AI Vibe Coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary><span class="lno">12</span><span class="lt">Documentation Generation Tool (PowerDocu)</span><span class="lcat">Enablement</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt about Cybersecurity Scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Github</span><span>PowerDocu</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary><span class="lno">13</span><span class="lt">SAGE Copilot AI</span><span class="lcat">Enablement</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Integrating SAGE's ME5 Delta Agent into Copilot for training purposes using Open Source models.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Navigated license constraints creatively to replicate GPT 4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary><span class="lno">14</span><span class="lt">1-Day Power Platform Bootcamp (815 SQN)</span><span class="lcat">Enablement</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Lovable</span><span>Power Platform</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary><span class="lno">15</span><span class="lt">Comprehensive Guide for New Interns</span><span class="lcat">Enablement</span><span class="lorg">RAiD</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Documentation</span><span>Mentoring</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="enablement">
+        <summary><span class="lno">16</span><span class="lt">Google Collab Text to Flowchart Bot</span><span class="lcat">Enablement</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
         <div class="log-body">
           <p>Created an AI tool using Python and ChatGPT 3.5 that generates flowcharts from text.</p>
           <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Explored prompt engineering and integrating python libraries together in a single notebook for workflow tools.</p></div>
           <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
+        </div>
+      </details>
+
+      <!-- ── 06 · COMPETITIONS & CREDENTIALS ── -->
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary><span class="lno">17</span><span class="lt">National AI Student Challenge 2025 — Huawei Track</span><span class="lcat">Competition</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Mobile app to improve Citizen Engagement and Civic Services, allowing them to report issues and track their progress of their requests.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Exposure to ML algorithms, various Cloud Technologies in Huawei's ecosystem, and MLOps. Introduced to AI development field.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>Cloud Tech</span><span>MLOps</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary><span class="lno">18</span><span class="lt">Whitehacks 2025 (Cybersecurity CTF)</span><span class="lcat">Competition</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Cybersecurity CTF Competition organised by SMU. Used tools such as Wireshark, John The Ripper, and Z-steg.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary><span class="lno">19</span><span class="lt">Iron Viz Student Edition</span><span class="lcat">Competition</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary><span class="lno">20</span><span class="lt">World Skills Training (Aircraft Maintenance)</span><span class="lcat">Competition</span><span class="lorg">Temasek Poly</span><span class="lplus">+</span></summary>
+        <div class="log-body">
+          <p>Acquired technical skills essential for Aircraft Maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
+          <div><div class="mono mb-2"><b>What I learned</b></div><p class="learn">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and ability to handle stress.</p></div>
+          <div><div class="mono mb-2"><b>Built with</b></div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span><span>Stress Management</span></div></div>
         </div>
       </details>
 
@@ -1330,23 +1416,53 @@ html.tier-0.sky-dark .silo{ color:rgba(255,255,255,.34); }
 
   /* ─────────── 1. FLIGHT LOG FILTER (always on — content first) ─────────── */
   (function () {
-    var buttons = document.querySelectorAll('.filt');
+    var orgBtns = document.querySelectorAll('.filt');
+    var catBtns = document.querySelectorAll('.catcard');
     var rows = document.querySelectorAll('.log-row');
     var count = document.getElementById('logCount');
-    buttons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        buttons.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
-        btn.setAttribute('aria-pressed', 'true');
-        var org = btn.dataset.org, shown = 0;
-        rows.forEach(function (r) {
-          var show = org === 'all' || r.dataset.org === org;
-          r.hidden = !show;
-          if (show) shown++;
-        });
-        count.textContent = shown === rows.length
+
+    /* Two independent axes — organisation and category — combined with AND.
+       Held as state rather than read off the DOM at click time, so neither
+       control clobbers the other's selection. */
+    var org = 'all', cat = 'all';
+
+    function apply() {
+      var shown = 0;
+      rows.forEach(function (r) {
+        var show = (org === 'all' || r.dataset.org === org) &&
+                   (cat === 'all' || r.dataset.cat === cat);
+        r.hidden = !show;
+        if (show) shown++;
+      });
+      /* A combination can legitimately match nothing — Freelance holds one
+         entry, and it is not a competition. Say so, rather than leaving the
+         reader staring at an empty rule and assuming the page broke. */
+      count.textContent = shown === 0
+        ? 'No entries match — try another pair'
+        : shown === rows.length
           ? 'Showing all ' + rows.length
           : 'Showing ' + shown + ' of ' + rows.length;
-        if (hasGSAP && !reduce) ScrollTrigger.refresh();
+      if (hasGSAP && !reduce) ScrollTrigger.refresh();
+    }
+
+    orgBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        orgBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        btn.setAttribute('aria-pressed', 'true');
+        org = btn.dataset.org;
+        apply();
+      });
+    });
+
+    catBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        // Clicking the live card again clears the category — the deck has no
+        // "all" tile, so the selected card has to be its own escape hatch.
+        var next = btn.getAttribute('aria-pressed') === 'true' ? 'all' : btn.dataset.cat;
+        catBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        if (next !== 'all') btn.setAttribute('aria-pressed', 'true');
+        cat = next;
+        apply();
       });
     });
     // an entry opening changes page height — keep triggers honest
