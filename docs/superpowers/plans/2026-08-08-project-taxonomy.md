@@ -51,7 +51,7 @@ Copied verbatim from `docs/superpowers/specs/2026-08-08-project-taxonomy-design.
 
 Consequence: after this plan, `Simulation & Decision Support` and `Full-Stack Platforms` will have zero members. That is correct — the type declares the taxonomy; the data fills in later. **Do not write a test asserting every category has at least one project.**
 
-Also out of scope: the FUEL corrections to the parent spec and `redesign-concept.html` (spec §7), which need author-supplied replacement prose.
+Also out of scope: the parent spec and `redesign-concept.html`. An earlier draft claimed their waypoint 1 misdescribed FUEL; it does not. FUEL Up (claims and receipts) and FUEL (aircraft refuelling planning) are two different projects, and both files are correct as written. See spec §7.
 
 ## File Structure
 

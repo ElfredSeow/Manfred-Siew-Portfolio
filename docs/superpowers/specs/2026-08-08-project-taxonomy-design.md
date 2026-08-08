@@ -36,8 +36,7 @@ were accreted, not designed, and three problems follow:
 
 ## 3. Non-goals
 
-- Rewriting the three featured case studies' structure. Only waypoint 1's *subject
-  matter* changes (§7), not the three-beat form.
+- Touching the three featured case studies at all. They are correct as specced; see §7.
 - Adding quantified metrics. The parent spec's §8.2 evidence-slot approach stands.
 - Filter UI, sort behaviour, or animation for the category chips. Data and naming only.
 
@@ -120,36 +119,46 @@ These do not exist in the data layer and must be written from scratch. Prose is 
 
 | Project | Category | Public descriptor (codename demoted) |
 |---|---|---|
-| FUEL | Simulation & Decision Support | *author to supply — must not name the operational scenario* |
+| FUEL | Simulation & Decision Support | *author to supply — aircraft refuelling planning* |
+| FUEL Up | Enterprise Applications *(confirm — §7)* | *author to supply — claims and receipt digitalisation* |
 | BOLDFACE | Full-Stack Platforms | *author to supply* |
 | MILES / MAVIS | Full-Stack Platforms | *author to supply* |
 | GRID | Enterprise Applications | *author to supply — OCR document processing* |
 | Power Apps Vibe Coding Masterclass | Developer Enablement & R&D | (no codename) |
 
-Resulting totals: 24 projects if MILES/MAVIS is one entry, 25 if two. See §9.
+Both FUEL and FUEL Up must lead with a descriptor, not the codename (§4). `FUEL` is in
+the guarded codename list, so a title starting with either word fails `npm test`.
 
-## 7. Correction to the parent spec
+Resulting totals: 26 projects if MILES/MAVIS is one entry, 27 if two. See §9.
 
-**FUEL is operational modelling, not claims digitalisation.** The parent spec's §8.3
-table row 1 and the corresponding prose in `redesign-concept.html` are wrong and must be
-corrected before either ships, or the site will contradict itself.
+## 7. FUEL and FUEL Up are two different projects
 
-| Location | Current | Required change |
-|---|---|---|
-| Parent spec §8.3, row 1 | "FUEL Up — claims & receipt digitalisation … *Can you ship production software?*" | Subject becomes operational modelling; the question becomes *Can you model a domain you weren't trained in?* |
-| `redesign-concept.html`, waypoint 1 cold open | "A claim only becomes a number after somebody has typed a receipt into a form twice." | Replace. Author-supplied, per parent spec §8.4. |
-| `redesign-concept.html`, waypoint 1 section comment | Describes the claims/receipt framing | Update to match |
+**No correction to the parent spec is required.** An earlier draft of this document
+claimed the parent spec's §8.3 misdescribed FUEL. It did not. The two names are similar
+enough to be mistaken for each other, so they are recorded here explicitly:
 
-**The altitude ladder still holds.** Parent spec §8.3's "one process → one platform → a
-whole community" was about *scope*, and one operational scenario is still narrower in
-scope than a platform. Running order is unchanged. Only what waypoint 1 *claims* changes.
+| Name | What it is | Category | Status |
+|---|---|---|---|
+| **FUEL Up** | Claims and receipt digitalisation — RBAC, audit trail, SharePoint integration, data validation, governance | Enterprise Applications *(provisional — see below)* | Featured waypoint 1, parent spec §8.3. Framing is correct as written. |
+| **FUEL** | Plans optimal aircraft refuelling | Simulation & Decision Support | Archive entry, not yet authored |
 
-**Security framing becomes more load-bearing, not less.** The parent spec §12 already
-requires FUEL's "operational planning scenarios" framing to stay vague. Now that the
-category name itself is public, that constraint extends to the category: **"Simulation &
-Decision Support"** is the approved public label. Terms naming military purpose — "war
-fighting", "combat", "mission planning" — must not appear as a category name, a project
-title, or in body copy.
+`redesign-concept.html`'s waypoint 1 cold open — *"A claim only becomes a number after
+somebody has typed a receipt into a form twice"* — is about FUEL Up and stays.
+
+**FUEL Up's category is a judgement call the author should confirm.** It carries RBAC and
+an audit trail, which is the Enterprise Applications marker in §5, but whether it
+deployed across more than one department is unrecorded. If it served a single requesting
+party, it belongs in Process Automation instead.
+
+**FUEL validates category 1's definition.** "Plans optimal aircraft refuelling" is a
+system that reasons about a situation rather than recording transactions — the §5 rule,
+met exactly.
+
+**Security framing.** Parent spec §12 requires FUEL's operational framing to stay vague.
+**"Simulation & Decision Support"** is the approved public label. Terms naming military
+purpose — "war fighting", "combat", "mission planning" — must not appear as a category
+name, a project title, or in body copy. Refuelling optimisation is benign on its face;
+the constraint is on how the operational context around it is described.
 
 ## 8. Data model changes
 
@@ -200,6 +209,9 @@ they resolve.
 - **MILES / MAVIS — one entry or two?** `redesign-concept.html` treats them as a single
   paired waypoint. Whether the archive splits them changes the project count and the
   Full-Stack Platforms category size.
+- **FUEL Up's category.** Enterprise Applications provisionally, on the strength of its
+  RBAC and audit trail. Drops to Process Automation if it served one requesting party
+  rather than several departments. See §7.
 - **RSAF headcount.** Required to replace "the entire RSAF" with an absolute figure (§4).
 - **Masterclass cohort size and partner institutions.** Required for the "Who confirmed
   it" slot on featured waypoint 3.
@@ -214,5 +226,5 @@ they resolve.
   (§7).
 - No project title leads with a bare codename (§4).
 - `featuredProject` and `projects` share no duplicate project.
-- The three featured waypoints' structure is byte-identical to the parent spec's §8.1
-  three-beat form; only waypoint 1's subject matter differs.
+- The parent spec's three featured waypoints are unchanged by this work.
+- FUEL and FUEL Up appear as two separate projects, neither titled with a bare codename.
