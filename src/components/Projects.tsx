@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as motion from "motion/react-client";
-import { projects, Project } from "../data/portfolio";
+import { projects, Project, CATEGORY_LABEL } from "../data/portfolio";
 import { X } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -64,7 +64,7 @@ export function Projects() {
             >
               <div className="flex justify-between items-start mb-6">
                 <div className="micro-label px-2 py-1 bg-black/5 dark:bg-white/10">
-                  {project.category}
+                  {CATEGORY_LABEL[project.category]}
                 </div>
                 <div className="text-[10px] font-mono text-gray-500 dark:text-white/50 uppercase">
                   {project.organization}
