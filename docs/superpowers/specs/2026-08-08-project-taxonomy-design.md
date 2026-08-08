@@ -3,9 +3,8 @@
 **Date:** 2026-08-08
 **Target files:** `src/data/portfolio.ts`, `redesign-concept.html`
 **Relates to:** `2026-08-08-daylight-ascent-portfolio-design.md` (the parent spec). This
-document does not supersede it. It fills the gap that spec left: how the seventeen
-projects *outside* the three featured waypoints are grouped, and it corrects one factual
-error in the parent's §8.3.
+document does not supersede it, and corrects nothing in it. It fills the gap that spec
+left: how the projects *outside* the three featured waypoints are grouped.
 
 ---
 
@@ -68,8 +67,8 @@ ladder's meaning for every other entry.
 |---|---|---|---|
 | 1 | **Simulation & Decision Support** | *I can model a domain I wasn't trained in* | The system reasons about a situation rather than recording transactions |
 | 2 | **Full-Stack Platforms** | *I own systems, not features* | The author held the architecture and roadmap, not just an assigned component |
-| 3 | **Enterprise Applications** | *I build with governance* | Multi-department deployment with at least two of: RBAC, audit trail, approval workflow |
-| 4 | **Process Automation** | *I ship a working process in days* | One workflow, one requesting party, days-to-weeks delivery |
+| 3 | **Enterprise Applications** | *I build with governance* | A deliberate governance layer — at least two of: RBAC, audit trail, approval workflow |
+| 4 | **Process Automation** | *I ship a working process in days* | One workflow, one requesting party, days-to-weeks delivery, no governance layer beyond the platform default |
 | 5 | **Developer Enablement & R&D** | *I scale the practice past myself* | The output is a capability in other people, or a tool/clearance others depend on |
 | 6 | **Competitions & Credentials** | *externally assessed* | Judged or certified by a third party |
 
@@ -84,6 +83,30 @@ honestly reflects a seven-month internship — most of the volume is fast delive
 the deep-ownership work is recent and few. The design does not disguise this. It is the
 reason categories are **ordered strongest-first**: the reader meets the thin, strong
 categories before the long tail, rather than having to dig for them.
+
+### 5.2 Categories 3 and 4 split on governance, not on adoption breadth
+
+An earlier draft made Enterprise Applications require *multi-department deployment*. That
+was wrong on two counts, and FUEL Up exposed both (§7).
+
+**It misused the word.** In industry vocabulary an enterprise application is one built to
+organisational standards — access control, auditability, integration with corporate
+systems. It is a statement about how the thing was built, not about how far it has
+spread. A hiring manager reads it the first way.
+
+**It made category a function of time.** Under a deployment-breadth rule, an unchanged
+codebase migrates from Process Automation to Enterprise Applications as adoption grows.
+A project's category should describe the work, which is finished, not its uptake, which
+is not.
+
+Reach is already carried by `scale` (§8.3), which is the right home for it. Encoding it
+twice made the two fields disagree the moment a project started scaling.
+
+The boundary is therefore **the presence of a deliberate governance layer**. Native
+platform behaviour does not count: `ssb-loan-form` routes an approval, but that is
+FormSG's built-in routing rather than an access model the author designed, so it stays in
+Process Automation. Re-checked against all eight current Process Automation entries — the
+revised rule moves none of them.
 
 ## 6. Project mapping
 
@@ -120,7 +143,7 @@ These do not exist in the data layer and must be written from scratch. Prose is 
 | Project | Category | Public descriptor (codename demoted) |
 |---|---|---|
 | FUEL | Simulation & Decision Support | *author to supply — aircraft refuelling planning* |
-| FUEL Up | Enterprise Applications *(confirm — §7)* | *author to supply — claims and receipt digitalisation* |
+| FUEL Up | Enterprise Applications | *author to supply — claims and receipt digitalisation* |
 | BOLDFACE | Full-Stack Platforms | *author to supply* |
 | MILES / MAVIS | Full-Stack Platforms | *author to supply* |
 | GRID | Enterprise Applications | *author to supply — OCR document processing* |
@@ -139,16 +162,30 @@ enough to be mistaken for each other, so they are recorded here explicitly:
 
 | Name | What it is | Category | Status |
 |---|---|---|---|
-| **FUEL Up** | Claims and receipt digitalisation — RBAC, audit trail, SharePoint integration, data validation, governance | Enterprise Applications *(provisional — see below)* | Featured waypoint 1, parent spec §8.3. Framing is correct as written. |
+| **FUEL Up** | Claims and receipt digitalisation — RBAC, audit trail, SharePoint integration, data validation, governance | Enterprise Applications *(resolved — see below)* | Featured waypoint 1, parent spec §8.3. Framing is correct as written. |
 | **FUEL** | Plans optimal aircraft refuelling | Simulation & Decision Support | Archive entry, not yet authored |
 
 `redesign-concept.html`'s waypoint 1 cold open — *"A claim only becomes a number after
 somebody has typed a receipt into a form twice"* — is about FUEL Up and stays.
 
-**FUEL Up's category is a judgement call the author should confirm.** It carries RBAC and
-an audit trail, which is the Enterprise Applications marker in §5, but whether it
-deployed across more than one department is unrecorded. If it served a single requesting
-party, it belongs in Process Automation instead.
+**FUEL Up is Enterprise Applications. Resolved 2026-08-08.**
+
+Author ruling: *"FUEL Up was used by one requesting party but it is in the scaling phase
+as more departments have shown interest to adopt it."*
+
+Under the original rule this was a demotion — one requesting party meant Process
+Automation. It is instead the case that broke the rule, and the rule changed (§5.2).
+FUEL Up carries RBAC and an audit trail, which is a governance layer somebody chose to
+build; that is the Enterprise Applications marker, and it was true on the day the work
+finished regardless of how many departments have since adopted it.
+
+**The scaling fact is an asset, and belongs in the prose rather than the category.**
+"Built to a standard that survived other departments asking for it" is a stronger claim
+than either category name makes on its own, and it is the kind of third-party validation
+the parent spec's §8.2 "Who confirmed it" slot exists to hold. Waypoint 1 should carry it
+once the author supplies the copy. The number of interested departments is an open item
+(§9) — the claim needs a figure, since "more departments" is exactly the vague
+quantifier §4 rules out.
 
 **FUEL validates category 1's definition.** "Plans optimal aircraft refuelling" is a
 system that reasons about a situation rather than recording transactions — the §5 rule,
@@ -209,9 +246,10 @@ they resolve.
 - **MILES / MAVIS — one entry or two?** `redesign-concept.html` treats them as a single
   paired waypoint. Whether the archive splits them changes the project count and the
   Full-Stack Platforms category size.
-- **FUEL Up's category.** Enterprise Applications provisionally, on the strength of its
-  RBAC and audit trail. Drops to Process Automation if it served one requesting party
-  rather than several departments. See §7.
+- **FUEL Up's adoption figure.** The category question is resolved — Enterprise
+  Applications (§7). What remains is the number: how many departments have asked to adopt
+  it. "More departments have shown interest" fails §4's absolute-numbers rule, and the fact is
+  worth stating precisely because it is external validation rather than self-assessment.
 - **RSAF headcount.** Required to replace "the entire RSAF" with an absolute figure (§4).
 - **Masterclass cohort size and partner institutions.** Required for the "Who confirmed
   it" slot on featured waypoint 3.
