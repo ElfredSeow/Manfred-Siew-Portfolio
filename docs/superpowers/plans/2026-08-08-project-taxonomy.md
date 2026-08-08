@@ -243,57 +243,85 @@ git commit -m "Migrate projects to the six-category taxonomy"
 
 **Interfaces:**
 - Consumes: the `Project` interface from Task 2.
-- Produces: `Project.role?: string` and `Project.scale?: string`. Both optional. Task 5 does not test them.
+- Produces: `export type Role` (union of three string literals), `Project.role: Role` (required), `Project.scale?: string` (optional, left unpopulated). Task 5 does not test them.
 
-Both fields are optional and are populated for `featuredProject` only. Per spec §8.2 and §6.2, role and scale for the other 18 are author-supplied; assigning values here would invent claims the author has not made.
+**Author ruling, 2026-08-08:** "If it is a development one, I did all the development myself. If it is a training the materials are made by me and for competitions I am always the competitor." This makes `role` fully derivable, so it is populated for every entry and typed as a required union rather than left to the author.
+
+`scale` stays optional and **unpopulated** — spec §9 lists the RSAF headcount as unresolved, and spec §4 forbids the vague phrasing. The field exists so the figure has somewhere to go; no test asserts a value that does not yet exist.
 
 - [ ] **Step 1: Write the failing test**
 
 Append to `src/data/portfolio.test.ts`, inside the `describe("project data", ...)` block:
 
 ```ts
-  it("states the featured project's role and scale", () => {
-    expect(featuredProject.role).toBe("Lead Developer / Solution Architect");
-    expect(featuredProject.scale).toMatch(/\d/);
+  it("gives every project a role from the closed set", () => {
+    for (const p of all) {
+      expect(ROLES).toContain(p.role);
+    }
+  });
+
+  it("marks all four competition entries as Competitor", () => {
+    const competitions = all.filter(
+      (p) => p.category === "Competitions & Credentials",
+    );
+    expect(competitions).toHaveLength(4);
+    for (const p of competitions) {
+      expect(p.role).toBe("Competitor");
+    }
   });
 ```
+
+Add `ROLES` to the existing `./portfolio` import at the top of the file.
 
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `npm test`
-Expected: FAIL — `expected undefined to be 'Lead Developer / Solution Architect'`
+Expected: FAIL — `"ROLES" is not exported by "src/data/portfolio.ts"`
 
-- [ ] **Step 3: Add the fields**
+- [ ] **Step 3: Add the type and fields**
 
-In the `Project` interface in `src/data/portfolio.ts`, add after `organization: string;`:
+In `src/data/portfolio.ts`, after the `Category` type declaration:
 
 ```ts
-  role?: string;
+export const ROLES = ["Sole developer", "Instructor", "Competitor"] as const;
+
+export type Role = (typeof ROLES)[number];
+```
+
+In the `Project` interface, add after `organization: string;`:
+
+```ts
+  role: Role;
   scale?: string;
 ```
 
-Then in `featuredProject`, add after the `organization: "RAiD",` line:
+- [ ] **Step 4: Populate `role` on all 19 entries**
 
-```ts
-  role: "Lead Developer / Solution Architect",
-  scale: "Deployed force-wide across the Republic of Singapore Air Force",
-```
+`Instructor` for exactly these two — the author wrote the materials:
 
-The `role` value is taken verbatim from the parent spec §8.3. **The `scale` value above is a stand-in and will fail the test**, which is deliberate: spec §9 lists "RSAF headcount" as an unresolved open item, and spec §4 requires an absolute number. Substitute the real figure before this task passes — for example `"Deployed force-wide across an ~8,000-person air force"`. Do not ship the stand-in.
+- `bootcamp-815`, `new-intern-guide`
 
-- [ ] **Step 4: Run the test to verify it passes**
+`Competitor` for exactly these four:
+
+- `huawei-track`, `whitehacks-2025`, `iron-viz`, `world-skills-training`
+
+`Sole developer` for the remaining thirteen: `raid-air-2` (`featuredProject`), `asv-logbook`, `sg-airshow-2026`, `soar-scheduling`, `ssb-loan-form`, `workplace-checkin`, `poly-forum-2024`, `lead-ambassadors-cca`, `mindsports-app`, `sage-copilot`, `vibe-coding-rnd`, `powerdocu-clearance`, `google-colab-bot`.
+
+**One judgement call to flag for the author:** `powerdocu-clearance` is a security-clearance collaboration with Cydef, not a build, so "Sole developer" is imprecise. It is assigned `Sole developer` because the author drove it alone from RAiD's side and the closed set has no better value. Raise it; do not add a fourth role value without the author's say-so.
+
+- [ ] **Step 5: Run the test to verify it passes**
 
 Run: `npm test`
-Expected: PASS, 6 tests — only after a real headcount replaces the stand-in. If it still fails on `toMatch(/\d/)`, the number is still missing.
+Expected: PASS, 7 tests.
 
 Run: `npm run lint`
 Expected: no output.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add src/data/portfolio.ts src/data/portfolio.test.ts
-git commit -m "Add role and scale fields to the Project interface"
+git commit -m "Add typed role field and populate it across all projects"
 ```
 
 ---
@@ -382,7 +410,7 @@ Leave the detail-modal reference at line 120 showing `selectedProject.category` 
 - [ ] **Step 5: Run the tests and the type check**
 
 Run: `npm test`
-Expected: PASS, 8 tests.
+Expected: PASS, 9 tests.
 
 Run: `npm run lint`
 Expected: no output.
@@ -462,7 +490,7 @@ The codename test checks only the *first* word, so `"Aircrew Qualification Platf
 - [ ] **Step 2: Run the tests to verify they pass**
 
 Run: `npm test`
-Expected: PASS, 10 tests. These pass immediately against current data — that is correct. They are regression guards for the author's future edits, not a description of a bug being fixed.
+Expected: PASS, 11 tests. These pass immediately against current data — that is correct. They are regression guards for the author's future edits, not a description of a bug being fixed.
 
 - [ ] **Step 3: Verify each guard actually catches its violation**
 
@@ -470,7 +498,7 @@ A guard that cannot fail is worthless. Prove both fire, then revert:
 
 1. Temporarily change `featuredProject.title` to `"MAVIS"`. Run `npm test`. Expected: the codename test FAILS. Revert.
 2. Temporarily append `" for combat readiness"` to `featuredProject.description`. Run `npm test`. Expected: the vocabulary test FAILS. Revert.
-3. Run `npm test` once more. Expected: PASS, 10 tests, with the file back to its committed state.
+3. Run `npm test` once more. Expected: PASS, 11 tests, with the file back to its committed state.
 
 - [ ] **Step 4: Commit**
 

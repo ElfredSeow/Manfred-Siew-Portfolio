@@ -157,12 +157,24 @@ In `src/data/portfolio.ts`:
 
 1. **Type the category.** Replace `category: string` with a union of the six values, so a
    typo fails the build rather than silently creating a seventh category.
-2. **Add `role: string`** — what the author personally did, in the parent spec's own
-   vocabulary (Lead Developer / Solution Owner / Lead Instructor). Category says how big
-   the system was; role says how much of it was the author's. Both are needed, and
-   neither substitutes for the other.
-3. **Add `scale?: string`** — absolute numbers, per §4. Optional, because it does not
-   apply to competitions or R&D.
+2. **Add `role: Role`** — what the author personally did. Category says how big the
+   system was; role says how much of it was the author's. Both are needed, and neither
+   substitutes for the other. A reader who sees only "Enterprise Applications" assumes
+   the least impressive reading available, which here is the wrong one.
+
+   **Author ruling, 2026-08-08:** *"If it is a development one, I did all the development
+   myself. If it is a training the materials are made by me and for competitions I am
+   always the competitor."* This collapses `Role` to a closed set of three —
+   `Sole developer`, `Instructor`, `Competitor` — typed as a union so a typo fails the
+   build, and populated for every entry rather than left as author input.
+
+   One entry resists the rule: `powerdocu-clearance` is a security-clearance
+   collaboration with Cydef, not a build. It carries `Sole developer` because the author
+   drove it alone from RAiD's side, and the closed set has no better value. Revisit if
+   the author wants a fourth.
+3. **Add `scale?: string`** — absolute numbers, per §4. Optional, and left **unpopulated**
+   until the RSAF headcount in §9 resolves. The field exists so the figure has somewhere
+   to go; §4's ban on "the entire RSAF" means a placeholder is worse than an empty field.
 4. **Resolve the duplicate.** `featuredProject` (`raid-air-2`, "RSAF Facility Booking
    App") and `projects[0]` (`facility-booking-app`, "Facility Booking App") are the same
    project entered twice with divergent `tools` arrays and truncated `learningPoints`.
@@ -196,6 +208,8 @@ they resolve.
 
 - Every project in `portfolio.ts` carries exactly one of six typed categories; the build
   fails on any other value.
+- Every project carries exactly one of three typed roles; all four Competitions &
+  Credentials entries carry `Competitor`.
 - No category name, project title, or body string contains military-purpose vocabulary
   (§7).
 - No project title leads with a bare codename (§4).
