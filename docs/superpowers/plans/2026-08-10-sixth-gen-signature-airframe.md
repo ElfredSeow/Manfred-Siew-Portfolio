@@ -548,9 +548,18 @@ In `scripts/verify-airframe.mjs`, add to the `out` object after `bellyY`:
 ```js
     // Inlets on TOP. Inlets visible from below is the exact opposite of
     // the grammar being invoked here, so their height is checked, not just
-    // their presence.
-    inletsAboveDeck: solids.filter((mesh) => mesh.position.y > 0.2 && Math.abs(mesh.position.x) > 0.3 && mesh.position.z > 0.5).length,
-    ruddervators: solids.filter((mesh) => Math.abs(mesh.position.x) > 2.0 && mesh.position.z < -0.5).length,
+    // their presence. Counts the BUMPS only — each inlet is a bump plus a
+    // dark mouth sitting at the same y and x, so a position-only filter
+    // would count four and never match.
+    inletsAboveDeck: solids.filter((mesh) =>
+      mesh.geometry.type === 'SphereGeometry' &&
+      mesh.position.y > 0.2 &&
+      Math.abs(mesh.position.x) > 0.3 &&
+      mesh.position.z > 0.5).length,
+    // Ruddervators carry their fore/aft offset inside the extruded shape,
+    // so mesh.position.z is 0 for both — outboard x is the only reliable
+    // discriminator, and nothing else on the airframe sits past x = 2.0.
+    ruddervators: solids.filter((mesh) => Math.abs(mesh.position.x) > 2.0).length,
 ```
 
 And in `main()`, after `belly_depth`:
@@ -685,7 +694,11 @@ The tailless check goes green: max height drops from 1.62 to 0.48."
 In `scripts/verify-airframe.mjs`, add to the `out` object after `ruddervators`:
 
 ```js
-    skinHex: (solids.find((mesh) => mesh.geometry.attributes.position.count > 200 && !mesh.material.transparent) || {}).material?.color.getHexString() ?? null,
+    // Read the skin colour off the planform itself — the mesh already
+    // identified above by bounding-box area — rather than guessing at it
+    // with a vertex-count threshold that would silently pick a different
+    // mesh if the geometry were ever retuned.
+    skinHex: planform ? planform.material.color.getHexString() : null,
 ```
 
 And in `main()`, after `canted_ruddervators`:
