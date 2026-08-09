@@ -65,7 +65,9 @@
    contact band's worst-case ground #2A4E7A: paper 8.5 · body-inv 6.8 ·
    accent-inv 4.9 · data-inv 5.4. --signal is 2.7:1 and is therefore a
    FILL token only; ink-on-signal is 6.5:1, which is the pairing used.
-   Body copy floor is 18px. Nothing sits below 13px.
+   Body copy is 18px (--fs-body). The secondary text scale — .context, .note,
+   .feat li and #catClaim — is 16px, so 16px is the floor for reading copy.
+   Nothing sits below 13px.
    ══════════════════════════════════════════════════════════════════════ */
 
 :root{
@@ -464,6 +466,15 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
    counter labels, which numbered nothing the reader needed to count. */
 .process{list-style:none;counter-reset:step;margin:1.25rem 0 0;padding:0;
   display:grid;gap:.75rem}
+/* EVERY <li> MUST CONTAIN EXACTLY ONE ELEMENT — a wrapper <div> holding the
+   label, the prose and any chip. The li is a two-column grid (counter, then
+   content), and a grid container makes a grid item out of every child element
+   AND out of every bare text run between them. Written flat, a beat produced
+   three or four items rather than two: the label landed in column 2, the prose
+   wrapped onto a second row back in column 1, and the chip was crushed into a
+   78px column one word per line. Measured at 1440px it resolved the template to
+   426.469px 77.9375px instead of 25.6px + the rest. The wrapper is the same
+   fix .evi uses for the same reason. */
 .process li{counter-increment:step;display:grid;
   grid-template-columns:auto 1fr;gap:.75rem;align-items:baseline}
 .process li::before{content:counter(step);font-family:"IBM Plex Mono",monospace;
@@ -491,7 +502,10 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .ai-role{margin:1rem 0 0;padding:.9rem 1rem;border:1px solid var(--line);
   border-radius:var(--r-sm);background:var(--tint);display:grid;gap:.35rem}
 .ai-role dt{font-size:var(--fs-label);color:var(--muted)}
-.ai-role dd{margin:0;color:var(--body)}
+/* Same measure cap the other prose components carry (.evi dd 58ch,
+   .log-body p 66ch, .context 60ch) — without it these lines ran the full
+   card width, the longest measure on the page. */
+.ai-role dd{margin:0;color:var(--body);max-width:58ch}
 /* Log bodies are a grid with their own gap, so the block's top margin would
    double the space above it there. */
 .log-body .ai-role{margin:0}
@@ -505,6 +519,14 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
   background:var(--wash); border:1px dashed var(--accent-strong);
   border-radius:var(--r-pill); padding:.22rem .75rem;
 }
+/* Draft preview, for the author only. Add the class `drafts-hidden` to <html>
+   in devtools to read the page the way a visitor would, with every chip
+   suppressed; remove it to get them back. Nothing in this file ever adds the
+   class — chips are visible by default and must stay that way, because the
+   page is genuinely unfinished and must not accidentally look finished. There
+   is deliberately no on-page control: a visitor who could switch the chips off
+   would be reading a page that quietly claims more than it can support. */
+html.drafts-hidden .needs-copy{ display:none; }
 
 /* ── EXPERIENCE ───────────────────────────────────────────────────────
    Round by construction: a rounded rail with round nodes. */
@@ -774,7 +796,8 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
 .btn.btn-block{ width:100%; justify-content:center; }
 .contact-list{ display:grid; gap:.75rem; margin-top:1.5rem; font-size:.9375rem; }
 .contact-list > div{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:.75rem; }
-/* Same dimmed label blue as .invert .num — 8.9:1 on var(--deep). */
+/* Same dimmed label blue as .invert .num — #BFD4E8 on var(--deep) #12244A is
+   10.02:1, and 5.59:1 on the band's lighter end #2A4E7A. */
 .contact-list dt{ color:#BFD4E8; }
 
 .footer-inner{
@@ -897,11 +920,17 @@ html.js [data-reveal].shown{
         </div>
 
         <!-- AUTHOR: rewrite this thesis in your own voice. Structure is final; words are a draft. -->
+        <!-- The three-example list this used to carry named the users of two
+             projects ("a technician signing off a jet, a clerk chasing a
+             receipt") that the case studies below still ask YOU to identify —
+             the page contradicted itself in the space of two screens. Nothing
+             is named here now. If you want the examples back, they belong in
+             the .context line of each case study, where you can say who the
+             users actually are. -->
         <p id="hero-thesis" class="hero-thesis">
           I train people and build tools where software meets a human being under
-          pressure: a technician signing off a jet, a clerk chasing a receipt,
-          a cohort learning to build with AI. The interesting problem is never
-          the automation; it is the person the automation has to serve.
+          pressure. The interesting problem is never the automation; it is the
+          person the automation has to serve.
         </p>
         <nav class="proof-row" aria-label="Jump to evidence">
           <a class="chip proof" href="#wp1">Three case studies, with process</a>
@@ -997,58 +1026,73 @@ html.js [data-reveal].shown{
     <article class="card card-lg stage-card" data-reveal>
       <h2 class="h2">FUEL Up</h2>
       <p class="context">
-        <span class="needs-copy">Add: one plain sentence saying what FUEL Up is and who uses it</span>
+        <span class="needs-copy">Add: who uses FUEL Up, and at which organisation</span>
       </p>
       <p class="lede case-lede">
         A claim only becomes a number after somebody has typed a receipt into a form twice.
       </p>
 
+      <!-- Every <li> holds ONE wrapper <div>. See the .process rule: the li is a
+           two-column grid, so a flat beat produced three or four grid items and
+           broke the layout. Do not unwrap these. -->
       <ol class="process" role="list">
         <li>
-          <b>The person.</b>
-          Receipt and claims handling ran on manual submission and manual checking.
-          <span class="needs-copy">Add: who hit this problem and what it was costing them</span>
+          <div>
+            <b>The person.</b>
+            Receipt and claims handling ran on manual submission and manual checking.
+            <span class="needs-copy">Add: who hit this problem and what it was costing them</span>
+          </div>
         </li>
         <li>
-          <b>Framing.</b>
-          I was asked to design and build the platform that replaced it: submission,
-          validation, tracking and reporting in one workflow, on Power Platform with
-          SharePoint as the document store.
-          <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
+          <div>
+            <b>Framing.</b>
+            I was asked to design and build the platform that replaced it: submission,
+            validation, tracking and reporting in one workflow, on Power Platform with
+            SharePoint as the document store.
+            <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
+          </div>
         </li>
         <li>
-          <b>My role.</b> Lead developer &amp; solution architect.
-          I architected the solution and wrote it. I modelled the claim schema, built
-          the submission and validation flow, implemented authentication and role-based
-          permissions, wired the SharePoint integration, and added the audit trail and
-          the reporting views on top.
-          <span class="needs-copy">Add: timeline, team size, or the hard constraint</span>
+          <div>
+            <b>My role.</b> Lead developer &amp; solution architect.
+            I architected the solution and wrote it. I modelled the claim schema, built
+            the submission and validation flow, implemented authentication and role-based
+            permissions, wired the SharePoint integration, and added the audit trail and
+            the reporting views on top.
+            <span class="needs-copy">Add: timeline, team size, or the hard constraint</span>
+          </div>
         </li>
         <li>
-          <b>Iteration.</b>
-          <span class="needs-copy">Add: one obstacle you handled alone</span>
+          <div>
+            <b>Iteration.</b>
+            <span class="needs-copy">Add: one obstacle you handled alone</span>
+          </div>
         </li>
         <li>
-          <b>Validation.</b>
-          <span class="needs-copy">Add: who used it, signed it off, or tested it</span>
+          <div>
+            <b>Validation.</b>
+            <span class="needs-copy">Add: who used it, signed it off, or tested it</span>
+          </div>
         </li>
         <li>
-          <b>What I’d do differently.</b>
-          <span class="needs-copy">Add: one honest line</span>
+          <div>
+            <b>What I’d do differently.</b>
+            <span class="needs-copy">Add: one honest line</span>
+          </div>
         </li>
       </ol>
 
+      <!-- Human need and What I did used to restate beats 1 and 3 verbatim,
+           700px above. The block's only new sentence is the AI line, so the
+           other two slots point at the beat that already answers them rather
+           than saying it twice. -->
       <dl class="ai-role">
         <dt>Human need</dt>
-        <dd>Receipt and claims handling ran on manual submission and manual checking.</dd>
+        <dd>See beat 1 (the person) above.</dd>
         <dt>What the AI does in the product</dt>
         <dd>Nothing. The product has no AI in it.</dd>
         <dt>What I did</dt>
-        <dd>
-          Architected it and wrote it: the claim schema, the submission and validation
-          flow, authentication and role-based permissions, the SharePoint integration,
-          the audit trail and the reporting views.
-        </dd>
+        <dd>See beat 3 (my role) above.</dd>
       </dl>
 
       <dl class="evi">
@@ -1074,64 +1118,72 @@ html.js [data-reveal].shown{
     <article class="card card-lg stage-card" data-reveal>
       <h2 class="h2">MILES / MAVIS</h2>
       <p class="context">
-        <span class="needs-copy">Add: one plain sentence saying what MILES / MAVIS is and who uses it</span>
+        <span class="needs-copy">Add: who uses MILES / MAVIS, and at which organisation</span>
       </p>
       <p class="lede case-lede">
         Owning a feature means finishing it. Owning a platform means deciding what it
         will still be able to carry in two years.
       </p>
 
+      <!-- Every <li> holds ONE wrapper <div>. See the .process rule. -->
       <ol class="process" role="list">
         <li>
-          <b>The person.</b>
-          Operational and maintenance workflows were spread across manual steps with
-          no single record of who was qualified for what.
-          <span class="needs-copy">Add: who hit this problem and what it was costing them</span>
+          <div>
+            <b>The person.</b>
+            Operational and maintenance workflows were spread across manual steps with
+            no single record of who was qualified for what.
+            <span class="needs-copy">Add: who hit this problem and what it was costing them</span>
+          </div>
         </li>
         <li>
-          <b>Framing.</b>
-          The platform pulls those workflows into one place: structured automation over
-          centralised data, with role management and qualification tracking as
-          first-class parts of the model rather than fields bolted on later.
-          <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
+          <div>
+            <b>Framing.</b>
+            The platform pulls those workflows into one place: structured automation over
+            centralised data, with role management and qualification tracking as
+            first-class parts of the model rather than fields bolted on later.
+            <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
+          </div>
         </li>
         <li>
-          <b>My role.</b> Full-stack developer &amp; solution owner.
-          I was Solution Owner as well as a developer, so the scope decisions were mine
-          to make and defend. I designed the role and qualification model, built the
-          workflow automation and the reporting surface, and did the scalability
-          planning for enterprise rollout, deciding what the data model had to support
-          before anyone asked it to.
-          <span class="needs-copy">Add: timeline, team size, or the hard constraint</span>
+          <div>
+            <b>My role.</b> Full-stack developer &amp; solution owner.
+            I was Solution Owner as well as a developer, so the scope decisions were mine
+            to make and defend. I designed the role and qualification model, built the
+            workflow automation and the reporting surface, and did the scalability
+            planning for enterprise rollout, deciding what the data model had to support
+            before anyone asked it to.
+            <span class="needs-copy">Add: timeline, team size, or the hard constraint</span>
+          </div>
         </li>
         <li>
-          <b>Iteration.</b>
-          <span class="needs-copy">Add: one obstacle you handled alone</span>
+          <div>
+            <b>Iteration.</b>
+            <span class="needs-copy">Add: one obstacle you handled alone</span>
+          </div>
         </li>
         <li>
-          <b>Validation.</b>
-          <span class="needs-copy">Add: who used it, signed it off, or tested it</span>
+          <div>
+            <b>Validation.</b>
+            <span class="needs-copy">Add: who used it, signed it off, or tested it</span>
+          </div>
         </li>
         <li>
-          <b>What I’d do differently.</b>
-          <span class="needs-copy">Add: one honest line</span>
+          <div>
+            <b>What I’d do differently.</b>
+            <span class="needs-copy">Add: one honest line</span>
+          </div>
         </li>
       </ol>
 
+      <!-- Human need and What I did pointed at beats 1 and 3 instead of
+           restating them. See the note on FUEL Up's block. -->
       <dl class="ai-role">
         <dt>Human need</dt>
-        <dd>
-          Operational and maintenance workflows were spread across manual steps, with
-          no single record of who was qualified for what.
-        </dd>
+        <dd>See beat 1 (the person) above.</dd>
         <dt>What the AI does in the product</dt>
         <dd>Nothing. The product has no AI in it.</dd>
         <dt>What I did</dt>
-        <dd>
-          Solution owner as well as developer: I designed the role and qualification
-          model, built the workflow automation and the reporting surface, and did the
-          scalability planning for enterprise rollout.
-        </dd>
+        <dd>See beat 3 (my role) above.</dd>
       </dl>
 
       <dl class="evi">
@@ -1170,58 +1222,68 @@ html.js [data-reveal].shown{
         stand in front of a room and teach it.
       </p>
 
+      <!-- Every <li> holds ONE wrapper <div>. See the .process rule. -->
       <ol class="process" role="list">
         <li>
-          <b>The person.</b>
-          <span class="needs-copy">Add: who the learners were and what the gap was costing them</span>
+          <div>
+            <b>The person.</b>
+            <span class="needs-copy">Add: who the learners were and what the gap was costing them</span>
+          </div>
         </li>
         <li>
-          <b>Framing.</b>
-          The syllabus covered prompt-driven development, rapid prototyping and Power
-          Apps deployment.
-          <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
+          <div>
+            <b>Framing.</b>
+            The syllabus covered prompt-driven development, rapid prototyping and Power
+            Apps deployment.
+            <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
+          </div>
         </li>
         <li>
-          <b>My role.</b> Lead instructor.
-          I organised and led it. I wrote the training materials and the hands-on labs,
-          sequenced the syllabus, coordinated delivery with the external academic
-          partners, and taught the sessions.
-          <span class="needs-copy">Add: dates, cohort size, or the hard constraint</span>
+          <div>
+            <b>My role.</b> Lead instructor.
+            I organised and led it. I wrote the training materials and the hands-on labs,
+            sequenced the syllabus, coordinated delivery with the external academic
+            partners, and taught the sessions.
+            <span class="needs-copy">Add: dates, cohort size, or the hard constraint</span>
+          </div>
         </li>
         <li>
-          <b>Iteration.</b>
-          <span class="needs-copy">Add: one obstacle you handled alone</span>
+          <div>
+            <b>Iteration.</b>
+            <span class="needs-copy">Add: one obstacle you handled alone</span>
+          </div>
         </li>
         <li>
-          <b>Validation.</b>
-          External academic institutions co-delivered the training rather than
-          attending it. Internally the masterclass was recognised in PPCoE updates,
-          and attendance held across the cohort.
+          <div>
+            <b>Validation.</b>
+            External academic institutions co-delivered the training rather than
+            attending it. Internally the masterclass was recognised in PPCoE updates,
+            and attendance held across the cohort.
+          </div>
         </li>
         <li>
-          <b>What I’d do differently.</b>
-          <span class="needs-copy">Add: one honest line</span>
+          <div>
+            <b>What I’d do differently.</b>
+            <span class="needs-copy">Add: one honest line</span>
+          </div>
         </li>
       </ol>
 
+      <!-- Human need and What I did pointed at the beats instead of restating
+           them; the duplicate copy of beat 1's chip went with the restatement.
+           The AI line keeps its first sentence, which is the only claim this
+           block makes that is made nowhere else, and drops the syllabus list
+           it was repeating from beat 2. -->
       <dl class="ai-role">
         <dt>Human need</dt>
-        <dd>
-          A mixed cohort of citizen developers and engineers.
-          <span class="needs-copy">Add: who the learners were and what the gap was costing them</span>
-        </dd>
+        <dd>See beat 1 (the person) above.</dd>
         <dt>What the AI does in the product</dt>
         <dd>
           The training does not ship a product with AI in it. AI is the subject it
-          teaches: prompt-driven development, rapid prototyping and Power Apps
-          deployment.
+          teaches.
         </dd>
         <dt>What I did</dt>
-        <dd>
-          Lead instructor: I wrote the training materials and the hands-on labs,
-          sequenced the syllabus, coordinated delivery with the external academic
-          partners, and taught the sessions.
-        </dd>
+        <dd>See beat 3 (my role) above.</dd>
       </dl>
 
       <dl class="evi">
@@ -1262,7 +1324,9 @@ html.js [data-reveal].shown{
           System and the Project Management Tracker they were the same one. I acted as
           Security Reviewer on both. Both are in the project log below.
         </p>
-        <ul class="feat governance-list">
+        <!-- role="list" because list-style:none strips the implicit list role in
+             Safari/VoiceOver. Same reason the three .process <ol>s carry it. -->
+        <ul class="feat governance-list" role="list">
           <li>Security code review and repository review before deployment</li>
           <li>Vulnerability scanning and assessment</li>
           <li>Deployment validation and governance compliance checks</li>
@@ -1336,7 +1400,22 @@ html.js [data-reveal].shown{
     </div>
 
     <!-- Gap-separated rounded rows. v1's hairline-ruled list was the squarest
-         element on the page and it held 20 of the 20 entries. -->
+         element on the page and it held 20 of the 20 entries.
+
+         ⚠ THE .lab VOCABULARY IS CLOSED. Four labels, no more, in this order
+         where a row carries several:
+
+           What it does    what the thing is and what it can do
+           Outcome         what came of it, including who else assessed it
+           What I learned   the lesson, which is never an impact claim
+           Built with      the stack
+
+         It had grown to eight strings for these four slots ("What exists now",
+         "What it covered", "What changed", "Who confirmed it" were the extras),
+         which meant the same slot was asking the author a differently-worded
+         question on every row. Adding a fifth string is a decision about the
+         page's structure, not a wording choice — make it deliberately or not
+         at all. -->
     <div class="log-list" id="logList">
 
       <!-- ── FULL-STACK PLATFORMS ──
@@ -1355,7 +1434,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Operational and maintenance workflows were spread across manual steps with no single record of who was qualified for what. The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model rather than fields bolted on later.</p>
-          <div><div class="lab">What exists now</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, and reporting that reads from the same store the work is recorded in.</p></div>
+          <div><div class="lab">What it does</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, and reporting that reads from the same store the work is recorded in.</p></div>
           <div><div class="lab">Built with</div><p><span class="needs-copy">Add: what MILES / MAVIS was built on</span></p></div>
           <p><a class="link-inline" href="#wp2">Full case study, further up the page</a></p>
         </div>
@@ -1370,13 +1449,18 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Receipt and claims handling ran on manual submission and manual checking. I was asked to design and build the platform that replaced it: submission, validation, tracking and reporting in one workflow, on Power Platform with SharePoint as the document store.</p>
-          <div><div class="lab">What exists now</div><p class="note">A digital submission path for receipts, role-based permissions across claim stages, an audit trail on every record, and reporting views that read from the same data the claims are filed against.</p></div>
+          <div><div class="lab">What it does</div><p class="note">A digital submission path for receipts, role-based permissions across claim stages, an audit trail on every record, and reporting views that read from the same data the claims are filed against.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Power Platform</span><span>SharePoint</span></div></div>
           <p><a class="link-inline" href="#wp1">Full case study, further up the page</a></p>
         </div>
       </details>
 
-      <details class="log-row" data-org="RAiD" data-cat="enterprise">
+      <!-- open by default. This row and the Workplace Check In/Out row are the
+           only two carrying a product screenshot, and the whole evidence layer
+           was invisible to a reader who expanded nothing: one infographic, one
+           interface shot and a certificate, all behind closed rows. Being open
+           costs nothing — the filter reads .log-row[hidden], never [open]. -->
+      <details class="log-row" data-org="RAiD" data-cat="enterprise" open>
         <summary>
           <span class="lt">RAiD Facility Booking System</span>
           <span class="tag">Enterprise</span><span class="lorg">RAiD</span>
@@ -1385,7 +1469,7 @@ html.js [data-reveal].shown{
         <div class="log-body">
           <p>A centralised facility reservation platform on Microsoft Dataverse and React, built as Developer and Product Owner.</p>
           <div><div class="lab">What it does</div>
-            <ul class="feat">
+            <ul class="feat" role="list">
               <li>Role-based access control across four permission tiers</li>
               <li>Approval workflows with end-to-end visibility</li>
               <li>Real-time availability and conflict detection</li>
@@ -1393,7 +1477,7 @@ html.js [data-reveal].shown{
               <li>Audit logging on reservation records</li>
               <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
             </ul></div>
-          <div><div class="lab">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development (frontend, API integration and data model) in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
+          <div><div class="lab">Outcome</div><p class="note">Designed and implemented end-to-end with specs-driven development (frontend, API integration and data model) in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
             <p class="log-note"><span class="needs-copy">Add: who can confirm the two-day build, or the dates it ran between</span></p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
           <figure class="shot">
@@ -1458,7 +1542,9 @@ html.js [data-reveal].shown{
         </div>
       </details>
 
-      <details class="log-row" data-org="Freelance" data-cat="automation">
+      <!-- open by default: carries the second of the two product screenshots.
+           See the note on the RAiD Facility Booking row. -->
+      <details class="log-row" data-org="Freelance" data-cat="automation" open>
         <summary>
           <span class="lt">Workplace Check In/Out App</span>
           <span class="tag">Automation</span><span class="lorg">Freelance</span>
@@ -1467,7 +1553,7 @@ html.js [data-reveal].shown{
         <div class="log-body">
           <p>Developed a PowerApp to simplify and automate the administrative workflow for duty management for duty personnel in an RSAF unit.</p>
           <div><div class="lab">What it does</div>
-            <ul class="feat">
+            <ul class="feat" role="list">
               <li>Geofencing for check in/out at designated locations</li>
               <li>Logistics accountability and tracking</li>
               <li>Noticeboards for centralised announcements</li>
@@ -1476,7 +1562,7 @@ html.js [data-reveal].shown{
           <!-- This was filed under "What I learned", where an impact claim is
                the one thing that cannot be a lesson. It is an outcome, so it
                sits in the outcome slot, and it is unsourced, so it is chipped. -->
-          <div><div class="lab">What changed</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p>
+          <div><div class="lab">Outcome</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p>
             <p class="log-note"><span class="needs-copy">Add: how the efficiency and accuracy change was measured, and who reported it</span></p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
           <figure class="shot">
@@ -1536,7 +1622,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Led the case to unlock Microsoft Power Apps Code Apps across the organisation’s M365 environment, working through the relevant cybersecurity authorities within MINDEF.</p>
-          <div><div class="lab">What changed</div><p class="note">Every Code Apps project in this portfolio was built after this approval. Before it, Code Apps could not be deployed in the environment at all.</p></div>
+          <div><div class="lab">Outcome</div><p class="note">Every Code Apps project in this portfolio was built after this approval. Before it, Code Apps could not be deployed in the environment at all.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Power Platform Governance</span><span>M365 Administration</span><span>Security Review</span></div></div>
         </div>
       </details>
@@ -1549,8 +1635,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>A large-scale masterclass on vibe-coding (directing AI coding agents from a spec to a working app, and reviewing everything they produce), run for a mixed cohort of citizen developers and engineers, and co-delivered with external academic institutions.</p>
-          <div><div class="lab">What it covered</div><p>The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</p></div>
-          <div><div class="lab">Who confirmed it</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
+          <div><div class="lab">What it does</div><p>The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</p></div>
+          <div><div class="lab">Outcome</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
           <p><a class="link-inline" href="#wp3">Full case study, further up the page</a></p>
         </div>
       </details>
@@ -1563,7 +1649,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Explored AI vibe-coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
-          <div><div class="lab">What changed</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p>
+          <div><div class="lab">Outcome</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p>
             <p class="log-note"><span class="needs-copy">Add: who measured the months-to-days figure, and against which project</span></p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
         </div>
@@ -1701,10 +1787,21 @@ html.js [data-reveal].shown{
         </div>
       </details>
 
+      <!-- Tag is "Credential", not "Competition". The category holds both halves
+           of "Competitions & credentials", and the tag names which half a row
+           is. Every line this row states is training RECEIVED — the title says
+           Training, the body says skills were acquired at the Lufthansa
+           Technical Training Center, the lesson is riveting and soldering. No
+           line on the page says an entry was submitted, judged or placed, so
+           "Competition" was the one claim here the row could not support. The
+           chip below is deliberately left as-is: it asks what was assessed,
+           which is still the open question, and only Manfred can say whether he
+           competed at World Skills or trained for it. If he did compete, this
+           tag goes back to Competition. -->
       <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
         <summary>
           <span class="lt">World Skills Training (Aircraft Maintenance)</span>
-          <span class="tag">Competition</span><span class="lorg">Temasek Poly</span>
+          <span class="tag">Credential</span><span class="lorg">Temasek Poly</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
