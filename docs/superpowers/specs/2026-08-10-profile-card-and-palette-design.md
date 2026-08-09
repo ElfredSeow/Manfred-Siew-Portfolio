@@ -108,11 +108,34 @@ for every `.invert` pairing — so all of them survive untouched:
 | `.invert .num` `#BFD4E8` | 5.59 | 4.5 |
 | `.invert .on-data` `#9FD4FF` | 5.40 | 4.5 |
 
-One `.invert` value changes, because it is an accent derivative:
-`.invert .on-accent` and `.invert .eyebrow` shift `#FFC9A3` → **`#FFC2B8`**,
-which measures **5.53** on `#2A4E7A` — above the 4.9 the file records today.
-`.invert a:hover` at `redesign-v2.html:621` uses the same `#FFC9A3` and moves
-with it.
+#### The bare band is not the binding ground
+
+`redesign-v2.html:605-608` records the trap: `.invert .card` is
+`rgba(255,255,255,.07)`, which composites over the band's light end to
+**`#395A83`**, and *that* is where the accent derivative is tightest — the file
+measures `#FFC9A3` at 4.77 there versus 5.72 on the bare band. Any replacement
+must be checked against `#395A83`, not `#2A4E7A`.
+
+Two accent derivatives change:
+
+| Rule | From | To | on `#2A4E7A` | on `#395A83` |
+|---|---|---|---|---|
+| `.invert .on-accent`, `.invert .eyebrow`, `.invert a:hover` (`:609`, `:618`, `:621`) | `#FFC9A3` | **`#FFCFC7`** | 6.08 | **5.06** |
+| `.btn-signal:hover` fill (`:628`) | `#FF8038` | **`#F79389`** | — | ink-on-fill **8.36** |
+
+`#FFCFC7` was chosen over the closer-to-coral `#FFC2B8` (4.61 on `#395A83`)
+because 4.61 leaves no margin. At 5.06 the new value is *better* than the 4.77
+the page ships today.
+
+#### One latent trap, noted and deliberately not fixed
+
+`.invert .on-data #9FD4FF` measures **4.4966** on `#395A83` — below the floor.
+It is not a live failure: no `.on-data` element currently sits inside an
+`.invert .card`, and the pairing is fine at 5.40 on the bare band. It is
+pre-existing, unrelated to this change, and out of scope. It is recorded here
+because the next person to put an `.on-data` span inside a card on the dark band
+will ship a contrast failure and the harness will not catch it — the spot-checks
+at `scripts/verify-page.mjs:374` do not sample that combination.
 
 ### 4.5 The comment block must be rewritten
 
@@ -241,7 +264,13 @@ Four bands, matching the reference top to bottom. Card keeps `--r-xl` (30px) and
 └─────────────────┴──────────────────┘
 ```
 
-**① Role bar.** `--tint` bed, full card width, top corners `--r-xl`. Two lines,
+**① Role bar.** Two lines, reading `FORWARD DEPLOYED` / `SOLUTION ARCHITECT
+(INTERN)`. The parenthesised form is deliberate and replaces the `·` separator
+first sketched: it makes the bar's text, lowercased and whitespace-collapsed,
+*byte-identical* to the title of record, so the P1-9 verbatim invariant can be
+machine-checked across all three places rather than eyeballed on two.
+
+`--tint` bed, full card width, top corners `--r-xl`. Two lines,
 13px (`--fs-label`), weight 500, `letter-spacing:.08em`, uppercase,
 `color:var(--data)` — **5.99:1** on the `--tint` bed it sits on. Two lines is not
 a compromise; the reference's own title bar wraps to two.
