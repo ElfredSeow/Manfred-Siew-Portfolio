@@ -28,3 +28,6 @@ pnpm-debug.log*
 .env.local
 .env.*.local
 .gstack/
+
+# Stray harness output (a JS `undefined` leaking into an output path)
+undefined/

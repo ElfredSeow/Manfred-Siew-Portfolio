@@ -93,6 +93,11 @@
    none of which any rule below re-corrects, because none of them ever had
    to. This block is a faithful subset, not an invitation to grow one. */
 *,::before,::after{ box-sizing:border-box; border-width:0; border-style:solid; }
+/* Stops iOS Safari inflating text when a phone is turned to landscape.
+   Preflight ships only the -webkit- form; the standard property is added
+   alongside it for Chrome/Edge. It is inert here either way — this page
+   sets width=device-width, which already disables Chrome's font boosting. */
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 h1,h2,h3,h4,h5,h6{ font-size:inherit; font-weight:inherit; margin:0; }
 p,figure,figcaption,blockquote,dl,dd{ margin:0; }
 ul,ol{ margin:0; padding:0; list-style:none; }
@@ -101,6 +106,14 @@ img,video{ max-width:100%; height:auto; }
 a{ color:inherit; text-decoration:inherit; }
 button{ font:inherit; color:inherit; margin:0; padding:0;
         background-color:transparent; background-image:none; cursor:pointer; }
+/* MUST stay last, and is not optional. The img/svg rule above is an AUTHOR
+   rule, so it beats the user agent's own [hidden]{display:none} no matter how
+   specific that one is — author sheets win over UA sheets outright. Without
+   this line `this.hidden=true` silently stops working on replaced elements,
+   and the portrait's onerror fallback renders a broken-image box filling the
+   4:5 crop instead of disappearing. Preflight ships this rule last for the
+   same reason. */
+[hidden]{ display:none; }
 
 /* ── STACKING ORDER ───────────────────────────────────────────────────
    One scale, read top to bottom, with nothing arbitrary in it:
@@ -113,9 +126,11 @@ button{ font:inherit; color:inherit; margin:0; padding:0;
    The nav/skip pair was 50/60 before; those numbers were only ever "higher
    than the other one" and carried no relation to the rest of the file. */
 
-/* scroll-padding-top clears the floating nav (measured 81px bottom edge)
-   for every fragment jump with room to spare; a per-element scroll-margin-top
-   was tried and measured redundant on top of it, so it was left out. */
+/* scroll-padding-top clears the floating nav (measured 83px bottom edge, at
+   both 1440px and 390px) for every fragment jump with room to spare; a
+   per-element scroll-margin-top was tried and measured redundant on top of
+   it, so it was left out. 7rem = 112px leaves ~29px of slack, so this figure
+   drifting by a pixel or two does not threaten the clearance. */
 html{ scroll-behavior:smooth; scroll-padding-top:7rem; }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
 
@@ -564,8 +579,9 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 /* .lede hard-codes var(--body) — #2C3E52 — which on this band is 1.5:1 and
    effectively invisible. It was being rescued by a Tailwind text utility in
    the markup, i.e. by the CDN this file no longer loads; the contact lede is
-   the only .lede on the dark band and it needs a real rule. 8.0:1 on
-   var(--deep), 6.1:1 on the band's lighter end #2A4E7A. */
+   the only .lede on the dark band and it needs a real rule. 12.27:1 on
+   var(--deep), 6.84:1 on the band's lighter end #2A4E7A — the same pair the
+   block header above records as body-inv 6.8. */
 .invert .lede{ color:#DCE8F4; }
 .invert .num{ color:#BFD4E8; }
 .invert .on-accent{ color:#FFC9A3; }
