@@ -123,14 +123,11 @@ tailwind.config = {
 }
 
 *{ box-sizing:border-box; }
+/* scroll-padding-top clears the floating nav (measured 81px bottom edge)
+   for every fragment jump with room to spare; a per-element scroll-margin-top
+   was tried and measured redundant on top of it, so it was left out. */
 html{ scroll-behavior:smooth; scroll-padding-top:7rem; }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
-
-/* Anchor occlusion. The nav pill measures 65px tall with a 1rem top
-   offset (bottom edge at 81px in any viewport from 320-1440px); 6.5rem
-   (104px) clears that with a visible gap so a jumped-to heading never
-   sits under the floating bar. */
-section[id],h2[id]{ scroll-margin-top:6.5rem; }
 
 body{
   margin:0; background:var(--bg); color:var(--body);
