@@ -61,10 +61,25 @@
    gone. You cannot feel round while decorating your corners.
 
    CONTRAST. Every pair below was computed, not eyeballed. On --bg:
-   ink 17.4 · body 10.3 · muted 5.3 · accent 6.9 · data 6.2. On the dark
-   contact band's worst-case ground #2A4E7A: paper 8.5 · body-inv 6.8 ·
-   accent-inv 4.9 · data-inv 5.4. --signal is 2.7:1 and is therefore a
-   FILL token only; ink-on-signal is 6.5:1, which is the pairing used.
+   ink 17.4 · body 10.3 · muted 5.3 · accent 6.0 · accent-strong 5.0 ·
+   data 6.3 · deep 13.3. The tightest light pairing in the file is
+   accent-strong on --tint at 4.76.
+
+   The dark band has TWO grounds and the second is the binding one. On the
+   bare band's worst-case #2A4E7A: paper 8.5 · body-inv 6.8 · num 5.6 ·
+   accent-inv 6.1 · data-inv 5.4. But .invert .card is rgba(255,255,255,.07),
+   which composites to #395a83 — and there accent-inv is 5.06 and num is 4.65.
+   Check accent derivatives against #395a83, not against the bare band.
+
+   --signal (#F5837A) and --sky (#4B9BD4) are 2.4:1 and 2.8:1 and are
+   therefore FILL tokens only; ink-on-signal is 7.4:1 and ink-on-sky is 6.1:1,
+   which are the pairings used.
+
+   KNOWN LATENT TRAP, not a live failure: .invert .on-data #9FD4FF is 5.40 on
+   the bare band but 4.4966 on #395a83. No .on-data currently sits inside an
+   .invert .card. If you ever put one there, it ships a contrast failure and
+   the harness will not catch it — the spot-checks do not sample that pair.
+
    Body copy is 18px (--fs-body). The secondary text scale — .context, .note,
    .feat li and #catClaim — is 16px, so 16px is the floor for reading copy.
    Nothing sits below 13px.
@@ -73,8 +88,11 @@
 :root{
   --bg:#F6F8FB; --surface:#FFFFFF; --tint:#EEF3FA; --wash:#FDF1EB;
   --ink:#0B1420; --body:#2C3E52; --muted:#55697E;
-  --accent:#9A3412; --accent-strong:#C2410C; --signal:#FF6B1A; --data:#0B5FA5;
-  --line:#E3EAF2; --rule:#C6D4E2; --deep:#12244A;
+  --accent:#A8392C; --accent-strong:#B84630; --signal:#F5837A; --data:#17618F;
+  --line:#E3EAF2; --rule:#C6D4E2; --deep:#1B2C42;
+  /* Fill-only, like --signal: 2.8:1 on --bg, so it may never carry text.
+     Its one appearance is the 2px rule under the profile card's role bar. */
+  --sky:#4B9BD4;
 
   /* Radius scale. Nested radius = parent radius − parent padding, so a chip
      inside a card never looks pinched at the corner. */
@@ -168,7 +186,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .band-ground{ opacity:1; background:linear-gradient(#F6F8FB, #DDEBF7); }
 .band-cruise{ opacity:0; background:linear-gradient(#DDEBF7, #8FBFE9); }
-.band-space{  opacity:0; background:linear-gradient(#2A4E7A, #12244A); }
+.band-space{  opacity:0; background:linear-gradient(#2A4E7A, #1B2C42); }
 
 /* The 3D stage. z-index 2 — above the sky, below every content bed at
    z-10. "No body text over a moving 3D scene" is therefore enforced by
@@ -602,11 +620,12 @@ html.drafts-hidden .needs-copy{ display:none; }
    computed color/background values were correct the whole time. */
 .invert{ color:#DCE8F4; background:var(--deep); }
 .invert .h1,.invert .h2,.invert .h3{ color:#FFFFFF; }
-/* #FFC9A3, not #FFB380. The links inside .invert .card hover to this colour,
+/* #FFCFC7, not #FFC2B8. The links inside .invert .card hover to this colour,
    and that card composites to #395a83 against the band's lighter end — on
-   which #FFB380 measures 4.05:1 and fails. #FFC9A3 is 4.77:1 there and
-   5.72:1 on the bare band. Computed, not adjusted by eye. */
-.invert .eyebrow{ color:#FFC9A3; }
+   which the closer-to-coral #FFC2B8 measures 4.61:1, which leaves no margin.
+   #FFCFC7 is 5.06:1 there and 6.08:1 on the bare band, so this re-tint ends
+   up SAFER than the #FFC9A3 it replaces (4.77:1). Computed, not eyeballed. */
+.invert .eyebrow{ color:#FFCFC7; }
 /* .lede hard-codes var(--body) — #2C3E52 — which on this band is 1.5:1 and
    effectively invisible. It was being rescued by a Tailwind text utility in
    the markup, i.e. by the CDN this file no longer loads; the contact lede is
@@ -615,10 +634,10 @@ html.drafts-hidden .needs-copy{ display:none; }
    block header above records as body-inv 6.8. */
 .invert .lede{ color:#DCE8F4; }
 .invert .num{ color:#BFD4E8; }
-.invert .on-accent{ color:#FFC9A3; }
+.invert .on-accent{ color:#FFCFC7; }
 .invert .on-data{ color:#9FD4FF; }
 .invert a:not(.btn){ color:#FFFFFF; text-decoration-color:rgba(255,255,255,.55); }
-@media (hover:hover) and (pointer:fine){ .invert a:not(.btn):hover{ color:#FFC9A3; } }
+@media (hover:hover) and (pointer:fine){ .invert a:not(.btn):hover{ color:#FFCFC7; } }
 .invert .card{
   background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.16);
   box-shadow:none; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
@@ -626,7 +645,7 @@ html.drafts-hidden .needs-copy{ display:none; }
 /* The contact CTA keeps the ink-on-signal pairing (6.5:1) that v1 established. */
 .btn-signal{ background:var(--signal); color:var(--ink); box-shadow:none; }
 @media (hover:hover) and (pointer:fine){
-  .btn-signal:hover{ background-color:#FF8038; box-shadow:var(--sh-2); }
+  .btn-signal:hover{ background-color:#F79389; box-shadow:var(--sh-2); }
 }
 
 /* ── TIER 0 FALLBACK ──────────────────────────────────────────────────
