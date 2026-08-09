@@ -364,6 +364,48 @@ async function main() {
     await ctx.close();
   }
 
+  // ── Check 8: palette tokens resolve to the values the spec fixed ──
+  {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    await page.goto(PAGE_URL);
+    const EXPECTED = {
+      '--deep': '#1B2C42',
+      '--data': '#17618F',
+      '--accent': '#A8392C',
+      '--accent-strong': '#B84630',
+      '--signal': '#F5837A',
+      '--sky': '#4B9BD4',
+    };
+    const actual = await page.evaluate((names) => {
+      const cs = getComputedStyle(document.documentElement);
+      const out = {};
+      for (const n of names) out[n] = cs.getPropertyValue(n).trim().toUpperCase();
+      return out;
+    }, Object.keys(EXPECTED));
+    const tokenDiff = {};
+    for (const [name, want] of Object.entries(EXPECTED)) {
+      const got = actual[name] || '(unset)';
+      if (got !== want.toUpperCase()) tokenDiff[name] = { want, got };
+    }
+    // --signal and --sky are fill-only. Their sole legal pairing is --ink on
+    // top; assert that here so a future re-tint cannot quietly break it.
+    const inkOnFill = await page.evaluate(() => {
+      const cs = getComputedStyle(document.documentElement);
+      return { signal: cs.getPropertyValue('--signal').trim(), sky: cs.getPropertyValue('--sky').trim(), ink: cs.getPropertyValue('--ink').trim() };
+    });
+    const toRgb = (h) => { const s = h.replace('#', ''); return [0, 2, 4].map((i) => parseInt(s.slice(i, i + 2), 16)); };
+    const fillRatios = {};
+    for (const k of ['signal', 'sky']) {
+      if (!inkOnFill[k] || !inkOnFill.ink) { fillRatios[k] = null; continue; }
+      const r = contrastRatio(toRgb(inkOnFill.ink), toRgb(inkOnFill[k]));
+      fillRatios[k] = Math.round(r * 100) / 100;
+    }
+    const fillBad = Object.values(fillRatios).some((r) => r === null || r < CONTRAST_MIN);
+    if (Object.keys(tokenDiff).length || fillBad) fail('palette_tokens', { tokenDiff, fillRatios });
+    else pass('palette_tokens', { fillRatios });
+    await page.close();
+  }
+
   // ── Check 4: contrast spot-checks ──
   {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
