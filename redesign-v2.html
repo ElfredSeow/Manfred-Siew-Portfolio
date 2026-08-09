@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manfred Siew — Aerospace to AI Engineering</title>
-<meta name="description" content="Manfred Siew — Aerospace engineer converting to AI &amp; Software Engineering. Power Platform Developer at RAiD (RSAF Agile innovation Digital). 20 projects.">
+<meta name="description" content="Manfred Siew — Aerospace engineer converting to AI &amp; Software Engineering. Power Platform Developer at RAiD (RSAF Agile innovation Digital). 24 projects.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -301,7 +301,7 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 }
 .pill:active:not(:disabled){ transform:scale(.97); }
 .pill[aria-pressed="true"]{ background-color:var(--ink); border-color:var(--ink); color:#FFFFFF; }
-/* Two categories hold no published entry yet. An empty filter that silently
+/* One category holds no published entry yet. An empty filter that silently
    returns nothing reads as a broken control, so it says so instead. */
 .pill:disabled{ cursor:not-allowed; color:var(--muted); border-style:dashed; opacity:1; }
 
@@ -334,7 +334,11 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 
 .log-row summary{
   list-style:none; cursor:pointer; padding:1.1rem 1.25rem;
-  display:grid; grid-template-columns:1fr auto auto; gap:1rem;
+  /* Four columns for four children: title, tag, org, chevron. v1 had five
+     columns for five children; v2 dropped the leading row number and cut the
+     template to three, which left the chevron auto-placing onto a second row
+     under the title instead of sitting at the right edge. */
+  display:grid; grid-template-columns:1fr auto auto auto; gap:1rem;
   align-items:center;
   transition:background-color var(--d-hover) ease, transform var(--d-press) ease;
 }
@@ -385,10 +389,17 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
   font-size:.8125rem; padding:.3rem .7rem; border-radius:var(--r-pill);
   border:1px solid var(--line); color:var(--body); background:var(--bg);
 }
+/* Narrow screens drop to two columns. The org used to be display:none here,
+   which hid the one fact that tells a reader whether a row is RSAF work or a
+   poly CCA app, the single most useful sorting signal in the list, gone at
+   exactly the width where the list is hardest to scan. Tag and org now share
+   the second row, one at each end, and the chevron is pinned beside the
+   title so the row stays two lines tall. */
 @media (max-width:640px){
   .log-row summary{ grid-template-columns:1fr auto; row-gap:.5rem; }
-  .tag{ grid-column:1; justify-self:start; }
-  .lorg{ display:none; }
+  .chev{ grid-column:2; grid-row:1; }
+  .tag{ grid-column:1; grid-row:2; justify-self:start; }
+  .lorg{ grid-column:2; grid-row:2; justify-self:end; }
 }
 
 /* ── THE DESIGN-PROCESS SPINE ─────────────────────────────────────────
@@ -1020,16 +1031,14 @@ html.js [data-reveal].shown{
       <div class="card p-6 sm:p-8">
         <p class="m-0 max-w-[58ch]">
           Pushing an organisation towards AI-assisted development and then signing off on
-          its security are usually two different people. On the FlightSim Code App and the
-          Project Management Tracker they were the same one — I acted as Security Reviewer
-          on both.
+          its security are usually two different people. On the Flight Simulator Scheduling
+          System and the Project Management Tracker they were the same one — I acted as
+          Security Reviewer on both. Both are in the project log below.
         </p>
         <ul class="feat mt-5">
           <li>Security code review and repository review before deployment</li>
           <li>Vulnerability scanning and assessment</li>
           <li>Deployment validation and governance compliance checks</li>
-          <li>Worked with the cyber-defence team to clear an open-source documentation
-              tool for citizen-developer use, rather than routing around the policy</li>
         </ul>
       </div>
     </div>
@@ -1042,7 +1051,7 @@ html.js [data-reveal].shown{
 
     <div class="mb-7" data-reveal>
       <p class="eyebrow">All projects</p>
-      <h2 class="h2">Twenty, filterable two ways.</h2>
+      <h2 class="h2">Twenty-four, filterable two ways.</h2>
     </div>
 
     <!-- v1 ran two filter systems here: a six-card deck AND a button row.
@@ -1053,20 +1062,28 @@ html.js [data-reveal].shown{
          stronger than hiding the earlier work. The two filters combine. -->
     <div class="grid gap-3" data-reveal>
       <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
+        <!-- The reset. Clicking any category pill a second time already cleared
+             it, but that is a discovered affordance, not a visible one, and it
+             cleared only one of the two axes. This clears both and states the
+             total, so the list always has one obvious way back. -->
+        <button type="button" class="pill" id="logReset" aria-pressed="true"
+                aria-label="Show all projects and clear both filters">
+          All <span class="pill-count">24</span>
+        </button>
         <button type="button" class="pill" data-cat="simulation" data-claim="I can model a domain I wasn’t trained in." aria-pressed="false" disabled>
           Simulation &amp; decision support <span class="pill-count">— in preparation</span>
         </button>
-        <button type="button" class="pill" data-cat="platform" data-claim="I own systems, not features." aria-pressed="false" disabled>
-          Full-stack platforms <span class="pill-count">— in preparation</span>
+        <button type="button" class="pill" data-cat="platform" data-claim="I own systems, not features." aria-pressed="false">
+          Full-stack platforms <span class="pill-count">1</span>
         </button>
         <button type="button" class="pill" data-cat="enterprise" data-claim="I build with governance — access control, audit trails, approvals." aria-pressed="false">
-          Enterprise applications <span class="pill-count">1</span>
+          Enterprise applications <span class="pill-count">2</span>
         </button>
         <button type="button" class="pill" data-cat="automation" data-claim="I ship a working process in days, not quarters." aria-pressed="false">
           Process automation <span class="pill-count">8</span>
         </button>
         <button type="button" class="pill" data-cat="enablement" data-claim="I scale the practice past myself." aria-pressed="false">
-          Developer enablement &amp; R&amp;D <span class="pill-count">7</span>
+          Developer enablement &amp; R&amp;D <span class="pill-count">8</span>
         </button>
         <button type="button" class="pill" data-cat="competition" data-claim="Assessed by somebody other than me." aria-pressed="false">
           Competitions &amp; credentials <span class="pill-count">4</span>
@@ -1082,7 +1099,7 @@ html.js [data-reveal].shown{
         <button type="button" class="pill" data-org="RAiD" aria-pressed="false">RSAF (RAiD)</button>
         <button type="button" class="pill" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
         <button type="button" class="pill" data-org="Freelance" aria-pressed="false">Freelance</button>
-        <span class="num ml-auto" id="logCount" role="status">Showing all 20</span>
+        <span class="num ml-auto" id="logCount" role="status">Showing all 24</span>
       </div>
     </div>
 
@@ -1090,7 +1107,43 @@ html.js [data-reveal].shown{
          element on the page and it held 20 of the 20 entries. -->
     <div class="log-list mt-6" id="logList">
 
+      <!-- ── FULL-STACK PLATFORMS ──
+           The three featured projects were absent from the log, which is why
+           two category pills sat disabled directly beneath case studies that
+           described exactly those categories. They are in the log now, tagged,
+           and each links back to its case study so the row reads as the same
+           project rather than a second one. Every line below is the case
+           study's own wording; nothing new is asserted here. The organisation
+           is chipped because no case study on this page names it. -->
+      <details class="log-row" data-cat="platform">
+        <summary>
+          <span class="lt">MILES / MAVIS</span>
+          <span class="tag">Platform</span><span class="lorg needs-copy">Add: organisation</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Operational and maintenance workflows were spread across manual steps with no single record of who was qualified for what. The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model rather than fields bolted on later.</p>
+          <div><div class="lab mb-1.5">What exists now</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, and reporting that reads from the same store the work is recorded in.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><p><span class="needs-copy">Add: what MILES / MAVIS was built on</span></p></div>
+          <p><a class="underline underline-offset-4" href="#wp2">Full case study, further up the page</a></p>
+        </div>
+      </details>
+
       <!-- ── ENTERPRISE APPLICATIONS ── -->
+      <details class="log-row" data-cat="enterprise">
+        <summary>
+          <span class="lt">FUEL Up</span>
+          <span class="tag">Enterprise</span><span class="lorg needs-copy">Add: organisation</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Receipt and claims handling ran on manual submission and manual checking. I was asked to design and build the platform that replaced it: submission, validation, tracking and reporting in one workflow, on Power Platform with SharePoint as the document store.</p>
+          <div><div class="lab mb-1.5">What exists now</div><p class="note">A digital submission path for receipts, role-based permissions across claim stages, an audit trail on every record, and reporting views that read from the same data the claims are filed against.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform</span><span>SharePoint</span></div></div>
+          <p><a class="underline underline-offset-4" href="#wp1">Full case study, further up the page</a></p>
+        </div>
+      </details>
+
       <details class="log-row" data-org="RAiD" data-cat="enterprise">
         <summary>
           <span class="lt">RAiD Facility Booking System</span>
@@ -1108,7 +1161,8 @@ html.js [data-reveal].shown{
               <li>Audit logging on reservation records</li>
               <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
             </ul></div>
-          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p></div>
+          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
+            <p class="mt-2"><span class="needs-copy">Add: who can confirm the two-day build, or the dates it ran between</span></p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
           <figure class="shot">
             <img src="public/facility-infographic.jpg" loading="lazy"
@@ -1187,7 +1241,11 @@ html.js [data-reveal].shown{
               <li>Noticeboards for centralised announcements</li>
               <li>Hand-over features facilitating smooth transitions</li>
             </ul></div>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
+          <!-- This was filed under "What I learned", where an impact claim is
+               the one thing that cannot be a lesson. It is an outcome, so it
+               sits in the outcome slot, and it is unsourced, so it is chipped. -->
+          <div><div class="lab mb-1.5">What changed</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p>
+            <p class="mt-2"><span class="needs-copy">Add: how the efficiency and accuracy change was measured, and who reported it</span></p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
           <figure class="shot">
             <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
@@ -1229,7 +1287,7 @@ html.js [data-reveal].shown{
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
+          <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation. <span class="needs-copy">Add: where the 500-student figure comes from, and who counted it</span></p>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span></div></div>
         </div>
       </details>
@@ -1251,6 +1309,20 @@ html.js [data-reveal].shown{
         </div>
       </details>
 
+      <details class="log-row" data-cat="enablement">
+        <summary>
+          <span class="lt">Vibe Coding Masterclass</span>
+          <span class="tag">Enablement</span><span class="lorg needs-copy">Add: organisation</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>A large-scale masterclass on vibe-coding (directing AI coding agents from a spec to a working app, and reviewing everything they produce), run for a mixed cohort of citizen developers and engineers, and co-delivered with external academic institutions.</p>
+          <div><div class="lab mb-1.5">What it covered</div><p>The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</p></div>
+          <div><div class="lab mb-1.5">Who confirmed it</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
+          <p><a class="underline underline-offset-4" href="#wp3">Full case study, further up the page</a></p>
+        </div>
+      </details>
+
       <details class="log-row" data-org="RAiD" data-cat="enablement">
         <summary>
           <span class="lt">R&amp;D for Vibe-Coding Code Apps</span>
@@ -1259,7 +1331,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Explored AI vibe-coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
+          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p>
+            <p class="mt-2"><span class="needs-copy">Add: who measured the months-to-days figure, and against which project</span></p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
         </div>
       </details>
@@ -1271,7 +1344,7 @@ html.js [data-reveal].shown{
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use. <span class="needs-copy">Expand: Cydef</span></p>
+          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use. <span class="needs-copy">Expand: Cydef</span> <span class="needs-copy">Add: which is correct, cleared for your personal use or for citizen developers generally</span></p>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>GitHub</span><span>PowerDocu</span></div></div>
         </div>
@@ -1312,7 +1385,7 @@ html.js [data-reveal].shown{
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials. <span class="needs-copy">Expand: 815 SQN</span> <span class="needs-copy">Add: what Lovable was used for here</span></p>
+          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials. <span class="needs-copy">Expand: 815 SQN</span> <span class="needs-copy">Add: what Lovable was used for here</span> <span class="needs-copy">Add: where the 35-attendee figure comes from</span></p>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform</span></div></div>
         </div>
       </details>
@@ -1350,7 +1423,11 @@ html.js [data-reveal].shown{
         </div>
       </details>
 
-      <!-- ── COMPETITIONS & CREDENTIALS ── -->
+      <!-- ── COMPETITIONS & CREDENTIALS ──
+           This category's whole claim is "assessed by somebody other than me",
+           so a row that reports no assessment is the one row in the group that
+           does not earn its tag. Each therefore carries an outcome slot; where
+           the page cannot answer it, the chip asks. -->
       <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
         <summary>
           <span class="lt">National AI Student Challenge 2025 — Huawei Track</span>
@@ -1359,6 +1436,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
+          <div><div class="lab mb-1.5">Outcome</div><p>Certificate of Participation from AI Singapore, reproduced in the experience section below. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
         </div>
@@ -1372,6 +1450,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Cybersecurity CTF competition organised by SMU. Used tools such as Wireshark, John the Ripper, and Z-steg.</p>
+          <div><div class="lab mb-1.5">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
         </div>
@@ -1385,6 +1464,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
+          <div><div class="lab mb-1.5">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
         </div>
       </details>
@@ -1397,8 +1477,28 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Acquired technical skills essential for aircraft maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
+          <div><div class="lab mb-1.5">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span></div></div>
+        </div>
+      </details>
+
+      <!-- ── NOT YET CATEGORISED ──
+           The security section names this project and nothing else on the page
+           did, which left a named artifact that existed nowhere. Nothing here
+           establishes that it is a renaming of an existing row, so it gets its
+           own row rather than a guess. It carries no data-cat and no data-org
+           on purpose: it is the one entry the category counts above do not
+           add up to, and the chips say why. -->
+      <details class="log-row">
+        <summary>
+          <span class="lt">Project Management Tracker</span>
+          <span class="tag needs-copy">Add: category</span><span class="lorg needs-copy">Add: organisation</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p><span class="needs-copy">Add: what the Project Management Tracker is, who uses it, and what you built on it</span></p>
+          <p class="context">Named in the security section above: I acted as Security Reviewer on it.</p>
         </div>
       </details>
 
@@ -1421,13 +1521,28 @@ html.js [data-reveal].shown{
 
       <div class="relative pb-12" data-reveal>
         <span class="tl-node" aria-hidden="true"></span>
-        <div class="num mb-1.5">Oct 2025 — Present · 7 months · Singapore</div>
+        <div class="num mb-1.5">Oct 2025 — Present · Singapore</div>
         <h3 class="h3">Power Platform Developer, Student Intern</h3>
         <div class="mt-1 text-[.9375rem] font-medium on-data">RAiD (RSAF Agile innovation Digital)</div>
         <p class="mt-3 max-w-[64ch]">
           Specialising in Power Apps and Power Platform within the PPCoE team. Focus on
           designing digital solutions that streamline processes, improve data quality,
           and support data-driven decision-making.
+        </p>
+      </div>
+
+      <!-- Ordered strictly by start date, newest first: Oct 2025, Dec 2024,
+           Dec 2023, Apr 2021. The Temasek Polytechnic role runs to Present and
+           so used to sit second on end date, which put a Dec 2023 start above a
+           Dec 2024 one and made the timeline read as a mistake. -->
+      <div class="relative pb-12" data-reveal>
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="num mb-1.5">Dec 2024 — Oct 2025 · Singapore</div>
+        <h3 class="h3">Software Engineer (Power Platform)</h3>
+        <div class="mt-1 text-[.9375rem] font-medium on-data">Freelance</div>
+        <p class="mt-3 max-w-[64ch]">
+          Leveraged low-code tools like PowerApps and Power Automate to develop tailored
+          automation solutions.
         </p>
       </div>
 
@@ -1438,17 +1553,6 @@ html.js [data-reveal].shown{
         <div class="mt-1 text-[.9375rem] font-medium on-data">Temasek Polytechnic</div>
         <p class="mt-3 max-w-[64ch]">
           Self-taught PowerApps to automate admin work for various CCAs, enhancing club efficiency.
-        </p>
-      </div>
-
-      <div class="relative pb-12" data-reveal>
-        <span class="tl-node" aria-hidden="true"></span>
-        <div class="num mb-1.5">Dec 2024 — Oct 2025 · Singapore</div>
-        <h3 class="h3">Software Engineer (Power Platform)</h3>
-        <div class="mt-1 text-[.9375rem] font-medium on-data">Freelance</div>
-        <p class="mt-3 max-w-[64ch]">
-          Leveraged low-code tools like PowerApps and Power Automate to develop tailored
-          automation solutions.
         </p>
       </div>
 
@@ -1530,11 +1634,17 @@ html.js [data-reveal].shown{
 
   /* ─────────── 1. PROJECT FILTER (always on — content first) ─────────── */
   (function () {
-    var orgBtns = document.querySelectorAll('[data-org]');
-    var catBtns = document.querySelectorAll('[data-cat][data-claim]');
+    /* Scoped to .pill deliberately. The log rows carry data-org and data-cat
+       too, so a bare [data-org] selector also matched all 24 rows and bound a
+       filter handler to each: opening a RAiD row set the organisation filter
+       to RAiD and hid two thirds of the list. The category selector was saved
+       only by the extra [data-claim], which rows do not have. */
+    var orgBtns = document.querySelectorAll('.pill[data-org]');
+    var catBtns = document.querySelectorAll('.pill[data-cat][data-claim]');
     var rows = document.querySelectorAll('.log-row');
     var count = document.getElementById('logCount');
     var claim = document.getElementById('catClaim');
+    var reset = document.getElementById('logReset');
     var DEFAULT_CLAIM = claim ? claim.textContent : '';
 
     /* Two independent axes — organisation and category — combined with AND.
@@ -1558,6 +1668,9 @@ html.js [data-reveal].shown{
         : shown === rows.length
           ? 'Showing all ' + rows.length
           : 'Showing ' + shown + ' of ' + rows.length;
+      /* The reset pill reads as pressed exactly when nothing is filtered, so
+         it doubles as the indicator for "you are seeing everything". */
+      if (reset) reset.setAttribute('aria-pressed', (org === 'all' && cat === 'all') ? 'true' : 'false');
       Flight.remeasure();
     }
 
@@ -1595,6 +1708,22 @@ html.js [data-reveal].shown{
         apply();
       });
     });
+
+    /* One control that clears BOTH axes. It reuses the same deselect path the
+       pills already have: set state to 'all', drop every aria-pressed except
+       the organisation row's own "All entries", restore the default claim. */
+    if (reset) {
+      reset.addEventListener('click', function () {
+        org = 'all';
+        cat = 'all';
+        catBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        orgBtns.forEach(function (b) {
+          b.setAttribute('aria-pressed', b.dataset.org === 'all' ? 'true' : 'false');
+        });
+        setClaim(DEFAULT_CLAIM);
+        apply();
+      });
+    }
   })();
 
   /* ═══════════ 2. THE FLIGHT DRIVER ═══════════
