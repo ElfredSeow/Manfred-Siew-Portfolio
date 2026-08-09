@@ -302,8 +302,18 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .pill:active:not(:disabled){ transform:scale(.97); }
 .pill[aria-pressed="true"]{ background-color:var(--ink); border-color:var(--ink); color:#FFFFFF; }
 /* One category holds no published entry yet. An empty filter that silently
-   returns nothing reads as a broken control, so it says so instead. */
-.pill:disabled{ cursor:not-allowed; color:var(--muted); border-style:dashed; opacity:1; }
+   returns nothing reads as a broken control, so it says so instead.
+   It also carries its claim inline, which the other five reveal in #catClaim
+   only on selection — a control that can never be selected can never show it.
+   Without that line the reader meets "simulation: nothing yet", then meets a
+   Flight Simulator Scheduling System further down, and has nothing telling
+   them this category means modelling a domain rather than booking a simulator.
+   The claim is therefore allowed to wrap, which the other pills are not. */
+.pill:disabled{
+  cursor:not-allowed; color:var(--muted); border-style:dashed; opacity:1;
+  white-space:normal; text-align:left;
+}
+.pill-claim{ display:block; font-weight:400; font-size:.8125rem; margin-top:.15rem; }
 
 .pill-count{ opacity:.68; font-variant-numeric:tabular-nums; }
 .pill:disabled .pill-count{ opacity:1; color:var(--muted); }
@@ -1061,17 +1071,22 @@ html.js [data-reveal].shown{
          capability while obviously differing in stakes, and showing that is
          stronger than hiding the earlier work. The two filters combine. -->
     <div class="grid gap-3" data-reveal>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
+      <!-- items-start, not the default stretch: the disabled pill carries a
+           second line, and stretching would make all seven that tall. -->
+      <div class="flex flex-wrap items-start gap-2" role="group" aria-label="Filter projects by category, and reset both filters">
         <!-- The reset. Clicking any category pill a second time already cleared
              it, but that is a discovered affordance, not a visible one, and it
              cleared only one of the two axes. This clears both and states the
              total, so the list always has one obvious way back. -->
+        <!-- The accessible name must start with the visible label, or speech
+             input ("click All 24") finds no match. WCAG 2.5.3. -->
         <button type="button" class="pill" id="logReset" aria-pressed="true"
-                aria-label="Show all projects and clear both filters">
+                aria-label="All 24 projects, clearing both filters">
           All <span class="pill-count">24</span>
         </button>
         <button type="button" class="pill" data-cat="simulation" data-claim="I can model a domain I wasn’t trained in." aria-pressed="false" disabled>
           Simulation &amp; decision support <span class="pill-count">— in preparation</span>
+          <span class="pill-claim">I can model a domain I wasn’t trained in.</span>
         </button>
         <button type="button" class="pill" data-cat="platform" data-claim="I own systems, not features." aria-pressed="false">
           Full-stack platforms <span class="pill-count">1</span>
@@ -1436,7 +1451,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
-          <div><div class="lab mb-1.5">Outcome</div><p>Certificate of Participation from AI Singapore, reproduced in the experience section below. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
+          <div><div class="lab mb-1.5">Outcome</div><p class="note">Certificate of Participation from AI Singapore, reproduced in the experience section below. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
         </div>
@@ -1569,7 +1584,7 @@ html.js [data-reveal].shown{
 
       <figure class="shot shot--cert">
         <img src="public/huawei-track-cert.jpg" loading="lazy"
-             alt="AI Singapore Certificate of Participation issued to Siew Lee Hong Manfred, with a QR code and a signature from the Director of AI Talent Development"
+             alt="AI Singapore Certificate of Participation issued to Siew Lee Hong Manfred for the National AI Student Challenge 2025 - Huawei Track, with a QR code and a signature from the Director of AI Talent Development"
              onerror="this.closest('figure').hidden=true">
         <figcaption>Externally assessed — one of the few claims on this page somebody else graded.</figcaption>
       </figure>
