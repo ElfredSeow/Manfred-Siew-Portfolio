@@ -19,44 +19,6 @@
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
 </script>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  /* Tailwind's `hover:` variant compiles to a bare :hover with no capability
-     query, which is sticky hover on every touch device. This gates all of
-     them behind (hover: hover) — the CSS below gates its own by hand, but
-     the utilities in the nav could not be fixed any other way. */
-  future: { hoverOnlyWhenSupported: true },
-  theme: {
-    extend: {
-      colors: {
-        bg:      '#F6F8FB',   // cool near-white, tinted toward the brand blue
-        surface: '#FFFFFF',
-        tint:    '#EEF3FA',
-        wash:    '#FDF1EB',
-        ink:     '#0B1420',   // 17.4:1 on bg
-        body:    '#2C3E52',   // 10.3:1 on bg
-        muted:   '#55697E',   //  5.3:1 on bg
-        accent:  '#9A3412',   //  6.9:1 on bg — accent TEXT
-        'accent-strong': '#C2410C', // 4.9:1 — >=24px headings, borders
-        signal:  '#FF6B1A',   // FILL ONLY — 2.7:1, never under a glyph
-        data:    '#0B5FA5',   //  6.2:1
-        line:    '#E3EAF2',
-        rule:    '#C6D4E2',
-        deep:    '#12244A',
-      },
-      fontFamily: {
-        sans: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
-      },
-      borderRadius: {
-        xs: '8px', sm: '12px', md: '16px', lg: '22px', xl: '30px',
-      },
-    },
-  },
-};
-</script>
-
 <style>
 /* ══════════════════════════════════════════════════════════════════════
    ASCENT v2 — one signature, everything else quiet.
@@ -122,7 +84,35 @@ tailwind.config = {
   --sh-2:0 2px 4px rgba(11,20,32,.04), 0 30px 64px -34px rgba(11,20,32,.38);
 }
 
-*{ box-sizing:border-box; }
+/* ── BASELINE RESET ───────────────────────────────────────────────────
+   This page used to get its reset from Tailwind's Preflight, which the Play
+   CDN injected at runtime. The CDN is gone, so the parts of Preflight this
+   document actually leans on are written out here. Without them every <p>
+   regains a 1em margin, every <ol>/<ul> a bullet and 40px of padding, every
+   <a> the UA's blue underline, and every <button> the UA's system font —
+   none of which any rule below re-corrects, because none of them ever had
+   to. This block is a faithful subset, not an invitation to grow one. */
+*,::before,::after{ box-sizing:border-box; border-width:0; border-style:solid; }
+h1,h2,h3,h4,h5,h6{ font-size:inherit; font-weight:inherit; margin:0; }
+p,figure,figcaption,blockquote,dl,dd{ margin:0; }
+ul,ol{ margin:0; padding:0; list-style:none; }
+img,svg,video,canvas{ display:block; }
+img,video{ max-width:100%; height:auto; }
+a{ color:inherit; text-decoration:inherit; }
+button{ font:inherit; color:inherit; margin:0; padding:0;
+        background-color:transparent; background-image:none; cursor:pointer; }
+
+/* ── STACKING ORDER ───────────────────────────────────────────────────
+   One scale, read top to bottom, with nothing arbitrary in it:
+     30  skip link   — must clear the nav it shares a corner with
+     20  nav bar     — floats over every content bed
+     10  content     — <main> and <footer>; the opaque beds
+      2  #scene      — the 3D signature, above the sky, under all copy
+      0  .sky        — the atmosphere bands
+     -1  .silo       — the Tier-0 silhouette, behind its own section's card
+   The nav/skip pair was 50/60 before; those numbers were only ever "higher
+   than the other one" and carried no relation to the rest of the file. */
+
 /* scroll-padding-top clears the floating nav (measured 81px bottom edge)
    for every fragment jump with room to spare; a per-element scroll-margin-top
    was tried and measured redundant on top of it, so it was left out. */
@@ -180,7 +170,8 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .lede{ font-size:clamp(1.1rem,1.6vw,1.3rem); line-height:1.55; color:var(--body); }
 
 /* Hero thesis + proof row, replacing the old stat-tile grid (Task 1). */
-.hero-thesis{max-width:56ch;font-size:1.25rem;line-height:1.6;color:var(--body)}
+.hero-thesis{max-width:56ch;font-size:1.25rem;line-height:1.6;color:var(--body);
+  margin:2.25rem 0 0}
 .proof-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
 .chip.proof{border:1px solid var(--rule);border-radius:var(--r-pill);
   padding:.45rem .9rem;font-size:var(--fs-label);color:var(--body);
@@ -194,8 +185,11 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
   letter-spacing:-.005em; margin:0 0 .7rem;
 }
 /* Small in-card labels. Semibold muted sentence case — legible as a label
-   without becoming a texture the way 13px tracked mono caps did. */
-.lab{ font-size:.875rem; font-weight:600; color:var(--muted); letter-spacing:-.005em; }
+   without becoming a texture the way 13px tracked mono caps did. All 46 of
+   them sit directly above the thing they label, so the gap belongs to the
+   component rather than to 46 copies of a spacing utility. */
+.lab{ font-size:.875rem; font-weight:600; color:var(--muted); letter-spacing:-.005em;
+  margin-bottom:.375rem; }
 /* Tabular data only: dates, counts, the flight readout. Not decorative. */
 .num{
   font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:var(--fs-label);
@@ -207,17 +201,39 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 /* Floating rounded nav bar rather than a full-width ruled edge. Opaque, not
    translucent: the sky behind it runs to #12244A, and a 90%-alpha bar over
    that ground would shift every label's contrast as the reader climbs. */
+/* The dock is the fixed full-width strip; the bar is the pill inside it.
+   Two elements because the strip must span the viewport to stay centred
+   while the pill itself is capped at the page measure. */
+.nav-dock{ position:fixed; inset-inline:0; top:0; z-index:20; padding:1rem 1rem 0; }
+@media (min-width:640px){ .nav-dock{ padding-inline:1.5rem; } }
+
 .nav-bar{
+  display:flex; align-items:center; gap:1rem;
+  margin-inline:auto; max-width:1120px;
   border:1px solid var(--line); background:var(--surface);
   border-radius:var(--r-lg); box-shadow:var(--sh-1);
   padding:.75rem 1rem;
 }
+@media (min-width:640px){ .nav-bar{ padding-inline:1.25rem; } }
+
+.nav-link{
+  padding:.375rem .75rem; border-radius:var(--r-pill);
+  font-size:.9375rem; color:var(--body);
+  transition:background-color 200ms ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .nav-link:hover{ background-color:var(--tint); }
+}
+/* Smaller and tighter than a body button — it rides inside the nav pill. */
+.btn.nav-cta{ margin-left:auto; padding:.5rem 1rem; font-size:.875rem; }
+@media (min-width:768px){ .btn.nav-cta{ margin-left:.5rem; } }
 
 /* Skip link. Off-screen until focused, then parked above the nav pill
-   (z-index 60, one above the nav's own z-50) so keyboard focus is never
-   hidden underneath the opaque bar it shares a corner with. */
+   (z-index 30, one step above the nav's 20 on the scale at the top of this
+   file) so keyboard focus is never hidden underneath the opaque bar it
+   shares a corner with. */
 .skip{
-  position:absolute; left:-9999px; top:0; z-index:60;
+  position:absolute; left:-9999px; top:0; z-index:30;
   background:var(--surface); border:1px solid var(--rule);
   border-radius:var(--r-pill); padding:.5rem 1rem;
   color:var(--ink); text-decoration:none; font-weight:600;
@@ -227,7 +243,8 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 /* Mobile nav. No hamburger — a horizontally scrollable pill row keeps every
    section reachable on phones without adding a second interaction pattern. */
 .nav-links{
-  display:flex; gap:.25rem; overflow-x:auto; scrollbar-width:none;
+  display:flex; align-items:center; margin-left:auto;
+  gap:.25rem; overflow-x:auto; scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
   min-width:0; flex-shrink:1;
 }
@@ -236,7 +253,10 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 
 /* Guard only: the name shrinks before it forces the link row to wrap or
    push the Contact button off the bar. */
-.nav-name{ flex-shrink:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.nav-name{
+  flex-shrink:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  font-size:1.05rem; font-weight:700; letter-spacing:-.025em; color:var(--ink);
+}
 
 /* ── SURFACES ─────────────────────────────────────────────────────────
    One card recipe, three sizes. No corner ticks, no brackets, no stripes. */
@@ -330,7 +350,7 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
    which is the squarest possible treatment. They are now gap-separated
    rounded surfaces — the single biggest contributor to the page reading
    round rather than ruled. */
-.log-list{ display:grid; gap:.6rem; }
+.log-list{ display:grid; gap:.6rem; margin-top:1.5rem; }
 .log-row{
   background:var(--surface); border:1px solid var(--line);
   border-radius:var(--r-md); overflow:hidden;
@@ -523,7 +543,17 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
    Contact and footer sit directly on .band-space and invert. Every pairing
    is checked against the LIGHTER end of that gradient, #2A4E7A, which is
    the worst case: paper 7.9 · body-inv 6.8 · accent-inv 4.9 · data-inv 5.4.
-   #FF6B1A on that ground is 3.0:1, so it stays a fill here too. */
+   #FF6B1A on that ground is 3.0:1, so it stays a fill here too.
+
+   ⚠ DO NOT re-introduce a utility framework without renaming this class.
+   "invert" is also Tailwind's filter utility (filter:invert(100%)). While the
+   Play CDN was loaded it matched this same class name and painted the whole
+   contact section and footer through a colour inversion — the navy band
+   rendered cream, --signal orange rendered blue, and every ratio computed in
+   the comment above was measured against colours the browser was not
+   actually showing. Removing the CDN removed the filter; the ratios below
+   now describe what renders. The collision is silent and visual only: the
+   computed color/background values were correct the whole time. */
 .invert{ color:#DCE8F4; background:var(--deep); }
 .invert .h1,.invert .h2,.invert .h3{ color:#FFFFFF; }
 /* #FFC9A3, not #FFB380. The links inside .invert .card hover to this colour,
@@ -531,6 +561,12 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
    which #FFB380 measures 4.05:1 and fails. #FFC9A3 is 4.77:1 there and
    5.72:1 on the bare band. Computed, not adjusted by eye. */
 .invert .eyebrow{ color:#FFC9A3; }
+/* .lede hard-codes var(--body) — #2C3E52 — which on this band is 1.5:1 and
+   effectively invisible. It was being rescued by a Tailwind text utility in
+   the markup, i.e. by the CDN this file no longer loads; the contact lede is
+   the only .lede on the dark band and it needs a real rule. 8.0:1 on
+   var(--deep), 6.1:1 on the band's lighter end #2A4E7A. */
+.invert .lede{ color:#DCE8F4; }
 .invert .num{ color:#BFD4E8; }
 .invert .on-accent{ color:#FFC9A3; }
 .invert .on-data{ color:#9FD4FF; }
@@ -561,6 +597,165 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
 @media (max-width:1023px){
   html.tier-0 .silo{ width:58vw; right:50%; top:14%; transform:translate(50%,0); }
   html.tier-0 .stage-right .silo{ left:auto; right:50%; transform:translate(50%,0) scaleX(-1); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PAGE LAYOUT
+
+   Everything below replaces utility classes that used to come from the
+   Tailwind Play CDN. Two things about placement are deliberate:
+
+   1. This block sits AFTER the @media (max-width:1023px) .stage rule above.
+      That is load-bearing. The CDN appended its stylesheet to <head> after
+      this one, so its padding utilities outranked that rule on equal
+      specificity, and the stage sections measured 80px/64px of bottom
+      padding on phones, not the 3rem that rule asks for. Reproducing the
+      page as it actually renders means the section rules below must keep
+      winning that tie. (The 3rem rule has therefore been dead since the
+      padding utilities were added — flagged, not fixed, here: this task
+      removes a dependency, it does not restyle the page.)
+   2. Names describe the thing, not the declaration. There is no .mt-4 in
+      this file and there should not be one.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* The page measure, and the one narrow variant the timeline uses. */
+.shell{ margin-inline:auto; width:100%; max-width:1120px; }
+.shell-narrow{ max-width:980px; }
+
+/* Opaque content beds, above the sky and the 3D scene. */
+.content-layer{ position:relative; z-index:10; }
+
+/* Shared section gutter. Block padding is per-section below, because the
+   sections genuinely differ; the horizontal gutter never does. */
+.section{ position:relative; padding-inline:1rem; }
+@media (min-width:640px){ .section{ padding-inline:1.5rem; } }
+
+/* ── HERO ─────────────────────────────────────────────────────────── */
+.hero{ display:flex; align-items:center; min-height:100svh; padding-block:8rem 5rem; }
+@media (min-width:1024px){ .hero{ padding-block-start:9rem; } }
+
+.hero-grid{ display:grid; align-items:center; gap:2rem; }
+@media (min-width:1024px){
+  .hero-grid{ grid-template-columns:1.15fr .85fr; gap:3rem; }
+}
+
+.hero-card{ padding:1.5rem; }
+@media (min-width:640px){  .hero-card{ padding:2.25rem; } }
+@media (min-width:1024px){ .hero-card{ padding:2.75rem; } }
+
+.hero-status{
+  display:flex; align-items:center; gap:.625rem; margin-bottom:1.25rem;
+  font-size:.9375rem; font-weight:500; color:var(--body);
+}
+.hero-dot{
+  flex:none; width:.5rem; height:.5rem; border-radius:50%; background:var(--signal);
+}
+
+/* The aerospace → AI pill under the name. */
+.hero-arc{
+  display:inline-flex; flex-wrap:wrap; align-items:center; gap:.625rem;
+  margin-top:1rem; padding:.5rem 1rem;
+  border:1px solid var(--line); border-radius:var(--r-pill); background:var(--bg);
+  font-size:.9375rem; font-weight:500;
+}
+
+.hero-lede{ margin-top:1.5rem; max-width:54ch; }
+.hero-lede strong{ font-weight:600; color:var(--ink); }
+.hero-lede .on-accent{ font-weight:600; }
+
+.hero-actions{ display:flex; flex-wrap:wrap; gap:.75rem; margin-top:2rem; }
+
+.hero-portrait{ display:none; margin-inline:auto; width:100%; max-width:330px; }
+@media (min-width:1024px){ .hero-portrait{ display:block; } }
+.portrait-frame{ overflow:hidden; padding:.625rem; }
+/* Radius from the scale: --r-lg is the 22px the crop used to hard-code. */
+.portrait-crop{ aspect-ratio:4/5; overflow:hidden; border-radius:var(--r-lg); background:var(--tint); }
+.portrait-crop img{ width:100%; height:100%; object-fit:cover; }
+.portrait-meta{
+  display:grid; grid-template-columns:auto 1fr; column-gap:1rem; row-gap:.625rem;
+  padding:1rem .75rem .5rem; font-size:.875rem;
+}
+.portrait-meta dt{ color:var(--muted); }
+
+.hero-orgs{ display:flex; flex-wrap:wrap; align-items:center; gap:.625rem; margin-top:2rem; }
+/* 4.7:1 at the ground gradient's darkest stop — the pairing Task 6 computed
+   and accepted. It is a label, not body copy, and it is the only muted text
+   on this page sitting on the sky rather than on an opaque bed. */
+.hero-orgs-label{ font-size:.9375rem; color:var(--muted); }
+.org-chip{
+  padding:.375rem .875rem; border:1px solid var(--line); border-radius:var(--r-pill);
+  background:var(--surface); font-size:.875rem; color:var(--body);
+}
+.org-chip b{ font-weight:600; color:var(--ink); }
+
+/* ── SECTION BLOCK PADDING ────────────────────────────────────────── */
+.origin{ padding-block:5rem; }
+.waypoint{ padding-block:4rem; }
+.featured-intro{ padding-block-start:5rem; }
+.governance{ padding-block:5rem; }
+.log-section,.record{ padding-block:5rem; }
+@media (min-width:1024px){ .log-section,.record{ padding-block:7rem; } }
+.contact{ padding-block:7rem; }
+@media (min-width:1024px){ .contact{ padding-block:9rem; } }
+.site-footer{ padding-block-end:2.5rem; }
+
+.origin-note{ margin-top:1.25rem; max-width:56ch; }
+
+/* ── FEATURED WORK ────────────────────────────────────────────────── */
+.featured-card{ max-width:42rem; padding:1.5rem; }
+@media (min-width:640px){ .featured-card{ padding:2.25rem; } }
+.featured-lede{ margin-top:1rem; max-width:52ch; }
+.featured-note{ margin-top:1.25rem; }
+/* The one-line hook under each case study's orientation sentence. */
+.case-lede{ margin-top:1rem; }
+
+/* ── GOVERNANCE ───────────────────────────────────────────────────── */
+.governance-grid{ display:grid; gap:2rem; }
+@media (min-width:1024px){ .governance-grid{ grid-template-columns:.8fr 1.2fr; } }
+.governance-note{ max-width:58ch; }
+.governance-list{ margin-top:1.25rem; }
+
+/* A plain padded card interior, used by governance and by contact. */
+.panel{ padding:1.5rem; }
+@media (min-width:640px){ .panel{ padding:2rem; } }
+
+/* ── PROJECT LOG ──────────────────────────────────────────────────── */
+.log-head{ margin-bottom:1.75rem; }
+.log-filters{ display:grid; gap:.75rem; }
+/* align-items:flex-start, not the default stretch: the disabled category
+   pill carries a second claim line, and stretching would make all seven
+   that tall. The organisation row has no such pill and centres instead. */
+.filter-row{ display:flex; flex-wrap:wrap; align-items:flex-start; gap:.5rem; }
+.filter-row--org{ align-items:center; margin-top:.25rem; }
+.log-count{ margin-left:auto; }
+.log-note{ margin-top:.5rem; }
+
+/* The page's standard inline text link. */
+.link-inline{ text-decoration:underline; text-underline-offset:4px; }
+
+/* ── EXPERIENCE ───────────────────────────────────────────────────── */
+.record-head{ margin-bottom:2.5rem; }
+.timeline{ position:relative; padding-left:2rem; }
+.tl-item{ position:relative; padding-bottom:3rem; }
+.tl-item--last{ padding-bottom:0; }
+.tl-date{ margin-bottom:.375rem; }
+.tl-org{ margin-top:.25rem; font-size:.9375rem; font-weight:500; }
+.tl-desc{ margin-top:.75rem; max-width:64ch; }
+
+/* ── CONTACT & FOOTER ─────────────────────────────────────────────── */
+.contact-grid{ display:grid; align-items:center; gap:2.5rem; }
+@media (min-width:1024px){ .contact-grid{ grid-template-columns:1.1fr .9fr; } }
+.contact-lede{ margin-top:1.5rem; max-width:48ch; }
+.btn.btn-block{ width:100%; justify-content:center; }
+.contact-list{ display:grid; gap:.75rem; margin-top:1.5rem; font-size:.9375rem; }
+.contact-list > div{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:.75rem; }
+/* Same dimmed label blue as .invert .num — 8.9:1 on var(--deep). */
+.contact-list dt{ color:#BFD4E8; }
+
+.footer-inner{
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:.75rem;
+  border-top:1px solid rgba(255,255,255,.2); padding-top:2rem;
+  font-size:.875rem; color:#BFD4E8;
 }
 
 /* ── REVEALS ──────────────────────────────────────────────────────────
@@ -624,20 +819,20 @@ html.js [data-reveal].shown{
      A floating rounded bar rather than a full-width ruled edge. Opaque, not
      translucent: the sky behind it runs to #12244A and a 90%-alpha bar over
      that ground would shift every label's contrast. -->
-<nav class="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6" aria-label="Sections">
-  <div class="mx-auto flex max-w-[1120px] items-center gap-4 nav-bar sm:px-5">
-    <a href="#ident" class="nav-name text-[1.05rem] font-bold tracking-tight text-ink no-underline">Manfred Siew</a>
-    <div class="ml-auto nav-links items-center gap-1">
-      <a href="#origin"  class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Start</a>
-      <a href="#wp1"     class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Featured</a>
-      <a href="#log"     class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Projects</a>
-      <a href="#record"  class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Experience</a>
+<nav class="nav-dock" aria-label="Sections">
+  <div class="nav-bar">
+    <a href="#ident" class="nav-name">Manfred Siew</a>
+    <div class="nav-links">
+      <a href="#origin"  class="nav-link">Start</a>
+      <a href="#wp1"     class="nav-link">Featured</a>
+      <a href="#log"     class="nav-link">Projects</a>
+      <a href="#record"  class="nav-link">Experience</a>
     </div>
-    <a href="#contact" class="btn ml-auto px-4 py-2 text-[.875rem] md:ml-2">Contact</a>
+    <a href="#contact" class="btn nav-cta">Contact</a>
   </div>
 </nav>
 
-<main class="relative z-10">
+<main class="content-layer">
 
 <!-- ══════════ 01 · HERO ══════════
      v1 held the aircraft at zero opacity until the hero copy had scrolled
@@ -646,38 +841,38 @@ html.js [data-reveal].shown{
      paint. The hero now has its own card, exactly as v1's own code comment
      said it would have to. The signature is visible immediately. -->
 <section id="ident" data-alt="0,1500" data-section="Home"
-         class="relative flex min-h-[100svh] items-center px-4 pb-20 pt-32 sm:px-6 lg:pt-36">
-  <div class="mx-auto w-full max-w-[1120px]">
-    <div class="grid items-center gap-8 lg:grid-cols-[1.15fr_.85fr] lg:gap-12">
+         class="hero section">
+  <div class="shell">
+    <div class="hero-grid">
 
-      <div class="card card-lg p-6 sm:p-9 lg:p-11" data-reveal>
-        <p class="mb-5 flex items-center gap-2.5 text-[.9375rem] font-medium text-body">
-          <span class="inline-block h-2 w-2 flex-none rounded-full bg-signal"></span>
+      <div class="card card-lg hero-card" data-reveal>
+        <p class="hero-status">
+          <span class="hero-dot"></span>
           Aerospace → AI · building with people in the loop
         </p>
 
         <h1 class="h1">Manfred Siew<span class="on-accent">.</span></h1>
 
-        <p class="mt-4 inline-flex flex-wrap items-center gap-2.5 rounded-[999px] border border-line bg-bg px-4 py-2 text-[.9375rem] font-medium">
-          <span class="text-body">Aerospace</span>
+        <p class="hero-arc">
+          <span>Aerospace</span>
           <span class="on-accent" aria-hidden="true">→</span>
           <span class="on-data">AI engineering</span>
         </p>
 
-        <p class="lede mt-6 max-w-[54ch]">
-          <strong class="font-semibold text-ink">Power Platform Developer, Student Intern</strong>
-          (moving into AI engineering), currently at <span class="font-semibold on-accent">RAiD</span>
+        <p class="lede hero-lede">
+          <strong>Power Platform Developer, Student Intern</strong>
+          (moving into AI engineering), currently at <span class="on-accent">RAiD</span>
           (RSAF Agile innovation Digital) — an aircraft-maintenance-trained engineer
           retraining mid-flight for AI-orchestrated software development.
         </p>
 
-        <div class="mt-8 flex flex-wrap gap-3">
+        <div class="hero-actions">
           <a class="btn" href="#log">See all projects</a>
           <a class="btn btn-ghost" href="#wp1">Featured work</a>
         </div>
 
         <!-- AUTHOR: rewrite this thesis in your own voice. Structure is final; words are a draft. -->
-        <p id="hero-thesis" class="hero-thesis mt-9">
+        <p id="hero-thesis" class="hero-thesis">
           I train people and build tools where software meets a human being under
           pressure — a technician signing off a jet, a clerk chasing a receipt,
           a cohort learning to build with AI. The interesting problem is never
@@ -692,31 +887,30 @@ html.js [data-reveal].shown{
 
       <!-- Portrait. The four reticle corners and two leader lines are gone;
            a soft rounded frame replaces them. -->
-      <aside class="mx-auto hidden w-full max-w-[330px] lg:block" data-reveal aria-label="Profile">
-        <div class="card card-lg overflow-hidden p-2.5">
-          <div class="aspect-[4/5] overflow-hidden rounded-[22px] bg-tint">
+      <aside class="hero-portrait" data-reveal aria-label="Profile">
+        <div class="card card-lg portrait-frame">
+          <div class="portrait-crop">
             <img src="public/profile_picture.png" alt="Portrait of Manfred Siew"
-                 class="h-full w-full object-cover"
                  onerror="this.hidden=true">
           </div>
-          <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 px-3 pb-2 pt-4 text-[.875rem]">
-            <dt class="text-muted">Role</dt>
-            <dd class="m-0 text-body">Power Platform Developer, Student Intern → AI engineering</dd>
-            <dt class="text-muted">Team</dt>
-            <dd class="m-0 text-body">RAiD · PPCoE <span class="needs-copy">Expand: PPCoE</span></dd>
-            <dt class="text-muted">Education</dt>
-            <dd class="m-0 text-body">Aerospace Eng. Dip. (TP)</dd>
+          <dl class="portrait-meta">
+            <dt>Role</dt>
+            <dd>Power Platform Developer, Student Intern → AI engineering</dd>
+            <dt>Team</dt>
+            <dd>RAiD · PPCoE <span class="needs-copy">Expand: PPCoE</span></dd>
+            <dt>Education</dt>
+            <dd>Aerospace Eng. Dip. (TP)</dd>
           </dl>
         </div>
       </aside>
 
     </div>
 
-    <div class="mt-8 flex flex-wrap items-center gap-2.5" data-reveal>
-      <span class="text-[.9375rem] text-muted">Where I’ve worked</span>
-      <span class="rounded-[999px] border border-line bg-surface px-3.5 py-1.5 text-[.875rem] text-body"><b class="font-semibold text-ink">RSAF</b> Republic of Singapore Air Force</span>
-      <span class="rounded-[999px] border border-line bg-surface px-3.5 py-1.5 text-[.875rem] text-body"><b class="font-semibold text-ink">RAiD</b> Agile innovation Digital</span>
-      <span class="rounded-[999px] border border-line bg-surface px-3.5 py-1.5 text-[.875rem] text-body"><b class="font-semibold text-ink">TP</b> Temasek Polytechnic</span>
+    <div class="hero-orgs" data-reveal>
+      <span class="hero-orgs-label">Where I’ve worked</span>
+      <span class="org-chip"><b>RSAF</b> Republic of Singapore Air Force</span>
+      <span class="org-chip"><b>RAiD</b> Agile innovation Digital</span>
+      <span class="org-chip"><b>TP</b> Temasek Polytechnic</span>
     </div>
   </div>
 </section>
@@ -726,14 +920,14 @@ html.js [data-reveal].shown{
      That is what makes the climb autobiographical instead of decorative:
      the reader watches the aircraft rotate at the exact moment they read
      about leaving aircraft maintenance. -->
-<section id="origin" data-alt="1500,8000" data-section="Start" class="stage px-4 py-20 sm:px-6">
+<section id="origin" data-alt="1500,8000" data-section="Start" class="stage section origin">
   <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
   <div class="stage-inner">
     <div class="card card-lg stage-card" data-reveal>
       <p class="eyebrow">Where this starts</p>
       <h2 class="h2">I trained on airframes before I trained on software.</h2>
       <p class="context">The jet outside the cards flies the same route this page tells: training, then climb, then handover.</p>
-      <p class="mt-5 max-w-[56ch]">
+      <p class="origin-note">
         I learned riveting, soldering and composite repair at the Lufthansa Technical
         Training Center as part of World Skills aircraft-maintenance training — work
         where a missed inspection is not a bug report. That is where the habit came
@@ -757,23 +951,23 @@ html.js [data-reveal].shown{
      deliberately NOT reproduced — a section that promises specifics and
      delivers adjectives reads worse than one that never promised. -->
 
-<div class="relative px-4 pt-20 sm:px-6" data-reveal>
-  <div class="mx-auto max-w-[1120px]">
-    <div class="card card-lg max-w-[42rem] p-6 sm:p-9">
+<div class="section featured-intro" data-reveal>
+  <div class="shell">
+    <div class="card card-lg featured-card">
       <p class="eyebrow">Featured work</p>
       <h2 class="h2">Build. Scale. <span class="on-accent">Teach.</span></h2>
-      <p class="mt-4 max-w-[52ch]">
+      <p class="featured-lede">
         Each of the three below answers a different question, in the same six steps:
         who hit the problem, how I framed it, what my role was, what changed after
         the first version, who validated it, and what I would do differently.
       </p>
-      <p class="mt-5"><span class="needs-copy">Draft copy — chips mark what only you can answer</span></p>
+      <p class="featured-note"><span class="needs-copy">Draft copy — chips mark what only you can answer</span></p>
     </div>
   </div>
 </div>
 
 <!-- ── WAYPOINT 1 · FUEL Up — 8,000 → 18,000 ft — "Can you ship?" ── -->
-<section id="wp1" data-alt="8000,18000" data-section="Featured work" class="stage px-4 py-16 sm:px-6">
+<section id="wp1" data-alt="8000,18000" data-section="Featured work" class="stage section waypoint">
   <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
   <div class="stage-inner">
     <article class="card card-lg stage-card" data-reveal>
@@ -781,7 +975,7 @@ html.js [data-reveal].shown{
       <p class="context">
         <span class="needs-copy">Add: one plain sentence saying what FUEL Up is and who uses it</span>
       </p>
-      <p class="lede mt-4">
+      <p class="lede case-lede">
         A claim only becomes a number after somebody has typed a receipt into a form twice.
       </p>
 
@@ -850,7 +1044,7 @@ html.js [data-reveal].shown{
 <div class="transit" data-alt="18000,22000" aria-hidden="true"></div>
 
 <!-- ── WAYPOINT 2 · MILES / MAVIS — 22,000 → 32,000 ft — "Do you own platforms?" ── -->
-<section id="wp2" data-alt="22000,32000" data-section="Featured work" class="stage stage-right px-4 py-16 sm:px-6">
+<section id="wp2" data-alt="22000,32000" data-section="Featured work" class="stage stage-right section waypoint">
   <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
   <div class="stage-inner">
     <article class="card card-lg stage-card" data-reveal>
@@ -858,7 +1052,7 @@ html.js [data-reveal].shown{
       <p class="context">
         <span class="needs-copy">Add: one plain sentence saying what MILES / MAVIS is and who uses it</span>
       </p>
-      <p class="lede mt-4">
+      <p class="lede case-lede">
         Owning a feature means finishing it. Owning a platform means deciding what it
         will still be able to carry in two years.
       </p>
@@ -936,7 +1130,7 @@ html.js [data-reveal].shown{
      This one ends the arc on purpose: AI-assisted engineering is the thing
      being hired for, so it sits at the reader's exit point. It is also the
      only waypoint whose "who confirmed it" slot the source material answers. -->
-<section id="wp3" data-alt="36000,46000" data-section="Featured work" class="stage px-4 py-16 sm:px-6">
+<section id="wp3" data-alt="36000,46000" data-section="Featured work" class="stage section waypoint">
   <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
   <div class="stage-inner">
     <article class="card card-lg stage-card" data-reveal>
@@ -947,7 +1141,7 @@ html.js [data-reveal].shown{
         mixed cohort of citizen developers and engineers, and co-delivered with
         external academic institutions.
       </p>
-      <p class="lede mt-4">
+      <p class="lede case-lede">
         The fastest way to find out whether you actually understand a practice is to
         stand in front of a room and teach it.
       </p>
@@ -1031,21 +1225,21 @@ html.js [data-reveal].shown{
      This work won no waypoint but is the rarest signal on the page: the same
      person drives AI adoption and reviews its risk. Paired with the
      masterclass directly above, that is the point being made. -->
-<section id="security" data-alt="46000,50000" data-section="Security" class="relative px-4 py-20 sm:px-6">
-  <div class="mx-auto max-w-[1120px]">
-    <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr]" data-reveal>
+<section id="security" data-alt="46000,50000" data-section="Security" class="section governance">
+  <div class="shell">
+    <div class="governance-grid" data-reveal>
       <div>
         <p class="eyebrow">Security &amp; governance</p>
         <h2 class="h2">I also review what I <span class="on-accent">advocate.</span></h2>
       </div>
-      <div class="card p-6 sm:p-8">
-        <p class="m-0 max-w-[58ch]">
+      <div class="card panel">
+        <p class="governance-note">
           Pushing an organisation towards AI-assisted development and then signing off on
           its security are usually two different people. On the Flight Simulator Scheduling
           System and the Project Management Tracker they were the same one — I acted as
           Security Reviewer on both. Both are in the project log below.
         </p>
-        <ul class="feat mt-5">
+        <ul class="feat governance-list">
           <li>Security code review and repository review before deployment</li>
           <li>Vulnerability scanning and assessment</li>
           <li>Deployment validation and governance compliance checks</li>
@@ -1056,10 +1250,10 @@ html.js [data-reveal].shown{
 </section>
 
 <!-- ══════════ 04 · ALL PROJECTS — 50,000 → 56,000 ft ══════════ -->
-<section id="log" data-alt="50000,56000" data-section="All projects" class="relative px-4 py-20 sm:px-6 lg:py-28">
-  <div class="mx-auto max-w-[1120px]">
+<section id="log" data-alt="50000,56000" data-section="All projects" class="section log-section">
+  <div class="shell">
 
-    <div class="mb-7" data-reveal>
+    <div class="log-head" data-reveal>
       <p class="eyebrow">All projects</p>
       <h2 class="h2">Twenty-four, filterable two ways.</h2>
     </div>
@@ -1070,10 +1264,11 @@ html.js [data-reveal].shown{
          separate axis: a poly CCA app and an RSAF system can share a
          capability while obviously differing in stakes, and showing that is
          stronger than hiding the earlier work. The two filters combine. -->
-    <div class="grid gap-3" data-reveal>
-      <!-- items-start, not the default stretch: the disabled pill carries a
-           second line, and stretching would make all seven that tall. -->
-      <div class="flex flex-wrap items-start gap-2" role="group" aria-label="Filter projects by category, and reset both filters">
+    <div class="log-filters" data-reveal>
+      <!-- .filter-row is align-items:flex-start, not the default stretch: the
+           disabled pill carries a second line, and stretching would make all
+           seven that tall. See the rule for the full note. -->
+      <div class="filter-row" role="group" aria-label="Filter projects by category, and reset both filters">
         <!-- The reset. Clicking any category pill a second time already cleared
              it, but that is a discovered affordance, not a visible one, and it
              cleared only one of the two axes. This clears both and states the
@@ -1109,18 +1304,18 @@ html.js [data-reveal].shown{
            v1's six-card deck; the deck is gone, the content is not. -->
       <p id="catClaim">Six groupings on one axis: how much of the system was mine to own.</p>
 
-      <div class="mt-1 flex flex-wrap items-center gap-2" role="group" aria-label="Filter projects by organisation">
+      <div class="filter-row filter-row--org" role="group" aria-label="Filter projects by organisation">
         <button type="button" class="pill" data-org="all" aria-pressed="true">All entries</button>
         <button type="button" class="pill" data-org="RAiD" aria-pressed="false">RSAF (RAiD)</button>
         <button type="button" class="pill" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
         <button type="button" class="pill" data-org="Freelance" aria-pressed="false">Freelance</button>
-        <span class="num ml-auto" id="logCount" role="status">Showing all 24</span>
+        <span class="num log-count" id="logCount" role="status">Showing all 24</span>
       </div>
     </div>
 
     <!-- Gap-separated rounded rows. v1's hairline-ruled list was the squarest
          element on the page and it held 20 of the 20 entries. -->
-    <div class="log-list mt-6" id="logList">
+    <div class="log-list" id="logList">
 
       <!-- ── FULL-STACK PLATFORMS ──
            The three featured projects were absent from the log, which is why
@@ -1138,9 +1333,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Operational and maintenance workflows were spread across manual steps with no single record of who was qualified for what. The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model rather than fields bolted on later.</p>
-          <div><div class="lab mb-1.5">What exists now</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, and reporting that reads from the same store the work is recorded in.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><p><span class="needs-copy">Add: what MILES / MAVIS was built on</span></p></div>
-          <p><a class="underline underline-offset-4" href="#wp2">Full case study, further up the page</a></p>
+          <div><div class="lab">What exists now</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, and reporting that reads from the same store the work is recorded in.</p></div>
+          <div><div class="lab">Built with</div><p><span class="needs-copy">Add: what MILES / MAVIS was built on</span></p></div>
+          <p><a class="link-inline" href="#wp2">Full case study, further up the page</a></p>
         </div>
       </details>
 
@@ -1153,9 +1348,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Receipt and claims handling ran on manual submission and manual checking. I was asked to design and build the platform that replaced it: submission, validation, tracking and reporting in one workflow, on Power Platform with SharePoint as the document store.</p>
-          <div><div class="lab mb-1.5">What exists now</div><p class="note">A digital submission path for receipts, role-based permissions across claim stages, an audit trail on every record, and reporting views that read from the same data the claims are filed against.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform</span><span>SharePoint</span></div></div>
-          <p><a class="underline underline-offset-4" href="#wp1">Full case study, further up the page</a></p>
+          <div><div class="lab">What exists now</div><p class="note">A digital submission path for receipts, role-based permissions across claim stages, an audit trail on every record, and reporting views that read from the same data the claims are filed against.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Power Platform</span><span>SharePoint</span></div></div>
+          <p><a class="link-inline" href="#wp1">Full case study, further up the page</a></p>
         </div>
       </details>
 
@@ -1167,7 +1362,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>A centralised facility reservation platform on Microsoft Dataverse and React, built as Developer and Product Owner.</p>
-          <div><div class="lab mb-1.5">What it does</div>
+          <div><div class="lab">What it does</div>
             <ul class="feat">
               <li>Role-based access control across four permission tiers</li>
               <li>Approval workflows with end-to-end visibility</li>
@@ -1176,9 +1371,9 @@ html.js [data-reveal].shown{
               <li>Audit logging on reservation records</li>
               <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
             </ul></div>
-          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
-            <p class="mt-2"><span class="needs-copy">Add: who can confirm the two-day build, or the dates it ran between</span></p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
+          <div><div class="lab">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
+            <p class="log-note"><span class="needs-copy">Add: who can confirm the two-day build, or the dates it ran between</span></p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
           <figure class="shot">
             <img src="public/facility-infographic.jpg" loading="lazy"
                  alt="FacilityBook product infographic: unified booking dashboard, location and time-slot picker, and a real-time availability calendar for the RAiD facility reservation platform"
@@ -1197,8 +1392,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Customised web-based app for Air Specialist Vehicle (ASV) usage and maintenance records to track upcoming vehicle servicing status.</p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span><span>PowerDocu</span></div></div>
+          <div><div class="lab">What I learned</div><p class="note">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>PowerApps</span><span>PowerDocu</span></div></div>
         </div>
       </details>
 
@@ -1210,8 +1405,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Auction tool allowing RSAF personnel to bid for charity bears as part of a charity movement for the Singapore Airshow.</p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>FormSG</span><span>Plumber</span><span>SharePoint</span></div></div>
+          <div><div class="lab">What I learned</div><p class="note">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>FormSG</span><span>Plumber</span><span>SharePoint</span></div></div>
         </div>
       </details>
 
@@ -1223,8 +1418,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Scheduling system for reserving simulator resources for training and assessment — online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely. GitHub Copilot and Google AI Studio assisted the build; neither runs in the shipped app.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span></div></div>
+          <div><div class="lab">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely. GitHub Copilot and Google AI Studio assisted the build; neither runs in the shipped app.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>PowerApps</span></div></div>
         </div>
       </details>
 
@@ -1236,8 +1431,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>End-to-end workflow for SSB to track and approve the loaning of their logistic items. <span class="needs-copy">Expand: SSB</span></p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>FormSG</span></div></div>
+          <div><div class="lab">What I learned</div><p class="note">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>FormSG</span></div></div>
         </div>
       </details>
 
@@ -1249,7 +1444,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Developed a PowerApp to simplify and automate the administrative workflow for duty management for duty personnel in an RSAF unit.</p>
-          <div><div class="lab mb-1.5">What it does</div>
+          <div><div class="lab">What it does</div>
             <ul class="feat">
               <li>Geofencing for check in/out at designated locations</li>
               <li>Logistics accountability and tracking</li>
@@ -1259,9 +1454,9 @@ html.js [data-reveal].shown{
           <!-- This was filed under "What I learned", where an impact claim is
                the one thing that cannot be a lesson. It is an outcome, so it
                sits in the outcome slot, and it is unsourced, so it is chipped. -->
-          <div><div class="lab mb-1.5">What changed</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p>
-            <p class="mt-2"><span class="needs-copy">Add: how the efficiency and accuracy change was measured, and who reported it</span></p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
+          <div><div class="lab">What changed</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p>
+            <p class="log-note"><span class="needs-copy">Add: how the efficiency and accuracy change was measured, and who reported it</span></p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
           <figure class="shot">
             <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
                  alt="Dark-themed duty app screen showing a personnel-on-duty count, a duty-instructions panel, and Check In, Useful Links and Check Out buttons in the bottom navigation"
@@ -1279,7 +1474,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
         </div>
       </details>
 
@@ -1291,7 +1486,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Data Visualization</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Data Visualization</span></div></div>
         </div>
       </details>
 
@@ -1303,7 +1498,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation. <span class="needs-copy">Add: where the 500-student figure comes from, and who counted it</span></p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span></div></div>
         </div>
       </details>
 
@@ -1319,8 +1514,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Led the case to unlock Microsoft Power Apps Code Apps across the organisation’s M365 environment, working through the relevant cybersecurity authorities within MINDEF.</p>
-          <div><div class="lab mb-1.5">What changed</div><p class="note">Every Code Apps project in this portfolio was built after this approval. Before it, Code Apps could not be deployed in the environment at all.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform Governance</span><span>M365 Administration</span><span>Security Review</span></div></div>
+          <div><div class="lab">What changed</div><p class="note">Every Code Apps project in this portfolio was built after this approval. Before it, Code Apps could not be deployed in the environment at all.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Power Platform Governance</span><span>M365 Administration</span><span>Security Review</span></div></div>
         </div>
       </details>
 
@@ -1332,9 +1527,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>A large-scale masterclass on vibe-coding (directing AI coding agents from a spec to a working app, and reviewing everything they produce), run for a mixed cohort of citizen developers and engineers, and co-delivered with external academic institutions.</p>
-          <div><div class="lab mb-1.5">What it covered</div><p>The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</p></div>
-          <div><div class="lab mb-1.5">Who confirmed it</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
-          <p><a class="underline underline-offset-4" href="#wp3">Full case study, further up the page</a></p>
+          <div><div class="lab">What it covered</div><p>The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</p></div>
+          <div><div class="lab">Who confirmed it</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
+          <p><a class="link-inline" href="#wp3">Full case study, further up the page</a></p>
         </div>
       </details>
 
@@ -1346,9 +1541,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Explored AI vibe-coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
-          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p>
-            <p class="mt-2"><span class="needs-copy">Add: who measured the months-to-days figure, and against which project</span></p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
+          <div><div class="lab">What changed</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p>
+            <p class="log-note"><span class="needs-copy">Add: who measured the months-to-days figure, and against which project</span></p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
         </div>
       </details>
 
@@ -1360,8 +1555,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use. <span class="needs-copy">Expand: Cydef</span> <span class="needs-copy">Add: which is correct, cleared for your personal use or for citizen developers generally</span></p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>GitHub</span><span>PowerDocu</span></div></div>
+          <div><div class="lab">What I learned</div><p class="note">Learnt about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>GitHub</span><span>PowerDocu</span></div></div>
         </div>
       </details>
 
@@ -1384,12 +1579,12 @@ html.js [data-reveal].shown{
             <dt>What I did</dt>
             <dd>Integrating the agent into Copilot under license constraints. <span class="needs-copy">Add: which parts you built and which SAGE supplied</span></dd>
           </dl>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Navigated license constraints creatively to replicate GPT-4.1 concepts, managing context engineering to prevent hallucinations.</p>
+          <div><div class="lab">What I learned</div><p class="note">Navigated license constraints creatively to replicate GPT-4.1 concepts, managing context engineering to prevent hallucinations.</p>
             <p class="context">
               <span class="needs-copy">Add: what "replicate GPT-4.1 concepts" means in plain terms, including what was built and what the licence constraint was</span>
             </p>
           </div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
         </div>
       </details>
 
@@ -1401,7 +1596,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials. <span class="needs-copy">Expand: 815 SQN</span> <span class="needs-copy">Add: what Lovable was used for here</span> <span class="needs-copy">Add: where the 35-attendee figure comes from</span></p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Power Platform</span></div></div>
         </div>
       </details>
 
@@ -1413,7 +1608,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerLib</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>PowerLib</span></div></div>
         </div>
       </details>
 
@@ -1433,8 +1628,8 @@ html.js [data-reveal].shown{
             <dt>What I did</dt>
             <dd>Created the tool: I wrote the notebook, engineered the prompts, and integrated the Python libraries it draws with.</dd>
           </dl>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Explored prompt engineering and integrating Python libraries together in a single notebook for workflow tools.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
+          <div><div class="lab">What I learned</div><p class="note">Explored prompt engineering and integrating Python libraries together in a single notebook for workflow tools.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
         </div>
       </details>
 
@@ -1451,9 +1646,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
-          <div><div class="lab mb-1.5">Outcome</div><p class="note">Certificate of Participation from AI Singapore, reproduced in the experience section below. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
+          <div><div class="lab">Outcome</div><p class="note">Certificate of Participation from AI Singapore, reproduced in the experience section below. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
+          <div><div class="lab">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
         </div>
       </details>
 
@@ -1465,9 +1660,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Cybersecurity CTF competition organised by SMU. Used tools such as Wireshark, John the Ripper, and Z-steg.</p>
-          <div><div class="lab mb-1.5">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
+          <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
+          <div><div class="lab">What I learned</div><p class="note">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
         </div>
       </details>
 
@@ -1479,8 +1674,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
-          <div><div class="lab mb-1.5">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
+          <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
         </div>
       </details>
 
@@ -1492,9 +1687,9 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Acquired technical skills essential for aircraft maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
-          <div><div class="lab mb-1.5">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span></div></div>
+          <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
+          <div><div class="lab">What I learned</div><p class="note">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span></div></div>
         </div>
       </details>
 
@@ -1522,24 +1717,24 @@ html.js [data-reveal].shown{
 </section>
 
 <!-- ══════════ 05 · EXPERIENCE — 56,000 → 60,000 ft ══════════ -->
-<section id="record" data-alt="56000,60000" data-section="Experience" class="relative px-4 py-20 sm:px-6 lg:py-28">
-  <div class="mx-auto max-w-[980px]">
+<section id="record" data-alt="56000,60000" data-section="Experience" class="section record">
+  <div class="shell shell-narrow">
 
-    <div class="mb-10" data-reveal>
+    <div class="record-head" data-reveal>
       <p class="eyebrow">Experience</p>
       <h2 class="h2">Transition path.</h2>
     </div>
 
-    <div class="relative pl-8" id="timeline">
+    <div class="timeline" id="timeline">
       <span class="tl-line" aria-hidden="true"></span>
       <span class="tl-fill" id="tlFill" aria-hidden="true"></span>
 
-      <div class="relative pb-12" data-reveal>
+      <div class="tl-item" data-reveal>
         <span class="tl-node" aria-hidden="true"></span>
-        <div class="num mb-1.5">Oct 2025 — Present · Singapore</div>
+        <div class="num tl-date">Oct 2025 — Present · Singapore</div>
         <h3 class="h3">Power Platform Developer, Student Intern</h3>
-        <div class="mt-1 text-[.9375rem] font-medium on-data">RAiD (RSAF Agile innovation Digital)</div>
-        <p class="mt-3 max-w-[64ch]">
+        <div class="tl-org on-data">RAiD (RSAF Agile innovation Digital)</div>
+        <p class="tl-desc">
           Specialising in Power Apps and Power Platform within the PPCoE team. Focus on
           designing digital solutions that streamline processes, improve data quality,
           and support data-driven decision-making.
@@ -1550,33 +1745,33 @@ html.js [data-reveal].shown{
            Dec 2023, Apr 2021. The Temasek Polytechnic role runs to Present and
            so used to sit second on end date, which put a Dec 2023 start above a
            Dec 2024 one and made the timeline read as a mistake. -->
-      <div class="relative pb-12" data-reveal>
+      <div class="tl-item" data-reveal>
         <span class="tl-node" aria-hidden="true"></span>
-        <div class="num mb-1.5">Dec 2024 — Oct 2025 · Singapore</div>
+        <div class="num tl-date">Dec 2024 — Oct 2025 · Singapore</div>
         <h3 class="h3">Software Engineer (Power Platform)</h3>
-        <div class="mt-1 text-[.9375rem] font-medium on-data">Freelance</div>
-        <p class="mt-3 max-w-[64ch]">
+        <div class="tl-org on-data">Freelance</div>
+        <p class="tl-desc">
           Leveraged low-code tools like PowerApps and Power Automate to develop tailored
           automation solutions.
         </p>
       </div>
 
-      <div class="relative pb-12" data-reveal>
+      <div class="tl-item" data-reveal>
         <span class="tl-node" aria-hidden="true"></span>
-        <div class="num mb-1.5">Dec 2023 — Present · Singapore</div>
+        <div class="num tl-date">Dec 2023 — Present · Singapore</div>
         <h3 class="h3">PowerApp / Power Platform Developer</h3>
-        <div class="mt-1 text-[.9375rem] font-medium on-data">Temasek Polytechnic</div>
-        <p class="mt-3 max-w-[64ch]">
+        <div class="tl-org on-data">Temasek Polytechnic</div>
+        <p class="tl-desc">
           Self-taught PowerApps to automate admin work for various CCAs, enhancing club efficiency.
         </p>
       </div>
 
-      <div class="relative" data-reveal>
+      <div class="tl-item tl-item--last" data-reveal>
         <span class="tl-node" aria-hidden="true"></span>
-        <div class="num mb-1.5">Apr 2021 — Jan 2023 · Singapore</div>
+        <div class="num tl-date">Apr 2021 — Jan 2023 · Singapore</div>
         <h3 class="h3">Freelance / Mini Start-Up</h3>
-        <div class="mt-1 text-[.9375rem] font-medium on-data">Personal Company</div>
-        <p class="mt-3 max-w-[64ch]">
+        <div class="tl-org on-data">Personal Company</div>
+        <p class="tl-desc">
           Founded a business in the anime industry animating 2D models using Live2D Cubism,
           building a portfolio with low-code platforms and practising SEO strategies.
         </p>
@@ -1599,31 +1794,31 @@ html.js [data-reveal].shown{
      The one section with no opaque bed: it sits directly on .band-space and
      inverts instead. Every pairing inside it is checked against the LIGHTER
      end of that gradient, #2A4E7A, which is the worst case. -->
-<section id="contact" data-alt="60000,62000" data-section="Get in touch" class="invert relative px-4 py-28 sm:px-6 lg:py-36">
-  <div class="mx-auto max-w-[1120px]">
-    <div class="grid items-center gap-10 lg:grid-cols-[1.1fr_.9fr]">
+<section id="contact" data-alt="60000,62000" data-section="Get in touch" class="invert section contact">
+  <div class="shell">
+    <div class="contact-grid">
       <div data-reveal>
         <p class="eyebrow">Get in touch</p>
         <h2 class="h1">Ready for what’s <span class="on-accent">next.</span></h2>
-        <p class="lede mt-6 max-w-[48ch] text-[#DCE8F4]">
+        <p class="lede contact-lede">
           Open to AI engineering and software development opportunities.
           Send me a note — I usually reply within a day.
         </p>
       </div>
-      <div class="card p-6 sm:p-8" data-reveal>
-        <a class="btn btn-signal w-full justify-center" href="mailto:Manfredsiew@hotmail.sg">Email me</a>
-        <dl class="mt-6 grid gap-3 text-[.9375rem]">
-          <div class="flex flex-wrap items-baseline gap-x-3">
-            <dt class="text-[#BFD4E8]">Email</dt>
-            <dd class="m-0"><a href="mailto:Manfredsiew@hotmail.sg" class="underline underline-offset-4">Manfredsiew@hotmail.sg</a></dd>
+      <div class="card panel" data-reveal>
+        <a class="btn btn-signal btn-block" href="mailto:Manfredsiew@hotmail.sg">Email me</a>
+        <dl class="contact-list">
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:Manfredsiew@hotmail.sg" class="link-inline">Manfredsiew@hotmail.sg</a></dd>
           </div>
-          <div class="flex flex-wrap items-baseline gap-x-3">
-            <dt class="text-[#BFD4E8]">LinkedIn</dt>
-            <dd class="m-0"><a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">manfred-siew</a></dd>
+          <div>
+            <dt>LinkedIn</dt>
+            <dd><a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer" class="link-inline">manfred-siew</a></dd>
           </div>
-          <div class="flex flex-wrap items-baseline gap-x-3">
-            <dt class="text-[#BFD4E8]">Location</dt>
-            <dd class="m-0">Singapore</dd>
+          <div>
+            <dt>Location</dt>
+            <dd>Singapore</dd>
           </div>
         </dl>
       </div>
@@ -1633,8 +1828,8 @@ html.js [data-reveal].shown{
 
 </main>
 
-<footer class="invert relative z-10 px-4 pb-10 sm:px-6">
-  <div class="mx-auto flex max-w-[1120px] flex-wrap justify-between gap-3 border-t border-white/20 pt-8 text-[.875rem] text-[#BFD4E8]">
+<footer class="invert content-layer section site-footer">
+  <div class="shell footer-inner">
     <span>© 2026 Manfred Siew</span>
     <span>Aerospace Engineering Diploma · Temasek Polytechnic</span>
   </div>
@@ -1928,11 +2123,27 @@ html.js [data-reveal].shown{
 
      The aircraft is built procedurally from primitives rather than loaded
      from a GLB: the licence and long-term availability of a third-party
-     model cannot be verified from here, and hotlinking one would put a
-     silent dependency on someone else's CDN into a file whose whole premise
-     is that it is self-contained. Procedural costs 0 bytes and has no licence
-     question. If a real GLB is wanted later, buildAircraft() is the only
-     function that has to change.
+     model cannot be verified from here. Procedural costs 0 bytes and has no
+     licence question. If a real GLB is wanted later, buildAircraft() is the
+     only function that has to change.
+
+     ON EXTERNAL DEPENDENCIES, HONESTLY. This file is not self-contained, and
+     an earlier version of this comment claimed it was while the page loaded
+     a runtime CSS compiler from a third-party CDN. Two remote dependencies
+     remain, both named at the top of the file:
+
+       · Google Fonts — Instrument Sans and IBM Plex Mono. Blocked or
+         offline, the page falls back to system-ui / ui-monospace and stays
+         completely readable; only the typeface changes.
+       · unpkg — three.js, via the import map. Blocked or offline, the
+         module never resolves, the Tier-0 path keeps the canvas hidden and
+         the flat silhouettes stand in. No content is lost.
+
+     Neither one can take the layout down with it, which is the property that
+     actually matters and the reason the Tailwind CDN had to go: that one
+     compiled the page's CSS at runtime, so losing it collapsed the nav, the
+     hero grid and every section's spacing. The stylesheet is now this file's
+     own, served in the same request as the markup.
 
      Everything here is a pure function of Flight.state.alt. No second clock.
      ══════════════════════════════════════════════════════════════════════ -->
