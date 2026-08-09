@@ -149,8 +149,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 .band{ position:absolute; inset:0; opacity:1; will-change:opacity; }
 html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .band-ground{ opacity:1; background:linear-gradient(#F6F8FB, #DDEBF7); }
-.band-cruise{ background:linear-gradient(#DDEBF7, #8FBFE9); }
-.band-space{  background:linear-gradient(#2A4E7A, #12244A); }
+.band-cruise{ opacity:0; background:linear-gradient(#DDEBF7, #8FBFE9); }
+.band-space{  opacity:0; background:linear-gradient(#2A4E7A, #12244A); }
 
 /* The 3D stage. z-index 2 — above the sky, below every content bed at
    z-10. "No body text over a moving 3D scene" is therefore enforced by
@@ -528,6 +528,12 @@ html.js [data-reveal].shown{
   .sky,#scene,canvas{display:none!important}
   .band,[data-reveal]{opacity:1!important;transform:none!important}
   .transit{display:none}
+  /* Browsers do not print background colours by default (Chrome/Edge
+     "Background graphics", Firefox "Print backgrounds" are both off unless
+     the reader opts in), so .invert's light-on-dark pairing cannot rely on
+     var(--deep) actually printing. Reset to dark text on unpainted (white)
+     paper instead of trusting print-color-adjust. */
+  .invert,.invert *{ background:none!important; color:var(--ink)!important; }
 }
 </style>
 </head>
