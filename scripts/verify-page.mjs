@@ -22,6 +22,16 @@
 // Exit code is non-zero if any pass/fail check fails, so this can gate CI.
 // All numbers are printed either way — this script reports, it does not
 // repair the page.
+//
+// Two correctness notes from review, both fixed in this file:
+//   - imgsBroken is read from load/error listeners attached BEFORE any
+//     image fetch is triggered, not from the DOM after the fact. Every
+//     <img> on this page has an onerror handler that hides itself or its
+//     <figure> — the only failure signal this page ever gives — so reading
+//     broken-ness from .hidden or a post-hoc DOM query would exclude
+//     exactly the images that failed.
+//   - A missing anchor target reports as { found:false } and its own
+//     `missingIds` field, rather than silently reading like zero overlap.
 
 import { chromium } from 'playwright';
 import { pathToFileURL } from 'node:url';
@@ -68,6 +78,20 @@ function parseRgb(str) {
   if (!m) return null;
   const p = m[1].split(',').map((s) => parseFloat(s.trim()));
   return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+}
+// A semi-transparent foreground doesn't have a contrast ratio on its own —
+// it has one against whatever's actually behind it. Composite it over the
+// sampled (assumed-opaque) background before computing luminance, so a
+// translucent text colour can't report an artificially favourable number
+// just because its own alpha-channel was silently dropped.
+function compositeOver(fg, bgRgb) {
+  const a = fg.a ?? 1;
+  if (a >= 1) return { r: fg.r, g: fg.g, b: fg.b };
+  return {
+    r: fg.r * a + bgRgb.r * (1 - a),
+    g: fg.g * a + bgRgb.g * (1 - a),
+    b: fg.b * a + bgRgb.b * (1 - a),
+  };
 }
 
 // Runs in the browser: text colour of `sel`, plus the effective (walked-up,
@@ -121,15 +145,38 @@ async function main() {
     }));
     if (w === 1440) pass('document_height_1440', { height: initial.scrollHeight });
 
-    // All four <img>s are loading="lazy", so a naive check right after
-    // goto() sees them all as unresolved. Two further live inside closed
+    // Every <img> on this page carries an onerror handler that sets
+    // hidden=true on itself or its <figure> the moment it fails — that's
+    // the ONLY way a broken image on this page ever signals failure, and it
+    // is set from inside the very 'error' event we need to observe. So
+    // load/error state must be captured with our own listeners attached
+    // BEFORE anything can trigger a fetch (see below), never read back from
+    // .hidden or a post-hoc DOM query afterwards — by then a failed image
+    // looks identical to one that was never present. For an image that's
+    // already .complete (the eager portrait can finish inside the earlier
+    // 2500ms wait, before this code even runs), naturalWidth at the moment
+    // of attachment is read directly, since no future 'load'/'error' event
+    // will fire for it to catch.
+    await page.evaluate(() => {
+      window.__imgTrack = [...document.images].map((img) => {
+        const rec = { src: img.src, ok: null };
+        if (img.complete) {
+          rec.ok = img.naturalWidth > 0;
+        } else {
+          img.addEventListener('load', () => { rec.ok = true; }, { once: true });
+          img.addEventListener('error', () => { rec.ok = false; }, { once: true });
+        }
+        return rec;
+      });
+    });
+
+    // All four <img>s are loading="lazy", so nothing has fetched yet at this
+    // point except the eager portrait. Two further live inside closed
     // <details class="log-row"> rows — a closed <details> has no layout box,
     // so native lazy-loading never sees them enter the viewport no matter
     // how far the page scrolls. Open every row first, the way a visitor who
     // expands a card would, then scroll the full document height so every
-    // image (now all laid out) crosses the lazy-load viewport threshold,
-    // then wait for each to actually resolve (load or error) rather than
-    // racing a fixed timeout, before judging naturalWidth.
+    // image (now all laid out) crosses the lazy-load viewport threshold.
     await page.evaluate(() => document.querySelectorAll('details').forEach((d) => { d.open = true; }));
     // The page sets html{scroll-behavior:smooth}, which window.scrollTo()'s
     // default 'auto' behavior honours — each call below would otherwise
@@ -145,21 +192,24 @@ async function main() {
       }
       window.scrollTo({ top: 0, behavior: 'instant' });
     });
-    await page.evaluate(() => Promise.all([...document.images].map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((resolve) => {
-        img.addEventListener('load', resolve, { once: true });
-        img.addEventListener('error', resolve, { once: true });
-        setTimeout(resolve, 5000);
-      });
-    })));
+    await page.waitForFunction(
+      () => window.__imgTrack.every((t) => t.ok !== null),
+      { timeout: 5000 },
+    ).catch(() => { /* any entry still null after the timeout is reported as broken below */ });
 
+    // Read from __imgTrack, not from document.images/.hidden — deliberately.
+    // .filter((i) => !i.closest('[hidden]')) was the bug the reviewer found:
+    // it excluded exactly the images whose onerror handler had just hidden
+    // them, which on this page is the only way a broken image ever presents
+    // itself. There is no [hidden] exclusion here because there must not be
+    // one — a genuinely broken image has to fail this check even though the
+    // page's own fallback makes it invisible to a human looking at the
+    // screen a moment later.
     const imgState = await page.evaluate(() => ({
-      imgsBroken: [...document.images]
-        .filter((i) => !i.closest('[hidden]'))
-        .filter((i) => !i.complete || !i.naturalWidth)
-        .map((i) => i.src),
-      imgCount: document.images.length,
+      imgsBroken: window.__imgTrack
+        .filter((t) => t.ok !== true)
+        .map((t) => ({ src: t.src, resolvedVia: t.ok === false ? 'error-event' : 'timeout-still-loading' })),
+      imgCount: window.__imgTrack.length,
     }));
 
     const overflow = initial.scrollWidth > initial.clientWidth;
@@ -178,29 +228,38 @@ async function main() {
       const r = nav.getBoundingClientRect();
       return { top: r.top, bottom: r.bottom, left: r.left, right: r.right };
     });
+    // One page reused for all 9 anchors (was: a fresh page per anchor, 18
+    // total across both viewports). A goto() per id still forces a real
+    // navigation/scroll-to-fragment for each, which is what's under test.
+    const navPage = await browser.newPage({ viewport: { width: w, height: h } });
     const occlusion = {};
     for (const id of ANCHORS) {
-      const p2 = await browser.newPage({ viewport: { width: w, height: h } });
-      await p2.goto(`${PAGE_URL}#${id}`);
-      await p2.waitForTimeout(600);
-      const r = await p2.evaluate((anchorId) => {
+      await navPage.goto(`${PAGE_URL}#${id}`);
+      await navPage.waitForTimeout(600);
+      const r = await navPage.evaluate((anchorId) => {
         const target = document.getElementById(anchorId);
-        if (!target) return null;
+        if (!target) return { found: false };
         const heading = target.matches('h1,h2') ? target : target.querySelector('h1,h2') || target;
         const tr = heading.getBoundingClientRect();
         const nav = document.querySelector('.nav-dock');
         const nr = nav ? nav.getBoundingClientRect() : { top: 0, bottom: 0, left: 0, right: 0 };
         const overlapY = Math.max(0, Math.min(tr.bottom, nr.bottom) - Math.max(tr.top, nr.top));
         const overlapX = Math.max(0, Math.min(tr.right, nr.right) - Math.max(tr.left, nr.left));
-        return { overlapPx: overlapX > 0 ? Math.round(overlapY) : 0, targetTop: Math.round(tr.top), navBottom: Math.round(nr.bottom) };
+        return { found: true, overlapPx: overlapX > 0 ? Math.round(overlapY) : 0, targetTop: Math.round(tr.top), navBottom: Math.round(nr.bottom) };
       }, id);
       occlusion[id] = r;
-      await p2.close();
     }
-    const occludedIds = Object.entries(occlusion).filter(([, v]) => v && v.overlapPx > 0).map(([id]) => id);
+    await navPage.close();
+    // A missing target used to fall through both here (r === null) and the
+    // filter below (`v && v.overlapPx > 0` treats null exactly like "found,
+    // zero overlap") — a renamed/deleted anchor id would silently pass. Both
+    // outcomes now get their own field, so a missing target fails loudly
+    // and visibly instead of reading identically to a real pass.
+    const missingIds = Object.entries(occlusion).filter(([, v]) => !v.found).map(([id]) => id);
+    const occludedIds = Object.entries(occlusion).filter(([, v]) => v.found && v.overlapPx > 0).map(([id]) => id);
     const label2 = `anchor_occlusion_${w}x${h}`;
-    if (occludedIds.length) fail(label2, { occlusion, occludedIds, navBox });
-    else pass(label2, { occlusion, navBox });
+    if (missingIds.length || occludedIds.length) fail(label2, { occlusion, occludedIds, missingIds, navBox });
+    else pass(label2, { occlusion, occludedIds, missingIds, navBox });
 
     await page.close();
   }
@@ -326,10 +385,16 @@ async function main() {
       }
       const fg = parseRgb(s.textColor);
       const bg = parseRgb(s.bg);
-      const ratio = fg && bg ? contrastRatio([fg.r, fg.g, fg.b], [bg.r, bg.g, bg.b]) : null;
+      // fg.a used to be parsed and then silently dropped here — a
+      // semi-transparent text colour would report a contrast ratio computed
+      // as if it were fully opaque, which is always the more favourable
+      // number. Composite it over the sampled background first instead.
+      const effectiveFg = fg && bg ? compositeOver(fg, bg) : null;
+      const ratio = effectiveFg && bg ? contrastRatio([effectiveFg.r, effectiveFg.g, effectiveFg.b], [bg.r, bg.g, bg.b]) : null;
       contrastResults[name] = {
         selector: sel,
         textColor: s.textColor,
+        textAlpha: fg?.a ?? null,
         bg: s.bg,
         filtersOnPath: s.filters,
         ratio: ratio ? Math.round(ratio * 100) / 100 : null,
