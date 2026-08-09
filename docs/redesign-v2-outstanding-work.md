@@ -6,7 +6,32 @@ The page marks each gap with a visible orange chip. **The page is not submittabl
 
 To preview the page as a reader would see it, open devtools and add the class `drafts-hidden` to the `<html>` element. That hides every chip. It is deliberately opt-in with no UI control, so the page can never accidentally look finished when it isn't.
 
-**48 chips outstanding.**
+**26 chips outstanding** (was 48).
+
+> **Status, 2026-08-10.** The author answered 32 of the 58 questions in
+> `redesign-v2-content-questionnaire.docx`, and those answers are now in the page.
+> Closed: the FUEL Up case study in full, the Masterclass case study in full, all four
+> organisation labels, PPCoE, the PowerDocu contradiction, two of the three SAGE
+> `ai-role` slots, the flowchart bot's human need, and the Project Management Tracker's
+> category and description. The tables below are the original 48 and have not been
+> re-marked — grep the page for `needs-copy` for the live list. 26 of the original 48 are
+> closed. Four of the 26 remaining are new,
+> narrower questions that replaced broader ones the answers only half-closed: what was
+> considered and rejected (FUEL Up and the Masterclass), the year of the Masterclass, and
+> which parts of the Project Management Tracker he built.
+>
+> **The log is 23 projects, not 24.** The author confirmed that MILES / MAVIS and the
+> "ASV Logbook & Maintenance Web App" row were one project under two names. They are
+> merged under MILES / MAVIS, which is the name to publish; Process automation dropped
+> 8 → 7. The absorbed row supplied two facts the case study lacked — the vehicles are
+> Air Specialist Vehicles, and PowerDocu generated the documentation the prompting
+> worked from — and independently corroborated the Power Apps → Lovable rebuild.
+>
+> **A fourth organisation pill exists now: "RSAF (other units)".** FUEL Up, the
+> masterclass and the Project Management Tracker are RSAF work that did not sit in
+> RAiD, and before this they carried no `data-org`, so every organisation filter hid
+> them — including two of the three featured projects. Distribution is RAiD 11,
+> RSAF (other units) 3, Temasek Polytechnic 8, Freelance 1.
 
 ## 1. The three things that matter most
 
