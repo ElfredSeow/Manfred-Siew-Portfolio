@@ -170,21 +170,48 @@ thing to lose.
 
 **The Experience blurb no longer matches its own heading.**
 `redesign-v2.html:1924-1927` reads *"Specialising in Power Apps and Power
-Platform within the PPCoE team"* — that describes a developer, under a heading
-that will say architect. It needs to describe scoping and designing instead.
-Those are the author's words to write, so implementation adds a `needs-copy`
-chip rather than inventing them.
+Platform within the PPCoE team. Focus on designing digital solutions that
+streamline processes, improve data quality, and support data-driven
+decision-making."* — that describes a developer, under a heading that will say
+architect. It also understates the work: the author confirmed on 2026-08-10 that
+his RAiD projects run well past Power Platform.
 
-### 5.3 Open question left to the author
+It is rewritten, not chipped. Every clause below traces to a row already in the
+project log, so nothing here is a new claim:
+
+> Embedded with the units that own the problem — scoping what's actually needed,
+> then choosing the platform to match. Power Platform where licensing and
+> governance fit; React on Dataverse, or a full-stack rebuild, where they don't.
+> Plus AI agent work and the tooling the rest of the team builds on.
+
+| Clause | Evidence in the log |
+|---|---|
+| *choosing the platform to match* | MILES / MAVIS, `:1518` — "proved in Power Apps first, then rebuilt as a full-stack application with Lovable once per-user licensing stopped being viable". This is the single best evidence for the architect title: a platform decision, re-made under a licensing constraint. |
+| *React on Dataverse* | RAiD Facility Booking System, `:1550` / `:1562` — Dataverse + React + PowerApps Code Apps |
+| *full-stack rebuild* | MILES / MAVIS, `:1518`; 815 SQN bootcamp, `:1773` |
+| *AI agent work* | SAGE Copilot AI, `:1740`; R&D for Vibe-Coding Code Apps, `:1713` |
+| *tooling the rest of the team builds on* | PowerDocu, `:1727`; Comprehensive Guide for New Interns, `:1780`; Code Apps Policy Approval (M365 Tenant), `:1686` |
+
+The words are a draft in the author's voice and he may adjust them; the
+constraint that survives any rewrite is that the blurb must describe **deciding**,
+not only building, or it contradicts the heading above it.
+
+### 5.3 The end-goal statement — resolved, keep the current framing
 
 The author states his end goal is AI engineering. But the working tree has just
 finished removing "moving into AI engineering" in favour of the `+` framing —
 the hero pill now reads *"Aerospace Engineering + software & AI"*, and the memory
 note is explicit that this must never read as a pivot away from aerospace.
 
-**Decision: the destination statement is left off the card.** The card carries
-only verifiable present-tense facts. If the author wants the goal stated, the
-hero thesis is where it belongs, not a facts panel.
+**Decision, confirmed by the author on 2026-08-10: keep the current framing.**
+The destination statement stays off the card and off the hero. The `+` framing
+stands as the working tree has it. The card carries only verifiable
+present-tense facts.
+
+Note for a later revision: "moving into AI engineering" is a real thing the
+author wants said, and the hero *thesis* — not a facts panel, and not the pill —
+is the only place it can go without re-reading as a pivot away from aerospace.
+That is out of scope here.
 
 ---
 
