@@ -2446,6 +2446,9 @@ else {
     }
 
     const jet = buildAircraft();
+    /* Populated in full further down; declared here so the verification
+       handle can read .length from the first task onward. */
+    const halos = [];
     scene.add(jet);
 
     /* Ground contact shadow: a soft radial blob, not a shadow map. The single
@@ -2670,6 +2673,15 @@ else {
       requestAnimationFrame(frame);
     }
     document.addEventListener('visibilitychange', () => { if (!document.hidden) dirty = true; });
+
+    /* Verification handle. `window.Flight` already establishes that this
+       stage publishes its state for other code to read; this publishes the
+       scene graph itself, so scripts/verify-airframe.mjs can assert facts a
+       screenshot cannot prove — that the bounding box still matches what the
+       camera distances were sized against, that the canopy still sits on the
+       COCKPIT constant three beats target, that no halo writes depth. It is
+       read-only by convention and nothing on the page consumes it. */
+    window.Stage = { THREE, scene, jet, halos, camera, renderer, apply, COCKPIT };
 
     root.classList.add('tier-2');
     canvas.style.transition = 'opacity 900ms cubic-bezier(.23,1,.32,1)';
