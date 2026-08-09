@@ -42,11 +42,15 @@ The fix is a shape that is unmistakably next-generation at a glance, and that ca
 
 ## 3. Non-goals
 
-- **No new motion.** `redesign-v2.html:2313` commits the stage to being a pure function of
+- **No new clock.** `redesign-v2.html:2313` commits the stage to being a pure function of
   `Flight.state.alt`, with the parked idle yaw as the single declared exception. Pulsing
-  lights, scan lines and contrails were considered and rejected on that basis.
-- **No post-processing.** No bloom pass, no shadow maps. The stage's performance story is
-  that it has neither, and the on-demand redraw depends on staying cheap.
+  lights, scan lines and contrails were considered and rejected on that basis. The engine
+  ignition ramp at §5.1 is *not* an exception: it is driven by altitude alone and adds no
+  clock.
+- **No post-processing.** No bloom pass, no shadow maps, no `EffectComposer`, no render
+  target. The stage's performance story is that it has none of these, and the on-demand
+  redraw depends on staying cheap. §5.1 obtains the glow another way rather than relaxing
+  this.
 - **No GLB.** `redesign-v2.html:2289-2293` rejects third-party models on licence and
   availability grounds. That reasoning is unchanged and this design stays procedural.
 - **No camera or altitude changes.** `CAM`, the sky ramp, and the tier gate are untouched.
@@ -128,7 +132,10 @@ registers it even when the viewer cannot name it.
 
 ## 5. Light
 
-Three emissive elements, all `MeshBasicMaterial`.
+Two layers: emissive surfaces on the airframe (§5, below) and the halos that make them read
+as light (§5.1). Neither works without the other.
+
+Three emissive surfaces, all `MeshBasicMaterial`.
 
 `MeshBasicMaterial` rather than `MeshStandardMaterial` with an `emissive` channel, for two
 reasons: it is cheaper, and it is **unlit**, so it holds constant brightness while
@@ -152,22 +159,71 @@ rather than the conventional sci-fi cyan. Two reasons: the page currently has ex
 accent hue and a second one would cost more than the effect is worth, and orange is
 physically right for exhaust. Approved 2026-08-10.
 
+### 5.1 Halos — how the glow actually glows
+
+An emissive surface with nothing else done to it is a flat bright colour. It reads as
+*light* only when light appears to spill off it into the surrounding air. That spill is
+the entire perceptual content of a bloom pass.
+
+It can be drawn directly instead of computed: an **additive-blended radial-gradient
+billboard** at each glow source. Pre-bloom real-time rendering did it this way for a
+decade, and it produces the effect rather than an approximation of it.
+
+This is not a foreign technique in this file. `redesign-v2.html:2455-2461` already builds a
+128×128 canvas radial gradient and maps it onto a plane for the contact shadow, for exactly
+the same reason: obtain the optical result without paying for the machinery that would
+normally produce it. Halos reuse that pattern with the gradient inverted and the blending
+additive.
+
+| Property | Value | Why |
+|---|---|---|
+| Geometry | `THREE.Sprite` | camera-facing and perspective-scaled for free; the halo grows correctly during the push-in |
+| Blending | `THREE.AdditiveBlending` | light adds; it does not occlude |
+| `depthWrite` | `false` | a halo must never carve a hole in what is behind it |
+| Texture | one shared 128×128 canvas radial gradient | built once, reused by every halo |
+
+Three halos, matching the three emissive elements: a large one at the nozzle, small ones at
+each inlet lip, and a very small one at the canopy. Total ~6 triangles each, one texture.
+
+**Engine ignition.** Halo scale and opacity ramp from near-zero on the ground to full by
+the end of rotation (~8000 ft), so the engine appears to light as the aircraft rotates.
+This is a **pure function of `Flight.state.alt`** and therefore introduces no second clock —
+it stays inside the constraint at §3, and it is the one place the glow gets to *do*
+something rather than sit there. If this reads as too much, delete the ramp and hold the
+halos at full; nothing else depends on it.
+
+### 5.2 What this technique costs, honestly
+
+The one uncertain interaction is compositing. The renderer runs `alpha: true` with
+`setClearAlpha(0)` (`redesign-v2.html:2582-2583`) so the canvas composites over the CSS
+sky, and three.js uses premultiplied alpha by default. Additive blending over transparent
+regions of the framebuffer is well-trodden and expected to composite correctly — a halo
+over open sky should tint the CSS background beneath it, which is the desired result — but
+this is a genuine interaction between three settings and **must be looked at rather than
+assumed**. See §10, check 8. If it composites wrongly, the fallback is
+`THREE.NormalBlending` with a hotter centre colour, which is weaker but has no
+alpha interaction at all.
+
 ## 6. Materials
 
 | Material | Was | Becomes | Note |
 |---|---|---|---|
-| `SKIN` | `#DCE2E9` | `#9AA3AE` | mid-graphite, roughness .50, metalness .22 |
-| `DECK` | — | `#7C8794` | new; separates the deck from the planform |
+| `SKIN` | `#DCE2E9` | `#5C6675` | graphite, roughness .52, metalness .24 |
+| `DECK` | — | `#474F5C` | new; separates the deck from the planform |
 | `TRIM` | `#C2410C` | unchanged | |
 | `GLASS` | `#33547D` | unchanged | the low-metalness reasoning at `:2369-2372` still holds — there is still no environment map |
-| `DARK` | `#5A6675` | unchanged | surrounds the glow |
+| `DARK` | `#5A6675` | `#2E3540` | darkened; it is now the surround that makes the glow read |
 
-**Mid-graphite, not near-black, and this is the design's main risk.** Stealth wants dark,
-and dark surfaces are what let unlit emissive read as glow rather than as paint. But the
-sky ramps to `#12244A`, and a near-black airframe against near-navy would vanish at
-exactly the "small against a large sky" beat that carries the argument. Mid-graphite plus
-the existing rim light plus the emissive edges is the compromise. Approved 2026-08-10.
-See §9.1 for what to do if it still reads too dark.
+**Graphite, not the mid-tone this spec originally called for.** An earlier revision hedged
+to `#9AA3AE` because the emissive elements were expected to be weak, which meant the
+airframe's own value had to carry legibility against the `#12244A` sky at altitude. The
+halos at §5.1 remove that dependency: light spilling off the airframe reads against a dark
+sky far better than a pale surface does, and it reads *as an aircraft with its lights on*
+rather than as a bright cut-out.
+
+The two are the same decision. A dark airframe is what makes glow read as glow, and real
+glow is what lets the airframe be dark. Hedging either one weakens both. Revised and
+approved 2026-08-10.
 
 ## 7. Consequential changes
 
@@ -191,23 +247,35 @@ These are the only edits outside `buildAircraft()` and the materials block:
 
 ## 8. Cost
 
-~2k additional triangles. The canvas redraws only when altitude changes
-(`redesign-v2.html:2662-2671`), so this is paid during scroll and not at all when idle.
-No new dependencies; the page's two remote dependencies, named at `:2295-2311`, are
-unchanged.
+~2k additional triangles for the airframe, plus ~24 for the four halo sprites and one
+shared 128×128 canvas texture built once at startup. The canvas redraws only when altitude
+changes (`redesign-v2.html:2662-2671`), so this is paid during scroll and not at all when
+idle. No new dependencies; the page's two remote dependencies, named at `:2295-2311`, are
+unchanged, and no post-processing pass is added.
 
 ## 9. Risks
 
 ### 9.1 The airframe goes too dark at altitude
-Covered in §6. If verification shows the aircraft losing legibility against `#12244A`,
-the fix is to lighten `SKIN` toward `#A8B0BA` — **not** to raise the sun intensity, which
-`:2644-2646` deliberately lowers, and not to add a light.
+Reduced, not eliminated. The halos at §5.1 are what carry legibility against `#12244A`, so
+this risk now depends on the halos landing rather than on the skin value. If the aircraft
+still loses legibility at altitude, raise halo opacity and the rim light's contribution
+first; lighten `SKIN` only after those are exhausted, and **never** raise sun intensity,
+which `:2644-2646` deliberately lowers.
 
-### 9.2 Unlit emissive may read as orange paint, not as light
-Without a bloom pass, an emissive surface is just a bright flat colour. It reads as light
-only by contrast with what surrounds it. Mitigation: keep every glow element thin and give
-each one a `DARK` surround. If it still reads as paint, widen the dark surround —
-**adding post-processing is out of scope** and would undo the stage's performance story.
+### 9.2 Halo compositing against the transparent canvas
+**This replaces an earlier risk about emissive reading as flat paint, which §5.1 resolves.**
+
+Additive blending interacts with `alpha: true`, `setClearAlpha(0)` and three.js's default
+premultiplied alpha. The expected behaviour — halos tinting the CSS sky beneath the canvas —
+is standard and well-trodden, but it is an interaction between three settings and is the
+one thing in this design that must be seen rather than reasoned about. Fallback if it
+composites wrongly: `THREE.NormalBlending` with a hotter centre, which is weaker but
+removes the alpha interaction entirely.
+
+**Adding a post-processing bloom pass remains out of scope**, and §5.1 exists precisely so
+that it is not needed. Reaching for `EffectComposer` would pull a second unpkg module, force
+a render target, complicate the transparent-canvas compositing this risk is already about,
+and undo the stage's performance story — a worse trade than any of the fallbacks above.
 
 ### 9.3 The delta may clip at wide shots
 The new planform is proportionally wider in plan view than the old airframe, and the rig
@@ -233,3 +301,9 @@ what keeps the airframe from reading as hard-edged in the way the rule is guardi
 6. The airframe is legible against the sky at altitude 58000+.
 7. Silhouette test: at wide-shot size, the sawtooth trailing edge and the absence of a
    vertical fin are both readable.
+8. **Halo compositing (§9.2).** Halos are inspected over three backdrops — the pale sky at
+   altitude 0, the mid sky at 30000, and the navy at 58000 — and over an opaque content
+   card. No dark box, no rectangular seam, no halo occluding the airframe in front of it.
+9. The engine halo ramps up across rotation and is at full by 8000 ft, with no visible step.
+10. Glow reads as light, not as paint: the halo must be visible spilling *past* the
+    airframe's silhouette edge, not merely filling the nozzle aperture.
