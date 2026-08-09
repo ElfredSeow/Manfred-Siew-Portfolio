@@ -190,7 +190,9 @@ Do NOT guess what MILES/MAVIS stands for — insert the slot with the chip patte
 
 - [ ] **Step 6: Commit** — `git commit -am "Featured cards: six-beat design-process spine replaces waypoint scaffold"`
 
----### Task 4: "What the AI actually does" block
+---
+
+### Task 4: "What the AI actually does" block
 
 **Files:**
 - Modify: `redesign-v2.html` — the three featured cards (Task 3 structure) and AI-claiming log rows (~997, 1037, 1129–1163, 1192–1200)
