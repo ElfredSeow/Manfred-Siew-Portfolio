@@ -217,6 +217,15 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 }
 .card-lg{ border-radius:var(--r-xl); box-shadow:var(--sh-2); }
 
+/* Evidence figure. Reused by any case study or log row that has a real
+   artifact to show — screenshot, infographic, certificate. */
+.shot{margin:1.25rem 0 0;border:1px solid var(--line);border-radius:var(--r-md);
+  overflow:hidden;background:var(--surface);box-shadow:var(--sh-1)}
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{padding:.6rem .9rem;font-size:var(--fs-label);
+  color:var(--muted);border-top:1px solid var(--line)}
+.shot--cert{max-width:28rem}
+
 /* ── BUTTONS ──────────────────────────────────────────────────────────
    Pills. Every one ships default / hover (gated) / focus / active. Hover
    moves to the warm accent — white on #9A3412 is 7.3:1. Note that every
@@ -592,7 +601,7 @@ html.js [data-reveal].shown{
           <div class="aspect-[4/5] overflow-hidden rounded-[22px] bg-tint">
             <img src="public/profile_picture.png" alt="Portrait of Manfred Siew"
                  class="h-full w-full object-cover"
-                 onerror="this.closest('aside').remove()">
+                 onerror="this.hidden=true">
           </div>
           <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 px-3 pb-2 pt-4 text-[.875rem]">
             <dt class="text-muted">Role</dt>
@@ -997,6 +1006,12 @@ html.js [data-reveal].shown{
             </ul></div>
           <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span><span>Gemini 3.1</span><span>Claude Opus 4.6</span><span>GitHub Copilot</span></div></div>
+          <figure class="shot">
+            <img src="public/facility-infographic.jpg" loading="lazy"
+                 alt="FacilityBook product infographic: unified booking dashboard, location and time-slot picker, and a real-time availability calendar for the RAiD facility reservation platform"
+                 onerror="this.closest('figure').hidden=true">
+            <figcaption>The shipped product, summarised for stakeholders.</figcaption>
+          </figure>
         </div>
       </details>
 
@@ -1070,6 +1085,12 @@ html.js [data-reveal].shown{
             </ul></div>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span><span>Digitalisation</span></div></div>
+          <figure class="shot">
+            <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
+                 alt="WorkCICO check-in screen: the attendance flow as a user sees it"
+                 onerror="this.closest('figure').hidden=true">
+            <figcaption>The shipped interface — what a user actually sees.</figcaption>
+          </figure>
         </div>
       </details>
 
@@ -1314,6 +1335,13 @@ html.js [data-reveal].shown{
           building a portfolio with low-code platforms and practising SEO strategies.
         </p>
       </div>
+
+      <figure class="shot shot--cert">
+        <img src="public/huawei-track-cert.jpg" loading="lazy"
+             alt="Huawei track certificate — external assessment of completed training"
+             onerror="this.closest('figure').hidden=true">
+        <figcaption>Externally assessed — one of the few claims on this page somebody else graded.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
