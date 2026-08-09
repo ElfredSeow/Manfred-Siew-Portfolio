@@ -476,10 +476,19 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 /* Transits carry no content. The camera needs somewhere to finish a
    pull-back before the next waypoint's wide shot begins. v1 spent 62vh
    on each; 40vh left ~80vh of blank scroll across the two transits (P1-21).
-   14vh keeps a breath between case studies without an empty screenful; the
-   camera keyframes either side (see the CAM/JET tables) were pulled back
-   into the neighbouring waypoints so the turn still has room to read. */
-.transit{ height:14vh; }
+   27vh is the shortest height that keeps the pull-back/turn's peak speed
+   within ~1.5x of the 40vh original (measured by sampling the resolved
+   camera/jet pose, not by eye — see task-8-report.md). The CAM/JET
+   keyframes bracketing each transit were deliberately left at the exact
+   altitudes where transit meets waypoint: that is where the scroll-to-
+   altitude mapping's slope changes (a different section, a different
+   px-per-foot rate), and smoothstep's velocity is exactly zero at every
+   keyframe, so a keyframe placed exactly on that seam cancels the seam's
+   slope change instead of amplifying it. Moving a keyframe off the seam
+   (tried, reverted) put the seam at a high-velocity point of the curve
+   and produced a real stutter, confirmed by a ~20x spike in the pose's
+   second derivative at that point. */
+.transit{ height:27vh; }
 @media (max-width:900px){ .transit{ height:15vh; } }
 
 .doc-bed{ position:relative; background:var(--bg); }
@@ -702,6 +711,7 @@ html.js [data-reveal].shown{
     <div class="card card-lg stage-card" data-reveal>
       <p class="eyebrow">Where this starts</p>
       <h2 class="h2">I trained on airframes before I trained on software.</h2>
+      <p class="context">The jet outside the cards flies the same route this page tells: training, then climb, then handover.</p>
       <p class="mt-5 max-w-[56ch]">
         I learned riveting, soldering and composite repair at the Lufthansa Technical
         Training Center as part of World Skills aircraft-maintenance training — work
@@ -731,7 +741,6 @@ html.js [data-reveal].shown{
     <div class="card card-lg max-w-[42rem] p-6 sm:p-9">
       <p class="eyebrow">Featured work</p>
       <h2 class="h2">Build. Scale. <span class="on-accent">Teach.</span></h2>
-      <p class="context">The jet outside the cards flies the same route this page tells: training, then climb, then handover.</p>
       <p class="mt-4 max-w-[52ch]">
         Each of the three below answers a different question, in the same six steps:
         who hit the problem, how I framed it, what my role was, what changed after
@@ -1973,15 +1982,20 @@ else {
     const ORIGIN  = new THREE.Vector3(0, 0, 0);
     const COCKPIT = new THREE.Vector3(0, .3, 1.25);
 
-    /* The two "pull back and climb ↔ next wide shot" jumps below (was
-       18000→22000 and 32000→36000) used to interpolate entirely inside a
-       40vh transit. Now that transits are 14vh, that same pose delta would
-       cross the gap in a third of the pixels — a lurch, not a flight.
-       Pulling each pair 1000ft into the *waypoint* it borders (which reads
-       altitude at roughly 5.4ft/px, versus the transit's ~32ft/px) restores
-       close to the old average pace across the whole move: measured on the
-       page, wp1's tail + the transit + wp2's head average out to ~12ft/px,
-       against the original transit-only ~11ft/px. See task-8-report.md. */
+    /* The CAM/JET keyframes at the two waypoint/transit seams (18000,
+       22000, 32000, 36000) are deliberately left at exactly those
+       altitudes — the altitude-to-scroll mapping's slope changes there
+       (a shorter/taller element means fewer/more pixels per foot), and
+       smoothstep brings pose velocity to zero at every keyframe, so a
+       keyframe sitting exactly on the seam absorbs that slope change for
+       free. An earlier version of this rig moved these breakpoints 1000ft
+       into the flanking waypoints to lower the transit's peak pose-rate;
+       that measurably worked for the *first* derivative but put the seam
+       at a high-velocity point of the curve instead of a zero-velocity
+       one, producing a ~20x spike in the *second* derivative there — a
+       real stutter, not just a faster pan. Reverted; see task-8-report.md
+       for the sampled-pose measurement. The transit's own height (see
+       `.transit` in the CSS) is what was tuned instead. */
     const CAM = [
       { a:     0, p:[ 7.5,  1.8,  9.5], look: ORIGIN,  fov: 30, roll:   0, shift: -.14 },
       { a:  5000, p:[ 8.2,  3.0, 10.5], look: ORIGIN,  fov: 30, roll:   0, shift: -.20 },
@@ -1989,14 +2003,14 @@ else {
       { a:  8000, p:[ 8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
       { a: 12000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
       { a: 14500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
-      { a: 17000, p:[ 2.0,  8.0, 26.0], look: ORIGIN,  fov: 46, roll:   0, shift: -.12 },
+      { a: 18000, p:[ 2.0,  8.0, 26.0], look: ORIGIN,  fov: 46, roll:   0, shift: -.12 },
       // ── waypoint 2 ── mirrored, because its card sits on the right
-      { a: 23000, p:[-8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift:  .20 },
+      { a: 22000, p:[-8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift:  .20 },
       { a: 26000, p:[-6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:   4, shift:  .20 },
       { a: 28500, p:[-4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll:  15, shift:  .20 },
-      { a: 31000, p:[-2.0,  8.2, 27.0], look: ORIGIN,  fov: 46, roll:   0, shift:  .12 },
+      { a: 32000, p:[-2.0,  8.2, 27.0], look: ORIGIN,  fov: 46, roll:   0, shift:  .12 },
       // ── waypoint 3 ──
-      { a: 37000, p:[ 8.6,  2.6, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
+      { a: 36000, p:[ 8.6,  2.6, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
       { a: 40000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
       { a: 42500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
       { a: 46000, p:[ 2.0,  9.0, 30.0], look: ORIGIN,  fov: 48, roll:   0, shift: -.08 },
@@ -2009,10 +2023,10 @@ else {
       { a:     0, p:[0, -.95, 0], r:[  0, 0,  0] },   // on the ground
       { a:  2000, p:[0, -.95, 0], r:[  0, 0,  0] },
       { a:  8000, p:[0, -.15, 0], r:[ 12, 0,  0] },   // rotation
-      { a: 17000, p:[0,  .10, 0], r:[  7, 0, -7] },
-      { a: 23000, p:[0,  .10, 0], r:[  6, 0,  7] },
-      { a: 31000, p:[0,  .18, 0], r:[  6, 0, -6] },
-      { a: 37000, p:[0,  .18, 0], r:[  5, 0,  5] },
+      { a: 18000, p:[0,  .10, 0], r:[  7, 0, -7] },
+      { a: 22000, p:[0,  .10, 0], r:[  6, 0,  7] },
+      { a: 32000, p:[0,  .18, 0], r:[  6, 0, -6] },
+      { a: 36000, p:[0,  .18, 0], r:[  5, 0,  5] },
       { a: 46000, p:[0,  .28, 0], r:[  6, 0,  0] },
       { a: 62000, p:[0,  .85, 0], r:[ 10, 0,  0] }
     ];
