@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manfred Siew — Aerospace to AI Engineering</title>
 <meta name="description" content="Manfred Siew — Aerospace engineer converting to AI &amp; Software Engineering. Power Platform Developer at RAiD (RSAF Agile innovation Digital). 24 projects.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<meta property="og:title" content="Manfred Siew — Aerospace to AI Engineering">
+<meta property="og:description" content="Case studies in building human-centred tools with AI: process, prototypes, and what the AI actually does.">
+<meta property="og:type" content="website">
+<!-- og:image is relative; crawlers need an absolute URL, so this must be rewritten to the deployed
+     origin (e.g. https://<domain>/public/WorkCICO%20Screenshot.jpg) at deploy time. -->
+<meta property="og:image" content="public/WorkCICO%20Screenshot.jpg">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +62,7 @@
 
    CONTRAST. Every pair below was computed, not eyeballed. On --bg:
    ink 17.4 · body 10.3 · muted 5.3 · accent 6.9 · data 6.2. On the dark
-   contact band's worst-case ground #2A4E7A: paper 7.9 · body-inv 6.8 ·
+   contact band's worst-case ground #2A4E7A: paper 8.5 · body-inv 6.8 ·
    accent-inv 4.9 · data-inv 5.4. --signal is 2.7:1 and is therefore a
    FILL token only; ink-on-signal is 6.5:1, which is the pairing used.
    Body copy floor is 18px. Nothing sits below 13px.
@@ -193,8 +201,9 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
   text-decoration:none;transition:border-color var(--d-hover) ease}
 .chip.proof:hover{border-color:var(--accent)}
 
-/* The one orientation label kept, as a deliberate system: six of them, one
-   per section, sentence case, no tracking, no mono. */
+/* Deliberate voice, not structure: the h2s carry section structure now
+   (Task 3's process spine), so this label is kept on only two sections —
+   the featured-work opener and Contact. Sentence case, no tracking, no mono. */
 .eyebrow{
   font-size:.9375rem; font-weight:600; color:var(--accent);
   letter-spacing:-.005em; margin:0 0 .7rem;
@@ -557,7 +566,7 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 /* ── THE DARK BAND ────────────────────────────────────────────────────
    Contact and footer sit directly on .band-space and invert. Every pairing
    is checked against the LIGHTER end of that gradient, #2A4E7A, which is
-   the worst case: paper 7.9 · body-inv 6.8 · accent-inv 4.9 · data-inv 5.4.
+   the worst case: paper 8.5 · body-inv 6.8 · accent-inv 4.9 · data-inv 5.4.
    #FF6B1A on that ground is 3.0:1, so it stays a fill here too.
 
    ⚠ DO NOT re-introduce a utility framework without renaming this class.
@@ -878,7 +887,7 @@ html.js [data-reveal].shown{
         <p class="lede hero-lede">
           <strong>Power Platform Developer, Student Intern</strong>
           (moving into AI engineering), currently at <span class="on-accent">RAiD</span>
-          (RSAF Agile innovation Digital) — an aircraft-maintenance-trained engineer
+          (RSAF Agile innovation Digital), an aircraft-maintenance-trained engineer
           retraining mid-flight for AI-orchestrated software development.
         </p>
 
@@ -890,7 +899,7 @@ html.js [data-reveal].shown{
         <!-- AUTHOR: rewrite this thesis in your own voice. Structure is final; words are a draft. -->
         <p id="hero-thesis" class="hero-thesis">
           I train people and build tools where software meets a human being under
-          pressure — a technician signing off a jet, a clerk chasing a receipt,
+          pressure: a technician signing off a jet, a clerk chasing a receipt,
           a cohort learning to build with AI. The interesting problem is never
           the automation; it is the person the automation has to serve.
         </p>
@@ -940,12 +949,11 @@ html.js [data-reveal].shown{
   <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
   <div class="stage-inner">
     <div class="card card-lg stage-card" data-reveal>
-      <p class="eyebrow">Where this starts</p>
       <h2 class="h2">I trained on airframes before I trained on software.</h2>
       <p class="context">The jet outside the cards flies the same route this page tells: training, then climb, then handover.</p>
       <p class="origin-note">
         I learned riveting, soldering and composite repair at the Lufthansa Technical
-        Training Center as part of World Skills aircraft-maintenance training — work
+        Training Center as part of World Skills aircraft-maintenance training, work
         where a missed inspection is not a bug report. That is where the habit came
         from: read the manual, check the tolerance, sign your name to it. I build
         software the same way, and the rest of this page is the climb out of the hangar.
@@ -977,7 +985,7 @@ html.js [data-reveal].shown{
         who hit the problem, how I framed it, what my role was, what changed after
         the first version, who validated it, and what I would do differently.
       </p>
-      <p class="featured-note"><span class="needs-copy">Draft copy — chips mark what only you can answer</span></p>
+      <p class="featured-note"><span class="needs-copy">Draft copy (chips mark what only you can answer)</span></p>
     </div>
   </div>
 </div>
@@ -995,7 +1003,7 @@ html.js [data-reveal].shown{
         A claim only becomes a number after somebody has typed a receipt into a form twice.
       </p>
 
-      <ol class="process">
+      <ol class="process" role="list">
         <li>
           <b>The person.</b>
           Receipt and claims handling ran on manual submission and manual checking.
@@ -1003,7 +1011,7 @@ html.js [data-reveal].shown{
         </li>
         <li>
           <b>Framing.</b>
-          I was asked to design and build the platform that replaced it — submission,
+          I was asked to design and build the platform that replaced it: submission,
           validation, tracking and reporting in one workflow, on Power Platform with
           SharePoint as the document store.
           <span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span>
@@ -1073,7 +1081,7 @@ html.js [data-reveal].shown{
         will still be able to carry in two years.
       </p>
 
-      <ol class="process">
+      <ol class="process" role="list">
         <li>
           <b>The person.</b>
           Operational and maintenance workflows were spread across manual steps with
@@ -1092,7 +1100,7 @@ html.js [data-reveal].shown{
           I was Solution Owner as well as a developer, so the scope decisions were mine
           to make and defend. I designed the role and qualification model, built the
           workflow automation and the reporting surface, and did the scalability
-          planning for enterprise rollout — deciding what the data model had to support
+          planning for enterprise rollout, deciding what the data model had to support
           before anyone asked it to.
           <span class="needs-copy">Add: timeline, team size, or the hard constraint</span>
         </li>
@@ -1145,7 +1153,7 @@ html.js [data-reveal].shown{
 <!-- ── WAYPOINT 3 · Masterclass — 36,000 → 46,000 ft ──
      This one ends the arc on purpose: AI-assisted engineering is the thing
      being hired for, so it sits at the reader's exit point. It is also the
-     only waypoint whose "who confirmed it" slot the source material answers. -->
+     only waypoint whose "Validation" beat the source material answers. -->
 <section id="wp3" data-alt="36000,46000" data-section="Featured work" class="stage section waypoint">
   <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
   <div class="stage-inner">
@@ -1162,7 +1170,7 @@ html.js [data-reveal].shown{
         stand in front of a room and teach it.
       </p>
 
-      <ol class="process">
+      <ol class="process" role="list">
         <li>
           <b>The person.</b>
           <span class="needs-copy">Add: who the learners were and what the gap was costing them</span>
@@ -1245,14 +1253,13 @@ html.js [data-reveal].shown{
   <div class="shell">
     <div class="governance-grid" data-reveal>
       <div>
-        <p class="eyebrow">Security &amp; governance</p>
         <h2 class="h2">I also review what I <span class="on-accent">advocate.</span></h2>
       </div>
       <div class="card panel">
         <p class="governance-note">
           Pushing an organisation towards AI-assisted development and then signing off on
           its security are usually two different people. On the Flight Simulator Scheduling
-          System and the Project Management Tracker they were the same one — I acted as
+          System and the Project Management Tracker they were the same one. I acted as
           Security Reviewer on both. Both are in the project log below.
         </p>
         <ul class="feat governance-list">
@@ -1270,7 +1277,6 @@ html.js [data-reveal].shown{
   <div class="shell">
 
     <div class="log-head" data-reveal>
-      <p class="eyebrow">All projects</p>
       <h2 class="h2">Twenty-four, filterable two ways.</h2>
     </div>
 
@@ -1296,13 +1302,13 @@ html.js [data-reveal].shown{
           All <span class="pill-count">24</span>
         </button>
         <button type="button" class="pill" data-cat="simulation" data-claim="I can model a domain I wasn’t trained in." aria-pressed="false" disabled>
-          Simulation &amp; decision support <span class="pill-count">— in preparation</span>
+          Simulation &amp; decision support <span class="pill-count">(in preparation)</span>
           <span class="pill-claim">I can model a domain I wasn’t trained in.</span>
         </button>
         <button type="button" class="pill" data-cat="platform" data-claim="I own systems, not features." aria-pressed="false">
           Full-stack platforms <span class="pill-count">1</span>
         </button>
-        <button type="button" class="pill" data-cat="enterprise" data-claim="I build with governance — access control, audit trails, approvals." aria-pressed="false">
+        <button type="button" class="pill" data-cat="enterprise" data-claim="I build with governance: access control, audit trails, approvals." aria-pressed="false">
           Enterprise applications <span class="pill-count">2</span>
         </button>
         <button type="button" class="pill" data-cat="automation" data-claim="I ship a working process in days, not quarters." aria-pressed="false">
@@ -1387,7 +1393,7 @@ html.js [data-reveal].shown{
               <li>Audit logging on reservation records</li>
               <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
             </ul></div>
-          <div><div class="lab">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
+          <div><div class="lab">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development (frontend, API integration and data model) in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
             <p class="log-note"><span class="needs-copy">Add: who can confirm the two-day build, or the dates it ran between</span></p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
           <figure class="shot">
@@ -1421,7 +1427,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Auction tool allowing RSAF personnel to bid for charity bears as part of a charity movement for the Singapore Airshow.</p>
-          <div><div class="lab">What I learned</div><p class="note">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
+          <div><div class="lab">What I learned</div><p class="note">Learned how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>FormSG</span><span>Plumber</span><span>SharePoint</span></div></div>
         </div>
       </details>
@@ -1433,7 +1439,7 @@ html.js [data-reveal].shown{
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Scheduling system for reserving simulator resources for training and assessment — online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
+          <p>Scheduling system for reserving simulator resources for training and assessment: online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
           <div><div class="lab">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely. GitHub Copilot and Google AI Studio assisted the build; neither runs in the shipped app.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>PowerApps</span></div></div>
         </div>
@@ -1477,7 +1483,7 @@ html.js [data-reveal].shown{
             <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
                  alt="Dark-themed duty app screen showing a personnel-on-duty count, a duty-instructions panel, and Check In, Useful Links and Check Out buttons in the bottom navigation"
                  onerror="this.closest('figure').hidden=true">
-            <figcaption>The shipped interface — what a user actually sees.</figcaption>
+            <figcaption>The shipped interface (what a user actually sees).</figcaption>
           </figure>
         </div>
       </details>
@@ -1571,7 +1577,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use. <span class="needs-copy">Expand: Cydef</span> <span class="needs-copy">Add: which is correct, cleared for your personal use or for citizen developers generally</span></p>
-          <div><div class="lab">What I learned</div><p class="note">Learnt about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
+          <div><div class="lab">What I learned</div><p class="note">Learned about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>GitHub</span><span>PowerDocu</span></div></div>
         </div>
       </details>
@@ -1704,7 +1710,7 @@ html.js [data-reveal].shown{
         <div class="log-body">
           <p>Acquired technical skills essential for aircraft maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
           <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
-          <div><div class="lab">What I learned</div><p class="note">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
+          <div><div class="lab">What I learned</div><p class="note">Learned riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span></div></div>
         </div>
       </details>
@@ -1737,7 +1743,6 @@ html.js [data-reveal].shown{
   <div class="shell shell-narrow">
 
     <div class="record-head" data-reveal>
-      <p class="eyebrow">Experience</p>
       <h2 class="h2">Transition path.</h2>
     </div>
 
@@ -1797,7 +1802,7 @@ html.js [data-reveal].shown{
         <img src="public/huawei-track-cert.jpg" loading="lazy"
              alt="AI Singapore Certificate of Participation issued to Siew Lee Hong Manfred for the National AI Student Challenge 2025 - Huawei Track, with a QR code and a signature from the Director of AI Talent Development"
              onerror="this.closest('figure').hidden=true">
-        <figcaption>Externally assessed — one of the few claims on this page somebody else graded.</figcaption>
+        <figcaption>Externally assessed. One of the few claims on this page somebody else graded.</figcaption>
       </figure>
     </div>
   </div>
@@ -1818,7 +1823,7 @@ html.js [data-reveal].shown{
         <h2 class="h1">Ready for what’s <span class="on-accent">next.</span></h2>
         <p class="lede contact-lede">
           Open to AI engineering and software development opportunities.
-          Send me a note — I usually reply within a day.
+          Send me a note. I usually reply within a day.
         </p>
       </div>
       <div class="card panel" data-reveal>
@@ -1890,7 +1895,7 @@ html.js [data-reveal].shown{
          entry, and it is not a competition. Say so, rather than leaving the
          reader staring at empty space and assuming the page broke. */
       count.textContent = shown === 0
-        ? 'No entries match — try another pair'
+        ? 'No entries match. Try another pair.'
         : shown === rows.length
           ? 'Showing all ' + rows.length
           : 'Showing ' + shown + ' of ' + rows.length;
@@ -2097,29 +2102,6 @@ html.js [data-reveal].shown{
     window.addEventListener('scroll', draw, { passive: true });
     window.addEventListener('resize', draw);
     draw();
-  })();
-
-  /* ─────────── 5. COUNTERS ───────────
-     The number is already correct in the markup; this only replays it. If the
-     script fails the stats still read 20 / 2 / 35 / 3. */
-  (function () {
-    var els = document.querySelectorAll('[data-count]');
-    if (reduce || !('IntersectionObserver' in window)) return;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target, target = parseFloat(el.dataset.count) || 0, t0 = null;
-        io.unobserve(el);
-        function step(t) {
-          if (t0 === null) t0 = t;
-          var k = Math.min(1, (t - t0) / 1100);
-          el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
-          if (k < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      });
-    }, { threshold: 0.6 });
-    els.forEach(function (el) { io.observe(el); });
   })();
 })();
 </script>
