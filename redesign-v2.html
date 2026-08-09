@@ -387,6 +387,19 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 .evi dt{ font-size:.875rem; font-weight:600; color:var(--data); }
 .evi dd{ margin:.15rem 0 0; color:var(--body); line-height:1.6; max-width:58ch; }
 
+/* The AI-role block. The page's whole claim is AI-assisted engineering, so the
+   first question a reader has is "what does the AI actually do here". This
+   answers it in three fixed lines, and it is allowed to answer "nothing" when
+   the AI only helped build the thing. Separating AI-in-the-product from
+   AI-assisted-build is the point of the component. */
+.ai-role{margin:1rem 0 0;padding:.9rem 1rem;border:1px solid var(--line);
+  border-radius:var(--r-sm);background:var(--tint);display:grid;gap:.35rem}
+.ai-role dt{font-size:var(--fs-label);color:var(--muted)}
+.ai-role dd{margin:0;color:var(--body)}
+/* Log bodies are a grid with their own gap, so the block's top margin would
+   double the space above it there. */
+.log-body .ai-role{margin:0}
+
 /* Draft marker. Deliberately visible: the case-study prose is author-supplied
    and structural stand-ins are to be replaced, not shipped. A quiet
    placeholder is one that gets shipped. */
@@ -728,6 +741,19 @@ html.js [data-reveal].shown{
         </li>
       </ol>
 
+      <dl class="ai-role">
+        <dt>Human need</dt>
+        <dd>Receipt and claims handling ran on manual submission and manual checking.</dd>
+        <dt>What the AI does in the product</dt>
+        <dd>Nothing. AI assisted the build, not the product.</dd>
+        <dt>What I did</dt>
+        <dd>
+          Architected it and wrote it: the claim schema, the submission and validation
+          flow, authentication and role-based permissions, the SharePoint integration,
+          the audit trail and the reporting views.
+        </dd>
+      </dl>
+
       <dl class="evi">
         <div>
           <dt>What exists now</dt>
@@ -795,6 +821,22 @@ html.js [data-reveal].shown{
         </li>
       </ol>
 
+      <dl class="ai-role">
+        <dt>Human need</dt>
+        <dd>
+          Operational and maintenance workflows were spread across manual steps, with
+          no single record of who was qualified for what.
+        </dd>
+        <dt>What the AI does in the product</dt>
+        <dd>Nothing. AI assisted the build, not the product.</dd>
+        <dt>What I did</dt>
+        <dd>
+          Solution owner as well as developer: I designed the role and qualification
+          model, built the workflow automation and the reporting surface, and did the
+          scalability planning for enterprise rollout.
+        </dd>
+      </dl>
+
       <dl class="evi">
         <div>
           <dt>What exists now</dt>
@@ -821,7 +863,8 @@ html.js [data-reveal].shown{
     <article class="card card-lg stage-card" data-reveal>
       <h2 class="h2">Vibe Coding Masterclass</h2>
       <p class="context">
-        A large-scale masterclass on AI-assisted application development, run for a
+        A large-scale masterclass on vibe-coding (directing AI coding agents from a
+        spec to a working app, and reviewing everything they produce), run for a
         mixed cohort of citizen developers and engineers, and co-delivered with
         external academic institutions.
       </p>
@@ -863,6 +906,25 @@ html.js [data-reveal].shown{
           <span class="needs-copy">Add: one honest line</span>
         </li>
       </ol>
+
+      <dl class="ai-role">
+        <dt>Human need</dt>
+        <dd>
+          Citizen developers and engineers who needed to build something with
+          AI-assisted tooling rather than read about it.
+        </dd>
+        <dt>What the AI does in the product</dt>
+        <dd>
+          Nothing runs inside the training. AI is the subject it teaches: prompt-driven
+          development, rapid prototyping and Power Apps deployment.
+        </dd>
+        <dt>What I did</dt>
+        <dd>
+          Lead instructor: I wrote the training materials and the hands-on labs,
+          sequenced the syllabus, coordinated delivery with the external academic
+          partners, and taught the sessions.
+        </dd>
+      </dl>
 
       <dl class="evi">
         <div>
@@ -987,8 +1049,8 @@ html.js [data-reveal].shown{
               <li>Audit logging on reservation records</li>
               <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
             </ul></div>
-          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span><span>Gemini 3.1</span><span>Claude Opus 4.6</span><span>GitHub Copilot</span></div></div>
+          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
           <figure class="shot">
             <img src="public/facility-infographic.jpg" loading="lazy"
                  alt="FacilityBook product infographic: unified booking dashboard, location and time-slot picker, and a real-time availability calendar for the RAiD facility reservation platform"
@@ -1008,7 +1070,7 @@ html.js [data-reveal].shown{
         <div class="log-body">
           <p>Customised web-based app for Air Specialist Vehicle (ASV) usage and maintenance records to track upcoming vehicle servicing status.</p>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span><span>PowerDocu</span></div></div>
         </div>
       </details>
 
@@ -1033,8 +1095,8 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Scheduling system for reserving simulator resources for training and assessment — online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
-          <div><div class="lab mb-1.5">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span><span>GitHub Copilot</span><span>Google AI Studio</span><span>Lovable</span></div></div>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely. GitHub Copilot and Google AI Studio assisted the build; neither runs in the shipped app.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span></div></div>
         </div>
       </details>
 
@@ -1067,7 +1129,7 @@ html.js [data-reveal].shown{
               <li>Hand-over features facilitating smooth transitions</li>
             </ul></div>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span><span>Digitalisation</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
           <figure class="shot">
             <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
                  alt="Dark-themed duty app screen showing a personnel-on-duty count, a duty-instructions panel, and Check In, Useful Links and Check Out buttons in the bottom navigation"
@@ -1085,7 +1147,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Agile App Dev</span><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
         </div>
       </details>
 
@@ -1097,7 +1159,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>Agile App Dev</span><span>UI Design</span><span>Data Visualization</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Data Visualization</span></div></div>
         </div>
       </details>
 
@@ -1109,7 +1171,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Agile App Dev</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span></div></div>
         </div>
       </details>
 
@@ -1164,6 +1226,14 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Integrating SAGE’s ME5 Delta Agent into Copilot for training purposes using open-source models.</p>
+          <dl class="ai-role">
+            <dt>Human need</dt>
+            <dd><span class="needs-copy">Add: who the agent was built for and what they could not do without it</span></dd>
+            <dt>What the AI does in the product</dt>
+            <dd>The ME5 Delta agent runs inside Copilot on open-source models, for training use. <span class="needs-copy">Add: what a user asks it and what it gives back</span></dd>
+            <dt>What I did</dt>
+            <dd>Integrated the agent into Copilot under license constraints. <span class="needs-copy">Add: which parts you built and which SAGE supplied</span></dd>
+          </dl>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Navigated license constraints creatively to replicate GPT-4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
         </div>
@@ -1176,8 +1246,8 @@ html.js [data-reveal].shown{
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Lovable</span><span>Power Platform</span></div></div>
+          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials. Lovable was used to build those materials.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform</span></div></div>
         </div>
       </details>
 
@@ -1189,7 +1259,7 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Documentation</span><span>Mentoring</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerLib</span></div></div>
         </div>
       </details>
 
@@ -1201,6 +1271,14 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Created an AI tool using Python and ChatGPT 3.5 that generates flowcharts from text.</p>
+          <dl class="ai-role">
+            <dt>Human need</dt>
+            <dd><span class="needs-copy">Add: who needed flowcharts out of written text, and what they were doing instead</span></dd>
+            <dt>What the AI does in the product</dt>
+            <dd>ChatGPT 3.5 reads a written description and produces the flowchart from it. The model is part of the tool, not part of building it.</dd>
+            <dt>What I did</dt>
+            <dd>Created the tool: I wrote the notebook, engineered the prompts, and integrated the Python libraries it draws with.</dd>
+          </dl>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Explored prompt engineering and integrating Python libraries together in a single notebook for workflow tools.</p></div>
           <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
         </div>
@@ -1216,7 +1294,7 @@ html.js [data-reveal].shown{
         <div class="log-body">
           <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>Cloud Tech</span><span>MLOps</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
         </div>
       </details>
 
@@ -1254,7 +1332,7 @@ html.js [data-reveal].shown{
         <div class="log-body">
           <p>Acquired technical skills essential for aircraft maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
           <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
-          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span><span>Stress Management</span></div></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span></div></div>
         </div>
       </details>
 
