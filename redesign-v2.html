@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manfred Siew — Aerospace to AI Engineering</title>
+<meta name="description" content="Manfred Siew — Aerospace engineer converting to AI &amp; Software Engineering. Power Platform Developer at RAiD (RSAF Agile innovation Digital). 20 projects.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Two families, not three. The condensed display face is gone: condensed
+     uppercase is the highest-tension shape available and it was fighting the
+     round/smooth brief harder than anything else on the page. Instrument Sans
+     carries every heading now, on weight and size contrast alone. Mono is
+     kept ONLY for genuinely tabular data — dates, counts, the altimeter. -->
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  /* Tailwind's `hover:` variant compiles to a bare :hover with no capability
+     query, which is sticky hover on every touch device. This gates all of
+     them behind (hover: hover) — the CSS below gates its own by hand, but
+     the utilities in the nav could not be fixed any other way. */
+  future: { hoverOnlyWhenSupported: true },
+  theme: {
+    extend: {
+      colors: {
+        bg:      '#F6F8FB',   // cool near-white, tinted toward the brand blue
+        surface: '#FFFFFF',
+        tint:    '#EEF3FA',
+        wash:    '#FDF1EB',
+        ink:     '#0B1420',   // 17.4:1 on bg
+        body:    '#2C3E52',   // 10.3:1 on bg
+        muted:   '#55697E',   //  5.3:1 on bg
+        accent:  '#9A3412',   //  6.9:1 on bg — accent TEXT
+        'accent-strong': '#C2410C', // 4.9:1 — >=24px headings, borders
+        signal:  '#FF6B1A',   // FILL ONLY — 2.7:1, never under a glyph
+        data:    '#0B5FA5',   //  6.2:1
+        line:    '#E3EAF2',
+        rule:    '#C6D4E2',
+        deep:    '#12244A',
+      },
+      fontFamily: {
+        sans: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: {
+        xs: '8px', sm: '12px', md: '16px', lg: '22px', xl: '30px',
+      },
+    },
+  },
+};
+</script>
+
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   ASCENT v2 — one signature, everything else quiet.
+
+   WHAT CHANGED FROM v1, AND WHY
+
+   v1 ran eighteen systems at once, six of them fixed on screen. With that
+   many, none of them is the focal point — which is exactly what "messy"
+   describes. The 3D aircraft is now THE signature element and it is the
+   only thing on this page allowed to be loud. Deleted outright:
+
+     · the HUD altitude tape and section readout (a second instrument,
+       competing with the aircraft, and desktop-only besides)
+     · four fixed corner brackets
+     · four reticle corners + two leader lines on the portrait
+     · the starfield canvas
+     · the drafting-grid overlay
+     · the corner ticks on .panel and .stage-card
+     · the 6-card category deck (now one row of pills)
+     · 54 uppercase tracked mono eyebrow labels
+     · two of the three numbering systems
+     · the per-character hero split animation
+     · the portrait parallax
+     · the condensed display face
+
+   ROUNDNESS IS NOT A STYLE CHOICE HERE.
+
+   Aircraft windows are rounded because the Comet's square ones concentrated
+   stress at the corners and cracked. In this subject's actual world, the
+   radius IS the engineering fix. So it is applied as a system, and — more
+   importantly — every element whose job was to POINT AT a 90° corner is
+   gone. You cannot feel round while decorating your corners.
+
+   CONTRAST. Every pair below was computed, not eyeballed. On --bg:
+   ink 17.4 · body 10.3 · muted 5.3 · accent 6.9 · data 6.2. On the dark
+   contact band's worst-case ground #2A4E7A: paper 7.9 · body-inv 6.8 ·
+   accent-inv 4.9 · data-inv 5.4. --signal is 2.7:1 and is therefore a
+   FILL token only; ink-on-signal is 6.5:1, which is the pairing used.
+   Body copy floor is 18px. Nothing sits below 13px.
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root{
+  --bg:#F6F8FB; --surface:#FFFFFF; --tint:#EEF3FA; --wash:#FDF1EB;
+  --ink:#0B1420; --body:#2C3E52; --muted:#55697E;
+  --accent:#9A3412; --accent-strong:#C2410C; --signal:#FF6B1A; --data:#0B5FA5;
+  --line:#E3EAF2; --rule:#C6D4E2; --deep:#12244A;
+
+  /* Radius scale. Nested radius = parent radius − parent padding, so a chip
+     inside a card never looks pinched at the corner. */
+  --r-xs:8px; --r-sm:12px; --r-md:16px; --r-lg:22px; --r-xl:30px; --r-pill:999px;
+
+  --fs-body:1.125rem;   /* 18px floor */
+  --fs-label:.8125rem;  /* 13px floor */
+
+  /* One entrance curve for the whole page. Entrances ease-out, hovers plain
+     ease, presses plain ease. There is no ease-in anywhere in this file. */
+  --e-out:cubic-bezier(.23,1,.32,1);
+  --d-press:120ms; --d-hover:180ms; --d-enter:340ms;
+
+  /* Soft, wide, low-opacity shadows. A tight dark shadow reads as a cut-out
+     edge; a diffuse one reads as weight, which is what "smooth" wants. */
+  --sh-1:0 1px 2px rgba(11,20,32,.04), 0 10px 26px -18px rgba(11,20,32,.22);
+  --sh-2:0 2px 4px rgba(11,20,32,.04), 0 30px 64px -34px rgba(11,20,32,.38);
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:7rem; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:var(--fs-body); line-height:1.65;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+::selection{ background:var(--signal); color:var(--ink); }
+
+/* One focus treatment, and it follows the radius of what it wraps. */
+a:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:3px solid var(--accent); outline-offset:3px;
+}
+
+/* ── ATMOSPHERE ───────────────────────────────────────────────────────
+   Three bands, down from five. They only ever fade IN — cross-fading two
+   layers leaves a frame where both are partly transparent and the page
+   shows through the seam. Stacking additively cannot gap.
+   The sky exists now for exactly one reason: to give the aircraft an
+   environment to be lit by and to sit in. It is not a second signature. */
+.sky{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.band{ position:absolute; inset:0; opacity:0; will-change:opacity; }
+.band-ground{ opacity:1; background:linear-gradient(#F6F8FB, #DDEBF7); }
+.band-cruise{ background:linear-gradient(#DDEBF7, #8FBFE9); }
+.band-space{  background:linear-gradient(#2A4E7A, #12244A); }
+
+/* The 3D stage. z-index 2 — above the sky, below every content bed at
+   z-10. "No body text over a moving 3D scene" is therefore enforced by
+   stacking order rather than by each new section remembering the rule. */
+#scene{ position:fixed; inset:0; z-index:2; pointer-events:none; opacity:0; }
+
+/* ── TYPE ─────────────────────────────────────────────────────────────
+   Sentence case throughout. There is no uppercase-tracked label anywhere
+   in this file — that texture, repeated 54 times, was the loudest thing
+   on the page. Hierarchy comes from size and weight instead.
+   The hero ceiling is 5rem (80px), down from 10rem (160px). */
+.h1{
+  font-size:clamp(2.6rem,6.4vw,5rem); font-weight:700; line-height:1.02;
+  letter-spacing:-.035em; color:var(--ink); margin:0;
+}
+.h2{
+  font-size:clamp(1.9rem,3.6vw,2.9rem); font-weight:600; line-height:1.12;
+  letter-spacing:-.028em; color:var(--ink); margin:0;
+}
+.h3{
+  font-size:clamp(1.35rem,2.1vw,1.65rem); font-weight:600; line-height:1.25;
+  letter-spacing:-.018em; color:var(--ink); margin:0;
+}
+.lede{ font-size:clamp(1.1rem,1.6vw,1.3rem); line-height:1.55; color:var(--body); }
+
+/* The one orientation label kept, as a deliberate system: six of them, one
+   per section, sentence case, no tracking, no mono. */
+.eyebrow{
+  font-size:.9375rem; font-weight:600; color:var(--accent);
+  letter-spacing:-.005em; margin:0 0 .7rem;
+}
+/* Small in-card labels. Semibold muted sentence case — legible as a label
+   without becoming a texture the way 13px tracked mono caps did. */
+.lab{ font-size:.875rem; font-weight:600; color:var(--muted); letter-spacing:-.005em; }
+/* Tabular data only: dates, counts, the flight readout. Not decorative. */
+.num{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:var(--fs-label);
+  font-variant-numeric:tabular-nums; color:var(--muted); letter-spacing:.01em;
+}
+.on-accent{ color:var(--accent-strong); }
+.on-data{ color:var(--data); }
+
+/* Floating rounded nav bar rather than a full-width ruled edge. Opaque, not
+   translucent: the sky behind it runs to #12244A, and a 90%-alpha bar over
+   that ground would shift every label's contrast as the reader climbs. */
+.nav-bar{
+  border:1px solid var(--line); background:var(--surface);
+  border-radius:var(--r-lg); box-shadow:var(--sh-1);
+  padding:.75rem 1rem;
+}
+
+/* ── SURFACES ─────────────────────────────────────────────────────────
+   One card recipe, three sizes. No corner ticks, no brackets, no stripes. */
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--sh-1);
+}
+.card-lg{ border-radius:var(--r-xl); box-shadow:var(--sh-2); }
+
+/* ── BUTTONS ──────────────────────────────────────────────────────────
+   Pills. Every one ships default / hover (gated) / focus / active. Hover
+   moves to the warm accent — white on #9A3412 is 7.3:1. Note that every
+   transition names its properties; there is no bare shorthand in this file. */
+.btn{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-size:.9375rem; font-weight:600; text-decoration:none;
+  padding:.9rem 1.6rem; border-radius:var(--r-pill);
+  background:var(--ink); color:#FFFFFF; border:1px solid transparent;
+  box-shadow:var(--sh-1); cursor:pointer;
+  transition:background-color var(--d-hover) ease,
+             box-shadow var(--d-hover) ease,
+             transform var(--d-press) ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{ background-color:var(--accent); box-shadow:var(--sh-2); }
+}
+.btn:active{ transform:scale(.97); }
+
+.btn-ghost{
+  background:var(--surface); color:var(--ink); border-color:var(--rule);
+  box-shadow:none;
+}
+@media (hover:hover) and (pointer:fine){
+  .btn-ghost:hover{ background-color:var(--tint); border-color:var(--rule); }
+}
+
+/* ── FILTER PILLS ─────────────────────────────────────────────────────
+   v1 had two filter systems: a six-card grid AND a button row. Both are
+   now the same pill, used on two axes. The category claims were content
+   worth keeping, so they were not deleted with the deck — they swap into
+   a single line below the row when a category is chosen. */
+.pill{
+  font-size:.875rem; font-weight:500; cursor:pointer; white-space:nowrap;
+  padding:.55rem 1.05rem; border-radius:var(--r-pill);
+  border:1px solid var(--rule); background:var(--surface); color:var(--body);
+  transition:background-color var(--d-hover) ease,
+             border-color var(--d-hover) ease,
+             color var(--d-hover) ease,
+             transform var(--d-press) ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .pill:hover:not(:disabled){ background-color:var(--tint); border-color:var(--rule); }
+}
+.pill:active:not(:disabled){ transform:scale(.97); }
+.pill[aria-pressed="true"]{ background-color:var(--ink); border-color:var(--ink); color:#FFFFFF; }
+/* Two categories hold no published entry yet. An empty filter that silently
+   returns nothing reads as a broken control, so it says so instead. */
+.pill:disabled{ cursor:default; color:var(--muted); border-style:dashed; opacity:.75; }
+
+.pill-count{ opacity:.68; font-variant-numeric:tabular-nums; }
+
+/* The claim line. Fades between values rather than snapping. */
+#catClaim{
+  min-height:1.6rem; font-size:1rem; color:var(--body); margin:0;
+  transition:opacity var(--d-hover) ease;
+}
+#catClaim.swapping{ opacity:0; }
+
+/* ── PROJECT LOG ──────────────────────────────────────────────────────
+   THE SIGNATURE'S PARTNER. v1 separated 20 entries with hairline rules,
+   which is the squarest possible treatment. They are now gap-separated
+   rounded surfaces — the single biggest contributor to the page reading
+   round rather than ruled. */
+.log-list{ display:grid; gap:.6rem; }
+.log-row{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r-md); overflow:hidden;
+  transition:border-color var(--d-hover) ease, box-shadow var(--d-hover) ease;
+}
+.log-row[hidden]{ display:none; }
+@media (hover:hover) and (pointer:fine){
+  .log-row:hover{ border-color:var(--rule); box-shadow:var(--sh-1); }
+}
+.log-row[open]{ border-color:var(--rule); box-shadow:var(--sh-1); }
+
+.log-row summary{
+  list-style:none; cursor:pointer; padding:1.1rem 1.25rem;
+  display:grid; grid-template-columns:1fr auto auto; gap:1rem;
+  align-items:center;
+  transition:background-color var(--d-hover) ease, transform var(--d-press) ease;
+}
+.log-row summary::-webkit-details-marker{ display:none; }
+@media (hover:hover) and (pointer:fine){
+  .log-row summary:hover{ background-color:var(--tint); }
+}
+.log-row summary:active{ transform:scale(.994); }
+
+.lt{ font-size:1.1rem; font-weight:600; color:var(--ink); line-height:1.35; letter-spacing:-.012em; }
+.tag{
+  font-size:.8125rem; font-weight:500; white-space:nowrap;
+  padding:.24rem .7rem; border-radius:var(--r-pill);
+  background:var(--tint); color:var(--data);
+}
+.lorg{ font-size:.8125rem; color:var(--muted); white-space:nowrap; }
+/* Chevron, not a plus sign. It rotates through 180° — a transform, and a
+   rounder gesture than a plus becoming a cross. */
+.chev{
+  flex:none; color:var(--muted);
+  transition:transform var(--d-enter) var(--e-out), color var(--d-hover) ease;
+}
+.log-row[open] .chev{ transform:rotate(180deg); color:var(--accent); }
+
+.log-body{ padding:0 1.25rem 1.4rem; display:grid; gap:1rem; }
+/* The disclosure animates its CONTENT with transform + opacity only. The
+   row's own height is not animated: doing that on a 20-row list janks the
+   whole column, and the smoothness you actually perceive is the content
+   arriving, not the box growing. */
+.log-row[open] .log-body{ animation:contentIn var(--d-enter) var(--e-out) both; }
+@keyframes contentIn{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:none; } }
+.log-body p{ margin:0; color:var(--body); font-size:var(--fs-body); max-width:66ch; line-height:1.6; }
+
+/* v1's .learn was a 3px coloured side stripe, repeated 14 times. It is now
+   a soft tinted bed with the same radius language as everything else. */
+.note{
+  background:var(--wash); border-radius:var(--r-sm);
+  padding:.85rem 1rem; color:var(--ink); font-size:1rem; line-height:1.55;
+}
+.feat{ list-style:none; margin:0; padding:0; display:grid; gap:.3rem; }
+.feat li{ position:relative; padding-left:1.35rem; font-size:1rem; color:var(--body); line-height:1.55; }
+.feat li::before{
+  content:""; position:absolute; left:.28rem; top:.62rem;
+  width:6px; height:6px; border-radius:50%; background:var(--data);
+}
+.chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.chips span{
+  font-size:.8125rem; padding:.3rem .7rem; border-radius:var(--r-pill);
+  border:1px solid var(--line); color:var(--body); background:var(--bg);
+}
+@media (max-width:640px){
+  .log-row summary{ grid-template-columns:1fr auto; row-gap:.5rem; }
+  .tag{ grid-column:1; justify-self:start; }
+  .lorg{ display:none; }
+}
+
+/* ── THE THREE BEATS ──────────────────────────────────────────────────
+   The only numbering system left on the page. Beat 2 is filled with
+   --signal because beat 2 is what the whole structure exists for: what
+   the author did, as opposed to what the team did. The camera pushes in
+   on the cockpit at the same moment — same emphasis, two channels. */
+.beats{ margin-top:1.6rem; display:grid; gap:.2rem; }
+.beat{ display:grid; grid-template-columns:2.2rem 1fr; gap:1rem; padding:1.2rem 0; }
+.beat + .beat{ border-top:1px solid var(--line); }
+.beat-n{
+  width:2.2rem; height:2.2rem; border-radius:50%; align-self:start;
+  display:grid; place-items:center;
+  font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:.875rem;
+  border:1px solid var(--rule); color:var(--accent); background:var(--wash);
+}
+.beat[data-beat="2"] .beat-n{ background:var(--signal); border-color:var(--signal); color:var(--ink); }
+.beat p{ margin:.45rem 0 0; color:var(--body); line-height:1.6; max-width:58ch; }
+.beat p + p{ margin-top:.5rem; }
+.evi{ margin:.5rem 0 0; display:grid; gap:.8rem; }
+.evi dt{ font-size:.875rem; font-weight:600; color:var(--data); }
+.evi dd{ margin:.15rem 0 0; color:var(--body); line-height:1.6; max-width:58ch; }
+
+/* Draft marker. Deliberately visible: the case-study prose is author-supplied
+   and structural stand-ins are to be replaced, not shipped. A quiet
+   placeholder is one that gets shipped. */
+.needs-copy{
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.8125rem; font-weight:600; color:var(--accent);
+  background:var(--wash); border:1px dashed var(--accent-strong);
+  border-radius:var(--r-pill); padding:.22rem .75rem;
+}
+
+/* ── EXPERIENCE ───────────────────────────────────────────────────────
+   Round by construction: a rounded rail with round nodes. */
+.tl-line{ position:absolute; left:0; top:0; width:2px; height:100%; border-radius:var(--r-pill); background:var(--line); }
+.tl-fill{
+  position:absolute; left:0; top:0; width:2px; height:100%; border-radius:var(--r-pill);
+  background:linear-gradient(var(--signal),var(--data)); transform-origin:top; transform:scaleY(0);
+}
+.tl-node{
+  position:absolute; top:.45rem; left:-1.9rem; width:12px; height:12px; border-radius:50%;
+  background:var(--surface); border:2px solid var(--accent-strong);
+}
+
+/* ── CONTENT MODES ────────────────────────────────────────────────────
+   STAGE    the aircraft owns the frame; short copy on a card pinned to
+            one side, leaving the other side to the signature.
+   DOCUMENT one opaque bed for all long-form reading.
+   Both live inside <main> at z-10; the canvas is at z-2. */
+.stage{ position:relative; display:flex; align-items:center; min-height:100svh; }
+.stage-inner{ margin-inline:auto; width:100%; max-width:1120px; }
+.stage-card{ position:relative; max-width:38rem; padding:1.9rem 1.6rem; }
+.stage-right .stage-card{ margin-left:auto; }
+@media (min-width:1024px){ .stage-card{ padding:2.6rem 2.8rem; } }
+
+/* On phones the card would cover the whole viewport and the aircraft would
+   have nowhere to be. Cards drop to the lower two thirds instead, leaving a
+   consistent band of open sky at the top for the signature to fly in. This
+   is what replaces v1's blanket 0.42 opacity multiplier. */
+@media (max-width:1023px){
+  .stage{ align-items:flex-end; padding-bottom:3rem; }
+  .stage-card{ max-width:none; }
+}
+
+/* Transits carry no content. The camera needs somewhere to finish a
+   pull-back before the next waypoint's wide shot begins. v1 spent 62vh
+   on each; 40vh is enough for the beats not to collide. */
+.transit{ height:40vh; }
+@media (max-width:900px){ .transit{ height:15vh; } }
+
+.doc-bed{ position:relative; background:var(--bg); }
+/* Feathered edges so the paper meets the sky without a hard seam. Nothing
+   readable is inside the feather — it is pure padding. */
+.doc-bed::before,.doc-bed::after{ content:""; position:absolute; left:0; right:0; height:150px; pointer-events:none; }
+.doc-bed::before{ top:-150px;    background:linear-gradient(rgba(246,248,251,0), #F6F8FB); }
+.doc-bed::after{  bottom:-150px; background:linear-gradient(#F6F8FB, rgba(246,248,251,0)); }
+
+/* ── THE DARK BAND ────────────────────────────────────────────────────
+   Contact and footer sit directly on .band-space and invert. Every pairing
+   is checked against the LIGHTER end of that gradient, #2A4E7A, which is
+   the worst case: paper 7.9 · body-inv 6.8 · accent-inv 4.9 · data-inv 5.4.
+   #FF6B1A on that ground is 3.0:1, so it stays a fill here too. */
+.invert{ color:#DCE8F4; }
+.invert .h1,.invert .h2,.invert .h3{ color:#FFFFFF; }
+/* #FFC9A3, not #FFB380. The links inside .invert .card hover to this colour,
+   and that card composites to #395a83 against the band's lighter end — on
+   which #FFB380 measures 4.05:1 and fails. #FFC9A3 is 4.77:1 there and
+   5.72:1 on the bare band. Computed, not adjusted by eye. */
+.invert .eyebrow{ color:#FFC9A3; }
+.invert .num{ color:#BFD4E8; }
+.invert .on-accent{ color:#FFC9A3; }
+.invert .on-data{ color:#9FD4FF; }
+.invert a:not(.btn){ color:#FFFFFF; text-decoration-color:rgba(255,255,255,.55); }
+@media (hover:hover) and (pointer:fine){ .invert a:not(.btn):hover{ color:#FFC9A3; } }
+.invert .card{
+  background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.16);
+  box-shadow:none; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+}
+/* The contact CTA keeps the ink-on-signal pairing (6.5:1) that v1 established. */
+.btn-signal{ background:var(--signal); color:var(--ink); box-shadow:none; }
+@media (hover:hover) and (pointer:fine){
+  .btn-signal:hover{ background-color:#FF8038; box-shadow:var(--sh-2); }
+}
+
+/* ── TIER 0 FALLBACK ──────────────────────────────────────────────────
+   No WebGL / reduced motion / Save-Data / low memory. The canvas never
+   loads and never fetches; a flat silhouette stands in. v1 hid this
+   entirely below 1024px, which left phone users on Tier 0 with three
+   empty stage sections and nothing at all. It now shows everywhere. */
+.silo{ display:none; }
+html.tier-0 .silo{
+  display:block; position:absolute; z-index:-1; pointer-events:none;
+  width:min(46vw,520px); height:auto; right:3vw; top:50%; transform:translateY(-50%);
+  color:var(--rule); opacity:.7;
+}
+html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%) scaleX(-1); }
+@media (max-width:1023px){
+  html.tier-0 .silo{ width:58vw; right:50%; top:14%; transform:translate(50%,0); }
+  html.tier-0 .stage-right .silo{ left:auto; right:50%; transform:translate(50%,0) scaleX(-1); }
+}
+
+/* ── REVEALS ──────────────────────────────────────────────────────────
+   The default state is VISIBLE. The animation enhances an already-readable
+   page rather than gating content behind a scroll position — if the script
+   never runs, nothing is hidden. */
+[data-reveal]{ opacity:1; }
+html.js [data-reveal]{ opacity:0; transform:translateY(10px); }
+html.js [data-reveal].shown{
+  opacity:1; transform:none;
+  transition:opacity var(--d-enter) var(--e-out), transform var(--d-enter) var(--e-out);
+}
+
+@media (prefers-reduced-motion:reduce){
+  #scene{ display:none; }
+  .stage{ min-height:0; padding-block:5rem; align-items:center; }
+  .transit{ height:0; }
+  html.js [data-reveal]{ opacity:1; transform:none; }
+  .log-row[open] .log-body{ animation:none; }
+  .btn:active,.pill:active,.log-row summary:active{ transform:none; }
+  *{ animation-duration:.001ms!important; animation-iteration-count:1!important;
+     transition-duration:.001ms!important; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════ ATMOSPHERE ══════════ -->
+<div class="sky" aria-hidden="true">
+  <div class="band band-ground" data-band="ground"></div>
+  <div class="band band-cruise" data-band="cruise"></div>
+  <div class="band band-space"  data-band="space"></div>
+</div>
+
+<!-- The signature. Above the sky, below every content bed. aria-hidden
+     because it carries nothing that is not also written down. -->
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="jet" viewBox="0 0 300 140">
+    <path fill="currentColor" d="M150 6c5 0 8 5 9 12l4 34 62 26c3 1 5 4 5 7v9l-67-14 3 30 18 14v7l-27-7-7 12-7-12-27 7v-7l18-14 3-30-67 14v-9c0-3 2-6 5-7l62-26 4-34c1-7 4-12 9-12z"/>
+  </symbol>
+</svg>
+
+<!-- ══════════ NAV ══════════
+     A floating rounded bar rather than a full-width ruled edge. Opaque, not
+     translucent: the sky behind it runs to #12244A and a 90%-alpha bar over
+     that ground would shift every label's contrast. -->
+<nav class="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6" aria-label="Sections">
+  <div class="mx-auto flex max-w-[1120px] items-center gap-4 nav-bar sm:px-5">
+    <a href="#ident" class="text-[1.05rem] font-bold tracking-tight text-ink no-underline">Manfred Siew</a>
+    <div class="ml-auto hidden items-center gap-1 md:flex">
+      <a href="#origin"  class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Start</a>
+      <a href="#wp1"     class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Featured</a>
+      <a href="#log"     class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Projects</a>
+      <a href="#record"  class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Experience</a>
+    </div>
+    <a href="#contact" class="btn ml-auto px-4 py-2 text-[.875rem] md:ml-2">Contact</a>
+  </div>
+</nav>
+
+<main class="relative z-10">
+
+<!-- ══════════ 01 · HERO ══════════
+     v1 held the aircraft at zero opacity until the hero copy had scrolled
+     off, because the hero was the one section with body text and no opaque
+     bed — so the most expensive thing on the page was invisible on first
+     paint. The hero now has its own card, exactly as v1's own code comment
+     said it would have to. The signature is visible immediately. -->
+<section id="ident" data-alt="0,1500" data-section="Home"
+         class="relative flex min-h-[100svh] items-center px-4 pb-20 pt-32 sm:px-6 lg:pt-36">
+  <div class="mx-auto w-full max-w-[1120px]">
+    <div class="grid items-center gap-8 lg:grid-cols-[1.15fr_.85fr] lg:gap-12">
+
+      <div class="card card-lg p-6 sm:p-9 lg:p-11" data-reveal>
+        <p class="mb-5 flex items-center gap-2.5 text-[.9375rem] font-medium text-body">
+          <span class="inline-block h-2 w-2 flex-none rounded-full bg-signal"></span>
+          Open to work — AI &amp; software engineering, Singapore
+        </p>
+
+        <h1 class="h1">Manfred Siew<span class="on-accent">.</span></h1>
+
+        <p class="mt-4 inline-flex flex-wrap items-center gap-2.5 rounded-[999px] border border-line bg-bg px-4 py-2 text-[.9375rem] font-medium">
+          <span class="text-body">Aerospace</span>
+          <span class="on-accent" aria-hidden="true">→</span>
+          <span class="on-data">AI engineering</span>
+        </p>
+
+        <p class="lede mt-6 max-w-[54ch]">
+          Aspiring <strong class="font-semibold text-ink">AI &amp; software engineer</strong>,
+          currently at <span class="font-semibold on-accent">RAiD</span>
+          (RSAF Agile innovation Digital) — an aircraft-maintenance-trained engineer
+          retraining mid-flight for AI-orchestrated software development.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a class="btn" href="#log">See all projects</a>
+          <a class="btn btn-ghost" href="#wp1">Featured work</a>
+        </div>
+
+        <div class="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div class="rounded-md bg-bg px-4 py-3.5">
+            <div class="text-2xl font-semibold tabular-nums text-ink" data-count="20">20</div>
+            <div class="mt-1 text-[.875rem] text-muted">Projects</div>
+          </div>
+          <div class="rounded-md bg-bg px-4 py-3.5">
+            <div class="text-2xl font-semibold tabular-nums text-ink" data-count="2">2</div>
+            <div class="mt-1 text-[.875rem] text-muted">Day build</div>
+          </div>
+          <div class="rounded-md bg-bg px-4 py-3.5">
+            <div class="text-2xl font-semibold tabular-nums text-ink" data-count="35">35</div>
+            <div class="mt-1 text-[.875rem] text-muted">People trained</div>
+          </div>
+          <div class="rounded-md bg-bg px-4 py-3.5">
+            <div class="text-2xl font-semibold tabular-nums text-ink" data-count="3">3</div>
+            <div class="mt-1 text-[.875rem] text-muted">Organisations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portrait. The four reticle corners and two leader lines are gone;
+           a soft rounded frame replaces them. -->
+      <aside class="mx-auto hidden w-full max-w-[330px] lg:block" data-reveal aria-label="Profile">
+        <div class="card card-lg overflow-hidden p-2.5">
+          <div class="aspect-[4/5] overflow-hidden rounded-[22px] bg-tint">
+            <img src="public/profile_picture.png" alt="Portrait of Manfred Siew"
+                 class="h-full w-full object-cover"
+                 onerror="this.closest('aside').remove()">
+          </div>
+          <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 px-3 pb-2 pt-4 text-[.875rem]">
+            <dt class="text-muted">Role</dt>
+            <dd class="m-0 text-body">AI &amp; software engineer (trainee)</dd>
+            <dt class="text-muted">Team</dt>
+            <dd class="m-0 text-body">RAiD · PPCoE</dd>
+            <dt class="text-muted">Education</dt>
+            <dd class="m-0 text-body">Aerospace Eng. Dip. (TP)</dd>
+          </dl>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="mt-8 flex flex-wrap items-center gap-2.5" data-reveal>
+      <span class="text-[.9375rem] text-muted">Where I’ve worked</span>
+      <span class="rounded-[999px] border border-line bg-surface px-3.5 py-1.5 text-[.875rem] text-body"><b class="font-semibold text-ink">RSAF</b> Republic of Singapore Air Force</span>
+      <span class="rounded-[999px] border border-line bg-surface px-3.5 py-1.5 text-[.875rem] text-body"><b class="font-semibold text-ink">RAiD</b> Agile innovation Digital</span>
+      <span class="rounded-[999px] border border-line bg-surface px-3.5 py-1.5 text-[.875rem] text-body"><b class="font-semibold text-ink">TP</b> Temasek Polytechnic</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 02 · ORIGIN — 1,500 → 8,000 ft ══════════
+     The aerospace history sits on the ground rather than inside a waypoint.
+     That is what makes the climb autobiographical instead of decorative:
+     the reader watches the aircraft rotate at the exact moment they read
+     about leaving aircraft maintenance. -->
+<section id="origin" data-alt="1500,8000" data-section="Start" class="stage px-4 py-20 sm:px-6">
+  <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
+  <div class="stage-inner">
+    <div class="card card-lg stage-card" data-reveal>
+      <p class="eyebrow">Where this starts</p>
+      <h2 class="h2">I trained on airframes before I trained on software.</h2>
+      <p class="mt-5 max-w-[56ch]">
+        I learned riveting, soldering and composite repair at the Lufthansa Technical
+        Training Center as part of World Skills aircraft-maintenance training — work
+        where a missed inspection is not a bug report. That is where the habit came
+        from: read the manual, check the tolerance, sign your name to it. I build
+        software the same way, and the rest of this page is the climb out of the hangar.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FEATURED WORK ══════════
+     Build → Scale → Teach. Scope escalates with altitude: one process, then
+     one platform, then a whole community. Each waypoint runs the same three
+     beats, so the reader learns the grammar once at FUEL Up and the next two
+     are immediately legible.
+
+     ⚠ DRAFT COPY. The case-study prose is author-supplied. Everything below
+     is drafted from the project summary Manfred wrote, and every slot the
+     summary does not answer carries a .needs-copy chip. The summary's own
+     impact lines ("reduced manual effort", "improved transparency") are
+     deliberately NOT reproduced — a section that promises specifics and
+     delivers adjectives reads worse than one that never promised. -->
+
+<div class="relative px-4 pt-20 sm:px-6" data-reveal>
+  <div class="mx-auto max-w-[1120px]">
+    <div class="card card-lg max-w-[42rem] p-6 sm:p-9">
+      <p class="eyebrow">Featured work</p>
+      <h2 class="h2">Build. Scale. <span class="on-accent">Teach.</span></h2>
+      <p class="mt-4 max-w-[52ch]">
+        Each of the three below answers a different question, in the same three steps:
+        what the project was, what I did, and what changed.
+      </p>
+      <p class="mt-5"><span class="needs-copy">Draft copy — chips mark what only you can answer</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── WAYPOINT 1 · FUEL Up — 8,000 → 18,000 ft — "Can you ship?" ── -->
+<section id="wp1" data-alt="8000,18000" data-section="Featured work" class="stage px-4 py-16 sm:px-6">
+  <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
+  <div class="stage-inner">
+    <article class="card card-lg stage-card" data-reveal>
+      <p class="eyebrow">Featured 1 of 3 — Lead developer &amp; solution architect</p>
+      <h2 class="h2">FUEL Up</h2>
+      <p class="lede mt-4">
+        A claim only becomes a number after somebody has typed a receipt into a form twice.
+      </p>
+
+      <div class="beats">
+        <div class="beat" data-beat="1">
+          <span class="beat-n">1</span>
+          <div>
+            <div class="lab">What the project was</div>
+            <p>
+              Receipt and claims handling ran on manual submission and manual checking.
+              I was asked to design and build the platform that replaced it — submission,
+              validation, tracking and reporting in one workflow, on Power Platform with
+              SharePoint as the document store.
+            </p>
+            <p><span class="needs-copy">Add: timeline, team size, or the hard constraint</span></p>
+          </div>
+        </div>
+
+        <div class="beat" data-beat="2">
+          <span class="beat-n">2</span>
+          <div>
+            <div class="lab">What I did</div>
+            <p>
+              I architected the solution and wrote it. I modelled the claim schema, built
+              the submission and validation flow, implemented authentication and role-based
+              permissions, wired the SharePoint integration, and added the audit trail and
+              the reporting views on top.
+            </p>
+            <p><span class="needs-copy">Add: one obstacle you handled alone</span></p>
+          </div>
+        </div>
+
+        <div class="beat" data-beat="3">
+          <span class="beat-n">3</span>
+          <div>
+            <div class="lab">What changed</div>
+            <dl class="evi">
+              <div>
+                <dt>What exists now</dt>
+                <dd>
+                  A digital submission path for receipts, role-based permissions across
+                  claim stages, an audit trail on every record, and reporting views that
+                  read from the same data the claims are filed against.
+                </dd>
+              </div>
+              <div>
+                <dt>Who confirmed it</dt>
+                <dd><span class="needs-copy">Add: who used it, signed it off, or tested it</span></dd>
+              </div>
+              <div>
+                <dt>What I’d do differently</dt>
+                <dd><span class="needs-copy">Add: one honest line</span></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="transit" data-alt="18000,22000" aria-hidden="true"></div>
+
+<!-- ── WAYPOINT 2 · MILES / MAVIS — 22,000 → 32,000 ft — "Do you own platforms?" ── -->
+<section id="wp2" data-alt="22000,32000" data-section="Featured work" class="stage stage-right px-4 py-16 sm:px-6">
+  <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
+  <div class="stage-inner">
+    <article class="card card-lg stage-card" data-reveal>
+      <p class="eyebrow">Featured 2 of 3 — Full-stack developer &amp; solution owner</p>
+      <h2 class="h2">MILES / MAVIS</h2>
+      <p class="lede mt-4">
+        Owning a feature means finishing it. Owning a platform means deciding what it
+        will still be able to carry in two years.
+      </p>
+
+      <div class="beats">
+        <div class="beat" data-beat="1">
+          <span class="beat-n">1</span>
+          <div>
+            <div class="lab">What the project was</div>
+            <p>
+              Operational and maintenance workflows were spread across manual steps with
+              no single record of who was qualified for what. The platform pulls those
+              workflows into one place: structured automation over centralised data, with
+              role management and qualification tracking as first-class parts of the model
+              rather than fields bolted on later.
+            </p>
+            <p><span class="needs-copy">Add: timeline, team size, or the hard constraint</span></p>
+          </div>
+        </div>
+
+        <div class="beat" data-beat="2">
+          <span class="beat-n">2</span>
+          <div>
+            <div class="lab">What I did</div>
+            <p>
+              I was Solution Owner as well as a developer, so the scope decisions were mine
+              to make and defend. I designed the role and qualification model, built the
+              workflow automation and the reporting surface, and did the scalability
+              planning for enterprise rollout — deciding what the data model had to support
+              before anyone asked it to.
+            </p>
+            <p><span class="needs-copy">Add: one obstacle you handled alone</span></p>
+          </div>
+        </div>
+
+        <div class="beat" data-beat="3">
+          <span class="beat-n">3</span>
+          <div>
+            <div class="lab">What changed</div>
+            <dl class="evi">
+              <div>
+                <dt>What exists now</dt>
+                <dd>
+                  A role management model, per-person qualification records, automated
+                  workflow steps replacing manual hand-offs, and reporting that reads from
+                  the same store the work is recorded in.
+                </dd>
+              </div>
+              <div>
+                <dt>Who confirmed it</dt>
+                <dd><span class="needs-copy">Add: who used it, signed it off, or tested it</span></dd>
+              </div>
+              <div>
+                <dt>What I’d do differently</dt>
+                <dd><span class="needs-copy">Add: one honest line</span></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="transit" data-alt="32000,36000" aria-hidden="true"></div>
+
+<!-- ── WAYPOINT 3 · Masterclass — 36,000 → 46,000 ft ──
+     This one ends the arc on purpose: AI-assisted engineering is the thing
+     being hired for, so it sits at the reader's exit point. It is also the
+     only waypoint whose "who confirmed it" slot the source material answers. -->
+<section id="wp3" data-alt="36000,46000" data-section="Featured work" class="stage px-4 py-16 sm:px-6">
+  <svg class="silo" viewBox="0 0 300 140" aria-hidden="true"><use href="#jet"></use></svg>
+  <div class="stage-inner">
+    <article class="card card-lg stage-card" data-reveal>
+      <p class="eyebrow">Featured 3 of 3 — Lead instructor</p>
+      <h2 class="h2">Vibe Coding Masterclass</h2>
+      <p class="lede mt-4">
+        The fastest way to find out whether you actually understand a practice is to
+        stand in front of a room and teach it.
+      </p>
+
+      <div class="beats">
+        <div class="beat" data-beat="1">
+          <span class="beat-n">1</span>
+          <div>
+            <div class="lab">What the project was</div>
+            <p>
+              A large-scale masterclass on AI-assisted application development, run for a
+              mixed cohort of citizen developers and engineers, and co-delivered with
+              external academic institutions. The syllabus covered prompt-driven
+              development, rapid prototyping and Power Apps deployment.
+            </p>
+            <p><span class="needs-copy">Add: dates, cohort size, or the hard constraint</span></p>
+          </div>
+        </div>
+
+        <div class="beat" data-beat="2">
+          <span class="beat-n">2</span>
+          <div>
+            <div class="lab">What I did</div>
+            <p>
+              I organised and led it. I wrote the training materials and the hands-on labs,
+              sequenced the syllabus, coordinated delivery with the external academic
+              partners, and taught the sessions.
+            </p>
+            <p><span class="needs-copy">Add: one obstacle you handled alone</span></p>
+          </div>
+        </div>
+
+        <div class="beat" data-beat="3">
+          <span class="beat-n">3</span>
+          <div>
+            <div class="lab">What changed</div>
+            <dl class="evi">
+              <div>
+                <dt>What exists now</dt>
+                <dd>
+                  A written syllabus and a set of hands-on labs that outlast the event, and
+                  a cohort who have each built something with AI-assisted tooling rather
+                  than read about it.
+                </dd>
+              </div>
+              <div>
+                <dt>Who confirmed it</dt>
+                <dd>
+                  External academic institutions co-delivered the training rather than
+                  attending it. Internally the masterclass was recognised in PPCoE updates,
+                  and attendance held across the cohort.
+                </dd>
+              </div>
+              <div>
+                <dt>What I’d do differently</dt>
+                <dd><span class="needs-copy">Add: one honest line</span></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ══════════ DOCUMENT MODE ══════════
+     One opaque bed carries governance, all projects and experience. Its top
+     and bottom edges feather into the sky, so there is exactly one seam
+     instead of three, and the canvas behind it is invisible for the whole
+     of the long-form reading. -->
+<div class="doc-bed">
+
+<!-- ══════════ 03 · SECURITY & GOVERNANCE — 46,000 → 50,000 ft ══════════
+     This work won no waypoint but is the rarest signal on the page: the same
+     person drives AI adoption and reviews its risk. Paired with the
+     masterclass directly above, that is the point being made. -->
+<section id="security" data-alt="46000,50000" data-section="Security" class="relative px-4 py-20 sm:px-6">
+  <div class="mx-auto max-w-[1120px]">
+    <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr]" data-reveal>
+      <div>
+        <p class="eyebrow">Security &amp; governance</p>
+        <h2 class="h2">I also review what I <span class="on-accent">advocate.</span></h2>
+      </div>
+      <div class="card p-6 sm:p-8">
+        <p class="m-0 max-w-[58ch]">
+          Pushing an organisation towards AI-assisted development and then signing off on
+          its security are usually two different people. On the FlightSim Code App and the
+          Project Management Tracker they were the same one — I acted as Security Reviewer
+          on both.
+        </p>
+        <ul class="feat mt-5">
+          <li>Security code review and repository review before deployment</li>
+          <li>Vulnerability scanning and assessment</li>
+          <li>Deployment validation and governance compliance checks</li>
+          <li>Worked with the cyber-defence team to clear an open-source documentation
+              tool for citizen-developer use, rather than routing around the policy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 04 · ALL PROJECTS — 50,000 → 56,000 ft ══════════ -->
+<section id="log" data-alt="50000,56000" data-section="All projects" class="relative px-4 py-20 sm:px-6 lg:py-28">
+  <div class="mx-auto max-w-[1120px]">
+
+    <div class="mb-7" data-reveal>
+      <p class="eyebrow">All projects</p>
+      <h2 class="h2">Twenty, filterable two ways.</h2>
+    </div>
+
+    <!-- v1 ran two filter systems here: a six-card deck AND a button row.
+         Both axes are now the same pill. The categories sit on one axis —
+         scope of ownership, ordered strongest-first — and organisation is a
+         separate axis: a poly CCA app and an RSAF system can share a
+         capability while obviously differing in stakes, and showing that is
+         stronger than hiding the earlier work. The two filters combine. -->
+    <div class="grid gap-3" data-reveal>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
+        <button type="button" class="pill" data-cat="simulation" data-claim="I can model a domain I wasn’t trained in." aria-pressed="false" disabled>
+          Simulation &amp; decision support <span class="pill-count">— in preparation</span>
+        </button>
+        <button type="button" class="pill" data-cat="platform" data-claim="I own systems, not features." aria-pressed="false" disabled>
+          Full-stack platforms <span class="pill-count">— in preparation</span>
+        </button>
+        <button type="button" class="pill" data-cat="enterprise" data-claim="I build with governance — access control, audit trails, approvals." aria-pressed="false">
+          Enterprise applications <span class="pill-count">1</span>
+        </button>
+        <button type="button" class="pill" data-cat="automation" data-claim="I ship a working process in days, not quarters." aria-pressed="false">
+          Process automation <span class="pill-count">8</span>
+        </button>
+        <button type="button" class="pill" data-cat="enablement" data-claim="I scale the practice past myself." aria-pressed="false">
+          Developer enablement &amp; R&amp;D <span class="pill-count">7</span>
+        </button>
+        <button type="button" class="pill" data-cat="competition" data-claim="Assessed by somebody other than me." aria-pressed="false">
+          Competitions &amp; credentials <span class="pill-count">4</span>
+        </button>
+      </div>
+
+      <!-- The claim each category makes. This is the content that justified
+           v1's six-card deck; the deck is gone, the content is not. -->
+      <p id="catClaim">Six groupings on one axis: how much of the system was mine to own.</p>
+
+      <div class="mt-1 flex flex-wrap items-center gap-2" role="group" aria-label="Filter projects by organisation">
+        <button type="button" class="pill" data-org="all" aria-pressed="true">All entries</button>
+        <button type="button" class="pill" data-org="RAiD" aria-pressed="false">RSAF (RAiD)</button>
+        <button type="button" class="pill" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
+        <button type="button" class="pill" data-org="Freelance" aria-pressed="false">Freelance</button>
+        <span class="num ml-auto" id="logCount" role="status">Showing all 20</span>
+      </div>
+    </div>
+
+    <!-- Gap-separated rounded rows. v1's hairline-ruled list was the squarest
+         element on the page and it held 20 of the 20 entries. -->
+    <div class="log-list mt-6" id="logList">
+
+      <!-- ── ENTERPRISE APPLICATIONS ── -->
+      <details class="log-row" data-org="RAiD" data-cat="enterprise">
+        <summary>
+          <span class="lt">RAiD Facility Booking System</span>
+          <span class="tag">Enterprise</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>A centralised facility reservation platform on Microsoft Dataverse and React, built as Developer and Product Owner.</p>
+          <div><div class="lab mb-1.5">What it does</div>
+            <ul class="feat">
+              <li>Role-based access control across four permission tiers</li>
+              <li>Approval workflows with end-to-end visibility</li>
+              <li>Real-time availability and conflict detection</li>
+              <li>Recurring bookings for repeating schedules</li>
+              <li>Audit logging on reservation records</li>
+              <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
+            </ul></div>
+          <div><div class="lab mb-1.5">What changed</div><p class="note">Designed and implemented end-to-end with specs-driven development — frontend, API integration and data model — in two days, and demonstrated it to stakeholders in a dedicated session.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span><span>Gemini 3.1</span><span>Claude Opus 4.6</span><span>GitHub Copilot</span></div></div>
+        </div>
+      </details>
+
+      <!-- ── PROCESS AUTOMATION ── -->
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary>
+          <span class="lt">ASV Logbook &amp; Maintenance Web App</span>
+          <span class="tag">Automation</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Customised web-based app for Air Specialist Vehicle (ASV) usage and maintenance records to track upcoming vehicle servicing status.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Explored Lovable to create a fullstack app swiftly after proving functions in PowerApps. Navigated license issues and used PowerDocu to create documentation for reliable prompting.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary>
+          <span class="lt">Singapore Airshow 2026 Charity Auction</span>
+          <span class="tag">Automation</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Auction tool allowing RSAF personnel to bid for charity bears as part of a charity movement for the Singapore Airshow.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt how to make use of FormSG and Plumber (Open Government Products) to safely store sensitive data and user contact details on the Internet considering policy constraints.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>FormSG</span><span>Plumber</span><span>SharePoint</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary>
+          <span class="lt">Flight Simulator Scheduling System</span>
+          <span class="tag">Automation</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Scheduling system for reserving simulator resources for training and assessment — online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps</span><span>GitHub Copilot</span><span>Google AI Studio</span><span>Lovable</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="automation">
+        <summary>
+          <span class="lt">SSB Loan Tracking System</span>
+          <span class="tag">Automation</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>End-to-end workflow for SSB to track and approve the loaning of their logistic items.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>FormSG</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Freelance" data-cat="automation">
+        <summary>
+          <span class="lt">Workplace Check In/Out App</span>
+          <span class="tag">Automation</span><span class="lorg">Freelance</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Developed a PowerApp to simplify and automate the administrative workflow for duty management for duty personnel in an RSAF unit.</p>
+          <div><div class="lab mb-1.5">What it does</div>
+            <ul class="feat">
+              <li>Geofencing for check in/out at designated locations</li>
+              <li>Logistics accountability and tracking</li>
+              <li>Noticeboards for centralised announcements</li>
+              <li>Hand-over features facilitating smooth transitions</li>
+            </ul></div>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span><span>Digitalisation</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="automation">
+        <summary>
+          <span class="lt">App Development for Lead Ambassadors CCA</span>
+          <span class="tag">Automation</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Designed an application as a secretary to help automate monthly meeting attendance as well as update databases.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Agile App Dev</span><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="automation">
+        <summary>
+          <span class="lt">App Development for Mindsports CCA</span>
+          <span class="tag">Automation</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Developed an app for Mindsports club which automates all workflows, taking attendance, and monitoring various logistics.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>Agile App Dev</span><span>UI Design</span><span>Data Visualization</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="automation">
+        <summary>
+          <span class="lt">App Development for Poly Forum 2024 (SYLP)</span>
+          <span class="tag">Automation</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span><span>Agile App Dev</span></div></div>
+        </div>
+      </details>
+
+      <!-- ── DEVELOPER ENABLEMENT & R&D ──
+           The policy approval leads this group deliberately: it is upstream of
+           every Code Apps project on this page. Before it, none of them could
+           have been deployed at all. -->
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary>
+          <span class="lt">Code Apps Policy Approval (M365 Tenant)</span>
+          <span class="tag">Enablement</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Led the case to unlock Microsoft Power Apps Code Apps across the organisation’s M365 environment, working through the relevant cybersecurity authorities within MINDEF.</p>
+          <div><div class="lab mb-1.5">What changed</div><p class="note">Every Code Apps project in this portfolio was built after this approval. Before it, Code Apps could not be deployed in the environment at all.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Power Platform Governance</span><span>M365 Administration</span><span>Security Review</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary>
+          <span class="lt">R&amp;D for Vibe-Coding Code Apps</span>
+          <span class="tag">Enablement</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Explored AI vibe-coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary>
+          <span class="lt">Documentation Generation Tool (PowerDocu)</span>
+          <span class="tag">Enablement</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps for personal use.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>GitHub</span><span>PowerDocu</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary>
+          <span class="lt">SAGE Copilot AI</span>
+          <span class="tag">Enablement</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Integrating SAGE’s ME5 Delta Agent into Copilot for training purposes using open-source models.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Navigated license constraints creatively to replicate GPT-4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary>
+          <span class="lt">1-Day Power Platform Bootcamp (815 SQN)</span>
+          <span class="tag">Enablement</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Lovable</span><span>Power Platform</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
+        <summary>
+          <span class="lt">Comprehensive Guide for New Interns</span>
+          <span class="tag">Enablement</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Developed a guide using PowerLib, Google AI Studio, and Lovable to expedite learning curves for the PPCoE team.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Documentation</span><span>Mentoring</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="enablement">
+        <summary>
+          <span class="lt">Google Colab Text-to-Flowchart Bot</span>
+          <span class="tag">Enablement</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Created an AI tool using Python and ChatGPT 3.5 that generates flowcharts from text.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Explored prompt engineering and integrating Python libraries together in a single notebook for workflow tools.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Python</span><span>OpenAI</span><span>Flowgiston</span></div></div>
+        </div>
+      </details>
+
+      <!-- ── COMPETITIONS & CREDENTIALS ── -->
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary>
+          <span class="lt">National AI Student Challenge 2025 — Huawei Track</span>
+          <span class="tag">Competition</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>Cloud Tech</span><span>MLOps</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary>
+          <span class="lt">Whitehacks 2025 (Cybersecurity CTF)</span>
+          <span class="tag">Competition</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Cybersecurity CTF competition organised by SMU. Used tools such as Wireshark, John the Ripper, and Z-steg.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary>
+          <span class="lt">Iron Viz Student Edition</span>
+          <span class="tag">Competition</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+        <summary>
+          <span class="lt">World Skills Training (Aircraft Maintenance)</span>
+          <span class="tag">Competition</span><span class="lorg">Temasek Poly</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Acquired technical skills essential for aircraft maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
+          <div><div class="lab mb-1.5">What I learned</div><p class="note">Learnt riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
+          <div><div class="lab mb-1.5">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span><span>Stress Management</span></div></div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 05 · EXPERIENCE — 56,000 → 60,000 ft ══════════ -->
+<section id="record" data-alt="56000,60000" data-section="Experience" class="relative px-4 py-20 sm:px-6 lg:py-28">
+  <div class="mx-auto max-w-[980px]">
+
+    <div class="mb-10" data-reveal>
+      <p class="eyebrow">Experience</p>
+      <h2 class="h2">Transition path.</h2>
+    </div>
+
+    <div class="relative pl-8" id="timeline">
+      <span class="tl-line" aria-hidden="true"></span>
+      <span class="tl-fill" id="tlFill" aria-hidden="true"></span>
+
+      <div class="relative pb-12" data-reveal>
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="num mb-1.5">Oct 2025 — Present · 7 months · Singapore</div>
+        <h3 class="h3">Power Platform Developer, Student Intern</h3>
+        <div class="mt-1 text-[.9375rem] font-medium on-data">RAiD (RSAF Agile innovation Digital)</div>
+        <p class="mt-3 max-w-[64ch]">
+          Specialising in Power Apps and Power Platform within the PPCoE team. Focus on
+          designing digital solutions that streamline processes, improve data quality,
+          and support data-driven decision-making.
+        </p>
+      </div>
+
+      <div class="relative pb-12" data-reveal>
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="num mb-1.5">Dec 2023 — Present · Singapore</div>
+        <h3 class="h3">PowerApp / Power Platform Developer</h3>
+        <div class="mt-1 text-[.9375rem] font-medium on-data">Temasek Polytechnic</div>
+        <p class="mt-3 max-w-[64ch]">
+          Self-taught PowerApps to automate admin work for various CCAs, enhancing club efficiency.
+        </p>
+      </div>
+
+      <div class="relative pb-12" data-reveal>
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="num mb-1.5">Dec 2024 — Oct 2025 · Singapore</div>
+        <h3 class="h3">Software Engineer (Power Platform)</h3>
+        <div class="mt-1 text-[.9375rem] font-medium on-data">Freelance</div>
+        <p class="mt-3 max-w-[64ch]">
+          Leveraged low-code tools like PowerApps and Power Automate to develop tailored
+          automation solutions.
+        </p>
+      </div>
+
+      <div class="relative" data-reveal>
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="num mb-1.5">Apr 2021 — Jan 2023 · Singapore</div>
+        <h3 class="h3">Freelance / Mini Start-Up</h3>
+        <div class="mt-1 text-[.9375rem] font-medium on-data">Personal Company</div>
+        <p class="mt-3 max-w-[64ch]">
+          Founded a business in the anime industry animating 2D models using Live2D Cubism,
+          building a portfolio with low-code platforms and practising SEO strategies.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<!-- ══════════ DOCUMENT MODE ENDS ══════════ -->
+
+<!-- ══════════ 06 · CONTACT — 60,000 → 62,000 ft ══════════
+     The one section with no opaque bed: it sits directly on .band-space and
+     inverts instead. Every pairing inside it is checked against the LIGHTER
+     end of that gradient, #2A4E7A, which is the worst case. -->
+<section id="contact" data-alt="60000,62000" data-section="Get in touch" class="invert relative px-4 py-28 sm:px-6 lg:py-36">
+  <div class="mx-auto max-w-[1120px]">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.1fr_.9fr]">
+      <div data-reveal>
+        <p class="eyebrow">Get in touch</p>
+        <h2 class="h1">Ready for what’s <span class="on-accent">next.</span></h2>
+        <p class="lede mt-6 max-w-[48ch] text-[#DCE8F4]">
+          Open to AI engineering and software development opportunities.
+          Send me a note — I usually reply within a day.
+        </p>
+      </div>
+      <div class="card p-6 sm:p-8" data-reveal>
+        <a class="btn btn-signal w-full justify-center" href="mailto:Manfredsiew@hotmail.sg">Email me</a>
+        <dl class="mt-6 grid gap-3 text-[.9375rem]">
+          <div class="flex flex-wrap items-baseline gap-x-3">
+            <dt class="text-[#BFD4E8]">Email</dt>
+            <dd class="m-0"><a href="mailto:Manfredsiew@hotmail.sg" class="underline underline-offset-4">Manfredsiew@hotmail.sg</a></dd>
+          </div>
+          <div class="flex flex-wrap items-baseline gap-x-3">
+            <dt class="text-[#BFD4E8]">LinkedIn</dt>
+            <dd class="m-0"><a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">manfred-siew</a></dd>
+          </div>
+          <div class="flex flex-wrap items-baseline gap-x-3">
+            <dt class="text-[#BFD4E8]">Location</dt>
+            <dd class="m-0">Singapore</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="invert relative z-10 px-4 pb-10 sm:px-6">
+  <div class="mx-auto flex max-w-[1120px] flex-wrap justify-between gap-3 border-t border-white/20 pt-8 text-[.875rem] text-[#BFD4E8]">
+    <span>© 2026 Manfred Siew</span>
+    <span>Aerospace Engineering Diploma · Temasek Polytechnic</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.classList.add('js');
+
+  /* ─────────── 1. PROJECT FILTER (always on — content first) ─────────── */
+  (function () {
+    var orgBtns = document.querySelectorAll('[data-org]');
+    var catBtns = document.querySelectorAll('[data-cat][data-claim]');
+    var rows = document.querySelectorAll('.log-row');
+    var count = document.getElementById('logCount');
+    var claim = document.getElementById('catClaim');
+    var DEFAULT_CLAIM = claim ? claim.textContent : '';
+
+    /* Two independent axes — organisation and category — combined with AND.
+       Held as state rather than read off the DOM at click time, so neither
+       control clobbers the other's selection. */
+    var org = 'all', cat = 'all';
+
+    function apply() {
+      var shown = 0;
+      rows.forEach(function (r) {
+        var show = (org === 'all' || r.dataset.org === org) &&
+                   (cat === 'all' || r.dataset.cat === cat);
+        r.hidden = !show;
+        if (show) shown++;
+      });
+      /* A combination can legitimately match nothing — Freelance holds one
+         entry, and it is not a competition. Say so, rather than leaving the
+         reader staring at empty space and assuming the page broke. */
+      count.textContent = shown === 0
+        ? 'No entries match — try another pair'
+        : shown === rows.length
+          ? 'Showing all ' + rows.length
+          : 'Showing ' + shown + ' of ' + rows.length;
+      Flight.remeasure();
+    }
+
+    /* The claim line swaps rather than snapping. Text is replaced at the
+       midpoint of a 180ms opacity fade, so the reader never sees the change
+       land — that is the whole difference between "smooth" and "fast". */
+    function setClaim(text) {
+      if (!claim || claim.textContent === text) return;
+      if (reduce) { claim.textContent = text; return; }
+      claim.classList.add('swapping');
+      setTimeout(function () {
+        claim.textContent = text;
+        claim.classList.remove('swapping');
+      }, 180);
+    }
+
+    orgBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        orgBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        btn.setAttribute('aria-pressed', 'true');
+        org = btn.dataset.org;
+        apply();
+      });
+    });
+
+    catBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        // Clicking a selected pill again clears the category — the row has no
+        // "all" tile, so the selected pill is its own escape hatch.
+        var next = btn.getAttribute('aria-pressed') === 'true' ? 'all' : btn.dataset.cat;
+        catBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        if (next !== 'all') btn.setAttribute('aria-pressed', 'true');
+        cat = next;
+        setClaim(next === 'all' ? DEFAULT_CLAIM : btn.dataset.claim);
+        apply();
+      });
+    });
+  })();
+
+  /* ═══════════ 2. THE FLIGHT DRIVER ═══════════
+     One number drives this page. Scroll position resolves to an ALTITUDE by
+     finding which section the middle of the viewport sits in and
+     interpolating across it, using the data-alt pair that section declares
+     in the markup. The sky and the 3D camera are pure functions of that
+     altitude and subscribe here. There is no second timeline that can drift
+     out of step with this one.
+
+     Altitude is monotonic by construction, not by hope: sections sort by
+     measured page offset, each one's start altitude equals the previous
+     one's end, and the gaps between sections HOLD rather than interpolate. */
+  var Flight = (function () {
+    var CEIL = 62000;
+    var legs = [], subs = [], measured = false, queued = false;
+    var state = { alt: 0, p: 0, top: 0, section: 'Home' };
+
+    function measure() {
+      legs = [];
+      document.querySelectorAll('[data-alt]').forEach(function (el) {
+        var a = el.dataset.alt.split(',');
+        var box = el.getBoundingClientRect();
+        legs.push({
+          top: box.top + window.scrollY,
+          h: Math.max(1, box.height),
+          a0: parseFloat(a[0]), a1: parseFloat(a[1]),
+          name: el.dataset.section || ''
+        });
+      });
+      legs.sort(function (x, y) { return x.top - y.top; });
+      measured = legs.length > 0;
+    }
+
+    /* Walk the legs in page order. Three cases: above this leg (we are in a
+       gap, so hold whatever the last leg ended at), inside it (interpolate),
+       or past it (adopt its end altitude and continue). */
+    function resolve(y) {
+      if (!measured) return { alt: 0, name: 'Home' };
+      var alt = legs[0].a0, name = legs[0].name || 'Home';
+      for (var i = 0; i < legs.length; i++) {
+        var L = legs[i];
+        if (y < L.top) break;
+        if (y < L.top + L.h) {
+          alt = L.a0 + (L.a1 - L.a0) * ((y - L.top) / L.h);
+          if (L.name) name = L.name;
+          break;
+        }
+        alt = L.a1;
+        if (L.name) name = L.name;
+      }
+      return { alt: alt, name: name };
+    }
+
+    function tick() {
+      queued = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var top = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      /* The reference point slides from the middle of the viewport at the top
+         of the page to its bottom edge at the end. Reading from the middle is
+         right while scrolling, but it means the last half-screen of the final
+         section is never the reference, so the climb would stop short of the
+         ceiling. Both terms rise with scrollY, so this stays monotonic. */
+      var r = resolve(window.scrollY + window.innerHeight * (0.5 + 0.5 * top));
+      state.alt = r.alt;
+      state.section = r.name;
+      state.p = Math.min(1, Math.max(0, r.alt / CEIL));
+      state.top = top;
+      for (var i = 0; i < subs.length; i++) subs[i](state);
+    }
+    function request() { if (!queued) { queued = true; requestAnimationFrame(tick); } }
+
+    measure();
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', function () { measure(); request(); });
+    window.addEventListener('load', function () { measure(); request(); });
+    /* A <details> opening changes every offset below it. Capture phase,
+       because toggle does not bubble. */
+    document.addEventListener('toggle', function () { measure(); request(); }, true);
+
+    return {
+      state: state,
+      remeasure: function () { measure(); request(); },
+      subscribe: function (fn) { subs.push(fn); fn(state); }
+    };
+  })();
+
+  /* The 3D stage lives in a separate <script type="module"> because it needs
+     top-level await for the dynamic three.js import. The seam is one-way:
+     the module reads the driver and never writes to it. */
+  window.Flight = Flight;
+
+  /* 2a. SKY — three bands, fade-in only. Cross-fading two layers leaves a
+         frame where both are partly transparent and the page shows through
+         the seam; stacking additively cannot gap. */
+  (function () {
+    var RAMP = [
+      ['ground', -1,        0],   // always fully on; the base layer
+      ['cruise', 10000, 36000],
+      ['space',  46000, 58000]
+    ];
+    var els = RAMP.map(function (r) { return document.querySelector('[data-band="' + r[0] + '"]'); });
+    Flight.subscribe(function (s) {
+      for (var i = 0; i < RAMP.length; i++) {
+        if (!els[i]) continue;
+        var o = (s.alt - RAMP[i][1]) / (RAMP[i][2] - RAMP[i][1]);
+        o = Math.min(1, Math.max(0, o)).toFixed(3);
+        if (els[i].style.opacity !== o) els[i].style.opacity = o;
+      }
+    });
+  })();
+
+  /* ─────────── 3. REVEALS ───────────
+     IntersectionObserver, not a scroll library. The default state is visible
+     (see the CSS): this only adds a class, so a failure here leaves a fully
+     readable page rather than an empty one. */
+  (function () {
+    var els = document.querySelectorAll('[data-reveal]');
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('shown'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('shown');
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* ─────────── 4. TIMELINE RAIL ───────────
+     scaleY on a transform-origin:top element. A transform, not a height. */
+  (function () {
+    var fill = document.getElementById('tlFill');
+    var tl = document.getElementById('timeline');
+    if (!fill || !tl || reduce) { if (fill) fill.style.transform = 'scaleY(1)'; return; }
+    function draw() {
+      var box = tl.getBoundingClientRect();
+      var start = window.innerHeight * .72;
+      var p = (start - box.top) / Math.max(1, box.height * .82);
+      fill.style.transform = 'scaleY(' + Math.min(1, Math.max(0, p)).toFixed(4) + ')';
+    }
+    window.addEventListener('scroll', draw, { passive: true });
+    window.addEventListener('resize', draw);
+    draw();
+  })();
+
+  /* ─────────── 5. COUNTERS ───────────
+     The number is already correct in the markup; this only replays it. If the
+     script fails the stats still read 20 / 2 / 35 / 3. */
+  (function () {
+    var els = document.querySelectorAll('[data-count]');
+    if (reduce || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target, target = parseFloat(el.dataset.count) || 0, t0 = null;
+        io.unobserve(el);
+        function step(t) {
+          if (t0 === null) t0 = t;
+          var k = Math.min(1, (t - t0) / 1100);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+          if (k < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.6 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     THE SIGNATURE · 3D STAGE
+
+     An aircraft that climbs as you scroll, and whose camera move carries the
+     argument rather than decorating it: at each waypoint the camera goes WIDE
+     (the whole airframe — what the project was), PUSHES IN on the cockpit
+     (one component — what I did), then PULLS BACK AND CLIMBS (small against a
+     large sky — what changed). The reader learns that grammar once at FUEL
+     Up; the next two waypoints are then legible without being explained.
+
+     This is now the ONLY loud element on the page, which is what makes it
+     read as a signature rather than as one more competing system.
+
+     The aircraft is built procedurally from primitives rather than loaded
+     from a GLB: the licence and long-term availability of a third-party
+     model cannot be verified from here, and hotlinking one would put a
+     silent dependency on someone else's CDN into a file whose whole premise
+     is that it is self-contained. Procedural costs 0 bytes and has no licence
+     question. If a real GLB is wanted later, buildAircraft() is the only
+     function that has to change.
+
+     Everything here is a pure function of Flight.state.alt. No second clock.
+     ══════════════════════════════════════════════════════════════════════ -->
+<script type="module">
+const root = document.documentElement;
+
+/* ── TIER GATE ────────────────────────────────────────────────────────
+   Decided BEFORE anything is fetched, so a Tier 0 device never pays a
+   single byte for a feature it will not see. Reduced motion is Tier 0 by
+   definition, not by coincidence: the point of the setting is that the
+   camera should not move. */
+function disqualify() {
+  const why = [];
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) why.push('prefers-reduced-motion');
+  const c = navigator.connection;
+  if (c && c.saveData) why.push('save-data');
+  if (navigator.deviceMemory && navigator.deviceMemory < 4) why.push('device-memory<4');
+  try {
+    const probe = document.createElement('canvas');
+    if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) why.push('no-webgl');
+  } catch (e) { why.push('no-webgl'); }
+  return why;
+}
+
+function tierZero(reason) {
+  root.classList.add('tier-0');
+  root.classList.remove('tier-2');
+  const el = document.getElementById('scene');
+  if (el) el.style.display = 'none';
+  console.info('[stage] Tier 0 — ' + reason + '. Flat silhouettes; nothing fetched.');
+}
+
+const blocked = disqualify();
+if (blocked.length) { tierZero(blocked.join(', ')); }
+else {
+  let THREE;
+  try {
+    /* WebGL is present but the library may still fail or hang. Race the
+       import against a 5s budget and degrade silently. */
+    THREE = await Promise.race([
+      import('three'),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('5s timeout')), 5000))
+    ]);
+  } catch (err) {
+    tierZero('three.js unavailable (' + err.message + ')');
+  }
+
+  if (THREE) try { start(THREE); } catch (err) { tierZero('stage failed to start: ' + err.message); }
+
+  function start(THREE) {
+    const canvas = document.getElementById('scene');
+    const scene = new THREE.Scene();
+
+    /* Model space: nose points +Z, up is +Y, length ~6 units, origin at the
+       wing root so the aircraft rotates about something plausible. */
+    const SKIN  = new THREE.MeshStandardMaterial({ color: 0xDCE2E9, roughness: .55, metalness: .18 });
+    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xC2410C, roughness: .48, metalness: .1  });
+    /* Low metalness on the canopy, deliberately. Without an environment map a
+       metallic surface has nothing to reflect and renders as a black blob. A
+       tinted dielectric picks up the hemisphere light instead and reads as
+       glass without needing anything to reflect. */
+    const GLASS = new THREE.MeshStandardMaterial({ color: 0x33547D, roughness: .2, metalness: .08,
+                                                   transparent: true, opacity: .82 });
+    const DARK  = new THREE.MeshStandardMaterial({ color: 0x5A6675, roughness: .68, metalness: .3  });
+
+    /* Bevelled, not flat-cut. The brief asked for round over square and that
+       applies to the signature too: a small bevel gives every wing and fin
+       edge a highlight to catch, which is what stops the airframe reading as
+       folded cardboard. It costs a few hundred triangles. */
+    function plate(pts, thickness, mat) {
+      const s = new THREE.Shape();
+      s.moveTo(pts[0][0], pts[0][1]);
+      for (let i = 1; i < pts.length; i++) s.lineTo(pts[i][0], pts[i][1]);
+      s.closePath();
+      const g = new THREE.ExtrudeGeometry(s, {
+        depth: thickness, bevelEnabled: true,
+        bevelThickness: .018, bevelSize: .018, bevelSegments: 2
+      });
+      return new THREE.Mesh(g, mat);
+    }
+
+    function buildAircraft() {
+      const jet = new THREE.Group();
+
+      // Fuselage: a lathe profile spun about Y, then tipped to lie along Z.
+      // 34 segments rather than 26 — the silhouette is the thing being looked
+      // at now, so faceting on the barrel is worth the extra triangles.
+      const profile = [[0,0],[.26,.15],[.34,.9],[.38,2.2],[.38,3.4],[.33,4.4],[.24,5.2],[.12,5.75],[0,6]]
+        .map(p => new THREE.Vector2(p[0], p[1]));
+      const body = new THREE.Mesh(new THREE.LatheGeometry(profile, 34), SKIN);
+      body.geometry.rotateX(Math.PI / 2);          // +Y becomes +Z: nose forward
+      body.geometry.translate(0, 0, -3);           // origin near the wing root
+      jet.add(body);
+
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(.24, .95, 28), TRIM);
+      cone.geometry.rotateX(Math.PI / 2);
+      cone.geometry.translate(0, 0, 2.55);
+      jet.add(cone);
+
+      /* Wings as one symmetric planform rather than a mirrored pair — a
+         negatively-scaled clone inverts its winding and lights wrong. */
+      const wing = plate([[-3.1,-.85],[0,.85],[3.1,-.85],[3.1,-1.5],[0,-1.35],[-3.1,-1.5]], .13, SKIN);
+      wing.geometry.rotateX(Math.PI / 2);
+      wing.geometry.translate(0, .065, 0);
+      jet.add(wing);
+
+      const tail = plate([[-1.35,-2.7],[0,-2.1],[1.35,-2.7],[1.35,-2.95],[0,-2.6],[-1.35,-2.95]], .1, SKIN);
+      tail.geometry.rotateX(Math.PI / 2);
+      tail.geometry.translate(0, .3, 0);
+      jet.add(tail);
+
+      const fin = plate([[-1.55,.28],[-2.35,1.62],[-2.72,1.62],[-2.5,.26]], .1, TRIM);
+      fin.geometry.rotateY(-Math.PI / 2);
+      fin.geometry.translate(.05, 0, 0);
+      jet.add(fin);
+
+      const canopy = new THREE.Mesh(new THREE.SphereGeometry(.34, 24, 16), GLASS);
+      canopy.scale.set(.85, .72, 2.1);
+      canopy.position.set(0, .3, 1.25);
+      jet.add(canopy);
+
+      const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(.3, .24, .55, 24, 1, true), DARK);
+      nozzle.rotation.x = Math.PI / 2;
+      nozzle.position.set(0, 0, -3.1);
+      jet.add(nozzle);
+
+      [-1, 1].forEach(side => {
+        const intake = new THREE.Mesh(new THREE.CylinderGeometry(.19, .19, .9, 18, 1, true), DARK);
+        intake.rotation.x = Math.PI / 2;
+        intake.position.set(side * .44, -.08, .55);
+        jet.add(intake);
+      });
+
+      return jet;
+    }
+
+    const jet = buildAircraft();
+    scene.add(jet);
+
+    /* Ground contact shadow: a soft radial blob, not a shadow map. The single
+       biggest performance saving in the stage — no shadow maps, no
+       post-processing. It only exists to sell "parked on the ramp", so it
+       fades out on climb. */
+    const blobCanvas = document.createElement('canvas');
+    blobCanvas.width = blobCanvas.height = 128;
+    const bctx = blobCanvas.getContext('2d');
+    const grad = bctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(11,20,32,.45)');
+    grad.addColorStop(1, 'rgba(11,20,32,0)');
+    bctx.fillStyle = grad; bctx.fillRect(0, 0, 128, 128);
+    const shadow = new THREE.Mesh(
+      new THREE.PlaneGeometry(9, 5.5),
+      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(blobCanvas), transparent: true, depthWrite: false })
+    );
+    shadow.rotation.x = -Math.PI / 2;
+    scene.add(shadow);
+
+    /* ── LIGHT ────────────────────────────────────────────────────────
+       The hemisphere light's sky colour is the SAME value as the page
+       background at that altitude, relit every time the band ramp moves.
+       That is what makes the aircraft read as lit by the sky the reader is
+       looking at, rather than pasted on top of it. Three stops now, matching
+       the three CSS bands. */
+    const hemi = new THREE.HemisphereLight(0xDDEBF7, 0xF6F8FB, 1.15);
+    scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xFFF4E8, 2.1);
+    sun.position.set(-6, 7, 5);
+    scene.add(sun);
+    const rim = new THREE.DirectionalLight(0x9FD4FF, .5);
+    rim.position.set(5, -2, -6);
+    scene.add(rim);
+
+    const SKY_RAMP = [[0, 0xDDEBF7], [30000, 0x8FBFE9], [58000, 0x12244A]];
+
+    /* ── CAMERA RIG ───────────────────────────────────────────────────
+       A plain keyframe table interpolated on altitude with smoothstep. Not
+       physics, not a spline solver: deterministic, debuggable, and tunable by
+       editing numbers. Every waypoint runs the same three beats, and the
+       push-in always lands on the cockpit — consistency is the point, because
+       it is what teaches the reader that "the camera moves to the cockpit"
+       means "this part was mine".
+
+       `shift` is a lens shift (setViewOffset), not a rotation. It slides the
+       aircraft to the side of the frame the stage card is NOT on, without
+       skewing the perspective. Negative pushes it right.
+
+       Distances are sized off the airframe: it is ~6 units long and ~6.2
+       across, so a wide shot at fov 31 needs roughly 14 units of standoff to
+       frame it with margin, and the push-in needs ~4 units from the cockpit
+       at fov 22 for the canopy to fill the frame. */
+    const ORIGIN  = new THREE.Vector3(0, 0, 0);
+    const COCKPIT = new THREE.Vector3(0, .3, 1.25);
+
+    const CAM = [
+      { a:     0, p:[ 7.5,  1.8,  9.5], look: ORIGIN,  fov: 30, roll:   0, shift: -.14 },
+      { a:  5000, p:[ 8.2,  3.0, 10.5], look: ORIGIN,  fov: 30, roll:   0, shift: -.20 },
+      // ── waypoint 1 ── wide → push-in → pull back and climb
+      { a:  8000, p:[ 8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
+      { a: 12000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
+      { a: 14500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
+      { a: 18000, p:[ 2.0,  8.0, 26.0], look: ORIGIN,  fov: 46, roll:   0, shift: -.12 },
+      // ── waypoint 2 ── mirrored, because its card sits on the right
+      { a: 22000, p:[-8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift:  .20 },
+      { a: 26000, p:[-6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:   4, shift:  .20 },
+      { a: 28500, p:[-4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll:  15, shift:  .20 },
+      { a: 32000, p:[-2.0,  8.2, 27.0], look: ORIGIN,  fov: 46, roll:   0, shift:  .12 },
+      // ── waypoint 3 ──
+      { a: 36000, p:[ 8.6,  2.6, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
+      { a: 40000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
+      { a: 42500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
+      { a: 46000, p:[ 2.0,  9.0, 30.0], look: ORIGIN,  fov: 48, roll:   0, shift: -.08 },
+      // ── document mode: small, still, far back, then out of frame ──
+      { a: 50000, p:[ 1.0, 11.0, 38.0], look: ORIGIN,  fov: 50, roll:   0, shift:    0 },
+      { a: 62000, p:[  .5, 15.0, 52.0], look: ORIGIN,  fov: 52, roll:   0, shift:    0 }
+    ];
+
+    const JET = [
+      { a:     0, p:[0, -.95, 0], r:[  0, 0,  0] },   // on the ground
+      { a:  2000, p:[0, -.95, 0], r:[  0, 0,  0] },
+      { a:  8000, p:[0, -.15, 0], r:[ 12, 0,  0] },   // rotation
+      { a: 18000, p:[0,  .10, 0], r:[  7, 0, -7] },
+      { a: 22000, p:[0,  .10, 0], r:[  6, 0,  7] },
+      { a: 32000, p:[0,  .18, 0], r:[  6, 0, -6] },
+      { a: 36000, p:[0,  .18, 0], r:[  5, 0,  5] },
+      { a: 46000, p:[0,  .28, 0], r:[  6, 0,  0] },
+      { a: 62000, p:[0,  .85, 0], r:[ 10, 0,  0] }
+    ];
+
+    const smooth = t => t * t * (3 - 2 * t);
+    const mix = (a, b, t) => a + (b - a) * t;
+
+    function span(table, alt) {
+      if (alt <= table[0].a) return [table[0], table[0], 0];
+      for (let i = 1; i < table.length; i++) {
+        if (alt <= table[i].a) {
+          const A = table[i - 1], B = table[i];
+          return [A, B, smooth((alt - A.a) / (B.a - A.a))];
+        }
+      }
+      const L = table[table.length - 1];
+      return [L, L, 0];
+    }
+
+    function rampColour(alt) {
+      let A = SKY_RAMP[0], B = SKY_RAMP[SKY_RAMP.length - 1], t = 1;
+      for (let i = 1; i < SKY_RAMP.length; i++) {
+        if (alt <= SKY_RAMP[i][0]) {
+          A = SKY_RAMP[i - 1]; B = SKY_RAMP[i];
+          t = (alt - A[0]) / (B[0] - A[0]);
+          break;
+        }
+      }
+      return new THREE.Color(A[1]).lerp(new THREE.Color(B[1]), Math.min(1, Math.max(0, t)));
+    }
+
+    const camera = new THREE.PerspectiveCamera(32, 1, .1, 400);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
+    renderer.setClearAlpha(0);
+
+    let W = 0, H = 0, narrow = false;
+    function resize() {
+      W = window.innerWidth; H = window.innerHeight;
+      narrow = W < 1024;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, narrow ? 1.5 : 2));
+      renderer.setSize(W, H, false);
+      camera.aspect = W / H;
+      dirty = true;
+    }
+
+    const lookAt = new THREE.Vector3();
+    const DEG = Math.PI / 180;
+    let dirty = true, alt = 0;
+
+    function apply(alt, time) {
+      const [c0, c1, ct] = span(CAM, alt);
+      camera.position.set(
+        mix(c0.p[0], c1.p[0], ct),
+        mix(c0.p[1], c1.p[1], ct),
+        mix(c0.p[2], c1.p[2], ct)
+      );
+      lookAt.copy(c0.look).lerp(c1.look, ct);
+      camera.fov = mix(c0.fov, c1.fov, ct);
+      camera.lookAt(lookAt);
+      camera.rotateZ(mix(c0.roll, c1.roll, ct) * DEG);
+
+      /* Lens shift. On wide screens it slides the aircraft horizontally away
+         from the stage card. On narrow screens the card is full width and
+         pinned to the BOTTOM of the viewport instead, so the shift becomes
+         vertical: the aircraft is lifted into the open band of sky above it.
+         v1 answered this case by multiplying opacity by 0.42, which made the
+         signature a ghost on every phone. */
+      const hShift = narrow ? 0 : mix(c0.shift, c1.shift, ct);
+      const vShift = narrow ? .30 : 0;
+      if (hShift === 0 && vShift === 0) camera.clearViewOffset();
+      else camera.setViewOffset(W, H, hShift * W, vShift * H, W, H);
+      camera.updateProjectionMatrix();
+
+      const [j0, j1, jt] = span(JET, alt);
+      jet.position.set(
+        mix(j0.p[0], j1.p[0], jt),
+        mix(j0.p[1], j1.p[1], jt),
+        mix(j0.p[2], j1.p[2], jt)
+      );
+      /* Idle yaw while parked, weighted so it has died out by the time the
+         aircraft rotates. It is the only motion on the page that is not a
+         function of scroll, and it is confined to the ground. */
+      const parked = Math.max(0, 1 - alt / 3000);
+      jet.rotation.set(
+        mix(j0.r[0], j1.r[0], jt) * DEG,
+        (mix(j0.r[1], j1.r[1], jt) + Math.sin(time * .00035) * 11 * parked) * DEG,
+        mix(j0.r[2], j1.r[2], jt) * DEG
+      );
+
+      shadow.position.set(jet.position.x, -1.45, jet.position.z);
+      shadow.material.opacity = Math.max(0, 1 - alt / 4500);
+      shadow.visible = shadow.material.opacity > .01;
+
+      hemi.color.copy(rampColour(alt));
+      /* The sun cools and dims with altitude so the airframe does not stay a
+         bright white cut-out once the sky behind it is near-navy. */
+      sun.intensity = mix(2.1, 1.25, Math.min(1, alt / 60000));
+
+      /* VISIBLE ON FIRST PAINT. v1 held this at zero until 1,500 ft because
+         the hero was the one section with body copy and no opaque bed — so
+         the most expensive element on the page was invisible exactly when a
+         first-time reader is looking hardest. The hero now has its own card,
+         which is what v1's own comment said would buy this back. The canvas
+         fades in over the first 900ms instead of popping. */
+      canvas.style.opacity = '1';
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.Flight.subscribe(s => { alt = s.alt; dirty = true; });
+
+    function frame(time) {
+      // Redraw only when the altitude actually moved, or while the parked
+      // idle yaw is still running. The loop is not permanent by design.
+      if (dirty || alt < 3000) {
+        dirty = false;
+        apply(alt, time);
+        renderer.render(scene, camera);
+      }
+      requestAnimationFrame(frame);
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) dirty = true; });
+
+    root.classList.add('tier-2');
+    canvas.style.transition = 'opacity 900ms cubic-bezier(.23,1,.32,1)';
+    requestAnimationFrame(frame);
+    console.info('[stage] Tier 2 — procedural airframe, ' +
+      scene.children.length + ' scene nodes, no external assets.');
+  }
+}
+</script>
+
+</body>
+</html>
