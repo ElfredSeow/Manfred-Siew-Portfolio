@@ -126,6 +126,12 @@ tailwind.config = {
 html{ scroll-behavior:smooth; scroll-padding-top:7rem; }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
 
+/* Anchor occlusion. The nav pill measures 65px tall with a 1rem top
+   offset (bottom edge at 81px in any viewport from 320-1440px); 6.5rem
+   (104px) clears that with a visible gap so a jumped-to heading never
+   sits under the floating bar. */
+section[id],h2[id]{ scroll-margin-top:6.5rem; }
+
 body{
   margin:0; background:var(--bg); color:var(--body);
   font-family:"Instrument Sans",system-ui,sans-serif;
@@ -209,6 +215,31 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
   border-radius:var(--r-lg); box-shadow:var(--sh-1);
   padding:.75rem 1rem;
 }
+
+/* Skip link. Off-screen until focused, then parked above the nav pill
+   (z-index 60, one above the nav's own z-50) so keyboard focus is never
+   hidden underneath the opaque bar it shares a corner with. */
+.skip{
+  position:absolute; left:-9999px; top:0; z-index:60;
+  background:var(--surface); border:1px solid var(--rule);
+  border-radius:var(--r-pill); padding:.5rem 1rem;
+  color:var(--ink); text-decoration:none; font-weight:600;
+}
+.skip:focus-visible{ left:1rem; top:1rem; }
+
+/* Mobile nav. No hamburger — a horizontally scrollable pill row keeps every
+   section reachable on phones without adding a second interaction pattern. */
+.nav-links{
+  display:flex; gap:.25rem; overflow-x:auto; scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  min-width:0; flex-shrink:1;
+}
+.nav-links::-webkit-scrollbar{ display:none; }
+.nav-links a{ flex:none; }
+
+/* Guard only: the name shrinks before it forces the link row to wrap or
+   push the Contact button off the bar. */
+.nav-name{ flex-shrink:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* ── SURFACES ─────────────────────────────────────────────────────────
    One card recipe, three sizes. No corner ticks, no brackets, no stripes. */
@@ -540,6 +571,8 @@ html.js [data-reveal].shown{
 
 <body>
 
+<a class="skip" href="#wp1">Skip to case studies</a>
+
 <!-- ══════════ ATMOSPHERE ══════════ -->
 <div class="sky" aria-hidden="true">
   <div class="band band-ground" data-band="ground"></div>
@@ -563,8 +596,8 @@ html.js [data-reveal].shown{
      that ground would shift every label's contrast. -->
 <nav class="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6" aria-label="Sections">
   <div class="mx-auto flex max-w-[1120px] items-center gap-4 nav-bar sm:px-5">
-    <a href="#ident" class="text-[1.05rem] font-bold tracking-tight text-ink no-underline">Manfred Siew</a>
-    <div class="ml-auto hidden items-center gap-1 md:flex">
+    <a href="#ident" class="nav-name text-[1.05rem] font-bold tracking-tight text-ink no-underline">Manfred Siew</a>
+    <div class="ml-auto nav-links items-center gap-1">
       <a href="#origin"  class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Start</a>
       <a href="#wp1"     class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Featured</a>
       <a href="#log"     class="rounded-[999px] px-3 py-1.5 text-[.9375rem] text-body no-underline transition-colors duration-200 hover:bg-tint">Projects</a>
