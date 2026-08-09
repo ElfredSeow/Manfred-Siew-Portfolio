@@ -146,7 +146,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
    The sky exists now for exactly one reason: to give the aircraft an
    environment to be lit by and to sit in. It is not a second signature. */
 .sky{ position:fixed; inset:0; z-index:0; pointer-events:none; }
-.band{ position:absolute; inset:0; opacity:0; will-change:opacity; }
+.band{ position:absolute; inset:0; opacity:1; will-change:opacity; }
+html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .band-ground{ opacity:1; background:linear-gradient(#F6F8FB, #DDEBF7); }
 .band-cruise{ background:linear-gradient(#DDEBF7, #8FBFE9); }
 .band-space{  background:linear-gradient(#2A4E7A, #12244A); }
@@ -274,9 +275,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 .pill[aria-pressed="true"]{ background-color:var(--ink); border-color:var(--ink); color:#FFFFFF; }
 /* Two categories hold no published entry yet. An empty filter that silently
    returns nothing reads as a broken control, so it says so instead. */
-.pill:disabled{ cursor:default; color:var(--muted); border-style:dashed; opacity:.75; }
+.pill:disabled{ cursor:not-allowed; color:var(--muted); border-style:dashed; opacity:1; }
 
 .pill-count{ opacity:.68; font-variant-numeric:tabular-nums; }
+.pill:disabled .pill-count{ opacity:1; color:var(--muted); }
 
 /* The claim line. Fades between values rather than snapping. */
 #catClaim{
@@ -461,7 +463,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
    is checked against the LIGHTER end of that gradient, #2A4E7A, which is
    the worst case: paper 7.9 · body-inv 6.8 · accent-inv 4.9 · data-inv 5.4.
    #FF6B1A on that ground is 3.0:1, so it stays a fill here too. */
-.invert{ color:#DCE8F4; }
+.invert{ color:#DCE8F4; background:var(--deep); }
 .invert .h1,.invert .h2,.invert .h3{ color:#FFFFFF; }
 /* #FFC9A3, not #FFB380. The links inside .invert .card hover to this colour,
    and that card composites to #395a83 against the band's lighter end — on
@@ -520,6 +522,12 @@ html.js [data-reveal].shown{
   .btn:active,.pill:active,.log-row summary:active{ transform:none; }
   *{ animation-duration:.001ms!important; animation-iteration-count:1!important;
      transition-duration:.001ms!important; }
+}
+
+@media print{
+  .sky,#scene,canvas{display:none!important}
+  .band,[data-reveal]{opacity:1!important;transform:none!important}
+  .transit{display:none}
 }
 </style>
 </head>
