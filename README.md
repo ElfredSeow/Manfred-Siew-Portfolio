@@ -43,4 +43,4 @@ I leverage an Aerospace Engineering background to bring highly structured, analy
 * **🎯 Mission:** Transforming technical complexity into business value.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/manfred-siew-25b4762aa/)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](YOUR_GITHUB_LINK_HERE)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](https://github.com/ElfredSeow)
