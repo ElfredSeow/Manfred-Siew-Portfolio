@@ -22,7 +22,7 @@ Every task's requirements implicitly include these. They come from the spec's §
 - **No GLB / no external model.** Procedural only (`redesign-v2.html:2289-2293`).
 - **Do not touch** the `CAM` table, the sky ramp, the altitude mapping, or the tier gate. The only permitted edits outside `buildAircraft()` and the materials block are the two `JET` ground keyframes, the shadow plane size, the `#jet` SVG symbol, and the `window.Stage` handle.
 - **No negatively-scaled clones for mirroring** — a negative scale inverts winding and lights wrong (`redesign-v2.html:2411-2412`). Mirror by generating coordinates.
-- **Materials, exact values:** `SKIN` `#5C6675` (roughness .52, metalness .24), `DECK` `#474F5C` (roughness .55, metalness .22), `TRIM` `#B84630` tracks `--accent-strong`, `GLASS` `#33547D` unchanged, `DARK` `#2E3540` (roughness .68, metalness .3), `GLOW_HOT` `#FFB0A5`, `GLOW_EDGE` `#E8685C`.
+- **Materials, exact values:** `SKIN` `#5C6675` (roughness .52, metalness .24), `DECK` `#474F5C` (roughness .55, metalness .22), **no `TRIM`** (removed 2026-08-10 — the ruddervators were its only user and are graphite `SKIN` now; see the spec's §6), `GLASS` `#33547D` unchanged, `DARK` `#2E3540` (roughness .68, metalness .3), `GLOW_HOT` `#FFB0A5`, `GLOW_EDGE` `#E8685C`.
 
 ## File Structure
 
@@ -538,7 +538,7 @@ This is the task that makes `tailless` go green. Everything identifiably twentie
 - Modify: `scripts/verify-airframe.mjs`
 
 **Interfaces:**
-- Consumes: `plate()`, `TRIM`, `DARK`, `SKIN`.
+- Consumes: `plate()`, `DARK`, `SKIN`.
 - Produces: nothing later tasks read by name. Task 7 places its halos NEAR — deliberately not ON — the geometry fixed here. Do not confuse the two sets of numbers: the **inlet mouths** sit at `(±0.52, 0.32, 1.43)` and the **slot nozzle** at `(0, 0.10, −2.45)` with depth 0.35 (aft face −2.625); the **halos** sit slightly proud of those, at `(±0.52, 0.32, 1.46)` and `(0, 0.10, −2.66)`, so the light appears to spill out of the aperture rather than being co-planar with it.
 
 - [ ] **Step 1: Add the propulsion and control-surface checks**
@@ -606,10 +606,14 @@ In the space the deleted blocks left, add:
 
          Built per side rather than mirrored, for the winding reason. The
          shape's [z, y] pairs become fore/aft and height after rotateY, the
-         same construction the old vertical fin used. TRIM keeps the page's
-         orange accent somewhere on the airframe now the nose cone is gone. */
+         same construction the old vertical fin used.
+
+         SKIN, not an accent colour. A saturated surface here projects
+         near-vertical at the low front-quarter beats and reads as a FIN
+         however it is canted, which destroys the tailless statement this
+         airframe exists to make. See the spec's §6. */
       [-1, 1].forEach(side => {
-        const rv = plate([[-0.95, 0], [-1.60, .55], [-1.85, .55], [-1.65, 0]], .08, TRIM);
+        const rv = plate([[-0.95, 0], [-1.60, .55], [-1.85, .55], [-1.65, 0]], .08, SKIN);
         rv.geometry.rotateY(-Math.PI / 2);
         // Cant 35deg outward from vertical: the tip leans away from centre.
         rv.geometry.rotateZ(side * -35 * Math.PI / 180);
@@ -687,7 +691,7 @@ The tailless check goes green: max height drops from 1.62 to 0.48."
 
 **Interfaces:**
 - Consumes: nothing new.
-- Produces: materials `SKIN`, `DECK`, `TRIM`, `GLASS`, `DARK`, and (created here, used in Task 6) `GLOW_HOT`, `GLOW_EDGE`.
+- Produces: materials `SKIN`, `DECK`, `GLASS`, `DARK`, and (created here, used in Task 6) `GLOW_HOT`, `GLOW_EDGE`. There is deliberately no `TRIM`.
 
 - [ ] **Step 1: Add the material and canopy checks**
 
@@ -747,10 +751,11 @@ In `redesign-v2.html`, replace the whole materials block at `redesign-v2.html:23
        what make this safe. */
     const SKIN  = new THREE.MeshStandardMaterial({ color: 0x5C6675, roughness: .52, metalness: .24 });
     const DECK  = new THREE.MeshStandardMaterial({ color: 0x474F5C, roughness: .55, metalness: .22 });
-    /* TRIM is deliberately pinned to --accent-strong (#B84630) — the signature
-       object is meant to carry the page's accent, not its own opinion of one.
-       If --accent-strong ever moves again, move this with it. */
-    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xB84630, roughness: .48, metalness: .1  });
+    /* There is deliberately NO painted accent material here. TRIM (#B84630)
+       used to live at this line and the ruddervators were its only user; that
+       made them read as a vertical fin at the low front-quarter beats. The
+       accent now reaches the airframe only as emitted light, GLOW_HOT and
+       GLOW_EDGE below. See the spec's §6. */
     /* Low metalness on the canopy, deliberately. Without an environment map a
        metallic surface has nothing to reflect and renders as a black blob. A
        tinted dielectric picks up the hemisphere light instead and reads as

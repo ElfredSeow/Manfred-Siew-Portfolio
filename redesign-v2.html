@@ -2488,10 +2488,22 @@ else {
        what make this safe. */
     const SKIN  = new THREE.MeshStandardMaterial({ color: 0x5C6675, roughness: .52, metalness: .24 });
     const DECK  = new THREE.MeshStandardMaterial({ color: 0x474F5C, roughness: .55, metalness: .22 });
-    /* TRIM is deliberately pinned to --accent-strong (#B84630) — the signature
-       object is meant to carry the page's accent, not its own opinion of one.
-       If --accent-strong ever moves again, move this with it. */
-    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xB84630, roughness: .48, metalness: .1  });
+    /* There is deliberately NO painted accent material here any more. TRIM
+       (#B84630, --accent-strong) existed to keep the page's accent somewhere on
+       the airframe once the nose cone was deleted, and the ruddervators were
+       the only thing wearing it. That backfired: as the sole saturated mass on
+       a graphite airframe the ruddervators became the first thing the eye
+       landed on, and at the low front-quarter beats — where they project
+       near-vertical — a reader reads them as A VERTICAL FIN. That is the exact
+       opposite of the tailless statement this airframe's whole silhouette is
+       built to make, so the accent was undercutting the strongest cue on the
+       page in order to appear on it.
+
+       The ruddervators are graphite SKIN now, and the accent reaches the
+       airframe ONLY as emitted light — GLOW_HOT #FFB0A5 and GLOW_EDGE #E8685C
+       below. That is the intended end state, not an oversight: on a dark
+       airframe the accent should read as the aircraft's lights being on, which
+       is what §5.1's halos already do, rather than as paint. */
     /* Low metalness on the canopy, deliberately. Without an environment map a
        metallic surface has nothing to reflect and renders as a black blob. A
        tinted dielectric picks up the hemisphere light instead and reads as
@@ -2631,10 +2643,17 @@ else {
 
          Built per side rather than mirrored, for the winding reason. The
          shape's [z, y] pairs become fore/aft and height after rotateY, the
-         same construction the old vertical fin used. TRIM keeps the page's
-         orange accent somewhere on the airframe now the nose cone is gone. */
+         same construction the old vertical fin used.
+
+         SKIN, not an accent colour. These wore the accent until the day a
+         verification pass looked at the low front-quarter beats and found that
+         a saturated surface projecting near-vertical reads as a fin no matter
+         what its cant angle actually is — the geometry was never wrong, the
+         colour was doing the damage. In graphite they recede into the airframe
+         and read as what they are: small canted tip surfaces. See the
+         materials block for where the accent lives now. */
       [-1, 1].forEach(side => {
-        const rv = plate([[-0.95, 0], [-1.60, .55], [-1.85, .55], [-1.65, 0]], .08, TRIM);
+        const rv = plate([[-0.95, 0], [-1.60, .55], [-1.85, .55], [-1.65, 0]], .08, SKIN);
         rv.geometry.rotateY(-Math.PI / 2);
         // ExtrudeGeometry's depth always runs 0 -> thickness in local space
         // (plus symmetric bevel margin), never centred on the mesh's own

@@ -119,7 +119,8 @@ registers it even when the viewer cannot name it.
 
 - **Canted ruddervators** — two small surfaces at x = ±2.35, z ≈ −1.25, canted 35°
   outward from vertical, span 0.55 and root chord 0.70. Small enough that the silhouette
-  still reads tailless.
+  still reads tailless. **Graphite `SKIN`, never an accent colour** — see §6; a saturated
+  surface here reads as a fin at the low front-quarter beats however it is canted.
 - **Top-mounted DSI inlet bumps** — smooth shoulder bumps at (±0.52, 0.32, 0.95), each
   with a dark forward-facing inlet mouth. Inlets on top, hidden from below.
 - **Slot nozzle** — a flat rectangular exhaust at (0, 0.10, −2.45), 1.05 wide × 0.16 tall.
@@ -161,8 +162,9 @@ is worth, and a warm glow is physically right for exhaust. Approved 2026-08-10.
 **Revised 2026-08-10.** This section originally cited `#C2410C` / `#FF8038` as "the page's
 existing orange accent" — that citation no longer holds. The page has since been re-tinted
 toward the bear-logo palette: `--accent-strong` is now `#B84630` and `--signal` is now the
-coral `#F5837A`, and the airframe's own `TRIM` was updated to match (`redesign-v2.html:2458`).
-The two reasons above are untouched by that move — one accent hue, and a warm colour is still
+coral `#F5837A`, and the airframe's own `TRIM` was updated to match. (`TRIM` has since been
+removed entirely — see §6 — so these two glow constants are now the *only* place the accent
+touches the airframe.) The two reasons above are untouched by that move — one accent hue, and a warm colour is still
 physically right for exhaust — so the author's decision, same day, is that the glow should
 follow the palette rather than freeze at the old hue: `GLOW_HOT` moves to `#FFB0A5` and
 `GLOW_EDGE` to `#E8685C`, both above in the table. These constants are not yet built in
@@ -219,7 +221,7 @@ alpha interaction at all.
 |---|---|---|---|
 | `SKIN` | `#DCE2E9` | `#5C6675` | graphite, roughness .52, metalness .24 |
 | `DECK` | — | `#474F5C` | new; separates the deck from the planform |
-| `TRIM` | `#C2410C` | `#B84630` | tracks `--accent-strong`, which moved in the 2026-08-10 re-tint (see §5's revision note) |
+| `TRIM` | `#C2410C` | **removed** | see below — the ruddervators were its only user and are now `SKIN` |
 | `GLASS` | `#33547D` | unchanged | the low-metalness reasoning at `:2369-2372` still holds — there is still no environment map |
 | `DARK` | `#5A6675` | `#2E3540` | darkened; it is now the surround that makes the glow read |
 
@@ -233,6 +235,23 @@ rather than as a bright cut-out.
 The two are the same decision. A dark airframe is what makes glow read as glow, and real
 glow is what lets the airframe be dark. Hedging either one weakens both. Revised and
 approved 2026-08-10.
+
+**`TRIM` removed, 2026-08-10.** `TRIM` (`#B84630`, tracking `--accent-strong`) existed for
+one reason: to keep the page's accent somewhere on the airframe once the cone nose was
+deleted. Its only user was the canted ruddervators of §4.5. Verification found that this cost
+more than it bought — as the only saturated mass on a graphite airframe the ruddervators drew
+the eye first, and at the low front-quarter camera beats, where they project near-vertical,
+they read as **a vertical fin**. §4.4 calls a tailless airframe "the single most legible
+'this is not a current-generation fighter' statement", so the accent was undercutting the
+strongest cue in the design in order to appear in it. The geometry was never wrong: the cant
+is 35° and `tailless` passes at maxY 0.53. The colour was doing the damage.
+
+The ruddervators are now `SKIN`, which left `TRIM` with no users, so the material is gone
+rather than left dead. **The accent now reaches the airframe only as emitted light** —
+`GLOW_HOT` `#FFB0A5` and `GLOW_EDGE` `#E8685C`, §5. That is the intended end state and not an
+oversight: §5's own argument is that on a dark airframe the accent should read as the
+aircraft's lights being on rather than as paint, and removing the paint is that argument
+carried to its conclusion. The airframe now carries no painted accent at all.
 
 ## 7. Consequential changes
 
