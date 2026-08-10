@@ -354,6 +354,53 @@ async function main() {
     if (ok) pass('tier0_silhouette', detail); else fail('tier0_silhouette', detail);
   }
 
+  // ── HiDPI canvas fit. A <canvas> is a REPLACED element: it has an
+  //    intrinsic size (its width/height ATTRIBUTES), and `position:fixed;
+  //    inset:0` cannot stretch a replaced element the way it stretches a div.
+  //    `renderer.setSize(W, H, false)` passes updateStyle=false, so three.js
+  //    writes the backing-store size into those attributes — W x devicePixelRatio
+  //    — and writes no CSS size at all. At dPR 1 the attribute size happens to
+  //    equal the viewport and everything looks fine; at dPR >= 1.5 the canvas
+  //    lays out at 1.5-2x the viewport, anchored top-left, and the aircraft
+  //    (drawn centred, then pushed right by the lens shift) renders off-screen
+  //    entirely. That is most laptops and effectively every phone.
+  //
+  //    Both the other harnesses run at deviceScaleFactor 1, which is exactly
+  //    why neither caught it — and a `position:fixed` oversized element creates
+  //    no document overflow, so verify-page.mjs's overflow checks stay green
+  //    too. This check therefore has to open its own context at dPR 2. The
+  //    assertion is on the LAID-OUT CSS box, not on the attributes: the
+  //    attributes are supposed to be 2x (that is the whole point of the
+  //    pixel-ratio clamp), the CSS box is what must match the viewport. ──
+  {
+    const VW = 1440, VH = 900;
+    const hd = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 2 });
+    const ph = await hd.newPage();
+    await ph.goto(PAGE_URL);
+    await ph.waitForTimeout(6000);
+    const fit = await ph.evaluate(() => {
+      const c = document.getElementById('scene');
+      const r = c.getBoundingClientRect();
+      return {
+        tier2: document.documentElement.classList.contains('tier-2'),
+        dpr: window.devicePixelRatio,
+        attr: [c.width, c.height],
+        cssBox: [+r.width.toFixed(2), +r.height.toFixed(2)],
+        origin: [+r.left.toFixed(2), +r.top.toFixed(2)],
+        viewport: [window.innerWidth, window.innerHeight],
+      };
+    });
+    await hd.close();
+
+    const dw = Math.abs(fit.cssBox[0] - fit.viewport[0]);
+    const dh = Math.abs(fit.cssBox[1] - fit.viewport[1]);
+    const fitOk = fit.tier2 && dw <= 1 && dh <= 1 &&
+                  Math.abs(fit.origin[0]) <= 1 && Math.abs(fit.origin[1]) <= 1;
+    const fitDetail = { ...fit, widthDelta: +dw.toFixed(2), heightDelta: +dh.toFixed(2), tolerance: 1 };
+    if (fitOk) pass('hidpi_canvas_fit', fitDetail);
+    else fail('hidpi_canvas_fit', { ...fitDetail, note: 'at deviceScaleFactor 2 the canvas must still lay out at the viewport size; a replaced element needs an explicit CSS width/height, inset:0 alone will not stretch it' });
+  }
+
   // ── Camera framing at every CAM keyframe. Not sampled — the spec is
   //    explicit that all sixteen are checked, because the delta is
   //    proportionally wider in plan than the airframe these distances were

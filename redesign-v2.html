@@ -190,8 +190,20 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 
 /* The 3D stage. z-index 2 — above the sky, below every content bed at
    z-10. "No body text over a moving 3D scene" is therefore enforced by
-   stacking order rather than by each new section remembering the rule. */
-#scene{ position:fixed; inset:0; z-index:2; pointer-events:none; opacity:0; }
+   stacking order rather than by each new section remembering the rule.
+
+   width/height 100% are NOT redundant with inset:0. A <canvas> is a
+   REPLACED element: it has an intrinsic size (its width/height attributes,
+   300x150 until scripted), and inset:0 cannot stretch a replaced element
+   the way it stretches a div — the intrinsic size wins. The renderer calls
+   setSize(W, H, false), which writes the BACKING STORE size into those
+   attributes (W x devicePixelRatio) and deliberately writes no CSS size, so
+   without these two declarations the canvas lays out at its backing-store
+   size: at devicePixelRatio 2 that is twice the viewport, anchored
+   top-left, and the aircraft renders entirely off-screen. Held by
+   hidpi_canvas_fit in scripts/verify-airframe.mjs, which runs at dPR 2
+   because at dPR 1 the bug is invisible. */
+#scene{ position:fixed; inset:0; width:100%; height:100%; z-index:2; pointer-events:none; opacity:0; }
 
 /* ── TYPE ─────────────────────────────────────────────────────────────
    Sentence case throughout. There is no uppercase-tracked label anywhere
@@ -2905,6 +2917,13 @@ else {
       W = window.innerWidth; H = window.innerHeight;
       narrow = W < 1024;
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, narrow ? 1.5 : 2));
+      /* updateStyle = false: three.js sizes the backing store only and writes
+         no inline style, because the canvas's CSS box is owned by the
+         `#scene` rule (width/height 100% on a fixed, inset:0 element). That
+         pairing is load-bearing — a canvas is a replaced element, so if the
+         CSS side ever loses its explicit width/height the attribute size
+         becomes the layout size and the stage renders 2x the viewport,
+         off-screen, on every HiDPI display. Change one, change the other. */
       renderer.setSize(W, H, false);
       camera.aspect = W / H;
       dirty = true;
