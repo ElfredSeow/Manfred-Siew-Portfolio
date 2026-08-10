@@ -34,3 +34,6 @@ undefined/
 
 # Claude Code local hooks/config (machine-specific, not shareable)
 .claude/
+
+# Firebase CLI local cache
+.firebase/
