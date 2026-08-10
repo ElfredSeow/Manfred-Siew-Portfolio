@@ -539,7 +539,7 @@ This is the task that makes `tailless` go green. Everything identifiably twentie
 
 **Interfaces:**
 - Consumes: `plate()`, `TRIM`, `DARK`, `SKIN`.
-- Produces: nothing later tasks read by name. Task 7 places halos at the inlet and nozzle coordinates fixed here: inlets at `(±0.52, 0.32, 1.46)`, nozzle at `(0, 0.10, −2.66)`.
+- Produces: nothing later tasks read by name. Task 7 places its halos NEAR — deliberately not ON — the geometry fixed here. Do not confuse the two sets of numbers: the **inlet mouths** sit at `(±0.52, 0.32, 1.43)` and the **slot nozzle** at `(0, 0.10, −2.45)` with depth 0.35 (aft face −2.625); the **halos** sit slightly proud of those, at `(±0.52, 0.32, 1.46)` and `(0, 0.10, −2.66)`, so the light appears to spill out of the aperture rather than being co-planar with it.
 
 - [ ] **Step 1: Add the propulsion and control-surface checks**
 
@@ -728,6 +728,8 @@ And in `main()`, after `canted_ruddervators`:
 Run: `node scripts/verify-airframe.mjs`
 
 Expected: `skin_graphite` FAILS with `dce2e9`. `canopy_profile` FAILS with scale `[0.85, 0.72, 2.1]`. `canopy_on_cockpit` PASSES already — the canopy has always been at `(0, .3, 1.25)`, and this check exists to make sure it *stays* there.
+
+**Do not expect `tailless`'s maxY to drop when you reshape the canopy.** Measurement during Task 4's review established that the tallest point on the airframe is the *ruddervator* at y ≈ 0.554, not the canopy at 0.545. Flattening the canopy moves it to ~0.436 and changes maxY by nothing. The 0.8 threshold has ample margin either way; this note exists only so the number not moving does not read as a failed edit.
 
 - [ ] **Step 3: Replace the materials block**
 
