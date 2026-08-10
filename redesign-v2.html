@@ -731,17 +731,61 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
 
 .hero-actions{ display:flex; flex-wrap:wrap; gap:.75rem; margin-top:2rem; }
 
+/* ── PROFILE CARD ─────────────────────────────────────────────────────
+   Four bands, after an F1 "Driver of the Day" broadcast graphic: role bar,
+   full-bleed portrait, identity, stat strip. The anatomy is borrowed; the
+   volume is not. That card is dark, loud and competes for attention, which
+   is exactly what line 38 of this file forbids anything but the aircraft
+   from doing. So: same skeleton, page's own light register.
+
+   The name is deliberately NOT on this card. The reference's dominant tier
+   is the driver's name, but <h1>Manfred Siew.</h1> sits directly beside
+   this aside. Two display-size names side by side is worse than none, so
+   the middle tier carries WHAT instead of WHO.
+
+   Every horizontal rule here runs edge to edge and dies in the card's own
+   radius. An inset rule with square ends would point at a 90° corner,
+   which line 55 forbids. */
 .hero-portrait{ display:none; margin-inline:auto; width:100%; max-width:330px; }
 @media (min-width:1024px){ .hero-portrait{ display:block; } }
-.portrait-frame{ overflow:hidden; padding:.625rem; }
-/* Radius from the scale: --r-lg is the 22px the crop used to hard-code. */
-.portrait-crop{ aspect-ratio:4/5; overflow:hidden; border-radius:var(--r-lg); background:var(--tint); }
-.portrait-crop img{ width:100%; height:100%; object-fit:cover; }
-.portrait-meta{
-  display:grid; grid-template-columns:auto 1fr; column-gap:1rem; row-gap:.625rem;
-  padding:1rem .75rem .5rem; font-size:.875rem;
+
+/* padding:0 is the whole point — the portrait bleeds to the card's edges.
+   overflow:hidden is what clips it into the --r-xl corners, and is also
+   what lets the role bar and stat strip sit flush against them. */
+.id-card{ overflow:hidden; padding:0; }
+
+.id-role{
+  padding:.875rem 1.25rem;
+  background:var(--tint);
+  /* The only place --sky appears on this page. One hairline of the logo's
+     blue reads as a deliberate mark; the same blue on four edges reads as
+     a border treatment. */
+  border-bottom:2px solid var(--sky);
+  font-size:var(--fs-label); font-weight:500; line-height:1.5;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--data);
 }
-.portrait-meta dt{ color:var(--muted); }
+.id-role span{ display:block; }
+
+/* No border-radius here any more; .id-card's overflow:hidden does the
+   clipping, so the crop must stay square or it would round twice. */
+.portrait-crop{ aspect-ratio:4/5; overflow:hidden; background:var(--tint); }
+.portrait-crop img{ width:100%; height:100%; object-fit:cover; }
+
+.id-meta{ padding:1.125rem 1.25rem; border-top:1px solid var(--line); }
+.id-team{ font-size:1.0625rem; font-weight:600; line-height:1.4; color:var(--ink); }
+.id-edu{ margin-top:.375rem; font-size:.9375rem; color:var(--body); }
+
+.id-stats{ display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); }
+.id-stats > div{ padding:1rem 1.25rem; }
+.id-stats > div + div{ border-left:1px solid var(--line); }
+.id-stat-label{
+  font-size:var(--fs-label); font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--data);
+}
+.id-stat-value{
+  margin-top:.25rem; font-size:2.5rem; font-weight:600; line-height:1;
+  color:var(--ink); font-variant-numeric:tabular-nums;
+}
 
 .hero-orgs{ display:flex; flex-wrap:wrap; align-items:center; gap:.625rem; margin-top:2rem; }
 /* 4.7:1 at the ground gradient's darkest stop — the pairing Task 6 computed
@@ -962,22 +1006,39 @@ html.js [data-reveal].shown{
         </nav>
       </div>
 
-      <!-- Portrait. The four reticle corners and two leader lines are gone;
-           a soft rounded frame replaces them. -->
+      <!-- Profile card. Four bands after an F1 driver card; see the PROFILE
+           CARD block in the stylesheet for why the name is not on it.
+           The two figures are recounted from the live DOM by the
+           stat_strip_integrity check in scripts/verify-page.mjs — this card
+           cannot state a number the project log does not back. -->
       <aside class="hero-portrait" data-reveal aria-label="Profile">
-        <div class="card card-lg portrait-frame">
+        <div class="card card-lg id-card">
+
+          <p class="id-role">
+            <span>Forward Deployed</span> <span>Solution Architect (Intern)</span>
+          </p>
+
           <div class="portrait-crop">
             <img src="public/profile_picture.png" alt="Portrait of Manfred Siew"
                  onerror="this.hidden=true">
           </div>
-          <dl class="portrait-meta">
-            <dt>Role</dt>
-            <dd>Power Platform Developer, Student Intern</dd>
-            <dt>Team</dt>
-            <dd>RAiD · Power Platform Centre of Excellence</dd>
-            <dt>Education</dt>
-            <dd>Aerospace Engineering, TP (graduated)</dd>
-          </dl>
+
+          <div class="id-meta">
+            <p class="id-team">RAiD · Power Platform Centre of Excellence</p>
+            <p class="id-edu">Aerospace Engineering, TP (graduated)</p>
+          </div>
+
+          <div class="id-stats">
+            <div data-stat="projects">
+              <div class="id-stat-label">Projects</div>
+              <div class="id-stat-value">23</div>
+            </div>
+            <div data-stat="organisations">
+              <div class="id-stat-label">Organisations</div>
+              <div class="id-stat-value">4</div>
+            </div>
+          </div>
+
         </div>
       </aside>
 

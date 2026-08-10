@@ -453,6 +453,40 @@ async function main() {
     await page.close();
   }
 
+  // ── Check 10: the stat strip cannot state a number the page cannot back ──
+  //
+  // Section 4 of docs/redesign-v2-outstanding-work.md lists six figures a
+  // panel cannot check. The card must never become a seventh. Each stat
+  // carries data-stat naming what it counts; this recounts it from the live
+  // DOM and compares. If the author adds a project, this check fails until
+  // the card is updated — which is the intended behaviour.
+  {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    await page.goto(PAGE_URL);
+    const stats = await page.evaluate(() => {
+      const counted = {
+        projects: document.querySelectorAll('.log-row').length,
+        organisations: new Set(
+          [...document.querySelectorAll('.log-row[data-org]')].map((el) => el.dataset.org)
+        ).size,
+      };
+      const stated = {};
+      for (const el of document.querySelectorAll('.id-stats [data-stat]')) {
+        const v = el.querySelector('.id-stat-value');
+        stated[el.dataset.stat] = v ? Number(v.textContent.trim()) : null;
+      }
+      return { counted, stated };
+    });
+    const mismatches = {};
+    for (const [key, want] of Object.entries(stats.counted)) {
+      if (stats.stated[key] === undefined) { mismatches[key] = { stated: '(no such data-stat)', counted: want }; continue; }
+      if (stats.stated[key] !== want) mismatches[key] = { stated: stats.stated[key], counted: want };
+    }
+    if (Object.keys(mismatches).length) fail('stat_strip_integrity', { mismatches, ...stats });
+    else pass('stat_strip_integrity', stats);
+    await page.close();
+  }
+
   // ── Check 4: contrast spot-checks ──
   {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -464,6 +498,9 @@ async function main() {
       invert_contact_body: '.contact-lede',
       disabled_pill_label: '.pill[data-cat="simulation"]',
       disabled_pill_claim: '.pill[data-cat="simulation"] .pill-claim',
+      id_role_bar: '.id-role',
+      id_stat_label: '.id-stats .id-stat-label',
+      id_team: '.id-team',
     };
     const contrastResults = {};
     for (const [name, sel] of Object.entries(samples)) {
