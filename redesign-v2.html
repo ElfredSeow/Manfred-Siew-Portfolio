@@ -2883,16 +2883,55 @@ else {
        real stutter, not just a faster pan. Reverted; see task-8-report.md
        for the sampled-pose measurement. The transit's own height (see
        `.transit` in the CSS) is what was tuned instead. */
+    /* CAMERA HEIGHT AT THE THREE READER-FACING WIDE BEATS (5000, 8000, 22000)
+       is not a taste setting — it is what decides whether the planform is
+       visible at all, and it is held by `planform_presentation` in
+       scripts/verify-airframe.mjs. Raised 2026-08-10, author-approved.
+
+       These three keyframes had been implicitly leaning on the nose-DOWN pitch
+       bug documented on the JET table below: a nose-down airframe tips its top
+       surface toward a camera sitting in front of it, which was doubling how
+       much planform the reader saw. Correcting the pitch removed that, and at
+       8000 — waypoint 1's establishing shot, the first clear look anyone gets
+       at the signature — the aircraft came within 0.8 degrees of edge-on and
+       rendered as a flat dark sliver.
+
+       The presentation angle (planform normal vs the aircraft-to-camera
+       vector, i.e. how far the camera sits above the wing plane) is
+       arithmetic: presentation ~= camera elevation - nose-up pitch. So:
+         - AZIMUTH IS NOT A LEVER. Swinging abeam drives presentation toward
+           zero, it does not raise it.
+         - MORE PITCH IS NOT A LEVER. It crosses through edge-on and inverts.
+         - Camera y is the only lever, and only p[1] was moved. No p[0], p[2],
+           `a`, look, fov, roll or shift changed anywhere in this table.
+
+              alt    p[1] before -> after    presentation before -> after
+              5000    3.0  -> 3.45            10.3deg -> 12.1deg
+              8000    2.4  -> 5.40             0.8deg -> 12.1deg
+             22000    2.4  -> 3.25             8.9deg -> 12.2deg
+
+       8000 is deliberately NOT restored to the full +5.31 that would return
+       the pre-fix presentation. That puts camera y at 7.71, close enough to
+       the 18000 transit's 8.0 that the establishing shot stops reading as
+       "just after rotation, on the deck" and starts reading as a crane shot.
+       12 degrees is the floor that keeps the blended delta legible; the
+       altitude difference between the beat and the transit is what keeps the
+       climb reading as a climb.
+
+       Raising the camera also increases standoff, so camera_framing and
+       camera_path_clear both moved in the safe direction. 36000 is untouched:
+       the pitch fix IMPROVED that beat (27.4deg -> 36.9deg) and it is the only
+       one that shows the sawtooth. */
     const CAM = [
       { a:     0, p:[ 7.5,  1.8,  9.5], look: ORIGIN,  fov: 30, roll:   0, shift: -.14 },
-      { a:  5000, p:[ 8.2,  3.0, 10.5], look: ORIGIN,  fov: 30, roll:   0, shift: -.20 },
+      { a:  5000, p:[ 8.2,  3.45, 10.5], look: ORIGIN, fov: 30, roll:   0, shift: -.20 },
       // ── waypoint 1 ── wide → push-in → pull back and climb
-      { a:  8000, p:[ 8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
+      { a:  8000, p:[ 8.6,  5.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
       { a: 12000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
       { a: 14500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
       { a: 18000, p:[ 2.0,  8.0, 26.0], look: ORIGIN,  fov: 46, roll:   0, shift: -.12 },
       // ── waypoint 2 ── mirrored, because its card sits on the right
-      { a: 22000, p:[-8.6,  2.4, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift:  .20 },
+      { a: 22000, p:[-8.6,  3.25, 11.0], look: ORIGIN, fov: 31, roll:   0, shift:  .20 },
       { a: 26000, p:[-6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:   4, shift:  .20 },
       { a: 28500, p:[-4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll:  15, shift:  .20 },
       { a: 32000, p:[-2.0,  8.2, 27.0], look: ORIGIN,  fov: 46, roll:   0, shift:  .12 },

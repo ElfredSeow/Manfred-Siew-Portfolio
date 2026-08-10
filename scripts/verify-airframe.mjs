@@ -670,6 +670,70 @@ async function main() {
     pass('camera_framing', { framing });
   }
 
+  // ── Planform PRESENTATION, not planform containment. ────────────────────
+  //    `camera_framing` above asks "is the airframe inside the viewport", and
+  //    an edge-on aircraft is comfortably inside the viewport. It passed —
+  //    with IMPROVED margins — at the exact moment waypoint 1's establishing
+  //    shot was rendering the signature as a flat dark sliver 0.8 degrees off
+  //    edge-on. Framing and presentation are different properties and no
+  //    containment test can see the second one.
+  //
+  //    The measurement: the angle between the planform's world normal and the
+  //    aircraft-to-camera vector, reported as 90deg minus that, i.e. how far
+  //    the camera sits ABOVE the wing plane. 0 is edge-on and shows nothing;
+  //    90 is straight down the planform. It is measured off the live scene
+  //    graph — the jet's actual world quaternion and the camera's actual world
+  //    position at that altitude — not re-derived from the CAM/JET tables,
+  //    because the tables are the thing under test.
+  //
+  //    Why these five beats: they are the wide shots a reader actually looks
+  //    AT. 18000/32000/46000 are transits (fov 46-48, ~26-30 units out, the
+  //    aircraft is a receding speck by design) and 50000/62000 are document
+  //    mode, where the airframe is measurably 25/25 occluded by the content
+  //    bed. Asserting a presentation floor on beats nobody sees would force
+  //    camera moves that buy nothing.
+  //
+  //    Delivered values are 13.2 / 12.1 / 12.1 / 12.2 / 36.9; the floor is set
+  //    at 11.5 so the assertion carries ~0.5deg of headroom rather than
+  //    sitting on the design target's exact value. It still bites hard on the
+  //    regression it exists for — before the 2026-08-10 camera raise the same
+  //    three beats read 10.3 / 0.8 / 8.9, all of them under this floor, with
+  //    the establishing shot an order of magnitude under it.
+  const PRESENTATION_BEATS = [
+    // alt     why this beat is reader-facing
+    0,      // parked on the ramp, the first frame of the page
+    5000,   // the roll-out wide
+    8000,   // waypoint 1's establishing shot — the first clear look at the signature
+    22000,  // waypoint 2's establishing shot, mirrored
+    36000,  // waypoint 3, astern: the only beat that shows the sawtooth
+  ];
+  const MIN_PRESENTATION_DEG = 11.5;
+  const presentation = await page.evaluate((alts) => {
+    const S = window.Stage;
+    const { THREE, jet, camera } = S;
+    return alts.map((alt) => {
+      S.apply(alt, 0);
+      jet.updateMatrixWorld(true);
+      camera.updateMatrixWorld(true);
+      // Planform normal: the wing plane's +Y, carried through the jet's real
+      // world rotation (pitch AND roll — roll is non-zero at 22000 and 36000).
+      const n = new THREE.Vector3(0, 1, 0)
+        .applyQuaternion(jet.getWorldQuaternion(new THREE.Quaternion())).normalize();
+      const centre = jet.getWorldPosition(new THREE.Vector3());
+      const toCam = camera.getWorldPosition(new THREE.Vector3()).sub(centre).normalize();
+      // asin(n . toCam) is the camera's elevation above the wing plane, signed:
+      // negative means the camera is UNDER the aircraft looking at its belly,
+      // which is a different failure and must not be laundered by an abs().
+      const deg = Math.asin(Math.max(-1, Math.min(1, n.dot(toCam)))) * 180 / Math.PI;
+      return { alt, presentationDeg: +deg.toFixed(2), camY: +camera.position.y.toFixed(2) };
+    });
+  }, PRESENTATION_BEATS);
+  const edgeOn = presentation.filter((b) => b.presentationDeg < MIN_PRESENTATION_DEG);
+  const presDetail = { beats: presentation, floorDeg: MIN_PRESENTATION_DEG };
+  if (edgeOn.length === 0) pass('planform_presentation', presDetail);
+  else fail('planform_presentation', { ...presDetail, edgeOn: edgeOn.map((b) => b.alt),
+    note: 'the planform must present at least 11.5deg of face to the camera at every reader-facing wide beat; camera_framing cannot see this because an edge-on aircraft is still in frame. The lever is p[1] on the CAM keyframe (presentation ~= camera elevation - nose-up pitch); azimuth and extra pitch both make it worse' });
+
   // ── The camera must never fly through the aircraft. CAM is interpolated
   //    LINEARLY in position, so two keyframes on opposite sides of the
   //    airframe are joined by a straight line that goes through it — a
