@@ -243,7 +243,7 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 .on-data{ color:var(--data); }
 
 /* Floating rounded nav bar rather than a full-width ruled edge. Opaque, not
-   translucent: the sky behind it runs to #12244A, and a 90%-alpha bar over
+   translucent: the sky behind it runs to #1B2C42, and a 90%-alpha bar over
    that ground would shift every label's contrast as the reader climbs. */
 /* The dock is the fixed full-width strip; the bar is the pill inside it.
    Two elements because the strip must span the viewport to stay centred
@@ -321,7 +321,7 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 
 /* ── BUTTONS ──────────────────────────────────────────────────────────
    Pills. Every one ships default / hover (gated) / focus / active. Hover
-   moves to the warm accent — white on #9A3412 is 7.3:1. Note that every
+   moves to the warm accent — white on #A8392C is 6.39:1. Note that every
    transition names its properties; there is no bare shorthand in this file. */
 .btn{
   display:inline-flex; align-items:center; gap:.55rem;
@@ -606,8 +606,8 @@ html.drafts-hidden .needs-copy{ display:none; }
 /* ── THE DARK BAND ────────────────────────────────────────────────────
    Contact and footer sit directly on .band-space and invert. Every pairing
    is checked against the LIGHTER end of that gradient, #2A4E7A, which is
-   the worst case: paper 8.5 · body-inv 6.8 · accent-inv 4.9 · data-inv 5.4.
-   #FF6B1A on that ground is 3.0:1, so it stays a fill here too.
+   the worst case: paper 8.5 · body-inv 6.8 · accent-inv 6.08 · data-inv 5.4.
+   #F5837A on that ground is 3.41:1, so it stays a fill here too.
 
    ⚠ DO NOT re-introduce a utility framework without renaming this class.
    "invert" is also Tailwind's filter utility (filter:invert(100%)). While the
@@ -629,7 +629,7 @@ html.drafts-hidden .needs-copy{ display:none; }
 /* .lede hard-codes var(--body) — #2C3E52 — which on this band is 1.5:1 and
    effectively invisible. It was being rescued by a Tailwind text utility in
    the markup, i.e. by the CDN this file no longer loads; the contact lede is
-   the only .lede on the dark band and it needs a real rule. 12.27:1 on
+   the only .lede on the dark band and it needs a real rule. 11.37:1 on
    var(--deep), 6.84:1 on the band's lighter end #2A4E7A — the same pair the
    block header above records as body-inv 6.8. */
 .invert .lede{ color:#DCE8F4; }
@@ -642,7 +642,7 @@ html.drafts-hidden .needs-copy{ display:none; }
   background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.16);
   box-shadow:none; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
 }
-/* The contact CTA keeps the ink-on-signal pairing (6.5:1) that v1 established. */
+/* The contact CTA keeps the ink-on-signal pairing (7.41:1, up from v1's 6.5:1) that v1 established. */
 .btn-signal{ background:var(--signal); color:var(--ink); box-shadow:none; }
 @media (hover:hover) and (pointer:fine){
   .btn-signal:hover{ background-color:#F79389; box-shadow:var(--sh-2); }
@@ -815,8 +815,8 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
 .btn.btn-block{ width:100%; justify-content:center; }
 .contact-list{ display:grid; gap:.75rem; margin-top:1.5rem; font-size:.9375rem; }
 .contact-list > div{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:.75rem; }
-/* Same dimmed label blue as .invert .num — #BFD4E8 on var(--deep) #12244A is
-   10.02:1, and 5.59:1 on the band's lighter end #2A4E7A. */
+/* Same dimmed label blue as .invert .num — #BFD4E8 on var(--deep) #1B2C42 is
+   9.29:1, and 5.59:1 on the band's lighter end #2A4E7A. */
 .contact-list dt{ color:#BFD4E8; }
 
 .footer-inner{
@@ -884,7 +884,7 @@ html.js [data-reveal].shown{
 
 <!-- ══════════ NAV ══════════
      A floating rounded bar rather than a full-width ruled edge. Opaque, not
-     translucent: the sky behind it runs to #12244A and a 90%-alpha bar over
+     translucent: the sky behind it runs to #1B2C42 and a 90%-alpha bar over
      that ground would shift every label's contrast. -->
 <nav class="nav-dock" aria-label="Sections">
   <div class="nav-bar">
