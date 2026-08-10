@@ -928,7 +928,20 @@ html.js [data-reveal].shown{
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="jet" viewBox="0 0 300 140">
-    <path fill="currentColor" d="M150 6c5 0 8 5 9 12l4 34 62 26c3 1 5 4 5 7v9l-67-14 3 30 18 14v7l-27-7-7 12-7-12-27 7v-7l18-14 3-30-67 14v-9c0-3 2-6 5-7l62-26 4-34c1-7 4-12 9-12z"/>
+    <!-- The Tier-0 stand-in, and it must be a silhouette of the aircraft
+         Tier 2 renders — the readers who see this are the ones who see
+         nothing else. Traced from the same twelve planform points, mapped
+         with x = 150 + 45.0*x and y = 6 + 21.333*(3.40 - z).
+
+         The mapping is deliberately NON-proportional, as the previous
+         symbol's was: the airframe is 6.2 across by 6.0 long and this box
+         is 300 by 140, so span and length are scaled independently. At
+         silhouette fidelity that is the right trade — what has to survive
+         is the sawtooth trailing edge and the absence of a fin, and both do.
+
+         Deck, ruddervators and inlet bumps are omitted: they are invisible
+         in a flat plan-view fill. -->
+    <path fill="currentColor" d="M150 6 L165.3 24.1 L180.6 44.4 L289.5 106.3 L281.4 115.2 L208.5 99.9 L150 134 L91.5 99.9 L18.6 115.2 L10.5 106.3 L119.4 44.4 L134.7 24.1 Z"/>
   </symbol>
 </svg>
 

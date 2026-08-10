@@ -320,6 +320,40 @@ async function main() {
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });
 
+  // ── Tier 0. The lowest-capability readers see this instead of the
+  //    canvas, so it has to be a silhouette of the aircraft that Tier 2
+  //    actually renders. Forced on by emulating reduced motion, which the
+  //    tier gate treats as Tier 0 by definition. ──
+  {
+    const t0 = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const p0 = await t0.newPage();
+    await p0.goto(PAGE_URL);
+    await p0.waitForTimeout(1500);
+    const silo = await p0.evaluate(() => {
+      const sym = document.querySelector('#jet path');
+      const uses = document.querySelectorAll('svg.silo');
+      const first = uses[0];
+      const r = first ? first.getBoundingClientRect() : null;
+      return {
+        tier0: document.documentElement.classList.contains('tier-0'),
+        d: sym ? sym.getAttribute('d') : null,
+        siloCount: uses.length,
+        rendered: r ? r.width > 0 && r.height > 0 : false,
+        canvasHidden: getComputedStyle(document.getElementById('scene')).display === 'none',
+      };
+    });
+    await t0.close();
+
+    // The old symbol was a single path built from curve commands (it used
+    // `c`); the new planform is a straight-edged polygon. A `d` still
+    // containing curve commands means the old shape survived.
+    const isPolygon = silo.d && !/[cCsSqQaA]/.test(silo.d);
+    const vertexCount = silo.d ? (silo.d.match(/[ML]/g) || []).length : 0;
+    const ok = silo.tier0 && silo.rendered && silo.canvasHidden && isPolygon && vertexCount === 12 && silo.siloCount === 4;
+    const detail = { ...silo, isPolygon, vertexCount, expectedVertices: 12, expectedSilos: 4 };
+    if (ok) pass('tier0_silhouette', detail); else fail('tier0_silhouette', detail);
+  }
+
   results.measured = m;
   await browser.close();
   console.log(JSON.stringify(results, null, 2));
