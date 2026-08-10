@@ -480,14 +480,14 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 <nav class="nav-dock" aria-label="Sections">
   <div class="nav-bar">
     <span class="nav-avatar" aria-hidden="true">MS</span>
-    <a href="redesign-v3.html" class="nav-name">Manfred Siew</a>
+    <a href="/" class="nav-name">Manfred Siew</a>
     <div class="nav-links">
-      <a href="redesign-v3.html" class="nav-link">Home</a>
-      <a href="redesign-v3-work.html" class="nav-link">Work</a>
-      <a href="redesign-v3-projects.html" class="nav-link" aria-current="page">Projects</a>
-      <a href="redesign-v3-experience.html" class="nav-link">Experience</a>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/work" class="nav-link">Work</a>
+      <a href="/projects" class="nav-link" aria-current="page">Projects</a>
+      <a href="/experience" class="nav-link">Experience</a>
     </div>
-    <a href="redesign-v3.html#contact" class="btn nav-cta">Contact</a>
+    <a href="/#contact" class="btn nav-cta">Contact</a>
   </div>
 </nav>
 
@@ -652,7 +652,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
           <p>Usage and maintenance records for Air Specialist Vehicles (ASVs) were spread across manual steps with no single record of who was qualified for what, or of which vehicle was due for servicing. The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model.</p>
           <div><div class="lab">What it does</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, servicing status tracked ahead of the due date, and reporting that reads from the same store the work is recorded in.</p></div>
           <div><div class="lab">Built with</div><p>The functions were proved in Power Apps first, then rebuilt as a full-stack application with Lovable once per-user licensing stopped being viable. PowerDocu generated the documentation the prompting worked from.</p><div class="chips"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
-          <p><a class="link-inline" href="redesign-v3-work.html#wp2">Full case study, on the Work page →</a></p>
+          <p><a class="link-inline" href="/work#wp2">Full case study, on the Work page →</a></p>
         </div>
       </details>
 
@@ -845,7 +845,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <p>Goods receipts and invoices arriving across every unit in MINDEF SAF, not filed because the person who received the goods was already on to the next task. I designed and built the capture and repository app; a partner RPA team built the automation that files the extracted data into the finance forms.</p>
           <div><div class="lab">What it does</div><p class="note">Reads a photographed goods receipt or invoice, in whatever format the issuing company used, extracts the fields the finance form and the downstream RPA flow need, and stores every record in one auditable repository.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>PowerApps</span><span>Vite</span><span>UiPath (RPA)</span></div></div>
-          <p><a class="link-inline" href="redesign-v3-work.html#wp1">Full case study, on the Work page →</a></p>
+          <p><a class="link-inline" href="/work#wp1">Full case study, on the Work page →</a></p>
         </div>
       </details>
 
@@ -881,32 +881,32 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             <div class="app-shots" role="list" aria-label="FUEL Up app screens, captured from the running app">
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Sign In</span></div>
-                <div class="app-shot-frame"><img src="public/fuelup/login.png" loading="lazy" alt="FUEL Up sign-in screen: corporate email field and a Get Login Code button, for the one-time-code authentication flow"></div>
+                <div class="app-shot-frame"><img src="fuelup/login.png" loading="lazy" alt="FUEL Up sign-in screen: corporate email field and a Get Login Code button, for the one-time-code authentication flow"></div>
                 <figcaption class="app-shot-cap"><div class="st">Sign in</div><div class="sd">Whitelisted corporate email + a one-time login code — no passwords</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Forms</span></div>
-                <div class="app-shot-frame"><img src="public/fuelup/dashboard.png" loading="lazy" alt="FUEL Up forms landing screen with Aviation Fuel and Vehicle Fuel submission tiles, and links to past Aviation and Vehicle history"></div>
+                <div class="app-shot-frame"><img src="fuelup/dashboard.png" loading="lazy" alt="FUEL Up forms landing screen with Aviation Fuel and Vehicle Fuel submission tiles, and links to past Aviation and Vehicle history"></div>
                 <figcaption class="app-shot-cap"><div class="st">Forms</div><div class="sd">Aviation and vehicle fuel submission, plus history, in one landing view</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — New Aviation Form</span></div>
-                <div class="app-shot-frame"><img src="public/fuelup/upload-ocr.png" loading="lazy" alt="FUEL Up receipt upload screen with a camera capture area, a Scan with AI button, and a Type it myself manual-entry fallback"></div>
+                <div class="app-shot-frame"><img src="fuelup/upload-ocr.png" loading="lazy" alt="FUEL Up receipt upload screen with a camera capture area, a Scan with AI button, and a Type it myself manual-entry fallback"></div>
                 <figcaption class="app-shot-cap"><div class="st">Capture</div><div class="sd">Photograph the receipt; scan with AI or type it in manually</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Aviation History</span></div>
-                <div class="app-shot-frame"><img src="public/fuelup/history.png" loading="lazy" alt="FUEL Up aviation history screen with date-range filters, an invoice-number search, and bulk export and send actions"></div>
+                <div class="app-shot-frame"><img src="fuelup/history.png" loading="lazy" alt="FUEL Up aviation history screen with date-range filters, an invoice-number search, and bulk export and send actions"></div>
                 <figcaption class="app-shot-cap"><div class="st">History</div><div class="sd">Filter by date, search by invoice number, export or send in bulk</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Audit Log</span></div>
-                <div class="app-shot-frame"><img src="public/fuelup/audit-log.png" loading="lazy" alt="FUEL Up audit log screen listing submit, edit, delete and role-change events by user and timestamp"></div>
+                <div class="app-shot-frame"><img src="fuelup/audit-log.png" loading="lazy" alt="FUEL Up audit log screen listing submit, edit, delete and role-change events by user and timestamp"></div>
                 <figcaption class="app-shot-cap"><div class="st">Audit log</div><div class="sd">Every submit, edit, delete and role change, timestamped</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Admin Panel</span></div>
-                <div class="app-shot-frame"><img src="public/fuelup/admin-panel.png" loading="lazy" alt="FUEL Up admin panel with platform management, CSV whitelist import, user management and a purge-all danger zone"></div>
+                <div class="app-shot-frame"><img src="fuelup/admin-panel.png" loading="lazy" alt="FUEL Up admin panel with platform management, CSV whitelist import, user management and a purge-all danger zone"></div>
                 <figcaption class="app-shot-cap"><div class="st">Admin panel</div><div class="sd">Manage platforms, the email whitelist and user roles</div></figcaption>
               </figure>
             </div>
@@ -951,22 +951,22 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             <div class="app-shots" role="list" aria-label="RAiD Facility Booking System app screens, captured from the running app">
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Dashboard</span></div>
-                <div class="app-shot-frame"><img src="public/facility-booking/dashboard.png" loading="lazy" alt="RAiD Facility Booking dashboard: pending/approved/upcoming stat cards, a today/tomorrow agenda list, and a facilities quick-book panel"></div>
+                <div class="app-shot-frame"><img src="facility-booking/dashboard.png" loading="lazy" alt="RAiD Facility Booking dashboard: pending/approved/upcoming stat cards, a today/tomorrow agenda list, and a facilities quick-book panel"></div>
                 <figcaption class="app-shot-cap"><div class="st">Dashboard</div><div class="sd">Pending, approved and upcoming counts, an agenda list, and one-tap rebooking of your own facilities</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Book a Facility</span></div>
-                <div class="app-shot-frame"><img src="public/facility-booking/book.png" loading="lazy" alt="RAiD Facility Booking wizard: a four-step stepper for facility, date and time, details and review, with a location-first facility picker"></div>
+                <div class="app-shot-frame"><img src="facility-booking/book.png" loading="lazy" alt="RAiD Facility Booking wizard: a four-step stepper for facility, date and time, details and review, with a location-first facility picker"></div>
                 <figcaption class="app-shot-cap"><div class="st">Booking wizard</div><div class="sd">Location-first facility picker, date/time and recurrence, purpose of booking, then a conflict check before submit</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Availability</span></div>
-                <div class="app-shot-frame"><img src="public/facility-booking/availability.png" loading="lazy" alt="RAiD Facility Booking availability calendar: a month grid with colour-coded approved, pending, processing clearance and blackout status chips"></div>
+                <div class="app-shot-frame"><img src="facility-booking/availability.png" loading="lazy" alt="RAiD Facility Booking availability calendar: a month grid with colour-coded approved, pending, processing clearance and blackout status chips"></div>
                 <figcaption class="app-shot-cap"><div class="st">Availability calendar</div><div class="sd">Month view per facility with a four-status colour legend, filterable by location and unit</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Management</span></div>
-                <div class="app-shot-frame"><img src="public/facility-booking/management.png" loading="lazy" alt="RAiD Facility Booking approver console: a pending-requests table with requester, facility, date and time, purpose, and approve or reject row actions"></div>
+                <div class="app-shot-frame"><img src="facility-booking/management.png" loading="lazy" alt="RAiD Facility Booking approver console: a pending-requests table with requester, facility, date and time, purpose, and approve or reject row actions"></div>
                 <figcaption class="app-shot-cap"><div class="st">Management console</div><div class="sd">Approver queue with per-row approve/reject, plus facilities, user roles and audit log tabs</div></figcaption>
               </figure>
             </div>
@@ -1033,7 +1033,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             <p><span class="needs-copy">Add: how the efficiency and accuracy change was measured, and who reported it</span></p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
           <figure class="shot" tabindex="0">
-            <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
+            <img src="workplace-cico.jpg" loading="lazy"
                  alt="Dark-themed duty app screen showing a personnel-on-duty count, a duty-instructions panel, and Check In, Useful Links and Check Out buttons in the bottom navigation"
                  onerror="this.closest('figure').hidden=true">
             <figcaption>The shipped interface (what a user actually sees).</figcaption>
@@ -1102,19 +1102,19 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <div><div class="lab">Outcome</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
           <div class="shot-pair">
             <figure class="shot" tabindex="0">
-              <img src="public/vibe-coding-masterclass-podium.jpg" loading="lazy"
+              <img src="vibe-coding-masterclass-podium.jpg" loading="lazy"
                    alt="Manfred presenting at the podium during the Vibe Coding Masterclass, laptop open and microphone in hand"
                    onerror="this.closest('figure').hidden=true">
               <figcaption>Leading a session for the mixed cohort.</figcaption>
             </figure>
             <figure class="shot" tabindex="0">
-              <img src="public/vibe-coding-masterclass-qna.jpg" loading="lazy"
+              <img src="vibe-coding-masterclass-qna.jpg" loading="lazy"
                    alt="Manfred fielding questions from attendees after the session"
                    onerror="this.closest('figure').hidden=true">
               <figcaption>Working through questions with attendees after.</figcaption>
             </figure>
           </div>
-          <p><a class="link-inline" href="redesign-v3-work.html#wp3">Full case study, on the Work page →</a></p>
+          <p><a class="link-inline" href="/work#wp3">Full case study, on the Work page →</a></p>
         </div>
       </details>
 
@@ -1255,7 +1255,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <div><div class="lab">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei's ecosystem, and MLOps. Introduced to the AI development field.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
           <figure class="shot shot--cert" tabindex="0">
-            <img src="public/huawei-track-cert.jpg" loading="lazy"
+            <img src="huawei-track-cert.jpg" loading="lazy"
                  alt="AI Singapore Certificate of Participation issued to Siew Lee Hong Manfred for the National AI Student Challenge 2025 · Huawei Track, with a QR code and a signature from the Director of AI Talent Development"
                  onerror="this.closest('figure').hidden=true">
             <figcaption>Externally assessed. One of the few claims on this page somebody else graded.</figcaption>
@@ -1343,7 +1343,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     </div>
     <p class="footnote">
       <span>© 2026 Manfred Siew · Aerospace Engineering, Temasek Polytechnic</span>
-      <span><a href="redesign-v3.html">Home</a> · <a href="redesign-v3-work.html">Work</a> · <a href="redesign-v3-experience.html">Experience</a></span>
+      <span><a href="/">Home</a> · <a href="/work">Work</a> · <a href="/experience">Experience</a></span>
     </p>
   </div>
 </footer>
@@ -1445,7 +1445,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     updateNav();
   }
 
-  // A link from another page (redesign-v3-projects.html#grid) should land on an
+  // A link from another page (/projects#grid) should land on an
   // open row. Without this the visitor arrives at a collapsed summary and has to
   // work out that the thing they clicked through for is behind another click.
   function openFromHash() {
