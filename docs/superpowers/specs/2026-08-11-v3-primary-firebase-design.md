@@ -169,6 +169,47 @@ v3's own palette, type scale and radius tokens, rendered to PNG with Playwright.
 dependencies, or the tool will not be there. The card source and its render script are
 temporary and live in the scratchpad, not the repository — only the PNG output is committed.
 
+### GitHub presence
+
+The profile is `https://github.com/ElfredSeow`. v3 currently links to two individual
+repositories — `App-Marketing-Skill` and `Google-AI-Studio-System-Prompt`, from the home and
+projects pages — but offers no route to the profile itself from anywhere on the site. For a
+portfolio aimed at AI-engineering roles with an open-source strand running through it, that
+is a gap worth closing while the pages are already being edited.
+
+Note that the handle does not match the name used everywhere else on the site. Renaming the
+account is not proposed: it would break the two repository links already embedded in v3, plus
+every link that exists outside this repository.
+
+**Contact card, all four pages.** A row between LinkedIn and Location, reusing the existing
+`<dl class="contact-list">` pattern. No CSS change. The value shows the bare handle, matching
+how LinkedIn is rendered as `manfred-siew` rather than as a full URL.
+
+```html
+<div><dt>GitHub</dt><dd><a href="https://github.com/ElfredSeow" target="_blank" rel="noopener noreferrer" class="link-inline">ElfredSeow</a></dd></div>
+```
+
+**Navigation dock, all four pages.** Not a fifth entry in `.nav-links`. That group holds
+internal pages, carries `aria-current="page"` highlighting an outbound link must never
+receive, and already overflows to a horizontal scroll on narrow screens — a fifth text link
+makes that worse. Instead, an icon button seated between `.nav-links` and `.btn.nav-cta`:
+
+- the GitHub mark as an inline SVG, `currentColor`, 1.125rem square
+- a 2.25rem hit area, `border-radius:var(--r-pill)`, `color:var(--body)`
+- hover state matching `.nav-link` — `background-color:var(--tint)`, `color:var(--ink)` —
+  under the same `(hover:hover) and (pointer:fine)` guard
+- `aria-label="GitHub profile"`, `target="_blank"`, `rel="noopener noreferrer"`
+- `flex:none` so it never compresses when the links scroll
+
+New CSS, one rule plus its hover guard, placed beside the existing `.nav-link` rules. The
+mark is drawn inline rather than fetched, keeping the pages' single-external-request
+property intact.
+
+**README.md.** The `YOUR_GITHUB_LINK_HERE` placeholder in the badge on line 46 is replaced
+with the profile URL. This is the placeholder fix only. The README's larger staleness — it
+describes a GitHub profile rather than this site, and does not mention the deployed URL —
+remains out of scope.
+
 ### package.json
 
 Reduced to a name and two scripts. The site has no dependencies.
@@ -234,6 +275,11 @@ Against the preview URL, not the local filesystem:
 - The projects page's category and organisation filters still work — it carries the most
   inline JavaScript and the most rewritten paths.
 - `og-card.png` returns 200 at its absolute URL.
+- The GitHub icon button appears in the nav on all four pages, is reachable by keyboard, and
+  announces as "GitHub profile". It does not pick up the `aria-current` page highlight, and
+  it does not compress or disappear when the nav links overflow at 360px width.
+- The contact card shows a GitHub row on all four pages, and both it and the nav button
+  resolve to `https://github.com/ElfredSeow`.
 - Response headers show the split cache policy: `immutable` on a PNG, `no-cache` on an HTML
   document.
 
@@ -255,14 +301,16 @@ they will fail if run. They also depend on Playwright, which leaves `package.jso
 `release/v3-primary` fast-forwards it across the whole of the v2 and v3 development history,
 not just this change.
 
-**README.md is stale.** It describes a GitHub profile, not this site, and still contains a
-`YOUR_GITHUB_LINK_HERE` placeholder. Out of scope here; noted for a later pass.
+**README.md stays stale apart from one line.** The `YOUR_GITHUB_LINK_HERE` placeholder is
+fixed, but the file still describes a GitHub profile rather than this site and will not
+mention the deployed URL. Noted for a later pass.
 
 ## Out of scope
 
 Page content and copy. The projects page still says twenty-seven projects and the outstanding
-questions about FUEL Up, MILES/MAVIS and the Masterclass codenames are unchanged. This
-change moves and deploys v3; it does not edit what v3 says.
+questions about FUEL Up, MILES/MAVIS and the Masterclass codenames are unchanged. Apart from
+adding the GitHub link in the two places described above, this change moves and deploys v3;
+it does not edit what v3 says.
 
 Custom domain. `manfred-siew.web.app` already contains `manfred-siew`, which was the stated
 requirement. Attaching a purchased domain would need DNS records and is not part of this
