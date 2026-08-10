@@ -2453,8 +2453,16 @@ else {
     const scene = new THREE.Scene();
 
     /* Model space: nose points +Z, up is +Y, length ~6 units, origin at the
-       wing root so the aircraft rotates about something plausible. */
-    const SKIN  = new THREE.MeshStandardMaterial({ color: 0xDCE2E9, roughness: .55, metalness: .18 });
+       wing root so the aircraft rotates about something plausible.
+
+       GRAPHITE, not the pale skin this airframe used to wear. Two reasons,
+       and they are the same reason: a dark surface is what lets an emissive
+       surface read as glow rather than as paint, and real glow is what lets
+       the airframe be dark without vanishing against the near-navy sky at
+       altitude. Hedging either one weakens both. The halos further down are
+       what make this safe. */
+    const SKIN  = new THREE.MeshStandardMaterial({ color: 0x5C6675, roughness: .52, metalness: .24 });
+    const DECK  = new THREE.MeshStandardMaterial({ color: 0x474F5C, roughness: .55, metalness: .22 });
     /* TRIM is deliberately pinned to --accent-strong (#B84630) — the signature
        object is meant to carry the page's accent, not its own opinion of one.
        If --accent-strong ever moves again, move this with it. */
@@ -2465,7 +2473,17 @@ else {
        glass without needing anything to reflect. */
     const GLASS = new THREE.MeshStandardMaterial({ color: 0x33547D, roughness: .2, metalness: .08,
                                                    transparent: true, opacity: .82 });
-    const DARK  = new THREE.MeshStandardMaterial({ color: 0x5A6675, roughness: .68, metalness: .3  });
+    /* Darkened from its old value. It is no longer just a shading colour —
+       it is the surround that makes the glow read as light. */
+    const DARK  = new THREE.MeshStandardMaterial({ color: 0x2E3540, roughness: .68, metalness: .3  });
+
+    /* Unlit, deliberately. MeshBasicMaterial ignores scene lights, so these
+       hold constant brightness while the sun dims from 2.1 to 1.25 across
+       the climb — the glow gets relatively STRONGER as the sky ramps to
+       navy. That is free, and it is the right direction: the airframe
+       should look most alive at altitude. */
+    const GLOW_HOT  = new THREE.MeshBasicMaterial({ color: 0xFFB0A5 });
+    const GLOW_EDGE = new THREE.MeshBasicMaterial({ color: 0xE8685C });
 
     /* Bevelled, not flat-cut. The brief asked for round over square and that
        applies to the signature too: a small bevel gives every wing and fin
@@ -2558,9 +2576,8 @@ else {
 
       /* Dorsal deck: volume behind the cockpit, blending into the buried
          engine. Occupies y in [0.06, 0.36] — a deliberate 0.02 overlap into
-         the planform, so no seam can open between them.
-         SKIN for now; Task 5 gives the deck its own darker material. */
-      const deck = plate(DECK_OUTLINE, .30, SKIN);
+         the planform, so no seam can open between them. */
+      const deck = plate(DECK_OUTLINE, .30, DECK);
       deck.geometry.rotateX(Math.PI / 2);
       deck.geometry.translate(0, .36, 0);
       jet.add(deck);
@@ -2573,9 +2590,13 @@ else {
       belly.geometry.translate(0, -.08, 0);
       jet.add(belly);
 
+      /* Low and faired, not a 1970s fighter bubble — flatter and longer.
+         Its centre must stay at exactly (0, .30, 1.25), because that is the
+         COCKPIT constant every waypoint's push-in beat targets. Move it and
+         three camera beats land on empty air with nothing complaining. */
       const canopy = new THREE.Mesh(new THREE.SphereGeometry(.34, 24, 16), GLASS);
-      canopy.scale.set(.85, .72, 2.1);
-      canopy.position.set(0, .3, 1.25);
+      canopy.scale.set(.62, .40, 1.55);
+      canopy.position.set(0, .30, 1.25);
       jet.add(canopy);
 
       /* Canted ruddervators. No vertical fin at all is the single most

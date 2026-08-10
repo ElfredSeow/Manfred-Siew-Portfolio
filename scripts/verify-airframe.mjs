@@ -112,6 +112,11 @@ function measure() {
     // so mesh.position.z is 0 for both — outboard x is the only reliable
     // discriminator, and nothing else on the airframe sits past x = 2.0.
     ruddervators: solids.filter((mesh) => Math.abs(mesh.position.x) > 2.0).length,
+    // Read the skin colour off the planform itself — the mesh already
+    // identified above by bounding-box area — rather than guessing at it
+    // with a vertex-count threshold that would silently pick a different
+    // mesh if the geometry were ever retuned.
+    skinHex: planform ? planform.material.color.getHexString() : null,
   };
 
   // Ruddervator mirror check. The two sides are built independently (never
@@ -206,6 +211,24 @@ async function main() {
 
   if (m.ruddervators === 2) pass('canted_ruddervators', { count: m.ruddervators });
   else fail('canted_ruddervators', { count: m.ruddervators, expected: 2 });
+
+  // ── The canopy anchors three camera beats. If it drifts off COCKPIT, the
+  //    push-in at 14500 / 28500 / 42500 lands on empty air and nothing in
+  //    the rig complains. ──
+  const c = m.canopy;
+  const cockpitOk = c && near(c.pos[0], m.cockpit[0], 0.001) && near(c.pos[1], m.cockpit[1], 0.001) && near(c.pos[2], m.cockpit[2], 0.001);
+  if (cockpitOk) pass('canopy_on_cockpit', { canopy: c.pos, cockpit: m.cockpit });
+  else fail('canopy_on_cockpit', { canopy: c ? c.pos : null, cockpit: m.cockpit, note: 'canopy centre must equal the COCKPIT constant exactly' });
+
+  // Low and long, not a 1970s bubble.
+  const shapeOk = c && near(c.scale[0], 0.62, 0.02) && near(c.scale[1], 0.40, 0.02) && near(c.scale[2], 1.55, 0.02);
+  if (shapeOk) pass('canopy_profile', { scale: c.scale, expected: [0.62, 0.40, 1.55] });
+  else fail('canopy_profile', { scale: c ? c.scale : null, expected: [0.62, 0.40, 1.55] });
+
+  // ── Graphite, not the pale skin the old airframe used. A dark surface is
+  //    what lets emissive read as glow rather than as paint. ──
+  if (m.skinHex === '5c6675') pass('skin_graphite', { skinHex: m.skinHex });
+  else fail('skin_graphite', { skinHex: m.skinHex, expected: '5c6675' });
 
   // ── Ruddervator mirror symmetry. Built per side (never negative-scale
   //    mirrored), so a fixed local-space offset combined with opposite-sign
