@@ -33,6 +33,37 @@ To preview the page as a reader would see it, open devtools and add the class `d
 > them — including two of the three featured projects. Distribution is RAiD 11,
 > RSAF (other units) 3, Temasek Polytechnic 8, Freelance 1.
 
+> **Palette and profile card, 2026-08-10.** The page is re-tinted toward the
+> personal bear logo and the profile card is rebuilt on the anatomy of an F1
+> driver card — role bar, full-bleed portrait, identity tier, stat strip.
+>
+> **Your job title was wrong in four places** and is now
+> `Forward Deployed Solution Architect (Intern)` everywhere. The hero lede
+> decodes "forward deployed" once, because it is insider vocabulary and a
+> reviewer already flagged five other terms as undecodable.
+>
+> **Two things are now machine-enforced.** The hero and the Experience heading
+> must state your title byte-identically, and the card's two figures are
+> recounted from the live page — so if you add a project, `verify-page.mjs`
+> fails until the card is updated. That is intentional: section 4 below lists
+> six figures a panel cannot check, and the card must not become a seventh.
+>
+> **The RAiD blurb was rewritten** to describe choosing platforms rather than
+> only building on one, since the heading now says architect. Every clause is
+> backed by a row in the log, but the words are yours to adjust.
+>
+> **Still open, and yours:** you said your end goal is AI engineering, and the
+> page does not say so anywhere. It was deliberately kept off the card, which
+> carries only present-tense verifiable facts, and off the pill, which now
+> reads "Aerospace Engineering + software & AI" and must not go back to
+> reading as a pivot away from aerospace. The hero thesis is the one place it
+> could go. See section 5.3 of the design spec.
+>
+> **One more correction, folded in alongside this work.** The profile card and
+> the origin section now say the Aerospace Engineering diploma at Temasek
+> Polytechnic is graduated, not "(studying)" — you confirmed this on
+> 2026-08-10.
+
 ## 1. The three things that matter most
 
 These aren't chips. They're the gaps a chip can't mark.
