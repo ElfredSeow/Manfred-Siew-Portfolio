@@ -22,7 +22,7 @@ Every task's requirements implicitly include these. They come from the spec's §
 - **No GLB / no external model.** Procedural only (`redesign-v2.html:2289-2293`).
 - **Do not touch** the `CAM` table, the sky ramp, the altitude mapping, or the tier gate. The only permitted edits outside `buildAircraft()` and the materials block are the two `JET` ground keyframes, the shadow plane size, the `#jet` SVG symbol, and the `window.Stage` handle.
 - **No negatively-scaled clones for mirroring** — a negative scale inverts winding and lights wrong (`redesign-v2.html:2411-2412`). Mirror by generating coordinates.
-- **Materials, exact values:** `SKIN` `#5C6675` (roughness .52, metalness .24), `DECK` `#474F5C` (roughness .55, metalness .22), `TRIM` `#C2410C` unchanged, `GLASS` `#33547D` unchanged, `DARK` `#2E3540` (roughness .68, metalness .3), `GLOW_HOT` `#FFB070`, `GLOW_EDGE` `#E86A2A`.
+- **Materials, exact values:** `SKIN` `#5C6675` (roughness .52, metalness .24), `DECK` `#474F5C` (roughness .55, metalness .22), `TRIM` `#B84630` tracks `--accent-strong`, `GLASS` `#33547D` unchanged, `DARK` `#2E3540` (roughness .68, metalness .3), `GLOW_HOT` `#FFB0A5`, `GLOW_EDGE` `#E8685C`.
 
 ## File Structure
 
@@ -745,7 +745,10 @@ In `redesign-v2.html`, replace the whole materials block at `redesign-v2.html:23
        what make this safe. */
     const SKIN  = new THREE.MeshStandardMaterial({ color: 0x5C6675, roughness: .52, metalness: .24 });
     const DECK  = new THREE.MeshStandardMaterial({ color: 0x474F5C, roughness: .55, metalness: .22 });
-    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xC2410C, roughness: .48, metalness: .1  });
+    /* TRIM is deliberately pinned to --accent-strong (#B84630) — the signature
+       object is meant to carry the page's accent, not its own opinion of one.
+       If --accent-strong ever moves again, move this with it. */
+    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xB84630, roughness: .48, metalness: .1  });
     /* Low metalness on the canopy, deliberately. Without an environment map a
        metallic surface has nothing to reflect and renders as a black blob. A
        tinted dielectric picks up the hemisphere light instead and reads as
@@ -761,8 +764,8 @@ In `redesign-v2.html`, replace the whole materials block at `redesign-v2.html:23
        the climb — the glow gets relatively STRONGER as the sky ramps to
        navy. That is free, and it is the right direction: the airframe
        should look most alive at altitude. */
-    const GLOW_HOT  = new THREE.MeshBasicMaterial({ color: 0xFFB070 });
-    const GLOW_EDGE = new THREE.MeshBasicMaterial({ color: 0xE86A2A });
+    const GLOW_HOT  = new THREE.MeshBasicMaterial({ color: 0xFFB0A5 });
+    const GLOW_EDGE = new THREE.MeshBasicMaterial({ color: 0xE8685C });
 ```
 
 - [ ] **Step 4: Switch the deck to its own material**
@@ -1446,7 +1449,7 @@ From the screenshots at altitudes 0 and 8000, confirm at 100% zoom that the sawt
 
 - [ ] **Step 6: Check legibility against the navy sky**
 
-From the altitude-58000 screenshot, confirm the airframe is still legible against `#12244A`. Per spec §9.1, if it is not: raise halo opacity and the rim light's contribution first, lighten `SKIN` only after those are exhausted, and **never** raise `sun.intensity`, which `redesign-v2.html:2644-2646` deliberately lowers.
+From the altitude-58000 screenshot, confirm the airframe is still legible against `#1B2C42`. Per spec §9.1, if it is not: raise halo opacity and the rim light's contribution first, lighten `SKIN` only after those are exhausted, and **never** raise `sun.intensity`, which `redesign-v2.html:2644-2646` deliberately lowers.
 
 - [ ] **Step 7: Commit the verification result**
 
