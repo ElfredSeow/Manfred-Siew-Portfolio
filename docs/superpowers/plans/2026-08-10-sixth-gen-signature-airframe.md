@@ -1028,9 +1028,14 @@ In `redesign-v2.html`, immediately after the `const halos = [];` line added in T
     glowCanvas.width = glowCanvas.height = 128;
     const gctx = glowCanvas.getContext('2d');
     const glowGrad = gctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    glowGrad.addColorStop(0,   'rgba(255,190,130,1)');
-    glowGrad.addColorStop(.35, 'rgba(255,128,56,.55)');
-    glowGrad.addColorStop(1,   'rgba(255,128,56,0)');
+    /* These three stops ARE GLOW_HOT and GLOW_EDGE, written as rgba because
+       a canvas gradient cannot take a hex constant. Centre #FFB0A5, falloff
+       #E8685C to transparent. If the palette moves again, these move with
+       it — they are the easiest values in the file to miss, because a grep
+       for the hex will not find them. */
+    glowGrad.addColorStop(0,   'rgba(255,176,165,1)');    // #FFB0A5 — GLOW_HOT
+    glowGrad.addColorStop(.35, 'rgba(232,104,92,.55)');   // #E8685C — GLOW_EDGE
+    glowGrad.addColorStop(1,   'rgba(232,104,92,0)');     // #E8685C, faded out
     gctx.fillStyle = glowGrad;
     gctx.fillRect(0, 0, 128, 128);
     const GLOW_TEX = new THREE.CanvasTexture(glowCanvas);
@@ -1441,7 +1446,7 @@ node scripts/shoot-halos.mjs "$SCRATCH"
 
 Inspect each image for: no dark or grey box behind any halo, no rectangular seam at the sprite's edge, no halo occluding airframe geometry in front of it, and the halo visibly spilling **past** the silhouette edge rather than merely filling the nozzle aperture.
 
-If additive compositing is wrong, switch the halo material to `THREE.NormalBlending` and warm the gradient's centre stop to `rgba(255,215,170,1)`. Record which path was taken in the commit message.
+If additive compositing is wrong, switch the halo material to `THREE.NormalBlending` and lift the gradient's centre stop to `rgba(255,214,208,1)` — a paler coral, still on the `--accent-strong` family, never back toward orange. Record which path was taken in the commit message.
 
 - [ ] **Step 5: Check the silhouette read at wide-shot size**
 
