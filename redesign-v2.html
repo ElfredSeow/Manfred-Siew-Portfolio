@@ -76,7 +76,7 @@
    which are the pairings used.
 
    KNOWN LATENT TRAP, not a live failure: .invert .on-data #9FD4FF is 5.40 on
-   the bare band but 4.4966 on #395a83. No .on-data currently sits inside an
+   the bare band but 4.4989 on #395a83. No .on-data currently sits inside an
    .invert .card. If you ever put one there, it ships a contrast failure and
    the harness will not catch it — the spot-checks do not sample that pair.
 
@@ -735,7 +735,7 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
    Four bands, after an F1 "Driver of the Day" broadcast graphic: role bar,
    full-bleed portrait, identity, stat strip. The anatomy is borrowed; the
    volume is not. That card is dark, loud and competes for attention, which
-   is exactly what line 38 of this file forbids anything but the aircraft
+   is exactly what lines 38-39 of this file forbid anything but the aircraft
    from doing. So: same skeleton, page's own light register.
 
    The name is deliberately NOT on this card. The reference's dominant tier
@@ -749,9 +749,11 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
 .hero-portrait{ display:none; margin-inline:auto; width:100%; max-width:330px; }
 @media (min-width:1024px){ .hero-portrait{ display:block; } }
 
-/* padding:0 is the whole point — the portrait bleeds to the card's edges.
-   overflow:hidden is what clips it into the --r-xl corners, and is also
-   what lets the role bar and stat strip sit flush against them. */
+/* padding:0 is stated explicitly, not to undo anything — .card sets no
+   padding of its own — but to make the intent visible: the portrait bleeds
+   to the card's edges. overflow:hidden is what clips it into the --r-xl
+   corners, and is also what lets the role bar and stat strip sit flush
+   against them. */
 .id-card{ overflow:hidden; padding:0; }
 
 .id-role{
@@ -775,7 +777,11 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
 .id-team{ font-size:1.0625rem; font-weight:600; line-height:1.4; color:var(--ink); }
 .id-edu{ margin-top:.375rem; font-size:.9375rem; color:var(--body); }
 
-.id-stats{ display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); }
+/* .id-stats is a <dl>; the two data-stat wrapper divs are its direct
+   children (dt/dd pairs grouped in a div is valid dl content), so the
+   selectors below are unchanged. margin:0 and the dd reset below undo the
+   browser's default dl/dd spacing — the layout is grid-driven, not that. */
+.id-stats{ display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); margin:0; }
 .id-stats > div{ padding:1rem 1.25rem; }
 .id-stats > div + div{ border-left:1px solid var(--line); }
 .id-stat-label{
@@ -783,7 +789,7 @@ html.tier-0 .stage-right .silo{ right:auto; left:3vw; transform:translateY(-50%)
   letter-spacing:.08em; text-transform:uppercase; color:var(--data);
 }
 .id-stat-value{
-  margin-top:.25rem; font-size:2.5rem; font-weight:600; line-height:1;
+  margin:.25rem 0 0; font-size:2.5rem; font-weight:600; line-height:1;
   color:var(--ink); font-variant-numeric:tabular-nums;
 }
 
@@ -1028,16 +1034,16 @@ html.js [data-reveal].shown{
             <p class="id-edu">Aerospace Engineering, TP (graduated)</p>
           </div>
 
-          <div class="id-stats">
+          <dl class="id-stats">
             <div data-stat="projects">
-              <div class="id-stat-label">Projects</div>
-              <div class="id-stat-value">23</div>
+              <dt class="id-stat-label">Projects</dt>
+              <dd class="id-stat-value">23</dd>
             </div>
             <div data-stat="organisations">
-              <div class="id-stat-label">Organisations</div>
-              <div class="id-stat-value">4</div>
+              <dt class="id-stat-label">Organisations</dt>
+              <dd class="id-stat-value">4</dd>
             </div>
-          </div>
+          </dl>
 
         </div>
       </aside>
@@ -1049,6 +1055,7 @@ html.js [data-reveal].shown{
       <span class="org-chip"><b>RSAF</b> Republic of Singapore Air Force</span>
       <span class="org-chip"><b>RAiD</b> Agile innovation Digital</span>
       <span class="org-chip"><b>TP</b> Temasek Polytechnic</span>
+      <span class="org-chip"><b>Freelance</b> Independent contract work</span>
     </div>
   </div>
 </section>
@@ -2567,7 +2574,7 @@ else {
     rim.position.set(5, -2, -6);
     scene.add(rim);
 
-    const SKY_RAMP = [[0, 0xDDEBF7], [30000, 0x8FBFE9], [58000, 0x12244A]];
+    const SKY_RAMP = [[0, 0xDDEBF7], [30000, 0x8FBFE9], [58000, 0x1B2C42]];
 
     /* ── CAMERA RIG ───────────────────────────────────────────────────
        A plain keyframe table interpolated on altitude with smoothstep. Not

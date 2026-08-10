@@ -59,10 +59,15 @@ To preview the page as a reader would see it, open devtools and add the class `d
 > reading as a pivot away from aerospace. The hero thesis is the one place it
 > could go. See section 5.3 of the design spec.
 >
-> **One more correction, folded in alongside this work.** The profile card and
-> the origin section now say the Aerospace Engineering diploma at Temasek
-> Polytechnic is graduated, not "(studying)" — you confirmed this on
-> 2026-08-10.
+> **One more correction, folded in alongside this work.** The profile card
+> now says the Aerospace Engineering diploma at Temasek Polytechnic is
+> graduated, not "(studying)" — you confirmed this on 2026-08-10. The origin
+> section's prose does not make this claim either way.
+>
+> **That makes the card the page's only statement of graduation.** The card
+> is `display:none` below 1024px, so mobile readers never see it — if you
+> want "graduated" on record for anyone reading on a phone, it needs to say
+> so somewhere else too.
 
 ## 1. The three things that matter most
 
@@ -139,6 +144,8 @@ Lines 1432, 1447, 1633, 1825 — organisation labels. Line 1438 — what MILES /
 **The closing line still says "Open to AI engineering and software development opportunities."** That's a job-hunting line, and it's the last thing a reader sees. If this page is going to an admissions panel, it probably shouldn't be there.
 
 **There's no "why design, why AI, why study" anywhere on the page.** It was deliberately out of scope for the design work, because it's content strategy rather than design. It's also the question the programme most wants answered.
+
+**The profile card's Team and Education lines have no labels.** `.id-team` and `.id-edu` are plain paragraphs — a sighted reader sees them under the "who/what" position in the card's hierarchy, but a screen-reader user just hears two unlabeled strings read back to back. The strings are mostly self-describing ("RAiD · Power Platform Centre of Excellence", "Aerospace Engineering, TP (graduated)"), so this isn't a hard failure, but it's not properly labelled either. Fixing it right needs a visually-hidden label utility, which the page doesn't have yet — left as a call for you rather than added speculatively.
 
 ## Verifying your changes
 
