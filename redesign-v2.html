@@ -2765,7 +2765,7 @@ else {
     grad.addColorStop(1, 'rgba(11,20,32,0)');
     bctx.fillStyle = grad; bctx.fillRect(0, 0, 128, 128);
     const shadow = new THREE.Mesh(
-      new THREE.PlaneGeometry(9, 5.5),
+      new THREE.PlaneGeometry(7.5, 7),
       new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(blobCanvas), transparent: true, depthWrite: false })
     );
     shadow.rotation.x = -Math.PI / 2;
@@ -2845,8 +2845,8 @@ else {
     ];
 
     const JET = [
-      { a:     0, p:[0, -.95, 0], r:[  0, 0,  0] },   // on the ground
-      { a:  2000, p:[0, -.95, 0], r:[  0, 0,  0] },
+      { a:     0, p:[0, -1.03, 0], r:[  0, 0,  0] },   // on the ground
+      { a:  2000, p:[0, -1.03, 0], r:[  0, 0,  0] },
       { a:  8000, p:[0, -.15, 0], r:[ 12, 0,  0] },   // rotation
       { a: 18000, p:[0,  .10, 0], r:[  7, 0, -7] },
       { a: 22000, p:[0,  .10, 0], r:[  6, 0,  7] },

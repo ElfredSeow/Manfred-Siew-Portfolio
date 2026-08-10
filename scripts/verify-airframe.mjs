@@ -287,6 +287,21 @@ async function main() {
   if (rampOk) pass('engine_ignition', ramp);
   else fail('engine_ignition', { ...ramp, note: 'must rise monotonically from near-dark at 0 to full by 8000ft, then hold' });
 
+  // ── Parked on the ground, not floating above it or sunk into it. The
+  //    ground plane is at y = -1.45; the old airframe's belly sat 0.12
+  //    above it, which is the clearance being reproduced. ──
+  const ground = await page.evaluate(() => {
+    const S = window.Stage;
+    S.apply(0, 0);
+    const box = new S.THREE.Box3();
+    S.jet.updateMatrixWorld(true);
+    S.jet.traverse((o) => { if (o.isMesh) box.expandByObject(o); });
+    return { jetY: S.jet.position.y, bellyWorldY: box.min.y, shadowY: -1.45 };
+  });
+  const clearance = ground.bellyWorldY - ground.shadowY;
+  if (clearance > 0 && clearance < 0.25) pass('ground_contact', { ...ground, clearance });
+  else fail('ground_contact', { ...ground, clearance, note: 'belly must sit just above y=-1.45: >0 (not sunk) and <0.25 (not floating)' });
+
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });
 
