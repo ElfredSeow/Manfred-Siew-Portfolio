@@ -97,6 +97,7 @@ function measure() {
     symmetryError: verts.length
       ? Math.abs(Math.abs(box.min.x) - Math.abs(box.max.x))
       : null,
+    bellyY: box.min.y,
   };
 
   jet.position.copy(pos);
@@ -154,6 +155,14 @@ async function main() {
   const symOk = m.symmetryError !== null && m.symmetryError <= 0.02;
   if (symOk) pass('symmetry', { symmetryError: m.symmetryError, tolerance: 0.02 });
   else fail('symmetry', { symmetryError: m.symmetryError, tolerance: 0.02 });
+
+  // ── Volume. A lifting body has an underside; without one the airframe is
+  //    a flat sheet at the wide shot and the contact shadow sits under
+  //    nothing. Belly target -0.30; bevel carries it a further ~0.018, and
+  //    Task 8's parked keyframe is derived from this number. ──
+  const bellyOk = near(m.bellyY, -0.30, 0.04);
+  if (bellyOk) pass('belly_depth', { bellyY: m.bellyY, expected: -0.30, tolerance: 0.04 });
+  else fail('belly_depth', { bellyY: m.bellyY, expected: -0.30, tolerance: 0.04 });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });

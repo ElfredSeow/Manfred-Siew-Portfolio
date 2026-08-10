@@ -2521,6 +2521,29 @@ else {
 
     const PLANFORM = mirrorOutline(HALF);
 
+    /* Volume, in two stacked plates rather than a modelled fuselage. Two
+       bevelled plates read as faceted-but-blended for a few hundred
+       triangles, which is the whole reason this airframe can be procedural
+       and still not look procedural.
+
+       Named _OUTLINE because Task 5 introduces a MATERIAL called DECK and
+       these are coordinate arrays. Do not shorten the names. */
+    const DECK_OUTLINE = mirrorOutline([
+      [0.00,  2.30],
+      [0.42,  1.30],
+      [0.66,  0.20],
+      [0.58, -1.20],
+      [0.00, -2.15],
+    ]);
+
+    const BELLY_OUTLINE = mirrorOutline([
+      [0.00,  2.60],
+      [0.40,  1.60],
+      [0.72,  0.10],
+      [0.66, -1.30],
+      [0.00, -2.30],
+    ]);
+
     function buildAircraft() {
       const jet = new THREE.Group();
 
@@ -2532,6 +2555,23 @@ else {
       planform.geometry.rotateX(Math.PI / 2);
       planform.geometry.translate(0, .08, 0);
       jet.add(planform);
+
+      /* Dorsal deck: volume behind the cockpit, blending into the buried
+         engine. Occupies y in [0.06, 0.36] — a deliberate 0.02 overlap into
+         the planform, so no seam can open between them.
+         SKIN for now; Task 5 gives the deck its own darker material. */
+      const deck = plate(DECK_OUTLINE, .30, SKIN);
+      deck.geometry.rotateX(Math.PI / 2);
+      deck.geometry.translate(0, .36, 0);
+      jet.add(deck);
+
+      /* Belly: y in [-0.30, -0.08]. Without it the airframe is a flat sheet
+         at the wide shot, and the contact shadow has nothing to sit under.
+         The parked keyframe in the JET table is derived from this number. */
+      const belly = plate(BELLY_OUTLINE, .22, SKIN);
+      belly.geometry.rotateX(Math.PI / 2);
+      belly.geometry.translate(0, -.08, 0);
+      jet.add(belly);
 
       const tail = plate([[-1.35,-2.7],[0,-2.1],[1.35,-2.7],[1.35,-2.95],[0,-2.6],[-1.35,-2.95]], .1, SKIN);
       tail.geometry.rotateX(Math.PI / 2);
