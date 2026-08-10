@@ -186,8 +186,12 @@ async function main() {
 
   // ── Tailless. The single strongest futuristic cue, and the one thing that
   //    fails loudly against the old airframe: its vertical fin reaches
-  //    y ~ 1.62. The new airframe's highest point is an inlet bump at
-  //    y ~ 0.48. Anything above 0.8 means a fin survived. ──
+  //    y ~ 1.62. The new airframe's highest point is a RUDDERVATOR tip at
+  //    y = 0.5312 — both of them, being true mirrors — with the inlet bumps
+  //    next at 0.476 and the canopy at 0.436. It matters which one is tallest:
+  //    the ruddervators are the only parts whose height is a design variable
+  //    (span 0.55, cant 35deg), so if this check ever tightens, they are what
+  //    it will bind on. Anything above 0.8 means a fin survived. ──
   if (m.max[1] >= 0.8) fail('tailless', { maxY: m.max[1], threshold: 0.8, note: 'geometry above y=0.8 means a vertical fin is still present' });
   else pass('tailless', { maxY: m.max[1], threshold: 0.8 });
 
@@ -402,8 +406,10 @@ async function main() {
   else fail('engine_ignition', { ...rampDetail, note: 'must rise monotonically from near-dark at 0 to full by 8000ft, then hold, with halo scale ratio matching baseScale*(.55+.45*ignition)' });
 
   // ── Parked on the ground, not floating above it or sunk into it. The
-  //    ground plane is at y = -1.45; the old airframe's belly sat 0.12
-  //    above it, which is the clearance being reproduced. ──
+  //    ground plane is at y = -1.45 and the designed clearance is 0.10, which
+  //    is what the tolerance below is centred on. (An earlier version of this
+  //    comment said 0.12, quoting the old tube airframe's clearance; the
+  //    assertion has always been 0.10 +-0.03 and the delta measures 0.102.) ──
   const ground = await page.evaluate(() => {
     const S = window.Stage;
     S.apply(0, 0);
@@ -499,9 +505,30 @@ async function main() {
     // containing curve commands means the old shape survived.
     const isPolygon = silo.d && !/[cCsSqQaA]/.test(silo.d);
     const vertexCount = silo.d ? (silo.d.match(/[ML]/g) || []).length : 0;
-    const ok = silo.tier0 && silo.rendered && silo.canvasHidden && isPolygon && vertexCount === 12 && silo.siloCount === 4;
-    const detail = { ...silo, isPolygon, vertexCount, expectedVertices: 12, expectedSilos: 4 };
-    if (ok) pass('tier0_silhouette', detail); else fail('tier0_silhouette', detail);
+
+    // Counting twelve M/L commands proves the path has twelve corners. It does
+    // NOT prove they are the RIGHT twelve — any wrong silhouette with the same
+    // vertex count sails through, and this is the only thing the lowest-
+    // capability readers ever see. So assert the three points that ARE the
+    // sawtooth, the one feature the whole planform exists to carry:
+    //   208.5 99.9  right notch   (planform  1.30, -1.00)
+    //   150   134   centre trailing point (0.00, -2.60)
+    //   91.5  99.9  left notch    (planform -1.30, -1.00)
+    // Their relationship is the assertion, not just their presence: both
+    // notches at the same height, mirrored about x=150, and the centre point
+    // BELOW them — that ordering is what makes the outline a W rather than a
+    // plain delta, and it is what would silently disappear if the symbol were
+    // ever retraced from the wrong coordinates.
+    const SAWTOOTH = ['208.5 99.9', '150 134', '91.5 99.9'];
+    const sawtoothPoints = silo.d ? SAWTOOTH.filter((p) => silo.d.includes(p)) : [];
+    const sawtoothOk = sawtoothPoints.length === SAWTOOTH.length;
+
+    const ok = silo.tier0 && silo.rendered && silo.canvasHidden && isPolygon &&
+               vertexCount === 12 && silo.siloCount === 4 && sawtoothOk;
+    const detail = { ...silo, isPolygon, vertexCount, expectedVertices: 12, expectedSilos: 4,
+                     sawtooth: SAWTOOTH, sawtoothFound: sawtoothPoints, sawtoothOk };
+    if (ok) pass('tier0_silhouette', detail);
+    else fail('tier0_silhouette', { ...detail, note: 'the Tier-0 path must contain the three sawtooth points; a wrong silhouette with twelve corners would otherwise pass' });
   }
 
   // ── HiDPI canvas fit. A <canvas> is a REPLACED element: it has an

@@ -42,7 +42,7 @@ The fix is a shape that is unmistakably next-generation at a glance, and that ca
 
 ## 3. Non-goals
 
-- **No new clock.** `redesign-v2.html:2313` commits the stage to being a pure function of
+- **No new clock.** `redesign-v2.html:2428` commits the stage to being a pure function of
   `Flight.state.alt`, with the parked idle yaw as the single declared exception. Pulsing
   lights, scan lines and contrails were considered and rejected on that basis. The engine
   ignition ramp at §5.1 is *not* an exception: it is driven by altitude alone and adds no
@@ -51,13 +51,13 @@ The fix is a shape that is unmistakably next-generation at a glance, and that ca
   target. The stage's performance story is that it has none of these, and the on-demand
   redraw depends on staying cheap. §5.1 obtains the glow another way rather than relaxing
   this.
-- **No GLB.** `redesign-v2.html:2289-2293` rejects third-party models on licence and
+- **No GLB.** `redesign-v2.html:2404-2408` rejects third-party models on licence and
   availability grounds. That reasoning is unchanged and this design stays procedural.
 - **No altitude changes, and no camera changes beyond the one named below.** The sky ramp
   and the tier gate are untouched. **No `a` value in either table has moved, or may move** —
   that is the hard half of this constraint and it still holds absolutely. Every altitude in
   `CAM` and `JET` is exactly where it was, and the seam altitudes (18000, 22000, 32000,
-  36000) are load-bearing for the reason `redesign-v2.html:2854-2867` gives.
+  36000) are load-bearing for the reason `redesign-v2.html:2872-2885` gives.
 
   **Revised 2026-08-10, author-approved.** This bullet originally read "`CAM`, the sky ramp,
   and the tier gate are untouched." That is no longer true, and the constraint was relaxed
@@ -111,7 +111,7 @@ single property is most of what separates a modern low-observable airframe from 
 
 ### 4.2 Planform
 
-One `plate()` call. `plate()` already bevels every edge (`redesign-v2.html:2377-2391`),
+One `plate()` call. `plate()` already bevels every edge (`redesign-v2.html:2543-2557`),
 which is what stops flat plates reading as folded cardboard — that helper is correct as-is
 and is reused unchanged.
 
@@ -130,7 +130,7 @@ Outline, in the `[x, z]` convention the existing plates use (mirrored across x=0
 Thickness 0.16, centred on y = 0, so the planform occupies y ∈ [−0.08, +0.08].
 
 Length 6.00, span 6.20 — deliberately within a rounding error of the old airframe's
-"~6 units long and ~6.2 across," which `redesign-v2.html:2498-2501` states every camera
+"~6 units long and ~6.2 across," which `redesign-v2.html:2865-2868` states every camera
 standoff distance was sized against.
 
 Points 5→6→7 are the **sawtooth trailing edge**. This is the highest-value single feature
@@ -172,7 +172,7 @@ registers it even when the viewer cannot name it.
 - **Canopy** — retained as a low, faired bubble: the same sphere, rescaled from the old
   fighter-bubble proportions of (0.85, 0.72, 2.10) to (0.62, 0.40, 1.55) — flatter and
   longer. **Its centre stays at exactly (0, 0.30, 1.25)**, because
-  that is the `COCKPIT` constant at `redesign-v2.html:2503` that every waypoint's push-in
+  that is the `COCKPIT` constant at `redesign-v2.html:2870` that every waypoint's push-in
   beat targets. Moving it silently breaks three camera beats.
 
 ## 5. Light
@@ -184,18 +184,26 @@ Three emissive surfaces, all `MeshBasicMaterial`.
 
 `MeshBasicMaterial` rather than `MeshStandardMaterial` with an `emissive` channel, for two
 reasons: it is cheaper, and it is **unlit**, so it holds constant brightness while
-`redesign-v2.html:2646` dims the sun from 2.1 to 1.25 across the climb. The glow therefore
+`redesign-v2.html:3086` dims the sun from 2.1 to 1.25 across the climb. The glow therefore
 gets relatively *stronger* as the sky ramps to `#1B2C42`. That is free, and it is the
 right direction — the airframe should look most alive at altitude.
 
 | Element | Where | Colour | Role |
 |---|---|---|---|
 | Engine slot interior | inside the nozzle | `#FFB0A5` (`GLOW_HOT`) | hottest; the anchor |
-| Chine + inlet-lip strips | thin slivers proud of the surface | `#E8685C` (`GLOW_EDGE`) | the *lit from within* read |
+| Chine strips | thin slivers proud of the surface, one per side | `#E8685C` (`GLOW_EDGE`) | the *lit from within* read |
 | Instrument glow | small plane inside the canopy | `#FFB0A5` (`GLOW_HOT`) | see below |
 
+**On the inlet lips, corrected 2026-08-10.** The middle row above read "Chine + inlet-lip
+strips" until verification checked it against what was built. Only the two chine strips
+exist; the inlet mouth is `DARK` `#2E3540`, not emissive, and the light at the inlets comes
+entirely from the two halos at §5.1 sitting proud of it. That reads correctly — a dark
+aperture with light spilling out of it is what an inlet lip should look like — so the row is
+corrected rather than the geometry changed. Three emissive elements, four emissive meshes
+(the chine strip is built per side), which is what `emissive_surfaces` asserts.
+
 **On the cockpit glow.** The camera's push-in lands on the cockpit at every waypoint, and
-`redesign-v2.html:2490-2492` establishes that this beat means *"this part was mine."* It is
+`redesign-v2.html:2857-2859` establishes that this beat means *"this part was mine."* It is
 the one place on the airframe where a light has narrative work to do rather than decorative
 work. It is also only visible during that beat, which is the correct amount of visibility.
 
@@ -211,8 +219,13 @@ removed entirely — see §6 — so these two glow constants are now the *only* 
 touches the airframe.) The two reasons above are untouched by that move — one accent hue, and a warm colour is still
 physically right for exhaust — so the author's decision, same day, is that the glow should
 follow the palette rather than freeze at the old hue: `GLOW_HOT` moves to `#FFB0A5` and
-`GLOW_EDGE` to `#E8685C`, both above in the table. These constants are not yet built in
-`redesign-v2.html`; this revision exists so the values are already correct when they are.
+`GLOW_EDGE` to `#E8685C`, both above in the table. **Both are built.** This paragraph said
+"not yet built in `redesign-v2.html`; this revision exists so the values are already correct
+when they are" — that was true when it was written and stopped being true the same day. They
+now exist as `MeshBasicMaterial` constants in the materials block, and — this is the part a
+grep for the hex will not find — the same two colours are restated a third time as `rgba()`
+stops in the halo gradient, because a canvas gradient cannot take a hex constant. If the
+palette moves again, three sites move, not two.
 
 ### 5.1 Halos — how the glow actually glows
 
@@ -224,7 +237,7 @@ It can be drawn directly instead of computed: an **additive-blended radial-gradi
 billboard** at each glow source. Pre-bloom real-time rendering did it this way for a
 decade, and it produces the effect rather than an approximation of it.
 
-This is not a foreign technique in this file. `redesign-v2.html:2455-2461` already builds a
+This is not a foreign technique in this file. `redesign-v2.html:2822-2828` already builds a
 128×128 canvas radial gradient and maps it onto a plane for the contact shadow, for exactly
 the same reason: obtain the optical result without paying for the machinery that would
 normally produce it. Halos reuse that pattern with the gradient inverted and the blending
@@ -237,8 +250,22 @@ additive.
 | `depthWrite` | `false` | a halo must never carve a hole in what is behind it |
 | Texture | one shared 128×128 canvas radial gradient | built once, reused by every halo |
 
-Three halos, matching the three emissive elements: a large one at the nozzle, small ones at
-each inlet lip, and a very small one at the canopy. Total ~6 triangles each, one texture.
+**Four** halos: a large one at the nozzle, one at each inlet lip, and a very small one at the
+canopy. Total ~6 triangles each, one texture. (This said "three" until 2026-08-10, counting
+the pair of inlets as one element. Four is the number built, the number §8 costs, and the
+number `halo_count` asserts.)
+
+**`depthTest` stays on, and that has a consequence.** Halos must depth-test or the engine
+glow would draw straight through the fuselage from any forward beat. The cost is that a halo
+can be depth-rejected by geometry in front of it — including *transparent* geometry, because
+three.js defaults transparent materials to `depthWrite: true`. That is what happened to the
+cockpit halo: the `GLASS` canopy wrote depth at z = 1.777 and rejected the halo inside it at
+z = 1.30, so the one light with narrative work to do contributed 5,024 luminance units where
+it should contribute 52,925. `GLASS` therefore carries `depthWrite: false` — standard for
+transparent glass, and it still depth-*tests*, so it is still occluded by anything genuinely
+in front of it. Every halo's actual contribution to the frame is now measured by
+`halo_visibility`, because `halo_count` and `halo_blending` assert properties and both were
+green throughout the bug.
 
 **Engine ignition.** Halo scale and opacity ramp from near-zero on the ground to full by
 the end of rotation (~8000 ft), so the engine appears to light as the aircraft rotates.
@@ -250,7 +277,7 @@ halos at full; nothing else depends on it.
 ### 5.2 What this technique costs, honestly
 
 The one uncertain interaction is compositing. The renderer runs `alpha: true` with
-`setClearAlpha(0)` (`redesign-v2.html:2582-2583`) so the canvas composites over the CSS
+`setClearAlpha(0)` (`redesign-v2.html:3000-3001`) so the canvas composites over the CSS
 sky, and three.js uses premultiplied alpha by default. Additive blending over transparent
 regions of the framebuffer is well-trodden and expected to composite correctly — a halo
 over open sky should tint the CSS background beneath it, which is the desired result — but
@@ -266,7 +293,7 @@ alpha interaction at all.
 | `SKIN` | `#DCE2E9` | `#5C6675` | graphite, roughness .52, metalness .24 |
 | `DECK` | — | `#474F5C` | new; separates the deck from the planform |
 | `TRIM` | `#C2410C` | **removed** | see below — the ruddervators were its only user and are now `SKIN` |
-| `GLASS` | `#33547D` | unchanged | the low-metalness reasoning at `:2369-2372` still holds — there is still no environment map |
+| `GLASS` | `#33547D` | unchanged | the low-metalness reasoning at `:2507-2510` still holds — there is still no environment map |
 | `DARK` | `#5A6675` | `#2E3540` | darkened; it is now the surround that makes the glow read |
 
 **Graphite, not the mid-tone this spec originally called for.** An earlier revision hedged
@@ -301,15 +328,15 @@ carried to its conclusion. The airframe now carries no painted accent at all.
 
 These are the only edits outside `buildAircraft()` and the materials block:
 
-1. **`JET` table, ground keyframes only** (`redesign-v2.html:2543-2544`). The old tube
+1. **`JET` table, ground keyframes only** (`redesign-v2.html:2961-2962`). The old tube
    fuselage had its belly at y = −0.38; the new belly sits at −0.30. The two parked
    keyframes at altitude 0 and 2000 move from y = −0.95 to y = −1.03 so the aircraft still
    sits on the ground rather than floating above it. **No other keyframe in either table
    changes.**
-2. **Contact shadow plane** (`redesign-v2.html:2463`). 9 × 5.5 was sized for a long narrow
+2. **Contact shadow plane** (`redesign-v2.html:2830`). 9 × 5.5 was sized for a long narrow
    tube. A delta's footprint is shorter and wider, so it becomes ~7.5 × 7.0. The blob
    texture and the fade-out on climb are unchanged.
-3. **`#jet` SVG symbol** (`redesign-v2.html:861-863`). Redrawn from the §4.2 planform
+3. **`#jet` SVG symbol** (`redesign-v2.html:942-957`). Redrawn from the §4.2 planform
    coordinates, so Tier 0 shows a silhouette of the aircraft that Tier 2 renders. Only the
    planform outline carries — deck, ruddervators and inlet bumps are omitted, as they are
    invisible in a flat plan-view fill. Like the current symbol, the mapping into the
@@ -323,7 +350,7 @@ Verification found two defects that could not be fixed inside those bounds, and 
 approved both on 2026-08-10. They are recorded here so the list stays a true description of
 what shipped — and so that replaying the plan cannot silently revert them.
 
-4. **`CAM`, waypoint 3's wide shot only** (`redesign-v2.html:2910`). Position moved from
+4. **`CAM`, waypoint 3's wide shot only** (`redesign-v2.html:2932`). Position moved from
    `[8.6, 2.6, 11.0]` to `[3.0, 8.5, -12.2]` — astern and high. `a`, `fov`, `roll`, `shift`
    and `look` are unchanged, and **no other `CAM` keyframe moved.** Reason, in full, at §3:
    every original keyframe sat forward of the nose, so the sawtooth of §4.2 was never visible
@@ -339,15 +366,15 @@ what shipped — and so that replaying the plan cannot silently revert them.
    `devicePixelRatio ≥ 1.5` the stage laid out at 1.5–2× the viewport, anchored top-left, and
    the signature rendered off-screen on most laptops and every phone. Full reasoning at §3.
    This is the only CSS edit this design permits, it is a sizing fix only, and it is coupled
-   to `renderer.setSize(W, H, false)` at `redesign-v2.html:2974` — change one, change the
+   to `renderer.setSize(W, H, false)` at `redesign-v2.html:3015` — change one, change the
    other. Both sites carry a comment naming the other. Held by `hidpi_canvas_fit`.
 
 ## 8. Cost
 
 ~2k additional triangles for the airframe, plus ~24 for the four halo sprites and one
 shared 128×128 canvas texture built once at startup. The canvas redraws only when altitude
-changes (`redesign-v2.html:2662-2671`), so this is paid during scroll and not at all when
-idle. No new dependencies; the page's two remote dependencies, named at `:2295-2311`, are
+changes (`redesign-v2.html:3102-3111`), so this is paid during scroll and not at all when
+idle. No new dependencies; the page's two remote dependencies, named at `:2410-2420`, are
 unchanged, and no post-processing pass is added.
 
 ## 9. Risks
@@ -357,7 +384,7 @@ Reduced, not eliminated. The halos at §5.1 are what carry legibility against `#
 this risk now depends on the halos landing rather than on the skin value. If the aircraft
 still loses legibility at altitude, raise halo opacity and the rim light's contribution
 first; lighten `SKIN` only after those are exhausted, and **never** raise sun intensity,
-which `:2644-2646` deliberately lowers.
+which `:3084-3086` deliberately lowers.
 
 ### 9.2 Halo compositing against the transparent canvas
 **This replaces an earlier risk about emissive reading as flat paint, which §5.1 resolves.**
@@ -379,7 +406,7 @@ The new planform is proportionally wider in plan view than the old airframe, and
 applies up to 15° of roll during push-in beats. Every `CAM` keyframe must be checked
 visually, not assumed. This is the one item that could force a camera change, which would
 contradict §3 — if it does, the correct response is to shrink the span slightly rather
-than to retune keyframes that `:2505-2518` documents as expensively arrived at.
+than to retune keyframes that `:2872-2885` documents as expensively arrived at.
 
 ### 9.4 Angular geometry versus the page's round-over-square language
 The page commits to round over square, and a faceted delta is angular by nature. The

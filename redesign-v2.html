@@ -2923,8 +2923,12 @@ else {
          must keep zeroing pose velocity on it. Only the position moved. The
          camera does not pass through the airframe on either side of this
          beat — closest approach is 8.52 units on the way in and 7.04 on the
-         way out, against a 3.1-unit airframe half-extent, and camera_path_clear
-         in scripts/verify-airframe.mjs holds that for every segment. */
+         way out, against an enclosing radius of 4.369. (Not 3.1: that is the
+         wingtip's x, and the sphere that encloses this planform is set by the
+         nose apex at z = 3.40, not by the span. camera_path_clear measures the
+         radius rather than assuming it, exactly so this number cannot drift.)
+         That check in scripts/verify-airframe.mjs holds the clearance for
+         every segment, not just for this beat's two neighbours. */
       { a: 36000, p:[ 3.0,  8.5,-12.2], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
       { a: 40000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
       { a: 42500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
