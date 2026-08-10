@@ -114,6 +114,28 @@ function measure() {
     ruddervators: solids.filter((mesh) => Math.abs(mesh.position.x) > 2.0).length,
   };
 
+  // Ruddervator mirror check. The two sides are built independently (never
+  // by negative scale), so nothing guarantees they land as true mirror
+  // images short of measuring both and comparing. Sorted by min.x so [0] is
+  // the left (negative x) side and [1] is the right.
+  const rvMeshes = solids.filter((mesh) => Math.abs(mesh.position.x) > 2.0);
+  if (rvMeshes.length === 2) {
+    const boxes = rvMeshes
+      .map((mesh) => new THREE.Box3().setFromObject(mesh))
+      .sort((a, b) => a.min.x - b.min.x);
+    const [L, R] = boxes;
+    out.ruddervatorSymmetry = {
+      yMinDelta: Math.abs(L.min.y - R.min.y),
+      yMaxDelta: Math.abs(L.max.y - R.max.y),
+      // Mirrored x-extents: left's min should equal minus right's max, and
+      // vice versa.
+      xMirrorMinDelta: Math.abs(L.min.x + R.max.x),
+      xMirrorMaxDelta: Math.abs(L.max.x + R.min.x),
+    };
+  } else {
+    out.ruddervatorSymmetry = null;
+  }
+
   jet.position.copy(pos);
   jet.rotation.copy(rot);
   jet.updateMatrixWorld(true);
@@ -184,6 +206,18 @@ async function main() {
 
   if (m.ruddervators === 2) pass('canted_ruddervators', { count: m.ruddervators });
   else fail('canted_ruddervators', { count: m.ruddervators, expected: 2 });
+
+  // ── Ruddervator mirror symmetry. Built per side (never negative-scale
+  //    mirrored), so a fixed local-space offset combined with opposite-sign
+  //    cant rotation can silently pivot each side about a different
+  //    effective axis. Catches that: both y-extents and mirrored x-extents
+  //    must match closely. ──
+  const rvSym = m.ruddervatorSymmetry;
+  const rvSymOk = !!rvSym &&
+    rvSym.yMinDelta <= 0.005 && rvSym.yMaxDelta <= 0.005 &&
+    rvSym.xMirrorMinDelta <= 0.005 && rvSym.xMirrorMaxDelta <= 0.005;
+  if (rvSymOk) pass('ruddervator_symmetry', { ...rvSym, tolerance: 0.005 });
+  else fail('ruddervator_symmetry', { ...rvSym, tolerance: 0.005 });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });

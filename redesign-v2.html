@@ -2590,6 +2590,14 @@ else {
       [-1, 1].forEach(side => {
         const rv = plate([[-0.95, 0], [-1.60, .55], [-1.85, .55], [-1.65, 0]], .08, TRIM);
         rv.geometry.rotateY(-Math.PI / 2);
+        // ExtrudeGeometry's depth always runs 0 -> thickness in local space
+        // (plus symmetric bevel margin), never centred on the mesh's own
+        // origin. After rotateY that depth lands on local x, off-centre by
+        // half the thickness. Re-centre it here, BEFORE the cant rotation,
+        // so rotateZ(+-35deg) pivots on a symmetric shape and the two sides
+        // become true mirror images instead of each canting about a
+        // different effective axis.
+        rv.geometry.translate(.04, 0, 0);
         // Cant 35deg outward from vertical: the tip leans away from centre.
         rv.geometry.rotateZ(side * -35 * Math.PI / 180);
         rv.position.set(side * 2.35, .04, 0);
@@ -2606,9 +2614,9 @@ else {
         bump.position.set(side * .52, .32, .95);
         jet.add(bump);
 
-        const mouth = new THREE.Mesh(new THREE.CircleGeometry(.17, 16), DARK);
+        const mouth = new THREE.Mesh(new THREE.CircleGeometry(.085, 16), DARK);
         mouth.scale.set(1, .62, 1);
-        mouth.position.set(side * .52, .32, 1.44);
+        mouth.position.set(side * .52, .32, 1.43);
         jet.add(mouth);
       });
 
