@@ -145,19 +145,28 @@ right direction — the airframe should look most alive at altitude.
 
 | Element | Where | Colour | Role |
 |---|---|---|---|
-| Engine slot interior | inside the nozzle | `#FF8038` | hottest; the anchor |
-| Chine + inlet-lip strips | thin slivers proud of the surface | `#E86A2A` | the *lit from within* read |
-| Instrument glow | small plane inside the canopy | `#FF8038` | see below |
+| Engine slot interior | inside the nozzle | `#FFB0A5` (`GLOW_HOT`) | hottest; the anchor |
+| Chine + inlet-lip strips | thin slivers proud of the surface | `#E8685C` (`GLOW_EDGE`) | the *lit from within* read |
+| Instrument glow | small plane inside the canopy | `#FFB0A5` (`GLOW_HOT`) | see below |
 
 **On the cockpit glow.** The camera's push-in lands on the cockpit at every waypoint, and
 `redesign-v2.html:2490-2492` establishes that this beat means *"this part was mine."* It is
 the one place on the airframe where a light has narrative work to do rather than decorative
 work. It is also only visible during that beat, which is the correct amount of visibility.
 
-**On the hue.** The glow uses the page's existing orange accent (`#C2410C` / `#FF8038`)
-rather than the conventional sci-fi cyan. Two reasons: the page currently has exactly one
-accent hue and a second one would cost more than the effect is worth, and orange is
-physically right for exhaust. Approved 2026-08-10.
+**On the hue.** The glow uses the page's accent rather than the conventional sci-fi cyan. Two
+reasons: the page has exactly one accent hue and a second one would cost more than the effect
+is worth, and a warm glow is physically right for exhaust. Approved 2026-08-10.
+
+**Revised 2026-08-10.** This section originally cited `#C2410C` / `#FF8038` as "the page's
+existing orange accent" — that citation no longer holds. The page has since been re-tinted
+toward the bear-logo palette: `--accent-strong` is now `#B84630` and `--signal` is now the
+coral `#F5837A`, and the airframe's own `TRIM` was updated to match (`redesign-v2.html:2458`).
+The two reasons above are untouched by that move — one accent hue, and a warm colour is still
+physically right for exhaust — so the author's decision, same day, is that the glow should
+follow the palette rather than freeze at the old hue: `GLOW_HOT` moves to `#FFB0A5` and
+`GLOW_EDGE` to `#E8685C`, both above in the table. These constants are not yet built in
+`redesign-v2.html`; this revision exists so the values are already correct when they are.
 
 ### 5.1 Halos — how the glow actually glows
 

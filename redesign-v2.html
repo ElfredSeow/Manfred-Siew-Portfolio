@@ -2455,7 +2455,10 @@ else {
     /* Model space: nose points +Z, up is +Y, length ~6 units, origin at the
        wing root so the aircraft rotates about something plausible. */
     const SKIN  = new THREE.MeshStandardMaterial({ color: 0xDCE2E9, roughness: .55, metalness: .18 });
-    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xC2410C, roughness: .48, metalness: .1  });
+    /* TRIM is deliberately pinned to --accent-strong (#B84630) — the signature
+       object is meant to carry the page's accent, not its own opinion of one.
+       If --accent-strong ever moves again, move this with it. */
+    const TRIM  = new THREE.MeshStandardMaterial({ color: 0xB84630, roughness: .48, metalness: .1  });
     /* Low metalness on the canopy, deliberately. Without an environment map a
        metallic surface has nothing to reflect and renders as a black blob. A
        tinted dielectric picks up the hemisphere light instead and reads as
