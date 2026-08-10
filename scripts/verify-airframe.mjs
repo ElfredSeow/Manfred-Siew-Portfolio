@@ -54,6 +54,25 @@ function measure() {
 
   const canopy = solids.find((m) => m.material && m.material.transparent && m.material.opacity < 1);
 
+  // The planform is the largest solid by bounding-box area. Pull its vertex
+  // set so the outline's defining points can be checked for real, rather
+  // than trusting that the constants at the top of buildAircraft() were
+  // actually the ones fed to plate().
+  let planform = null, area = -1;
+  solids.forEach((mesh) => {
+    const b = new THREE.Box3().setFromObject(mesh);
+    const a = (b.max.x - b.min.x) * (b.max.z - b.min.z);
+    if (a > area) { area = a; planform = mesh; }
+  });
+  const verts = [];
+  if (planform) {
+    const p = planform.geometry.attributes.position;
+    for (let i = 0; i < p.count; i++) verts.push([p.getX(i), p.getY(i), p.getZ(i)]);
+  }
+  // Does any vertex land within `tol` of this [x, z]? Bevelling moves every
+  // outline point slightly, so an exact match would never hit.
+  const hasVertexAt = (x, z, tol) => verts.some((v) => Math.abs(v[0] - x) <= tol && Math.abs(v[2] - z) <= tol);
+
   const out = {
     ok: true,
     min: box.min.toArray(),
@@ -64,6 +83,20 @@ function measure() {
     haloCount: S.halos.length,
     canopy: canopy ? { pos: canopy.position.toArray(), scale: canopy.scale.toArray() } : null,
     cockpit: S.COCKPIT.toArray(),
+    sawtooth: {
+      notchR:   hasVertexAt( 1.30, -1.00, 0.08),
+      notchL:   hasVertexAt(-1.30, -1.00, 0.08),
+      centreTE: hasVertexAt( 0.00, -2.60, 0.08),
+      tipR:     hasVertexAt( 3.10, -1.30, 0.08),
+      tipL:     hasVertexAt(-3.10, -1.30, 0.08),
+      noseApex: hasVertexAt( 0.00,  3.40, 0.08),
+    },
+    // Symmetry, measured rather than assumed. Mirroring by negative scale
+    // would invert winding and light wrong, so the outline is mirrored in
+    // coordinates instead — this is what proves that happened.
+    symmetryError: verts.length
+      ? Math.abs(Math.abs(box.min.x) - Math.abs(box.max.x))
+      : null,
   };
 
   jet.position.copy(pos);
@@ -110,6 +143,17 @@ async function main() {
   const boxOk = near(m.length, 6.00, 0.15) && near(m.span, 6.20, 0.15);
   const boxDetail = { length: m.length, span: m.span, expected: { length: 6.00, span: 6.20 }, tolerance: 0.15 };
   if (boxOk) pass('bounding_box', boxDetail); else fail('bounding_box', boxDetail);
+
+  // ── Sawtooth trailing edge. The one feature that reads as
+  //    "next generation" instantly and survives being shrunk to a
+  //    silhouette. Every defining point of the outline is checked. ──
+  const st = m.sawtooth;
+  const stOk = st.notchR && st.notchL && st.centreTE && st.tipR && st.tipL && st.noseApex;
+  if (stOk) pass('planform_outline', st); else fail('planform_outline', st);
+
+  const symOk = m.symmetryError !== null && m.symmetryError <= 0.02;
+  if (symOk) pass('symmetry', { symmetryError: m.symmetryError, tolerance: 0.02 });
+  else fail('symmetry', { symmetryError: m.symmetryError, tolerance: 0.02 });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });

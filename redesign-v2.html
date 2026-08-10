@@ -2483,30 +2483,55 @@ else {
       return new THREE.Mesh(g, mat);
     }
 
+    /* ── PLANFORM ──────────────────────────────────────────────────────
+       The airframe is one continuous outline: nose, chine and wing with no
+       seam anywhere. That single property is most of what separates a
+       modern low-observable airframe from a 1970s fighter, and it costs
+       less geometry than the tube-plus-bolted-wing it replaces.
+
+       [x, z] pairs in plan view. plate() consumes them as a 2D shape and
+       rotateX(PI/2) turns +Y into +Z, so the second number is fore/aft.
+
+       Points 5-7 are the sawtooth trailing edge. It is the highest-value
+       feature here: the W-notch reads as "next generation" instantly and
+       is the one cue that survives being shrunk to the Tier-0 silhouette.
+
+       Leading-edge sweep from the chine flare to the tip is ~48deg and is
+       held identical on both sides. Parallel edge alignment is the rule
+       real low-observable planforms obey, and the eye registers it even
+       when the viewer cannot name it. */
+    const HALF = [
+      [0.00,  3.40],   // nose apex
+      [0.34,  2.55],   // chine origin
+      [0.68,  1.60],   // chine flare
+      [3.10, -1.30],   // wingtip, leading edge
+      [2.92, -1.72],   // wingtip, trailing edge
+      [1.30, -1.00],   // sawtooth notch
+      [0.00, -2.60],   // centre trailing point
+    ];
+
+    /* Mirror in coordinates, never with a negative scale. A negatively
+       scaled clone inverts its winding and lights wrong — the same reason
+       the previous wing was built as one symmetric planform rather than a
+       mirrored pair. First and last points sit on the centreline and are
+       not duplicated. */
+    function mirrorOutline(half) {
+      return half.concat(half.slice(1, -1).reverse().map(([x, z]) => [-x, z]));
+    }
+
+    const PLANFORM = mirrorOutline(HALF);
+
     function buildAircraft() {
       const jet = new THREE.Group();
 
-      // Fuselage: a lathe profile spun about Y, then tipped to lie along Z.
-      // 34 segments rather than 26 — the silhouette is the thing being looked
-      // at now, so faceting on the barrel is worth the extra triangles.
-      const profile = [[0,0],[.26,.15],[.34,.9],[.38,2.2],[.38,3.4],[.33,4.4],[.24,5.2],[.12,5.75],[0,6]]
-        .map(p => new THREE.Vector2(p[0], p[1]));
-      const body = new THREE.Mesh(new THREE.LatheGeometry(profile, 34), SKIN);
-      body.geometry.rotateX(Math.PI / 2);          // +Y becomes +Z: nose forward
-      body.geometry.translate(0, 0, -3);           // origin near the wing root
-      jet.add(body);
-
-      const cone = new THREE.Mesh(new THREE.ConeGeometry(.24, .95, 28), TRIM);
-      cone.geometry.rotateX(Math.PI / 2);
-      cone.geometry.translate(0, 0, 2.55);
-      jet.add(cone);
-
-      /* Wings as one symmetric planform rather than a mirrored pair — a
-         negatively-scaled clone inverts its winding and lights wrong. */
-      const wing = plate([[-3.1,-.85],[0,.85],[3.1,-.85],[3.1,-1.5],[0,-1.35],[-3.1,-1.5]], .13, SKIN);
-      wing.geometry.rotateX(Math.PI / 2);
-      wing.geometry.translate(0, .065, 0);
-      jet.add(wing);
+      /* One plate, and it is the whole aeroplane in plan. Thickness 0.16,
+         centred on y=0, so the planform occupies y in [-0.08, +0.08].
+         plate() bevels every edge, which is what gives each one a highlight
+         to catch and stops the airframe reading as folded cardboard. */
+      const planform = plate(PLANFORM, .16, SKIN);
+      planform.geometry.rotateX(Math.PI / 2);
+      planform.geometry.translate(0, .08, 0);
+      jet.add(planform);
 
       const tail = plate([[-1.35,-2.7],[0,-2.1],[1.35,-2.7],[1.35,-2.95],[0,-2.6],[-1.35,-2.95]], .1, SKIN);
       tail.geometry.rotateX(Math.PI / 2);
