@@ -406,6 +406,53 @@ async function main() {
     await page.close();
   }
 
+  // ── Check 9: the title of record, stated identically wherever it appears ──
+  //
+  // P1-9 (docs/superpowers/plans/2026-08-09-dai-design-alignment.md:73) found
+  // the hero and the Experience section disagreeing about the author's title.
+  // The fix was to make them verbatim identical, so that is asserted, not
+  // assumed. The card's role bar is a stylised two-line rendering of the same
+  // string; it is compared after lowercasing and collapsing whitespace.
+  {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    await page.goto(PAGE_URL);
+    const TITLE = 'Forward Deployed Solution Architect (Intern)';
+    const STALE = 'Power Platform Developer, Student Intern';
+    const norm = (s) => (s || '').replace(/\s+/g, ' ').trim();
+    const found = await page.evaluate(({ stale }) => {
+      const heroEl = document.querySelector('.hero-lede strong');
+      const expEl = document.querySelector('#timeline .tl-item h3');
+      const barEl = document.querySelector('.id-role');
+      return {
+        hero: heroEl ? heroEl.textContent : null,
+        experience: expEl ? expEl.textContent : null,
+        roleBar: barEl ? barEl.textContent : null,
+        staleCount: (document.documentElement.innerHTML.match(new RegExp(stale, 'g')) || []).length,
+        // Sampled separately: the meta description says "Power Platform
+        // Developer at RAiD" WITHOUT the ", Student Intern" suffix, so it does
+        // not match STALE and staleCount cannot see it. Without this field the
+        // <head> could keep the wrong title while every check went green.
+        metaDesc: (document.querySelector('meta[name="description"]') || {}).content || null,
+      };
+    }, { stale: STALE });
+    const hero = norm(found.hero);
+    const experience = norm(found.experience);
+    // The role bar is absent until Task 3; treat null as "not yet built"
+    // rather than as a mismatch, so this check can go green on Task 2 alone.
+    const roleBar = found.roleBar === null ? null : norm(found.roleBar).toLowerCase();
+    const problems = [];
+    if (hero !== TITLE) problems.push(`hero lede is "${hero}", want "${TITLE}"`);
+    if (experience !== TITLE) problems.push(`experience h3 is "${experience}", want "${TITLE}"`);
+    if (hero !== experience) problems.push('P1-9: hero and experience are not byte-identical');
+    if (roleBar !== null && roleBar !== TITLE.toLowerCase()) problems.push(`role bar normalises to "${roleBar}", want "${TITLE.toLowerCase()}"`);
+    if (found.staleCount > 0) problems.push(`stale title still present ${found.staleCount}x`);
+    if (!found.metaDesc || !found.metaDesc.includes(TITLE)) problems.push('meta description does not carry the title of record');
+    if (found.metaDesc && /Power Platform Developer/.test(found.metaDesc)) problems.push('meta description still carries the old title');
+    if (problems.length) fail('title_of_record', { problems, hero, experience, roleBar, staleCount: found.staleCount, metaDesc: found.metaDesc });
+    else pass('title_of_record', { hero, experience, roleBar, staleCount: found.staleCount });
+    await page.close();
+  }
+
   // ── Check 4: contrast spot-checks ──
   {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
