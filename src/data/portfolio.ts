@@ -80,6 +80,52 @@ export const featuredProject: Project = {
 
 export const projects: Project[] = [
   {
+    id: "fuel-refuelling-strategy",
+    title: "Aircraft Refuelling Strategy Planner (FUEL)",
+    description:
+      "A strategy-planning tool for aircraft refuelling, currently in pilot. It combines live operational data with historical trend to recommend a refuelling strategy ahead of time, so operators can decide quickly when conditions change.",
+    category: "Simulation & Decision Support",
+    organization: "RSAF (other units)",
+    role: "Sole developer",
+    tools: ["Power Platform", "AI-assisted forecasting model"],
+    features: [
+      "Recommends a refuelling strategy ahead of time from trend and live data, instead of operators working it out from scratch under time pressure",
+      "Surfaces the recommendation alongside current conditions so operators can act on it or override it",
+    ],
+  },
+  {
+    id: "matflow-logistics-pipeline",
+    title: "Supply & Demand Logistics Pipeline (MatFlow)",
+    description:
+      "A logistics planning system, currently in pilot, built around an automated pipeline for supply-and-demand requests. Operators monitor the pipeline instead of manually raising and tracking each request during time-critical periods.",
+    category: "Simulation & Decision Support",
+    organization: "RSAF (other units)",
+    role: "Sole developer",
+    tools: ["Power Platform", "Automated request pipeline"],
+    features: [
+      "Automated pipeline raises supply and demand requests without manual tracking",
+      "Shifts the operator's job from managing logistics by hand to monitoring pipeline status",
+    ],
+  },
+  {
+    id: "boldface-quiz-app",
+    title: "Aircrew BOLDFACE Quiz Training App",
+    description:
+      "Weekly and monthly quiz training on memory-item emergency procedures for aircrew across eight airframes, importing content from Excel/CSV and enforcing 100% mastery on every submitted attempt.",
+    category: "Full-Stack Platforms",
+    organization: "RAiD",
+    role: "Sole developer",
+    tools: ["React", "Vite", "Tailwind CSS", "PowerApps Code Apps", "OpenSpec"],
+    features: [
+      "Fill-in-the-blank, checklist-table and multiple-choice questions, graded case-insensitively",
+      "Submit hidden until every answer is correct — mastery enforced by the domain model, not a UI check",
+      "Cadence and rotation engine deriving Outstanding/Overdue/Upcoming/Completed status automatically",
+      "Readiness dashboard and status board scoped by squadron or platform",
+    ],
+    learningPoints:
+      "Modelled the mastery-grading and cadence-derivation rules as a testable domain layer before touching UI, then staged the storage layer so Microsoft Dataverse can slot in without touching call sites. Delivered spec-first with OpenSpec.",
+  },
+  {
     id: "asv-logbook",
     title: "ASV Logbook & Maintenance Web App",
     description:
@@ -150,6 +196,48 @@ export const projects: Project[] = [
     tools: ["PowerApps Code Apps", "AI Coding Tools"],
     learningPoints:
       "Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.",
+  },
+  {
+    id: "app-marketing-skill",
+    title: "App Marketing Skill (marketing-pr)",
+    description:
+      "A published AI agent skill that turns a GitHub repository into the launch material for it — a landing page, two infographics, a video composition and a LinkedIn post, built from screenshots of the real app rather than mock-ups. Released under MIT and installable in Claude Code and Google Antigravity. github.com/ElfredSeow/App-Marketing-Skill",
+    category: "Developer Enablement & R&D",
+    organization: "Open source",
+    role: "Sole developer",
+    tools: [
+      "Claude Code skills",
+      "Google Antigravity",
+      "Remotion",
+      "Headless browser capture",
+      "SVG",
+    ],
+    features: [
+      "Clones the target repository read-only into a temporary directory and never writes back to it",
+      "Runs a threat scan before anything executes; the app is only booted, with mock data, after it passes",
+      "Captures the app's actual screens, falling back to static reconstructions when Node or a headless browser is unavailable",
+      "Emits a marketing spec, a zero-dependency HTML landing page, 16:9 and 9:16 SVG infographics, a Remotion video composition, and LinkedIn copy",
+    ],
+    learningPoints:
+      "Writing a skill someone else installs is a different discipline from writing one for yourself: it has to refuse to damage a stranger's repository, and degrade instead of crash when their machine is missing a tool.",
+  },
+  {
+    id: "ai-studio-system-prompt",
+    title: "Google AI Studio System Prompt",
+    description:
+      "A system prompt, published for anyone to paste into Google AI Studio's instructions field, that changes how an AI coding assistant behaves before it writes a line: plan first, get approval, stay inside the request. github.com/ElfredSeow/Google-AI-Studio-System-Prompt",
+    category: "Developer Enablement & R&D",
+    organization: "Open source",
+    role: "Sole developer",
+    tools: ["Google AI Studio", "Prompt engineering"],
+    features: [
+      "Holds an approval gate: no change to code, files, data model, dependencies or structure until a complete implementation plan has been accepted",
+      "Requires 2–3 distinct approaches on anything substantial, conventional and unconventional, before one is chosen",
+      "Bans unrequested features, pages, integrations and redesigns mid-implementation",
+      "Instructs the assistant to stop the moment an assumption turns out to be false, and to be direct rather than agreeable",
+    ],
+    learningPoints:
+      "The useful part of a system prompt is the refusals, not the encouragement.",
   },
   {
     id: "code-apps-policy",

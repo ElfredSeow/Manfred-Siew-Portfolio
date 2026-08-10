@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manfred Siew · Aerospace Engineering &amp; Software Development</title>
-<meta name="description" content="Manfred Siew — trained in Aerospace Engineering, self-taught in software development. Forward Deployed Solution Architect (Intern) at RAiD (RSAF Agile innovation Digital). 23 projects.">
+<meta name="description" content="Manfred Siew — trained in Aerospace Engineering, self-taught in software development. Forward Deployed Solution Architect (Intern) at RAiD (RSAF Agile innovation Digital). 26 projects.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <meta property="og:title" content="Manfred Siew · Aerospace Engineering &amp; Software Development">
 <meta property="og:description" content="Case studies in building human-centred tools with AI: process, prototypes, and what the AI actually does.">
@@ -325,7 +325,7 @@ html.js .band{ opacity:0; transition:opacity .5s var(--e-out); }
 /* Evidence figure. Reused by any case study or log row that has a real
    artifact to show — screenshot, infographic, certificate. */
 .shot{margin:1.25rem 0 0;border:1px solid var(--line);border-radius:var(--r-md);
-  overflow:hidden;background:var(--surface);box-shadow:var(--sh-1)}
+  overflow:hidden;background:var(--surface);box-shadow:var(--sh-1);max-width:24rem}
 .shot img{display:block;width:100%;height:auto}
 .shot figcaption{padding:.6rem .9rem;font-size:var(--fs-label);
   color:var(--muted);border-top:1px solid var(--line)}
@@ -920,6 +920,105 @@ html.js [data-reveal].shown{
      paper instead of trusting print-color-adjust. */
   .invert,.invert *{ background:none!important; color:var(--ink)!important; }
 }
+
+/* ── BOLDFACE screen mockup ───────────────────────────────────────────
+   Rebuilt verbatim from the app's own interface code and design tokens —
+   the same recipe the BOLDFACE marketing site uses for its "actual
+   screens" section, not an invented mock. Source: BOLDFACE-Marketing-
+   Content/marketing-pr/BOLDFACE/MARKETING_SPEC.md (App Fidelity Map,
+   Key screen 1: Dashboard) and its index.html. Every custom property and
+   class is bf-/.bf- prefixed and scoped under .bf-mock so nothing here
+   can collide with this page's own tokens (this page already owns
+   --accent) or components (this page already owns .card and nav). */
+.shot--wide{max-width:34rem}
+/* Every rule below is qualified with the .bf-mock ancestor (not just a
+   bf- prefixed class alone), so its specificity always beats this page's
+   own descendant rules that also reach two levels deep into a log-row,
+   e.g. ".log-body p" — a single bf- class alone does not. */
+.bf-mock{
+  --bf-bg-1:#ffffff; --bf-bg-2:#eef2f7; --bf-fg-1:#16242f; --bf-fg-2:#4b6584; --bf-fg-4:#76889c;
+  --bf-brand-fg:#0076b3; --bf-brand-bg:#0090e0; --bf-brand-tint:#e1f4ff;
+  --bf-stroke-2:#e3e9f0; --bf-success:#0a7d73; --bf-danger:#c2384a;
+  --bf-rail-bg:#1c3b57; --bf-accent:#00a8ff; --bf-radius:0.625rem;
+  --bf-danger-tint:#fdecee; --bf-success-tint:#e4f5f3;
+  font-family:"Inter","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+}
+.bf-mock p,.bf-mock b,.bf-mock small,.bf-mock span,.bf-mock div{margin:0;font-size:inherit;line-height:inherit;color:inherit}
+.bf-mock .bf-chrome{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bf-rail-bg);color:#c8d8ea}
+.bf-mock .bf-dots{display:flex;gap:6px}
+.bf-mock .bf-dot{width:11px;height:11px;border-radius:50%}
+.bf-mock .bf-dot.bf-r{background:#ff5f57}.bf-mock .bf-dot.bf-y{background:#febc2e}.bf-mock .bf-dot.bf-g{background:#28c840}
+.bf-mock .bf-urlbar{flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border-radius:8px;padding:4px 12px;font-family:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:11.5px;letter-spacing:.03em;color:#9fc5e8;min-width:0}
+.bf-mock .bf-urlbar .bf-ttl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bf-mock .bf-screen{display:flex;background:var(--bf-bg-2);min-height:300px}
+.bf-mock .bf-rail{width:172px;flex-shrink:0;background:var(--bf-rail-bg);color:#b7c9dc;display:flex;flex-direction:column;font-size:12px}
+.bf-mock .bf-rail-hd{display:flex;align-items:center;gap:9px;padding:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.bf-mock .bf-rail-badge{width:28px;height:28px;border-radius:8px;background:var(--bf-accent);color:#04121d;display:grid;place-items:center;box-shadow:0 0 16px rgba(0,168,255,.45);flex-shrink:0}
+.bf-mock .bf-rail-hd b{color:#fff;font-size:12.5px;letter-spacing:.01em;line-height:1.1;display:block}
+.bf-mock .bf-rail-hd small{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#8fa5bb}
+.bf-mock .bf-rail nav{padding:8px;display:flex;flex-direction:column;gap:3px;flex:1}
+.bf-mock .bf-ri{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;position:relative;color:#b7c9dc;font-size:12px}
+.bf-mock .bf-ri.bf-on{background:rgba(0,168,255,.14);color:#fff}
+.bf-mock .bf-ri.bf-on::before{content:"";position:absolute;left:-8px;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--bf-accent);box-shadow:0 0 10px var(--bf-accent)}
+.bf-mock .bf-rail-ft{padding:10px 12px;border-top:1px solid rgba(255,255,255,.08);font-family:"JetBrains Mono",ui-monospace,monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#8fa5bb}
+.bf-mock .bf-pane{flex:1;padding:16px 18px;min-width:0}
+.bf-mock .bf-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--bf-fg-4)}
+.bf-mock .bf-pane h4{font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--bf-fg-1);margin:2px 0 2px}
+.bf-mock .bf-desc{font-size:11.5px;color:var(--bf-fg-4);margin-bottom:12px}
+.bf-mock .bf-card{background:var(--bf-bg-1);border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);box-shadow:0 1px 3px rgba(22,36,47,.05)}
+.bf-mock .bf-metrics{display:grid;grid-template-columns:1.6fr 1fr;gap:10px}
+.bf-mock .bf-ringcard{display:flex;align-items:center;gap:12px;padding:14px}
+.bf-mock .bf-ring{position:relative;width:88px;height:88px;flex-shrink:0}
+.bf-mock .bf-ring .bf-pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.bf-mock .bf-ring .bf-pct b{font-size:19px;font-variant-numeric:tabular-nums;color:var(--bf-fg-1)}
+.bf-mock .bf-ring .bf-pct span{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--bf-fg-4)}
+.bf-mock .bf-ringtext p{color:var(--bf-fg-1)}
+.bf-mock .bf-ringtext p:first-child{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--bf-fg-4)}
+.bf-mock .bf-ringtext .bf-big{font-size:15px;font-weight:600}
+.bf-mock .bf-ringtext .bf-big span{font-weight:400;color:var(--bf-fg-4);font-size:11.5px}
+.bf-mock .bf-ringtext .bf-note{font-size:10px;color:var(--bf-fg-4)}
+.bf-mock .bf-tiles{display:flex;flex-direction:column;gap:8px}
+.bf-mock .bf-tile{padding:8px 12px}
+.bf-mock .bf-tile .bf-lbl{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bf-fg-4)}
+.bf-mock .bf-tile .bf-val{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2;color:var(--bf-fg-1)}
+.bf-mock .bf-tile .bf-val.bf-brand{color:var(--bf-brand-fg)}.bf-mock .bf-tile .bf-val.bf-good{color:var(--bf-success)}
+.bf-mock .bf-tile .bf-sm{font-size:9px;color:var(--bf-fg-4)}
+.bf-mock .bf-upnext{margin-top:12px}
+.bf-mock .bf-upnext-h{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-2);margin-bottom:6px}
+.bf-mock .bf-task{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px 9px 16px;margin-bottom:6px}
+.bf-mock .bf-spine{position:absolute;left:0;top:0;bottom:0;width:4px}
+.bf-mock .bf-spine.bf-red{background:var(--bf-danger)}.bf-mock .bf-spine.bf-blue{background:var(--bf-brand-bg)}
+.bf-mock .bf-task b{font-size:12px;color:var(--bf-fg-1)}
+.bf-mock .bf-task .bf-meta{font-size:9.5px;color:var(--bf-fg-4)}
+.bf-mock .bf-badge{display:inline-block;border-radius:999px;padding:1px 7px;font-size:8.5px;font-weight:600}
+.bf-mock .bf-badge.bf-red{background:var(--bf-danger-tint);color:var(--bf-danger)}
+.bf-mock .bf-badge.bf-blue{background:var(--bf-brand-tint);color:var(--bf-brand-fg)}
+.bf-mock .bf-open-btn{background:var(--bf-brand-bg);color:#fff;border-radius:8px;padding:5px 10px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.bf-mock .bf-vboard{margin-top:14px}
+.bf-mock .bf-vb-hd{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-2)}
+.bf-mock .bf-vb-sub{font-size:9.5px;color:var(--bf-fg-4);margin:2px 0 8px}
+.bf-mock .bf-seg-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.bf-mock .bf-seg{display:flex;align-items:center;gap:6px}
+.bf-mock .bf-sl{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-4)}
+.bf-mock .bf-grp{display:inline-flex;border:1px solid var(--bf-stroke-2);background:var(--bf-bg-2);border-radius:7px;padding:2px}
+.bf-mock .bf-opt{border-radius:5px;padding:3px 10px;font-size:9px;font-weight:600;color:var(--bf-fg-2)}
+.bf-mock .bf-opt.bf-on{background:var(--bf-bg-1);color:var(--bf-brand-fg);box-shadow:0 1px 3px rgba(22,36,47,.12)}
+.bf-mock .bf-vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bf-mock .bf-vtile{padding:9px 11px}
+.bf-mock .bf-vt-top{display:flex;align-items:center;justify-content:space-between}
+.bf-mock .bf-vt-voc{font-size:8px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-2)}
+.bf-mock .bf-vt-tot{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--bf-fg-4)}
+.bf-mock .bf-vt-num{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;margin-top:3px}
+.bf-mock .bf-vt-num.bf-red{color:var(--bf-danger)}.bf-mock .bf-vt-num.bf-good{color:var(--bf-success)}
+.bf-mock .bf-vt-sm{font-size:8.5px;color:var(--bf-fg-4)}
+.bf-mock .bf-vt-bar{height:5px;border-radius:999px;background:var(--bf-bg-2);overflow:hidden;margin-top:7px}
+.bf-mock .bf-vt-bar i{display:block;height:100%;border-radius:999px}
+.bf-mock .bf-vt-bar i.bf-red{background:var(--bf-danger)}.bf-mock .bf-vt-bar i.bf-good{background:var(--bf-success)}
+@media (max-width:520px){
+  .bf-mock .bf-metrics,.bf-mock .bf-vgrid{grid-template-columns:1fr}
+  .bf-mock .bf-rail{width:48px}
+  .bf-mock .bf-rail-hd b,.bf-mock .bf-rail-hd small,.bf-mock .bf-ri span,.bf-mock .bf-rail-ft span{display:none}
+}
 </style>
 </head>
 
@@ -1062,7 +1161,7 @@ html.js [data-reveal].shown{
           <dl class="id-stats">
             <div data-stat="projects">
               <dt class="id-stat-label">Projects</dt>
-              <dd class="id-stat-value">23</dd>
+              <dd class="id-stat-value">26</dd>
             </div>
             <div data-stat="organisations">
               <dt class="id-stat-label">Organisations</dt>
@@ -1518,7 +1617,7 @@ html.js [data-reveal].shown{
   <div class="shell">
 
     <div class="log-head" data-reveal>
-      <h2 class="h2">Twenty-three, filterable two ways.</h2>
+      <h2 class="h2">Twenty-six, filterable two ways.</h2>
     </div>
 
     <!-- v1 ran two filter systems here: a six-card deck AND a button row.
@@ -1539,15 +1638,15 @@ html.js [data-reveal].shown{
         <!-- The accessible name must start with the visible label, or speech
              input ("click All 24") finds no match. WCAG 2.5.3. -->
         <button type="button" class="pill" id="logReset" aria-pressed="true"
-                aria-label="All 23 projects, clearing both filters">
-          All <span class="pill-count">23</span>
+                aria-label="All 26 projects, clearing both filters">
+          All <span class="pill-count">26</span>
         </button>
-        <button type="button" class="pill" data-cat="simulation" data-claim="I can model a domain I wasn’t trained in." aria-pressed="false" disabled>
-          Simulation &amp; decision support <span class="pill-count">(in preparation)</span>
+        <button type="button" class="pill" data-cat="simulation" data-claim="I can model a domain I wasn’t trained in." aria-pressed="false">
+          Simulation &amp; decision support <span class="pill-count">2</span>
           <span class="pill-claim">I can model a domain I wasn’t trained in.</span>
         </button>
         <button type="button" class="pill" data-cat="platform" data-claim="I own systems, not features." aria-pressed="false">
-          Full-stack platforms <span class="pill-count">2</span>
+          Full-stack platforms <span class="pill-count">3</span>
         </button>
         <button type="button" class="pill" data-cat="enterprise" data-claim="I build with governance: access control, audit trails, approvals." aria-pressed="false">
           Enterprise applications <span class="pill-count">2</span>
@@ -1580,7 +1679,7 @@ html.js [data-reveal].shown{
         <button type="button" class="pill" data-org="RSAF" aria-pressed="false">RSAF (other units)</button>
         <button type="button" class="pill" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
         <button type="button" class="pill" data-org="Freelance" aria-pressed="false">Freelance</button>
-        <span class="num log-count" id="logCount" role="status">Showing all 23</span>
+        <span class="num log-count" id="logCount" role="status">Showing all 26</span>
       </div>
     </div>
 
@@ -1602,6 +1701,48 @@ html.js [data-reveal].shown{
          page's structure, not a wording choice — make it deliberately or not
          at all. -->
     <div class="log-list" id="logList">
+
+      <!-- ── SIMULATION & DECISION SUPPORT ──
+           The category that used to sit disabled with "(in preparation)" —
+           reserved for FUEL since the taxonomy was designed. FUEL and MatFlow
+           are two separate systems, both currently pilots with an RSAF unit
+           outside RAiD, so both carry data-org="RSAF". Neither title leads
+           with its codename (npm test guards this): FUEL is not FUEL Up
+           (claims/receipts digitalisation, Enterprise Applications) — the two
+           names are similar enough to be mistaken for each other. -->
+      <details class="log-row" data-org="RSAF" data-cat="simulation">
+        <summary>
+          <span class="lt">Aircraft Refuelling Strategy Planner (FUEL)</span>
+          <span class="tag">Simulation</span><span class="lorg">RSAF (other units)</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>A strategy-planning tool for aircraft refuelling. It combines live operational data with historical trend to recommend a refuelling strategy ahead of time, so operators can decide quickly when conditions change.</p>
+          <div><div class="lab">What it does</div>
+            <ul class="feat" role="list">
+              <li>Recommends a refuelling strategy ahead of time from trend and live data, instead of operators working it out from scratch under time pressure</li>
+              <li>Surfaces the recommendation alongside current conditions so operators can act on it or override it</li>
+            </ul></div>
+          <div><div class="lab">Built with</div><p class="note">Power Platform, with an AI-assisted forecasting model behind the recommendation. Currently a working pilot. <span class="needs-copy">Add: which unit is piloting it, and the exact forecasting stack</span></p><div class="chips"><span>Power Platform</span><span>AI-assisted forecasting model</span></div></div>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RSAF" data-cat="simulation">
+        <summary>
+          <span class="lt">Supply &amp; Demand Logistics Pipeline (MatFlow)</span>
+          <span class="tag">Simulation</span><span class="lorg">RSAF (other units)</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>A logistics planning system built around an automated pipeline for supply-and-demand requests. Operators monitor the pipeline instead of manually raising and tracking each request during time-critical periods.</p>
+          <div><div class="lab">What it does</div>
+            <ul class="feat" role="list">
+              <li>Automated pipeline raises supply and demand requests without manual tracking</li>
+              <li>Shifts the operator's job from managing logistics by hand to monitoring pipeline status</li>
+            </ul></div>
+          <div><div class="lab">Built with</div><p class="note">Power Platform, with a custom automated request pipeline behind it. Currently a working pilot. <span class="needs-copy">Add: which unit is piloting it, and the exact pipeline stack</span></p><div class="chips"><span>Power Platform</span><span>Automated request pipeline</span></div></div>
+        </div>
+      </details>
 
       <!-- ── FULL-STACK PLATFORMS ──
            The three featured projects were absent from the log, which is why
@@ -1630,6 +1771,110 @@ html.js [data-reveal].shown{
           <div><div class="lab">What it does</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, servicing status tracked ahead of the due date, and reporting that reads from the same store the work is recorded in.</p></div>
           <div><div class="lab">Built with</div><p>The functions were proved in Power Apps first, then rebuilt as a full-stack application with Lovable once per-user licensing stopped being viable. PowerDocu generated the documentation the prompting worked from.</p><div class="chips"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
           <p><a class="link-inline" href="#wp2">Full case study, further up the page</a></p>
+        </div>
+      </details>
+
+      <details class="log-row" data-org="RAiD" data-cat="platform">
+        <summary>
+          <span class="lt">BOLDFACE</span>
+          <span class="tag">Platform</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>Weekly and monthly quiz training on memory-item emergency procedures for aircrew across eight airframes. Content is imported from Excel and CSV; a quiz cannot be submitted until every answer on it is correct, and each crew's readiness status is derived automatically rather than tracked by hand.</p>
+          <div><div class="lab">What it does</div>
+            <ul class="feat" role="list">
+              <li>Fill-in-the-blank, checklist-table and multiple-choice questions, graded case-insensitively against the authored answer</li>
+              <li>Submit stays hidden until every question on a quiz is correct — mastery enforced by the domain model, not a UI check</li>
+              <li>A cadence and rotation engine that derives Outstanding, Overdue, Upcoming and Completed status for every crew</li>
+              <li>A readiness dashboard and status board, scoped by squadron or platform, showing who is current across all eight airframes</li>
+            </ul></div>
+          <div><div class="lab">Built with</div><p>Delivered spec-first with OpenSpec change proposals, with the storage layer kept swappable behind the same call sites so Microsoft Dataverse can slot in without touching the app.</p><div class="chips"><span>React</span><span>Vite</span><span>Tailwind CSS</span><span>PowerApps Code Apps</span><span>OpenSpec</span></div></div>
+          <figure class="shot shot--wide">
+            <div class="bf-mock" role="img" aria-label="BOLDFACE aircrew readiness dashboard: a completion ring at 78%, outstanding-quiz tiles, a per-vocation status board, and an up-next task list">
+              <div class="bf-chrome"><div class="bf-dots"><span class="bf-dot bf-r"></span><span class="bf-dot bf-y"></span><span class="bf-dot bf-g"></span></div>
+                <div class="bf-urlbar"><span class="bf-ttl">BOLDFACE — Dashboard · /dashboard</span></div></div>
+              <div class="bf-screen">
+                <div class="bf-rail" aria-hidden="true">
+                  <div class="bf-rail-hd"><span class="bf-rail-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></span>
+                    <span><b>BOLDFACE</b><small>Quiz App 2.0</small></span></div>
+                  <nav>
+                    <span class="bf-ri bf-on"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></span>
+                    <span class="bf-ri"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><span>Assessment</span></span>
+                    <span class="bf-ri"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 7v10M18 7v10M3 9v6M21 9v6M6 12h12"/></svg><span>Practice</span></span>
+                    <span class="bf-ri"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg><span>Calendar</span></span>
+                  </nav>
+                  <div class="bf-rail-ft"><span>BOLDFACE · v2 Midnight</span></div>
+                </div>
+                <div class="bf-pane">
+                  <p class="bf-eyebrow">Pilot overview</p>
+                  <h4>Dashboard</h4>
+                  <p class="bf-desc">BOLDFACE progress at a glance.</p>
+                  <div class="bf-metrics">
+                    <div class="bf-card bf-ringcard">
+                      <div class="bf-ring">
+                        <svg viewBox="0 0 108 108" aria-hidden="true">
+                          <circle cx="54" cy="54" r="46" fill="none" stroke="#e3e9f0" stroke-width="10"/>
+                          <circle cx="54" cy="54" r="46" fill="none" stroke="#0090e0" stroke-width="10" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="63.6" transform="rotate(-90 54 54)"/>
+                        </svg>
+                        <div class="bf-pct"><b>78%</b><span>Complete</span></div>
+                      </div>
+                      <div class="bf-ringtext">
+                        <p>Overall completion</p>
+                        <p class="bf-big">7 <span>/ 9 quizzes</span></p>
+                        <p class="bf-note">Keep the streak going.</p>
+                      </div>
+                    </div>
+                    <div class="bf-tiles">
+                      <div class="bf-card bf-tile"><div class="bf-lbl">Outstanding · Weekly</div><div class="bf-val bf-brand">1</div><div class="bf-sm">Weekly quizzes still due</div></div>
+                      <div class="bf-card bf-tile"><div class="bf-lbl">Outstanding · Monthly</div><div class="bf-val bf-brand">1</div><div class="bf-sm">Monthly quizzes still due</div></div>
+                      <div class="bf-card bf-tile"><div class="bf-lbl">Completed</div><div class="bf-val bf-good">7</div><div class="bf-sm">of 9 this cycle</div></div>
+                    </div>
+                  </div>
+                  <div class="bf-vboard">
+                    <div class="bf-vb-hd">Status board</div>
+                    <p class="bf-vb-sub">Outstanding by vocation. Select one to see who.</p>
+                    <div class="bf-seg-row">
+                      <div class="bf-seg"><span class="bf-sl">Scope</span><span class="bf-grp"><span class="bf-opt bf-on">Squadron</span><span class="bf-opt">Platform</span></span></div>
+                      <div class="bf-seg"><span class="bf-sl">Show</span><span class="bf-grp"><span class="bf-opt bf-on">Outstanding</span><span class="bf-opt">Completed</span></span></div>
+                    </div>
+                    <div class="bf-vgrid">
+                      <div class="bf-card bf-vtile">
+                        <div class="bf-vt-top"><span class="bf-vt-voc">Pilot</span><span class="bf-vt-tot">6</span></div>
+                        <div class="bf-vt-num bf-red">2</div>
+                        <div class="bf-vt-sm">outstanding · of 6</div>
+                        <div class="bf-vt-bar"><i class="bf-red" style="width:67%"></i></div>
+                      </div>
+                      <div class="bf-card bf-vtile">
+                        <div class="bf-vt-top"><span class="bf-vt-voc">WSO</span><span class="bf-vt-tot">4</span></div>
+                        <div class="bf-vt-num bf-red">1</div>
+                        <div class="bf-vt-sm">outstanding · of 4</div>
+                        <div class="bf-vt-bar"><i class="bf-red" style="width:75%"></i></div>
+                      </div>
+                      <div class="bf-card bf-vtile">
+                        <div class="bf-vt-top"><span class="bf-vt-voc">Loadmaster</span><span class="bf-vt-tot">3</span></div>
+                        <div class="bf-vt-num bf-good">0</div>
+                        <div class="bf-vt-sm">all 3 clear</div>
+                        <div class="bf-vt-bar"><i class="bf-good" style="width:100%"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bf-upnext">
+                    <div class="bf-upnext-h">Up next</div>
+                    <div class="bf-card bf-task"><span class="bf-spine bf-red"></span>
+                      <div><b>C-130 BOLDFACE — Weekly</b> <span class="bf-badge bf-red">Overdue</span>
+                        <div class="bf-meta">4 / 9 answered</div></div>
+                      <span class="bf-open-btn">Open →</span></div>
+                    <div class="bf-card bf-task"><span class="bf-spine bf-blue"></span>
+                      <div><b>F-16 BOLDFACE — Monthly</b> <span class="bf-badge bf-blue">Outstanding</span>
+                        <div class="bf-meta">1 / 4 answered</div></div>
+                      <span class="bf-open-btn">Open →</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>Rebuilt from the app's own interface code and design tokens — not a photo, not invented. Figures shown are illustrative demo data.</figcaption>
+          </figure>
         </div>
       </details>
 
@@ -1926,7 +2171,7 @@ html.js [data-reveal].shown{
            so a row that reports no assessment is the one row in the group that
            does not earn its tag. Each therefore carries an outcome slot; where
            the page cannot answer it, the chip asks. -->
-      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition">
+      <details class="log-row" data-org="Temasek Polytechnic" data-cat="competition" open>
         <summary>
           <span class="lt">National AI Student Challenge 2025 · Huawei Track</span>
           <span class="tag">Competition</span><span class="lorg">Temasek Poly</span>
@@ -1934,9 +2179,15 @@ html.js [data-reveal].shown{
         </summary>
         <div class="log-body">
           <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
-          <div><div class="lab">Outcome</div><p class="note">Certificate of Participation from AI Singapore, reproduced in the experience section below. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
+          <div><div class="lab">Outcome</div><p class="note">Certificate of Participation from AI Singapore. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
           <div><div class="lab">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei’s ecosystem, and MLOps. Introduced to the AI development field.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
+          <figure class="shot shot--cert">
+            <img src="public/huawei-track-cert.jpg" loading="lazy"
+                 alt="AI Singapore Certificate of Participation issued to Siew Lee Hong Manfred for the National AI Student Challenge 2025 · Huawei Track, with a QR code and a signature from the Director of AI Talent Development"
+                 onerror="this.closest('figure').hidden=true">
+            <figcaption>Externally assessed. One of the few claims on this page somebody else graded.</figcaption>
+          </figure>
         </div>
       </details>
 
@@ -2078,13 +2329,6 @@ html.js [data-reveal].shown{
           building a portfolio with low-code platforms and practising SEO strategies.
         </p>
       </div>
-
-      <figure class="shot shot--cert">
-        <img src="public/huawei-track-cert.jpg" loading="lazy"
-             alt="AI Singapore Certificate of Participation issued to Siew Lee Hong Manfred for the National AI Student Challenge 2025 · Huawei Track, with a QR code and a signature from the Director of AI Talent Development"
-             onerror="this.closest('figure').hidden=true">
-        <figcaption>Externally assessed. One of the few claims on this page somebody else graded.</figcaption>
-      </figure>
     </div>
   </div>
 </section>

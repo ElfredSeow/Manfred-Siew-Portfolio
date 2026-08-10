@@ -121,7 +121,7 @@ const BANNED_TERMS = [
   "mission planning",
 ];
 
-const CODENAMES = ["boldface", "miles", "mavis", "grid", "fuel"];
+const CODENAMES = ["boldface", "miles", "mavis", "grid", "fuel", "matflow"];
 
 check("no military-purpose vocabulary anywhere", () => {
   const corpus = [

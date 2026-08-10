@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manfred Siew · Aerospace Engineering &amp; Software Development</title>
+<meta name="description" content="Manfred Siew — trained in Aerospace Engineering, self-taught in software development. Forward Deployed Solution Architect (Intern) at RAiD (RSAF Agile innovation Digital). Home.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   ASCENT v3 — "Aurora Deck"
+
+   v3 was the KING-poster pass: true black plus one saturated blue, a
+   single dark accent carrying the whole page. The brief for this pass is
+   the opposite instinct — softer, warmer, more colour — taken from a
+   game-style profile dashboard (rounded banner bled with a portrait,
+   colour-coded info tiles, a chip shelf underneath). That reference
+   earns its colour honestly: every hue on its screen is tied to a
+   different in-world category (Cryo is blue, Sumeru is teal-green,
+   Akademiya is dark teal), not decoration.
+
+   This file borrows that discipline, not that skin. Manfred's own build
+   log already sorts every project into six categories — Simulation,
+   Scaling systems, Enterprise, Process automation, Developer
+   enablement, Competitions — so those six become the site's six named
+   hues, and nothing on the page is coloured outside that system. See
+   the CATEGORY SYSTEM block below for the six pairs (every one computed
+   against white/tint and checked ≥4.5:1, script in scripts/_contrast.py
+   equivalent run for this pass).
+
+   THE SIGNATURE: one aurora banner — a layered dusk-sky gradient behind
+   the portrait, three soft blurred colour fields (sky, violet, coral)
+   standing in for the category system at page scale, plus a fine
+   star-field of dots for texture. Everything below the banner stays
+   quiet white/tint surfaces with colour rationed to icons and tags, so
+   the banner keeps the one loud moment on the page.
+
+   This pass also stops pointing at redesign-v2.html for content. All
+   four pages — this one, work, projects, experience — are native v3
+   pages now; only the words are carried over, not the layout or colour
+   of the version they came from. */
+:root{
+  /* ── Neutrals ── */
+  --bg:#F4F7FD; --surface:#FFFFFF; --tint:#EEF2FB; --wash:#E8EFFC;
+  --ink:#101828; --body:#3C4A63; --muted:#5B6D84;
+  --line:#E4EAF5; --rule:#C9D5E8;
+
+  /* ── Brand chrome (nav, links, primary buttons) ── */
+  --brand:#3E63E0; --brand-ink:#2C46A8; --brand-soft:#8FA8FF; --banner-soft:#C9D9FF;
+
+  /* ── Aurora banner grounds ── */
+  --deep:#12172F; --deep-2:#1B2450; --deep-3:#3A458C; --dusk:#3A2E6E;
+
+  /* ── Category system — one hue per build-log category, base/tint/ink ──
+     base  = decorative fill only (dots, blobs, borders) — never small text
+     tint  = light chip/card background
+     ink   = saturated dark shade — text on tint, or fill with white text */
+  --sky-base:#2F8FE6;  --sky-tint:#E3F1FE;  --sky-ink:#1B62A8;   /* Simulation & decision support */
+  --indigo-base:#5B6EF5; --indigo-tint:#EAECFE; --indigo-ink:#3B46C4; /* Scaling systems */
+  --violet-base:#9B5DE5; --violet-tint:#F3E9FD; --violet-ink:#7139B8; /* Enterprise applications */
+  --amber-base:#F0A93B; --amber-tint:#FDF1DC; --amber-ink:#9C6812;   /* Process automation */
+  --coral-base:#F0688C; --coral-tint:#FDE7ED; --coral-ink:#C23A63;   /* Developer enablement & R&D */
+  --mint-base:#29B7A3;  --mint-tint:#E1F8F4;  --mint-ink:#147A6C;    /* Competitions & credentials */
+
+  --content-max:1400px;
+
+  --r-xs:8px; --r-sm:12px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-2xl:40px; --r-pill:999px;
+
+  --fs-body:1.125rem;
+  --fs-label:.875rem;
+
+  --e-out:cubic-bezier(.23,1,.32,1);
+  --d-press:120ms; --d-hover:180ms; --d-enter:340ms;
+
+  --sh-1:0 1px 2px rgba(16,24,40,.04), 0 10px 26px -18px rgba(16,24,40,.22);
+  --sh-2:0 2px 4px rgba(16,24,40,.04), 0 30px 64px -34px rgba(16,24,40,.36);
+}
+
+*,::before,::after{ box-sizing:border-box; border-width:0; border-style:solid; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:7rem; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+h1,h2,h3,h4,h5,h6{ font-size:inherit; font-weight:inherit; margin:0; }
+p,figure,figcaption,blockquote,dl,dd{ margin:0; }
+ul,ol{ margin:0; padding:0; list-style:none; }
+img,svg,video,canvas{ display:block; }
+img,video{ max-width:100%; height:auto; }
+a{ color:inherit; text-decoration:inherit; }
+button{ font:inherit; color:inherit; margin:0; padding:0;
+        background-color:transparent; background-image:none; cursor:pointer; }
+[hidden]{ display:none; }
+
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:var(--fs-body); line-height:1.65;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+::selection{ background:var(--brand-soft); color:var(--ink); }
+a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-offset:3px; }
+
+.shell{ margin-inline:auto; width:100%; max-width:var(--content-max); padding-inline:1.25rem; }
+@media (min-width:640px){ .shell{ padding-inline:1.5rem; } }
+.shell-narrow{ max-width:900px; }
+
+.h1{ font-size:clamp(2.6rem,6.4vw,4.9rem); font-weight:700; line-height:1.02; letter-spacing:-.035em; color:var(--ink); }
+.h2{ font-size:clamp(1.5rem,2.6vw,1.9rem); font-weight:600; line-height:1.15; letter-spacing:-.022em; color:var(--ink); }
+.h3{ font-size:clamp(1.2rem,1.8vw,1.35rem); font-weight:600; line-height:1.25; letter-spacing:-.016em; color:var(--ink); }
+.lede{ font-size:clamp(1.05rem,1.5vw,1.2rem); line-height:1.55; color:var(--body); }
+.eyebrow{ font-size:.875rem; font-weight:600; letter-spacing:.02em; color:var(--brand-ink); margin-bottom:.5rem; }
+.on-brand{ color:var(--brand-ink); }
+.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+
+/* ── SKIP + NAV ─────────────────────────────────────────────────────── */
+.skip{
+  position:absolute; left:-9999px; top:0; z-index:30;
+  background:var(--surface); border:1px solid var(--rule);
+  border-radius:var(--r-pill); padding:.5rem 1rem;
+  color:var(--ink); text-decoration:none; font-weight:600;
+}
+.skip:focus-visible{ left:1rem; top:1rem; }
+
+.nav-dock{ position:fixed; inset-inline:0; top:0; z-index:20; padding:1rem 1rem 0; }
+@media (min-width:640px){ .nav-dock{ padding-inline:1.5rem; } }
+.nav-bar{
+  display:flex; align-items:center; gap:1rem;
+  margin-inline:auto; max-width:var(--content-max);
+  border:1px solid var(--line); background:rgba(255,255,255,.92);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-radius:var(--r-lg); box-shadow:var(--sh-1);
+  padding:.5rem 1rem .5rem .5rem;
+}
+@media (min-width:640px){ .nav-bar{ padding-inline:1.25rem; } }
+.nav-avatar{
+  flex:none; width:2.5rem; height:2.5rem; border-radius:50%;
+  background:radial-gradient(120% 120% at 25% 20%, var(--sky-ink), var(--violet-ink) 55%, var(--dusk) 100%);
+  display:grid; place-items:center; color:#fff; font-weight:700; font-size:1rem;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.4);
+}
+.nav-name{
+  flex-shrink:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  font-size:1.125rem; font-weight:700; letter-spacing:-.025em; color:var(--ink);
+}
+.nav-links{
+  display:flex; align-items:center; margin-left:auto;
+  gap:.25rem; overflow-x:auto; scrollbar-width:none;
+  -webkit-overflow-scrolling:touch; min-width:0; flex-shrink:1;
+}
+.nav-links::-webkit-scrollbar{ display:none; }
+.nav-links a{ flex:none; }
+.nav-link{
+  position:relative; padding:.5rem .75rem; border-radius:var(--r-pill);
+  font-size:1rem; color:var(--body);
+  transition:background-color var(--d-hover) ease, color var(--d-hover) ease;
+}
+@media (hover:hover) and (pointer:fine){ .nav-link:hover{ background-color:var(--tint); color:var(--ink); } }
+.nav-link[aria-current="page"]{ background:var(--brand); color:#fff; font-weight:600; }
+.nav-link:active{ transform:scale(.96); }
+.btn.nav-cta{ margin-left:auto; padding:.5rem 1rem; font-size:.875rem; }
+@media (min-width:768px){ .btn.nav-cta{ margin-left:.5rem; } }
+
+/* ── SURFACES + BUTTONS ───────────────────────────────────────────────── */
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--sh-1); }
+.card-lg{ border-radius:var(--r-xl); box-shadow:var(--sh-2); }
+
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:1rem; font-weight:600; text-decoration:none;
+  padding:1rem 1.5rem; border-radius:var(--r-pill);
+  background:var(--brand); color:#FFFFFF; border:1px solid transparent;
+  box-shadow:var(--sh-1); cursor:pointer;
+  transition:background-color var(--d-hover) ease, box-shadow var(--d-hover) ease, transform var(--d-press) ease;
+}
+@media (hover:hover) and (pointer:fine){ .btn:hover{ background-color:var(--brand-ink); box-shadow:var(--sh-2); } }
+.btn:active{ transform:scale(.97); }
+.btn-ghost{ background:var(--surface); color:var(--ink); border-color:var(--rule); box-shadow:none; }
+@media (hover:hover) and (pointer:fine){ .btn-ghost:hover{ background-color:var(--tint); } }
+.btn-ghost:active{ transform:scale(.97); }
+.btn-ghost-inv{ background:transparent; color:#FFFFFF; border-color:rgba(255,255,255,.35); box-shadow:none; }
+@media (hover:hover) and (pointer:fine){ .btn-ghost-inv:hover{ background-color:rgba(255,255,255,.12); } }
+.btn-ghost-inv:active{ transform:scale(.97); }
+.btn-block{ width:100%; justify-content:center; }
+
+/* ── CATEGORY TAG SYSTEM — the six named hues, everywhere on the site ── */
+.tag{
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.75rem; font-weight:600; letter-spacing:.01em;
+  padding:.25rem .75rem; border-radius:var(--r-pill);
+  background:var(--tint); color:var(--muted);
+}
+.tag::before{ content:""; width:.5rem; height:.5rem; border-radius:50%; background:currentColor; opacity:.55; }
+.tag-sky{ background:var(--sky-tint); color:var(--sky-ink); }
+.tag-indigo{ background:var(--indigo-tint); color:var(--indigo-ink); }
+.tag-violet{ background:var(--violet-tint); color:var(--violet-ink); }
+.tag-amber{ background:var(--amber-tint); color:var(--amber-ink); }
+.tag-coral{ background:var(--coral-tint); color:var(--coral-ink); }
+.tag-mint{ background:var(--mint-tint); color:var(--mint-ink); }
+
+/* ── HERO BANNER — the aurora signature ──────────────────────────────── */
+.hero-band{ padding:6.5rem 0 2.5rem; }
+@media (min-width:1024px){ .hero-band{ padding-top:7.5rem; } }
+
+.banner{
+  position:relative; overflow:hidden; isolation:isolate;
+  min-height:34rem; border-radius:var(--r-2xl);
+  background:
+    radial-gradient(60% 80% at 88% 12%, rgba(240,104,140,.35), transparent 60%),
+    radial-gradient(55% 70% at 8% 85%, rgba(41,183,163,.28), transparent 55%),
+    radial-gradient(90% 120% at 12% 6%, var(--deep-3) 0%, var(--deep-2) 48%, var(--deep) 100%);
+  display:flex; align-items:flex-end;
+}
+@media (min-width:768px){ .banner{ min-height:37rem; align-items:center; } }
+/* Star-field texture: a fine grid of soft dots, low opacity so it reads as
+   grain rather than a literal night sky. */
+.banner::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.5) 1px, transparent 1.6px);
+  background-size:26px 26px; background-position:4px 6px;
+  opacity:.22;
+}
+/* Two soft colour blobs, blurred — the aurora itself, standing for the
+   category system at page scale (sky + violet), floating very gently. */
+/* Both colour blobs sit right-of-centre, over the portrait — never behind
+   the text column on the left, so brightening them for "more colour" never
+   fights the copy's contrast. */
+.banner::after{
+  content:""; position:absolute; z-index:0; pointer-events:none;
+  width:28rem; height:28rem; right:-4rem; top:-9rem; border-radius:50%;
+  background:radial-gradient(circle, var(--sky-base) 0%, transparent 68%);
+  filter:blur(54px); opacity:.6;
+  animation:drift 22s ease-in-out infinite alternate;
+}
+.banner-orb2{
+  position:absolute; z-index:0; pointer-events:none;
+  width:24rem; height:24rem; right:6%; bottom:-10rem; border-radius:50%;
+  background:radial-gradient(circle, var(--violet-base) 0%, transparent 70%);
+  filter:blur(60px); opacity:.6;
+  animation:drift 26s ease-in-out infinite alternate-reverse;
+}
+.banner-orb3{
+  position:absolute; z-index:0; pointer-events:none;
+  width:18rem; height:18rem; right:22%; top:38%; border-radius:50%;
+  background:radial-gradient(circle, var(--coral-base) 0%, transparent 72%);
+  filter:blur(50px); opacity:.5;
+  animation:drift 30s ease-in-out infinite alternate;
+}
+@keyframes drift{ from{ transform:translate(0,0); } to{ transform:translate(2.2rem,1.6rem); } }
+@media (prefers-reduced-motion:reduce){ .banner::after,.banner-orb2{ animation:none; } }
+
+.banner-portrait{
+  display:none; position:absolute; z-index:1; inset-block:0; right:0;
+  width:min(58%, 44rem);
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 28%);
+          mask-image:linear-gradient(to right, transparent 0%, #000 28%);
+}
+@media (min-width:768px){ .banner-portrait{ display:block; } }
+.banner-portrait img{
+  width:100%; height:100%; object-fit:cover; object-position:top center;
+  filter:saturate(1.06) brightness(.98) contrast(1.02);
+}
+.banner-portrait::after{
+  content:""; position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(18,23,47,.22), transparent 24%, transparent 66%, rgba(18,23,47,.34)),
+    radial-gradient(120% 90% at 100% 0%, rgba(58,46,110,.4), transparent 55%);
+}
+
+.banner-copy{
+  position:relative; z-index:2; max-width:31rem;
+  padding:2rem 1.5rem 2.25rem;
+  text-shadow:0 1px 3px rgba(8,10,26,.4);
+}
+@media (min-width:640px){ .banner-copy{ padding:2.75rem 2.5rem 3rem; } }
+@media (min-width:1024px){ .banner-copy{ padding:3.5rem 3.25rem; } }
+
+.banner-status{
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.875rem; font-weight:500; color:#CBD9F5; margin-bottom:1rem;
+}
+.banner-dot{ flex:none; width:.5rem; height:.5rem; border-radius:50%; background:var(--coral-base); }
+
+.banner-name{
+  font-size:clamp(2.5rem,7vw,4.3rem); font-weight:700; line-height:1;
+  letter-spacing:-.03em; color:#FFFFFF; margin:0;
+}
+.banner-name .dot{ color:var(--coral-base); }
+.banner-role{
+  margin-top:.5rem; font-size:1rem; font-weight:500; color:var(--banner-soft);
+}
+.banner-lede{
+  margin-top:1rem; max-width:38ch; font-size:1rem; line-height:1.6; color:#DDE6F8;
+}
+.banner-actions{ display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.75rem; }
+
+.banner-carousel{ margin-top:2rem; max-width:34ch; }
+.slide{ display:none; }
+.slide[data-active]{ display:block; animation:slideIn 420ms var(--e-out) both; }
+@keyframes slideIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+.slide-eyebrow{ font-size:.875rem; font-weight:600; color:var(--banner-soft); margin-bottom:.25rem; }
+.slide-title{ font-size:1.125rem; font-weight:600; color:#FFFFFF; }
+.slide-line{ margin-top:.25rem; font-size:1rem; line-height:1.55; color:#CBD5EA; }
+.slide-link{
+  display:inline-flex; align-items:center; gap:.5rem; margin-top:.5rem;
+  font-size:.875rem; font-weight:600; color:var(--banner-soft);
+}
+@media (hover:hover) and (pointer:fine){ .slide-link:hover{ text-decoration:underline; } }
+
+.banner-dots{ display:flex; gap:.5rem; margin-top:1rem; }
+.banner-dots button{
+  width:1.5rem; height:.5rem; border-radius:var(--r-pill);
+  background:rgba(255,255,255,.25);
+  transition:background-color var(--d-hover) ease, width var(--d-hover) ease;
+}
+.banner-dots button[aria-selected="true"]{ background:var(--coral-base); width:2.5rem; }
+
+/* ── DASHBOARD SHELF ──────────────────────────────────────────────────── */
+.dash-band{ padding:1.5rem 0 5rem; }
+.dash-grid{ display:grid; gap:1.25rem; }
+@media (min-width:900px){
+  .dash-grid{ grid-template-columns:1.15fr .95fr .9fr; align-items:start; }
+}
+
+.dash-col{ padding:1.5rem; }
+@media (min-width:640px){ .dash-col{ padding:1.75rem; } }
+.dash-h{ font-size:1.125rem; font-weight:600; color:var(--ink); letter-spacing:-.01em; }
+.dash-h-sub{ margin-top:1.75rem; }
+
+.work-card{
+  display:flex; gap:1rem; align-items:flex-start;
+  margin-top:1rem; padding:.75rem; border:1px solid var(--line); border-radius:var(--r-md);
+  transition:border-color var(--d-hover) ease, background-color var(--d-hover) ease, transform var(--d-press) ease;
+}
+@media (hover:hover) and (pointer:fine){ .work-card:hover{ border-color:var(--rule); background:var(--tint); } }
+.work-card:active{ transform:scale(.99); }
+.work-thumb{
+  flex:none; width:5.5rem; height:5.5rem; border-radius:var(--r-sm); overflow:hidden;
+  border:1px solid var(--line); background:var(--tint);
+}
+.work-thumb img{ width:100%; height:100%; object-fit:cover; }
+.work-meta{ min-width:0; }
+.work-title{ display:block; font-size:1rem; font-weight:600; color:var(--ink); line-height:1.3; margin-top:.5rem; }
+.work-cap{ margin-top:.25rem; font-size:.875rem; color:var(--muted); line-height:1.45; }
+
+.chip-list{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+
+.org-stack{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+.org-chip{
+  padding:.5rem 1rem; border:1px solid var(--line); border-radius:var(--r-pill);
+  background:var(--surface); font-size:.875rem; color:var(--body);
+}
+.org-chip b{ font-weight:600; color:var(--ink); }
+
+.tool-list{ display:grid; gap:.5rem; margin-top:1rem; }
+.tool-link{
+  display:block; padding:.75rem 1rem;
+  border:1px solid var(--line); border-radius:var(--r-md); background:var(--surface);
+  transition:border-color var(--d-hover) ease, background-color var(--d-hover) ease, transform var(--d-press) ease;
+}
+@media (hover:hover) and (pointer:fine){ .tool-link:hover{ border-color:var(--rule); background:var(--tint); } }
+.tool-link:active{ transform:scale(.99); }
+.tool-name{ display:block; font-size:.9375rem; font-weight:600; color:var(--ink); }
+.tool-cap{ display:block; margin-top:.125rem; font-size:.8125rem; line-height:1.45; color:var(--muted); }
+
+.fact-col{ display:grid; gap:1rem; }
+.fact-card{ padding:1.25rem 1.5rem; display:flex; gap:1rem; align-items:flex-start; }
+.fact-icon{
+  flex:none; width:2.5rem; height:2.5rem; border-radius:var(--r-sm);
+  display:grid; place-items:center;
+}
+.fact-icon svg{ width:1.25rem; height:1.25rem; }
+.fact-icon.tag-sky{ background:var(--sky-tint); color:var(--sky-ink); }
+.fact-icon.tag-violet{ background:var(--violet-tint); color:var(--violet-ink); }
+.fact-icon.tag-indigo{ background:var(--indigo-tint); color:var(--indigo-ink); }
+.fact-title{ font-size:1rem; font-weight:600; color:var(--ink); }
+.fact-line{ margin-top:.25rem; font-size:.875rem; line-height:1.5; color:var(--muted); }
+
+/* ── FOOTER / CONTACT ─────────────────────────────────────────────────── */
+.invert{ color:#DCE6F8; background:var(--deep); }
+.invert .h1,.invert .h2{ color:#FFFFFF; }
+.invert .on-brand{ color:var(--brand-soft); }
+.site-footer{ padding:3rem 0 2.25rem; }
+.contact-grid{ display:grid; gap:2rem; }
+@media (min-width:768px){ .contact-grid{ grid-template-columns:1.1fr .9fr; align-items:center; gap:3rem; } }
+.contact-list{ display:grid; gap:.5rem; margin-top:1.25rem; font-size:1rem; }
+.contact-list > div{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:.75rem; }
+.contact-list dt{ color:#A9BADA; }
+.link-inline{ text-decoration:underline; text-underline-offset:2px; }
+.footnote{
+  margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,.15);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:.75rem;
+  font-size:.875rem; color:#93A3C2;
+}
+.footnote a{ color:#A9BADA; text-decoration:underline; text-underline-offset:2px; }
+
+.contact-lede{ margin-top:.75rem; color:#DCE6F8; max-width:42ch; }
+.contact-card{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); padding:1.75rem; }
+.btn-signal{ background:var(--coral-base); color:#33101C; box-shadow:none; }
+@media (hover:hover) and (pointer:fine){ .btn-signal:hover{ background-color:#F4839F; } }
+.mt-lg{ margin-top:1.25rem; }
+
+/* Reveal-on-scroll: opacity/transform only, gated behind .js so a no-script
+   visitor always sees full content (the class is added by the script below
+   before paint of the affected elements). */
+.js [data-reveal]{ opacity:0; transform:translateY(14px); }
+.js [data-reveal].is-visible{
+  opacity:1; transform:none;
+  transition:opacity 640ms var(--e-out), transform 640ms var(--e-out);
+}
+
+@media (prefers-reduced-motion:reduce){
+  .slide[data-active]{ animation:none; }
+  .js [data-reveal]{ opacity:1; transform:none; }
+  *{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; }
+}
+</style>
+</head>
+
+<body>
+
+<a class="skip" href="#dash">Skip to work</a>
+
+<nav class="nav-dock" aria-label="Sections">
+  <div class="nav-bar">
+    <span class="nav-avatar" aria-hidden="true">MS</span>
+    <a href="redesign-v3.html" class="nav-name">Manfred Siew</a>
+    <div class="nav-links">
+      <a href="redesign-v3.html" class="nav-link" aria-current="page">Home</a>
+      <a href="redesign-v3-work.html" class="nav-link">Work</a>
+      <a href="redesign-v3-projects.html" class="nav-link">Projects</a>
+      <a href="redesign-v3-experience.html" class="nav-link">Experience</a>
+    </div>
+    <a href="#contact" class="btn nav-cta">Contact</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════ HERO BANNER ══════════ -->
+<section id="home" class="hero-band">
+  <div class="shell">
+    <div class="banner card-lg" data-reveal>
+
+      <span class="banner-orb2" aria-hidden="true"></span>
+      <span class="banner-orb3" aria-hidden="true"></span>
+
+      <div class="banner-portrait">
+        <img src="public/profile_picture.png" alt="Portrait of Manfred Siew" onerror="this.parentElement.hidden=true">
+      </div>
+
+      <div class="banner-copy">
+        <p class="banner-status"><span class="banner-dot"></span> Aerospace and IT · building with people in the loop</p>
+        <h1 class="banner-name">Manfred Siew<span class="dot">.</span></h1>
+        <p class="banner-role">Forward Deployed Solution Architect (Intern) · RAiD</p>
+        <p class="banner-lede">
+          I sit inside the unit that has the problem rather than taking tickets
+          from it. Trained in Aerospace Engineering, self-taught in software,
+          LLM tuning and UI/UX design.
+        </p>
+        <div class="banner-actions">
+          <a class="btn" href="#dash">See featured work</a>
+          <a class="btn btn-ghost-inv" href="redesign-v3-projects.html">All 29 projects</a>
+        </div>
+
+        <div class="banner-carousel" role="group" aria-label="Featured case studies">
+          <div class="slide" data-slide="0" data-active>
+            <p class="slide-eyebrow">Featured work</p>
+            <p class="slide-title">GRID</p>
+            <p class="slide-line">Nobody skips the finance form on purpose. They skip it because the next task is already in front of them.</p>
+            <a class="slide-link" href="redesign-v3-work.html#wp1">Read the case study →</a>
+          </div>
+          <div class="slide" data-slide="1">
+            <p class="slide-eyebrow">Featured work</p>
+            <p class="slide-title">MILES / MAVIS</p>
+            <p class="slide-line">Owning a feature means finishing it. Owning a platform means deciding what it will still carry in two years.</p>
+            <a class="slide-link" href="redesign-v3-work.html#wp2">Read the case study →</a>
+          </div>
+          <div class="slide" data-slide="2">
+            <p class="slide-eyebrow">Featured work</p>
+            <p class="slide-title">Vibe Coding Masterclass</p>
+            <p class="slide-line">The fastest way to find out whether you understand a practice is to stand in front of a room and teach it.</p>
+            <a class="slide-link" href="redesign-v3-work.html#wp3">Read the case study →</a>
+          </div>
+          <div class="banner-dots" role="tablist" aria-label="Choose a case study">
+            <button type="button" role="tab" data-dot="0" aria-selected="true" aria-label="GRID"></button>
+            <button type="button" role="tab" data-dot="1" aria-selected="false" aria-label="MILES / MAVIS"></button>
+            <button type="button" role="tab" data-dot="2" aria-selected="false" aria-label="Vibe Coding Masterclass"></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DASHBOARD SHELF ══════════ -->
+<section id="dash" class="dash-band">
+  <div class="shell dash-grid">
+
+    <div class="card dash-col">
+      <h2 class="dash-h">Featured work</h2>
+
+      <a class="work-card" href="redesign-v3-projects.html#facility-booking">
+        <span class="work-thumb">
+          <img src="public/facility-booking/dashboard.png" loading="lazy"
+               alt="RAiD Facility Booking dashboard: pending/approved/upcoming stat cards, an agenda list, and a facilities quick-book panel">
+        </span>
+        <span class="work-meta">
+          <span class="tag tag-violet">Enterprise · RAiD</span>
+          <span class="work-title">RAiD Facility Booking System</span>
+          <span class="work-cap">The actual dashboard, captured from the running app.</span>
+        </span>
+      </a>
+
+      <a class="work-card" href="redesign-v3-projects.html#workplace-cico">
+        <span class="work-thumb">
+          <img src="public/WorkCICO%20Screenshot.jpg" loading="lazy"
+               alt="Dark-themed duty app screen showing a personnel-on-duty count and Check In / Check Out buttons">
+        </span>
+        <span class="work-meta">
+          <span class="tag tag-amber">Automation · Freelance</span>
+          <span class="work-title">Workplace Check In/Out App</span>
+          <span class="work-cap">The shipped interface — what a user actually sees.</span>
+        </span>
+      </a>
+
+      <a class="btn btn-ghost btn-block mt-lg" href="redesign-v3-projects.html">View all 29 projects</a>
+    </div>
+
+    <div class="card dash-col">
+      <h2 class="dash-h">What the work draws from</h2>
+      <ul class="chip-list">
+        <li class="tag tag-sky">Aerospace Engineering</li>
+        <li class="tag tag-indigo">Power Platform</li>
+        <li class="tag tag-violet">LLM tuning &amp; AI</li>
+        <li class="tag tag-coral">UI/UX design</li>
+        <li class="tag tag-amber">Process automation</li>
+      </ul>
+
+      <h2 class="dash-h dash-h-sub">Published for other builders</h2>
+      <div class="tool-list">
+        <a class="tool-link" href="https://github.com/ElfredSeow/App-Marketing-Skill" target="_blank" rel="noopener noreferrer">
+          <span class="tool-name">App Marketing Skill →</span>
+          <span class="tool-cap">An AI agent skill that turns a repository into a landing page, infographics and a launch video. MIT, on GitHub.</span>
+        </a>
+        <a class="tool-link" href="https://github.com/ElfredSeow/Google-AI-Studio-System-Prompt" target="_blank" rel="noopener noreferrer">
+          <span class="tool-name">Google AI Studio System Prompt →</span>
+          <span class="tool-cap">A system prompt that makes a coding assistant plan and get approval before it touches anything.</span>
+        </a>
+      </div>
+
+      <h2 class="dash-h dash-h-sub">Where I've worked</h2>
+      <div class="org-stack">
+        <span class="org-chip"><b>RSAF</b> Republic of Singapore Air Force</span>
+        <span class="org-chip"><b>RAiD</b> Agile innovation Digital</span>
+        <span class="org-chip"><b>TP</b> Temasek Polytechnic</span>
+        <span class="org-chip"><b>Freelance</b> Independent contract work</span>
+      </div>
+    </div>
+
+    <div class="fact-col">
+      <div class="card fact-card">
+        <span class="fact-icon tag-sky" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 16l8-2 4-9 2 1-2 8 6-1 2 2-7 3-1 4-2-1 1-4-9-1z"/>
+          </svg>
+        </span>
+        <span>
+          <span class="fact-title">Aerospace Engineering</span>
+          <p class="fact-line">Trained at Temasek Polytechnic — the formal half of the page, completed, not left behind.</p>
+        </span>
+      </div>
+      <div class="card fact-card">
+        <span class="fact-icon tag-violet" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12"/>
+          </svg>
+        </span>
+        <span>
+          <span class="fact-title">Software &amp; AI</span>
+          <p class="fact-line">Self-taught: full-stack development, LLM tuning and UI/UX design, on Power Platform and beyond.</p>
+        </span>
+      </div>
+      <div class="card fact-card">
+        <span class="fact-icon tag-indigo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M15 9l-4.5 2.5L8 16l4.5-2.5z"/>
+          </svg>
+        </span>
+        <span>
+          <span class="fact-title">RAiD — Forward Deployed</span>
+          <p class="fact-line">Embedded in the unit that owns the problem, rather than a queue that receives tickets.</p>
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="invert site-footer" id="contact">
+  <div class="shell">
+    <div class="contact-grid">
+      <div>
+        <p class="h2">Ready for what's <span class="on-brand">next.</span></p>
+        <p class="lede contact-lede">
+          Looking for a role that uses both sides, aerospace and IT, and adds
+          something I do not have yet. Send me a note — I usually reply within a day.
+        </p>
+      </div>
+      <div class="card contact-card">
+        <a class="btn btn-signal btn-block" href="mailto:Manfredsiew@hotmail.sg">Email me</a>
+        <dl class="contact-list">
+          <div><dt>Email</dt><dd><a href="mailto:Manfredsiew@hotmail.sg" class="link-inline">Manfredsiew@hotmail.sg</a></dd></div>
+          <div><dt>LinkedIn</dt><dd><a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer" class="link-inline">manfred-siew</a></dd></div>
+          <div><dt>Location</dt><dd>Singapore</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p class="footnote">
+      <span>© 2026 Manfred Siew · Aerospace Engineering, Temasek Polytechnic</span>
+      <span><a href="redesign-v3-work.html">Work</a> · <a href="redesign-v3-projects.html">Projects</a> · <a href="redesign-v3-experience.html">Experience</a></span>
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════ CAROUSEL SCRIPT ══════════ -->
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dots = Array.prototype.slice.call(document.querySelectorAll('.banner-dots button'));
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = 0, timer = null;
+
+  function show(i){
+    current = i;
+    slides.forEach(function(s){ s.toggleAttribute('data-active', +s.dataset.slide === i); });
+    dots.forEach(function(d){ d.setAttribute('aria-selected', +d.dataset.dot === i ? 'true' : 'false'); });
+  }
+  function next(){ show((current + 1) % slides.length); }
+  function start(){ if (!reduce) timer = setInterval(next, 6000); }
+  function stop(){ if (timer) { clearInterval(timer); timer = null; } }
+
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){ show(+d.dataset.dot); stop(); start(); });
+  });
+  var carousel = document.querySelector('.banner-carousel');
+  carousel.addEventListener('mouseenter', stop);
+  carousel.addEventListener('mouseleave', start);
+  carousel.addEventListener('focusin', stop);
+  carousel.addEventListener('focusout', start);
+
+  start();
+})();
+</script>
+
+<!-- ══════════ REVEAL-ON-SCROLL ══════════ -->
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var els = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  if (!('IntersectionObserver' in window) || !els.length) {
+    els.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: .1 });
+  els.forEach(function(el){ io.observe(el); });
+  // Hard fallback: guarantee every section is visible shortly after load,
+  // regardless of scroll position or how a tool (screenshot, print, crawler)
+  // captured the page. The reveal is a decorative bonus for a human who
+  // scrolls at human pace within this window; it must never be the only
+  // path to content actually appearing.
+  setTimeout(function(){
+    els.forEach(function(el){ el.classList.add('is-visible'); });
+    io.disconnect();
+  }, 1400);
+})();
+</script>
+
+</body>
+</html>
