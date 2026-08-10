@@ -342,7 +342,8 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 }
 .shot-lightbox-body img{ max-width:100%; max-height:76vh; width:auto; height:auto; object-fit:contain; border-radius:var(--r-sm); }
 .shot-lightbox-mockwrap{ position:relative; border-radius:var(--r-sm); }
-.shot-lightbox-mockwrap .bf-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
+.shot-lightbox-mockwrap .bf-mock,
+.shot-lightbox-mockwrap .mf-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
 .shot-lightbox-cap{ padding:.9rem 1.5rem 1.25rem; }
 .shot-lightbox-cap .st{ font-size:.9375rem; font-weight:600; color:var(--ink); }
 .shot-lightbox-cap .sd{ font-size:.8125rem; line-height:1.4; color:var(--muted); margin-top:.15rem; }
@@ -483,10 +484,179 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
    a taller screen" crop a real screenshot gets. 480px * .6 = 288px = the
    frame's own width (18rem), so nothing overflows sideways. */
 .app-shot-frame .bf-mock{width:480px;transform:scale(.6);transform-origin:top left}
+/* .mf-mock is authored at 720px (half the app's own 1440px capture
+   viewport) rather than 480px, so 0.4 lands it on the same 288px frame
+   width. Its data-mock-width tells the lightbox the same number. */
+.app-shot-frame .mf-mock{width:720px;transform:scale(.4);transform-origin:top left}
 @media (max-width:520px){
   .bf-mock .bf-metrics,.bf-mock .bf-vgrid{grid-template-columns:1fr}
   .bf-mock .bf-rail{width:48px}
   .bf-mock .bf-rail-hd b,.bf-mock .bf-rail-hd small,.bf-mock .bf-ri span,.bf-mock .bf-rail-ft span{display:none}
+}
+
+/* ── MatFlow screen mockups ───────────────────────────────────────────
+   Same recipe as .bf-mock above, for the second app on this page that
+   has no screenshot of its own: rebuilt from the app's own interface
+   code and design tokens, not invented and not a photo.
+
+   Source: raid-ppcoe/NSR-Marketing-Content, marketing-pr/Network-
+   Service-Recovery-App/MARKETING_SPEC.md — §3 Theme tokens (every
+   colour and radius below), §5 App Fidelity Map (which screens, what
+   each one shows, the lucide icon set), §6 mock dataset (every node
+   name, item name, balance and threshold) — cross-checked against the
+   captured screens/*.png in that same repo, which is where the row
+   order, column headings and RAG percentages come from. Nothing here
+   is authored copy: the app's own wordmark, page titles, the four
+   demand-state labels and the operator names are reproduced verbatim.
+
+   The one liberty taken is legibility at small sizes: text below about
+   7px stops rendering as text, so the smallest labels sit a little
+   above a strict 50% of the app's value. Nothing is re-proportioned and
+   no label is abbreviated. Tokens are mf- prefixed so they collide with
+   neither this page's own nor .bf-mock's, and every rule is qualified
+   with the .mf-mock ancestor so it outranks this page's descendant
+   rules (.log-body p and friends). */
+/* Authored at 720px — exactly half the 1440px viewport the app's own
+   screens were captured at — so every size below is the app's real value
+   halved, and the layout is the app's layout rather than a re-proportioned
+   one. .app-shot-frame scales it to 0.4 for the 8:5 thumbnail; the
+   lightbox scales it back up. */
+.mf-mock{
+  --mf-canvas:#000000; --mf-card:#1A1A2E;
+  --mf-purple:#8B5CF6; --mf-blue:#3B82F6; --mf-pink:#D946EF;
+  --mf-red:#EF4444; --mf-green:#4ADE80; --mf-amber:#FACC15;
+  --mf-line:rgba(255,255,255,.1);
+  --mf-fg-2:rgba(255,255,255,.7); --mf-fg-3:rgba(255,255,255,.5); --mf-fg-4:rgba(255,255,255,.4);
+  --mf-radius:6px;
+  font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--mf-canvas); color:#fff; line-height:1.35;
+}
+.mf-mock p,.mf-mock b,.mf-mock em,.mf-mock small,.mf-mock span,.mf-mock div,.mf-mock h4,.mf-mock th,.mf-mock td{margin:0;font-size:inherit;line-height:inherit;color:inherit;font-style:normal}
+/* App bar — src/layout/AppShell.tsx wordmark + signed-in operator */
+.mf-mock .mf-top{display:flex;align-items:center;justify-content:space-between;height:32px;padding:0 14px;background:#08080f;border-bottom:1px solid rgba(255,255,255,.06)}
+.mf-mock .mf-wordmark{font-size:7.5px;font-weight:700;letter-spacing:.05em}
+.mf-mock .mf-who{display:flex;align-items:center;gap:8px;color:var(--mf-fg-3)}
+.mf-mock .mf-who-id{text-align:right;line-height:1.25}
+.mf-mock .mf-who-id b{display:block;font-size:7px;font-weight:700;color:#fff}
+.mf-mock .mf-who-id span{font-size:5.5px;letter-spacing:.06em}
+.mf-mock .mf-avatar{width:19px;height:19px;border-radius:5px;background:var(--mf-purple);display:grid;place-items:center;color:#0b0b15;flex-shrink:0}
+/* Sidebar — .sidebar-gradient, role-gated nav from AppRouter. 120px is
+   the app's own 240px rail at half scale. */
+.mf-mock .mf-screen{display:flex;background:var(--mf-canvas);min-height:270px}
+.mf-mock .mf-rail{width:120px;flex-shrink:0;background:linear-gradient(180deg,#12121F 0%,#0B0B15 100%);border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;padding:9px 8px 7px}
+.mf-mock .mf-rail nav{display:flex;flex-direction:column;gap:2px;flex:1}
+.mf-mock .mf-ri{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:6px;font-size:7.5px;color:var(--mf-fg-2)}
+.mf-mock .mf-ri.mf-on{background:rgba(139,92,246,.16);color:var(--mf-purple);font-weight:700}
+.mf-mock .mf-ri svg{flex-shrink:0;opacity:.9}
+.mf-mock .mf-rail-ft{font-size:5.5px;color:rgba(255,255,255,.22);padding:0 9px}
+/* Page header */
+.mf-mock .mf-pane{flex:1;min-width:0;padding:15px 22px 20px}
+.mf-mock .mf-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.mf-mock .mf-title{display:flex;align-items:center;gap:8px}
+.mf-mock .mf-pane h4{font-size:17px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;line-height:1.1;white-space:nowrap}
+.mf-mock .mf-sub{font-size:7px;color:var(--mf-fg-3);margin-top:3px}
+.mf-mock .mf-sub.mf-caps{letter-spacing:.09em;text-transform:uppercase}
+.mf-mock .mf-corner{font-size:6.5px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.26);white-space:nowrap;padding-top:5px}
+.mf-mock .mf-back{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:700;color:var(--mf-purple);margin-bottom:9px}
+/* Tabs */
+.mf-mock .mf-tabs{display:flex;gap:24px;margin-top:13px;border-bottom:1px solid rgba(255,255,255,.07)}
+.mf-mock .mf-tab{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:700;color:var(--mf-fg-3);padding-bottom:7px;border-bottom:2px solid transparent}
+.mf-mock .mf-tab.mf-on{color:#fff;border-bottom-color:var(--mf-purple)}
+/* Glass cards — bg-obsidian-card/80, border-white/10, rounded-xl, with
+   the blurred token-tinted orb the app puts in a card's top corner */
+.mf-mock .mf-card{position:relative;overflow:hidden;background:var(--mf-card);border:1px solid var(--mf-line);border-radius:var(--mf-radius)}
+.mf-mock .mf-orb{position:absolute;top:-18px;right:-18px;width:44px;height:44px;border-radius:50%;filter:blur(15px);opacity:.5}
+.mf-mock .mf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.mf-mock .mf-stats2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.mf-mock .mf-stat{padding:11px 12px 12px}
+.mf-mock .mf-lbl{font-size:6.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mf-fg-4);line-height:1.45}
+.mf-mock .mf-stat .mf-lbl{min-height:19px}
+.mf-mock .mf-num{font-size:27px;font-weight:300;line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums}
+.mf-mock .mf-num.mf-p{color:var(--mf-purple)}
+.mf-mock .mf-num.mf-b{color:var(--mf-blue)}
+.mf-mock .mf-num.mf-k{color:var(--mf-pink)}
+/* Panels + the dense low-chrome tables the app uses everywhere */
+.mf-mock .mf-cols{display:grid;grid-template-columns:1.75fr 1fr;gap:10px;margin-top:11px}
+.mf-mock .mf-panel{padding:13px 15px 5px}
+.mf-mock .mf-ph{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.mf-mock .mf-ph .mf-pt{font-size:7.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mf-fg-3)}
+.mf-mock .mf-ph .mf-link{font-size:7px;font-weight:700;color:var(--mf-purple)}
+.mf-mock .mf-search{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.05);border:1px solid var(--mf-line);border-radius:6px;padding:5px 9px;font-size:6.5px;color:var(--mf-fg-4)}
+.mf-mock table{width:100%;border-collapse:collapse;table-layout:fixed}
+.mf-mock th{font-size:5.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mf-fg-4);text-align:left;padding:0 5px 7px;border-bottom:1px solid rgba(255,255,255,.08)}
+.mf-mock th.mf-r,.mf-mock td.mf-r{text-align:right}
+.mf-mock td{padding:7px 5px;border-bottom:1px solid rgba(255,255,255,.05);font-size:7px;vertical-align:middle}
+.mf-mock tr:last-child td{border-bottom:0}
+.mf-mock td.mf-ts{color:var(--mf-fg-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mf-mock td .mf-it{font-size:7.5px;font-weight:700;line-height:1.3}
+.mf-mock td .mf-loc{font-size:6.5px;color:var(--mf-fg-3);margin-top:1px}
+.mf-mock td.mf-qty{font-weight:700;font-variant-numeric:tabular-nums}
+.mf-mock td.mf-em{font-size:6.5px;color:var(--mf-fg-2)}
+.mf-mock .mf-pill{display:inline-block;border-radius:999px;padding:2px 6px;font-size:5px;font-weight:700;letter-spacing:.04em;text-align:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--mf-fg-2)}
+.mf-mock .mf-act{font-size:6.5px;font-weight:700;color:var(--mf-purple);white-space:nowrap}
+/* RAG status — computed per item from its own redline / yellowline */
+.mf-mock .mf-rag{display:inline-block;border-radius:5px;padding:2px 6px;font-size:6.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.mf-mock .mf-rag.mf-g{background:rgba(74,222,128,.12);color:var(--mf-green);border:1px solid rgba(74,222,128,.32)}
+.mf-mock .mf-rag.mf-a{background:rgba(250,204,21,.12);color:var(--mf-amber);border:1px solid rgba(250,204,21,.32)}
+.mf-mock .mf-rag.mf-rd{background:rgba(239,68,68,.14);color:var(--mf-red);border:1px solid rgba(239,68,68,.36)}
+/* Inventory holdings chart: balance against max, per spare item */
+.mf-mock .mf-chart{position:relative;display:flex;align-items:flex-end;gap:6px;height:104px;padding-left:17px;margin-top:2px}
+.mf-mock .mf-grp{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%}
+.mf-mock .mf-grp i{flex:1;display:block;border-radius:2px 2px 0 0;background:rgba(255,255,255,.13)}
+.mf-mock .mf-grp i.mf-fill{background:var(--mf-purple)}
+.mf-mock .mf-yax{position:absolute;left:0;top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-between;font-size:5px;color:var(--mf-fg-4)}
+.mf-mock .mf-xax{display:flex;font-size:5px;color:var(--mf-fg-4);margin:5px 0 10px;padding-left:17px;gap:6px}
+.mf-mock .mf-xax span{flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Demand lifecycle stepper — the four states, in order */
+.mf-mock .mf-stepper{display:flex;margin:4px 0 20px}
+.mf-mock .mf-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.mf-mock .mf-step i{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:8px;font-weight:700;background:rgba(255,255,255,.24);color:#0b0b15}
+.mf-mock .mf-step.mf-on i{background:var(--mf-purple);color:#fff}
+.mf-mock .mf-step b{font-size:7px;font-weight:400;letter-spacing:.04em;text-transform:uppercase;color:var(--mf-fg-3);margin-top:9px;text-align:center;line-height:1.3;white-space:nowrap}
+.mf-mock .mf-step.mf-on b{color:#fff}
+.mf-mock .mf-step::after{content:"";position:absolute;top:8px;left:calc(50% + 14px);right:calc(-50% + 14px);height:1px;background:rgba(255,255,255,.2)}
+.mf-mock .mf-step:last-child::after{display:none}
+.mf-mock .mf-two{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.mf-mock .mf-kv{font-size:8px;line-height:2}
+.mf-mock .mf-kv b{font-weight:700}
+.mf-mock .mf-kv span{color:var(--mf-fg-2)}
+.mf-mock .mf-field{position:relative;display:block;width:104px;border:1px solid rgba(255,255,255,.22);border-radius:4px;padding:11px 8px 6px;margin:5px 0 12px}
+.mf-mock .mf-field em{position:absolute;top:-4px;left:7px;background:var(--mf-card);padding:0 3px;font-size:6px;color:var(--mf-fg-3)}
+.mf-mock .mf-field b{font-size:9px;font-weight:400}
+.mf-mock .mf-btn{display:inline-flex;align-items:center;gap:6px;border-radius:4px;padding:7px 12px;font-size:8px;font-weight:700}
+.mf-mock .mf-btn.mf-solid{background:var(--mf-purple);color:#fff;box-shadow:0 0 15px rgba(139,92,246,.3)}
+.mf-mock .mf-btn.mf-ghost{border:1px solid var(--mf-purple);color:var(--mf-purple)}
+/* Ground-team quick operations, quick-consume tiles, activity log */
+.mf-mock .mf-ops{display:flex;gap:10px;margin-top:2px;margin-bottom:8px}
+.mf-mock .mf-opbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border-radius:4px;padding:12px;font-size:8px;font-weight:700;white-space:nowrap}
+.mf-mock .mf-opbtn.mf-b1{background:var(--mf-blue)}
+.mf-mock .mf-opbtn.mf-b2{background:var(--mf-purple)}
+.mf-mock .mf-hint{font-size:7px;color:var(--mf-fg-3);margin:9px 0 8px}
+.mf-mock .mf-tiles3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:8px}
+.mf-mock .mf-ct{padding:9px;border-radius:5px;background:rgba(255,255,255,.03);border:1px solid var(--mf-line)}
+.mf-mock .mf-ct b{display:block;font-size:7px;font-weight:700;line-height:1.3}
+.mf-mock .mf-ct small{display:block;font-size:6px;color:var(--mf-fg-3);margin-top:2px}
+.mf-mock .mf-ct .mf-av{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:6.5px;font-weight:700;color:var(--mf-green)}
+.mf-mock .mf-logrow{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.mf-mock .mf-logrow:last-child{border-bottom:0}
+.mf-mock .mf-logicon{width:19px;height:19px;border-radius:5px;display:grid;place-items:center;flex-shrink:0;background:rgba(139,92,246,.16);color:var(--mf-purple)}
+.mf-mock .mf-logicon.mf-bl{background:rgba(59,130,246,.16);color:var(--mf-blue)}
+.mf-mock .mf-logbody{min-width:0;flex:1}
+.mf-mock .mf-logbody b{font-size:7.5px;font-weight:700}
+.mf-mock .mf-logbody .mf-lm{font-size:6.5px;color:var(--mf-fg-3);margin:3px 0 5px}
+.mf-mock .mf-tsr{text-align:right;font-size:5.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mf-fg-4);white-space:nowrap;line-height:1.6;flex-shrink:0}
+.mf-mock .mf-stack{display:flex;flex-direction:column;gap:10px;min-width:0}
+/* User management chips */
+.mf-mock .mf-chip{display:inline-block;border-radius:999px;padding:2px 7px;font-size:6px;font-weight:600;white-space:nowrap}
+.mf-mock .mf-chip.mf-admin{background:rgba(59,130,246,.14);color:#8ab6ff;border:1px solid rgba(59,130,246,.42)}
+.mf-mock .mf-chip.mf-user{background:rgba(139,92,246,.14);color:#bda6ff;border:1px solid rgba(139,92,246,.42)}
+.mf-mock .mf-chip.mf-ok{background:rgba(74,222,128,.1);color:var(--mf-green);border:1px solid rgba(74,222,128,.36)}
+.mf-mock .mf-chip.mf-no{background:rgba(239,68,68,.1);color:var(--mf-red);border:1px solid rgba(239,68,68,.36)}
+.mf-mock .mf-manage{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(139,92,246,.45);border-radius:4px;padding:4px 7px;font-size:6px;font-weight:700;color:#c4b0ff;white-space:nowrap}
+.mf-mock .mf-who-cell{display:flex;align-items:center;gap:7px;font-size:7.5px}
+.mf-mock .mf-who-cell svg{color:var(--mf-fg-4);flex-shrink:0}
+@media (max-width:520px){
+  .mf-mock .mf-cols,.mf-mock .mf-two{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -643,6 +813,33 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               <li>Surfaces the recommendation alongside current conditions so operators can act on it or override it</li>
             </ul></div>
           <div><div class="lab">Built with</div><p class="note">Power Platform, with an AI-assisted forecasting model behind the recommendation. Currently a working pilot. <span class="needs-copy">Add: which unit is piloting it, and the exact forecasting stack</span></p><div class="chips"><span>Power Platform</span><span>AI-assisted forecasting model</span></div></div>
+          <div class="log-shots-wrap">
+            <div class="shots-head">
+              <div class="lab">The actual screens</div>
+              <div class="shots-nav-group" hidden>
+                <button type="button" class="shots-nav" data-shots-prev aria-label="Scroll screens left" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="shots-nav" data-shots-next aria-label="Scroll screens right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="app-shots-wrap">
+            <div class="app-shots" role="list" aria-label="FUEL app screens, captured from the running app">
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">FUEL — Operation Centre dashboard</span></div>
+                <div class="app-shot-frame"><img src="fuel/dashboard.jpg" loading="lazy" alt="FUEL dashboard for the Operation Centre: a left navigation rail for taskings, vehicles, storage tanks and landing points; a row of upcoming tasking cards showing landing point, aircraft type, tail number and fuel needed; a storage fuel level pie chart on an auto-refresh timer; and panels for tasking information, per-site fuel information and per-tank fuel levels"></div>
+                <figcaption class="app-shot-cap"><div class="st">Operation Centre</div><div class="sd">Upcoming taskings, per-site fuel demand and live tank levels on one auto-refreshing board</div></figcaption>
+              </figure>
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">FUEL — Ground operator app</span></div>
+                <div class="app-shot-frame"><img src="fuel/ground-app.jpg" loading="lazy" alt="FUEL ground operator app on a handheld screen: a bowser callsign header, shortcuts to tanker info, fuel replenishment and the conversion calculator, a fuel status overview for the operator's site, and a list of taskings assigned to that site with tick-off checkboxes and bowser assignment"></div>
+                <figcaption class="app-shot-cap"><div class="st">Ground app</div><div class="sd">The bowser crew's view — only the taskings assigned to their site, tick off as refuelled</div></figcaption>
+              </figure>
+            </div>
+            </div>
+          </div>
         </div>
       </details>
 
@@ -660,6 +857,446 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               <li>Shifts the operator's job from managing logistics by hand to monitoring pipeline status</li>
             </ul></div>
           <div><div class="lab">Built with</div><p class="note">Power Platform, with a custom automated request pipeline behind it. Currently a working pilot. <span class="needs-copy">Add: which unit is piloting it, and the exact pipeline stack</span></p><div class="chips"><span>Power Platform</span><span>Automated request pipeline</span></div></div>
+          <div class="log-shots-wrap">
+            <div class="shots-head">
+              <div class="lab">The actual screens</div>
+              <div class="shots-nav-group" hidden>
+                <button type="button" class="shots-nav" data-shots-prev aria-label="Scroll screens left" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="shots-nav" data-shots-next aria-label="Scroll screens right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="app-shots-wrap">
+            <div class="app-shots" role="list" aria-label="MatFlow app screens, rebuilt from the app's own interface code and design tokens — not photos, not invented">
+
+              <!-- 1. OS Cell Spares Overview (RoleB/Dashboard.tsx, tab 0) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — OS Cell Spares Overview</span></div>
+                <div class="app-shot-frame">
+                  <div class="mf-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="mf-top">
+                      <span class="mf-wordmark">NETWORK SERVICE RECOVERY</span>
+                      <span class="mf-who">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="mf-who-id"><b>Priya Nair</b><span>ROLE_B</span></span>
+                        <span class="mf-avatar"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z"/></svg></span>
+                      </span>
+                    </div>
+                    <div class="mf-screen">
+                      <div class="mf-rail">
+                        <nav>
+                          <span class="mf-ri mf-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M8 11h8M8 15h6"/></svg><span>Demands</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>User Access</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Inventory</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Spares Management</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></span>
+                        </nav>
+                        <div class="mf-rail-ft">v1.0.18</div>
+                      </div>
+                      <div class="mf-pane">
+                        <div class="mf-head">
+                          <div>
+                            <h4>OS Cell Spares Overview</h4>
+                            <p class="mf-sub">Centralized spares management and distribution analytics</p>
+                          </div>
+                          <span class="mf-corner">Network node: Alpha-7</span>
+                        </div>
+                        <div class="mf-tabs">
+                          <span class="mf-tab mf-on">Analytics Dashboard</span>
+                          <span class="mf-tab">Distribution Network</span>
+                        </div>
+                        <div class="mf-stats">
+                          <div class="mf-card mf-stat"><span class="mf-orb" style="background:#8B5CF6"></span><div class="mf-lbl">Total active demands</div><div class="mf-num">5</div></div>
+                          <div class="mf-card mf-stat"><span class="mf-orb" style="background:#3B82F6"></span><div class="mf-lbl">Pending acknowledgement</div><div class="mf-num mf-b">2</div></div>
+                          <div class="mf-card mf-stat"><span class="mf-orb" style="background:#8B5CF6"></span><div class="mf-lbl">Pending ES ref. logging</div><div class="mf-num mf-p">1</div></div>
+                          <div class="mf-card mf-stat"><span class="mf-orb" style="background:#D946EF"></span><div class="mf-lbl">Pending delivery/accept.</div><div class="mf-num mf-k">2</div></div>
+                        </div>
+                        <div class="mf-cols">
+                          <div class="mf-card mf-panel">
+                            <div class="mf-ph"><span class="mf-pt">Outstanding demands queue</span><span class="mf-link">View All</span></div>
+                            <table>
+                              <colgroup><col style="width:19%"><col style="width:38%"><col style="width:10%"><col style="width:22%"><col style="width:11%"></colgroup>
+                              <tr><th>Timestamp</th><th>Item description</th><th class="mf-r">Qty</th><th>Status</th><th>Action</th></tr>
+                              <tr>
+                                <td class="mf-ts">23:08:27</td>
+                                <td><div class="mf-it">Fibre Splice Cassette, Optical SFP+ Module</div><div class="mf-loc">Bravo-3 Forward Node</div></td>
+                                <td class="mf-qty mf-r">24, 12</td>
+                                <td><span class="mf-pill">Pending acknowledgement</span></td>
+                                <td><span class="mf-act">REVIEW</span></td>
+                              </tr>
+                              <tr>
+                                <td class="mf-ts">21:08:27</td>
+                                <td><div class="mf-it">10GbE Line Card</div><div class="mf-loc">Delta-9 Airfield Spur</div></td>
+                                <td class="mf-qty mf-r">6</td>
+                                <td><span class="mf-pill">Pending acknowledgement</span></td>
+                                <td><span class="mf-act">REVIEW</span></td>
+                              </tr>
+                              <tr>
+                                <td class="mf-ts">18:08:27</td>
+                                <td><div class="mf-it">Optical SFP+ Module</div><div class="mf-loc">Charlie-2 Coastal Relay</div></td>
+                                <td class="mf-qty mf-r">18</td>
+                                <td><span class="mf-pill">Pending ES ref. logging</span></td>
+                                <td><span class="mf-act">REVIEW</span></td>
+                              </tr>
+                              <tr>
+                                <td class="mf-ts">13:08:27</td>
+                                <td><div class="mf-it">48V Backup Battery, RF Power Amplifier</div><div class="mf-loc">Alpha-7 Central Depot</div></td>
+                                <td class="mf-qty mf-r">4, 3</td>
+                                <td><span class="mf-pill">Pending delivery/accept.</span></td>
+                                <td><span class="mf-act">REVIEW</span></td>
+                              </tr>
+                              <tr>
+                                <td class="mf-ts">04:08:27</td>
+                                <td><div class="mf-it">Fibre Splice Cassette</div><div class="mf-loc">Bravo-3 Forward Node</div></td>
+                                <td class="mf-qty mf-r">30</td>
+                                <td><span class="mf-pill">Pending delivery/accept.</span></td>
+                                <td><span class="mf-act">REVIEW</span></td>
+                              </tr>
+                            </table>
+                          </div>
+                          <div class="mf-card mf-panel">
+                            <div class="mf-ph"><span class="mf-pt">Inventory holdings analytics</span></div>
+                            <!-- Bars are balance (purple) against max (grey), per spare
+                                 item, on the app's own 0–320 axis. Every pair is the
+                                 canonical dataset's totals for that item. -->
+                            <div class="mf-chart">
+                              <span class="mf-yax"><span>320</span><span>240</span><span>160</span><span>80</span><span>0</span></span>
+                              <span class="mf-grp"><i class="mf-fill" style="height:24%"></i><i style="height:72%"></i></span>
+                              <span class="mf-grp"><i class="mf-fill" style="height:39%"></i><i style="height:66%"></i></span>
+                              <span class="mf-grp"><i class="mf-fill" style="height:57%"></i><i style="height:100%"></i></span>
+                              <span class="mf-grp"><i class="mf-fill" style="height:43%"></i><i style="height:81%"></i></span>
+                              <span class="mf-grp"><i class="mf-fill" style="height:45%"></i><i style="height:88%"></i></span>
+                            </div>
+                            <div class="mf-xax"><span></span><span>48V Backup Battery</span><span></span><span></span><span>RF Power Amplifier</span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">OS Cell Spares Overview</div><div class="sd">Four demand-state counters, the outstanding-demand queue, and holdings against capacity per spare item</div></figcaption>
+              </figure>
+
+              <!-- 2. Distribution Network (RoleB/Dashboard.tsx, tab 1) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — Distribution Network</span></div>
+                <div class="app-shot-frame">
+                  <div class="mf-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="mf-top">
+                      <span class="mf-wordmark">NETWORK SERVICE RECOVERY</span>
+                      <span class="mf-who">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="mf-who-id"><b>Priya Nair</b><span>ROLE_B</span></span>
+                        <span class="mf-avatar"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z"/></svg></span>
+                      </span>
+                    </div>
+                    <div class="mf-screen">
+                      <div class="mf-rail">
+                        <nav>
+                          <span class="mf-ri mf-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M8 11h8M8 15h6"/></svg><span>Demands</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>User Access</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Inventory</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Spares Management</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></span>
+                        </nav>
+                        <div class="mf-rail-ft">v1.0.18</div>
+                      </div>
+                      <div class="mf-pane">
+                        <div class="mf-head">
+                          <div>
+                            <h4>OS Cell Spares Overview</h4>
+                            <p class="mf-sub">Centralized spares management and distribution analytics</p>
+                          </div>
+                          <span class="mf-corner">Network node: Alpha-7</span>
+                        </div>
+                        <div class="mf-tabs">
+                          <span class="mf-tab">Analytics Dashboard</span>
+                          <span class="mf-tab mf-on">Distribution Network</span>
+                        </div>
+                        <div class="mf-card mf-panel" style="margin-top:11px">
+                          <div class="mf-ph">
+                            <span class="mf-pt">Distribution network status</span>
+                            <span class="mf-search"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search nodes or items...</span>
+                          </div>
+                          <!-- Status is the item's own balance-against-max, RAG'd by
+                               that item's own redline / yellowline — which is why
+                               Delta-9's line card at 14 of 90 is the one red row. -->
+                          <table>
+                            <colgroup><col style="width:30%"><col style="width:32%"><col style="width:13%"><col style="width:15%"><col style="width:10%"></colgroup>
+                            <tr><th>Location node ↑</th><th>Component</th><th class="mf-r">Balance</th><th>Status</th><th>UOM</th></tr>
+                            <tr><td class="mf-it">Alpha-7 Central Depot</td><td>Fibre Splice Cassette</td><td class="mf-qty mf-r">148</td><td><span class="mf-rag mf-g">74%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Alpha-7 Central Depot</td><td>Optical SFP+ Module</td><td class="mf-qty mf-r">96</td><td><span class="mf-rag mf-g">60%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Alpha-7 Central Depot</td><td>10GbE Line Card</td><td class="mf-qty mf-r">62</td><td><span class="mf-rag mf-g">44%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Alpha-7 Central Depot</td><td>RF Power Amplifier</td><td class="mf-qty mf-r">57</td><td><span class="mf-rag mf-a">38%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Bravo-3 Forward Node</td><td>Fibre Splice Cassette</td><td class="mf-qty mf-r">34</td><td><span class="mf-rag mf-a">28%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Bravo-3 Forward Node</td><td>48V Backup Battery</td><td class="mf-qty mf-r">74</td><td><span class="mf-rag mf-g">67%</span></td><td style="color:var(--mf-fg-4)">set</td></tr>
+                            <tr><td class="mf-it">Charlie-2 Coastal Relay</td><td>Optical SFP+ Module</td><td class="mf-qty mf-r">41</td><td><span class="mf-rag mf-a">41%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Charlie-2 Coastal Relay</td><td>48V Backup Battery</td><td class="mf-qty mf-r">52</td><td><span class="mf-rag mf-a">52%</span></td><td style="color:var(--mf-fg-4)">set</td></tr>
+                            <tr><td class="mf-it">Delta-9 Airfield Spur</td><td>10GbE Line Card</td><td class="mf-qty mf-r">14</td><td><span class="mf-rag mf-rd">16%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                            <tr><td class="mf-it">Delta-9 Airfield Spur</td><td>RF Power Amplifier</td><td class="mf-qty mf-r">88</td><td><span class="mf-rag mf-g">68%</span></td><td style="color:var(--mf-fg-4)">ea</td></tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Distribution Network</div><div class="sd">Every node × item balance, status computed from that item's own red and yellow lines rather than one global rule</div></figcaption>
+              </figure>
+
+              <!-- 3. NSR Team Overview (RoleA/Dashboard.tsx) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — Ground Team Overview</span></div>
+                <div class="app-shot-frame">
+                  <div class="mf-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="mf-top">
+                      <span class="mf-wordmark">NETWORK SERVICE RECOVERY</span>
+                      <span class="mf-who">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="mf-who-id"><b>Jordan Tan</b><span>ROLE_A</span></span>
+                        <span class="mf-avatar"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z"/></svg></span>
+                      </span>
+                    </div>
+                    <div class="mf-screen">
+                      <div class="mf-rail">
+                        <nav>
+                          <span class="mf-ri mf-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M8 11h8M8 15h6"/></svg><span>Demands</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Inventory</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Spares Management</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></span>
+                        </nav>
+                        <div class="mf-rail-ft">v1.0.18</div>
+                      </div>
+                      <div class="mf-pane">
+                        <div class="mf-head">
+                          <div>
+                            <h4>NSR Team Overview</h4>
+                            <p class="mf-sub">Real-time network recovery status and inventory monitoring</p>
+                          </div>
+                          <span class="mf-corner">System status: Optimal</span>
+                        </div>
+                        <div class="mf-stats2">
+                          <div class="mf-card mf-stat"><span class="mf-orb" style="background:#8B5CF6"></span><div class="mf-lbl">Open demands</div><div class="mf-num">5</div></div>
+                          <div class="mf-card mf-stat"><span class="mf-orb" style="background:#3B82F6"></span><div class="mf-lbl">Pending acceptance</div><div class="mf-num">2</div></div>
+                        </div>
+                        <div class="mf-cols">
+                          <div class="mf-stack">
+                            <div class="mf-card mf-panel" style="padding-bottom:12px">
+                              <div class="mf-ph"><span class="mf-pt">Quick operations</span></div>
+                              <div class="mf-ops">
+                                <span class="mf-opbtn mf-b1"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>Record Items Consumed</span>
+                                <span class="mf-opbtn mf-b2"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Accept Items</span>
+                              </div>
+                            </div>
+                            <div class="mf-card mf-panel" style="padding-bottom:12px">
+                              <div class="mf-ph"><span class="mf-pt">⚡ Quick consume — tap to record</span></div>
+                              <p class="mf-hint">Most commonly used items - tap item, enter quantity, done.</p>
+                              <div class="mf-tiles3">
+                                <span class="mf-ct"><b>Fibre Splice Cassette</b><small>Alpha-7 Central Depot</small><span class="mf-av">148 available <svg width="8" height="8" viewBox="0 0 24 24" fill="#FACC15" stroke="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></span>
+                                <span class="mf-ct"><b>Fibre Splice Cassette</b><small>Bravo-3 Forward Node</small><span class="mf-av">34 available <svg width="8" height="8" viewBox="0 0 24 24" fill="#FACC15" stroke="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></span>
+                                <span class="mf-ct"><b>Optical SFP+ Module</b><small>Alpha-7 Central Depot</small><span class="mf-av">96 available <svg width="8" height="8" viewBox="0 0 24 24" fill="#FACC15" stroke="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></span>
+                                <span class="mf-ct"><b>Optical SFP+ Module</b><small>Charlie-2 Coastal Relay</small><span class="mf-av">41 available <svg width="8" height="8" viewBox="0 0 24 24" fill="#FACC15" stroke="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></span>
+                                <span class="mf-ct"><b>10GbE Line Card</b><small>Alpha-7 Central Depot</small><span class="mf-av">62 available <svg width="8" height="8" viewBox="0 0 24 24" fill="#FACC15" stroke="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></span>
+                                <span class="mf-ct"><b>10GbE Line Card</b><small>Delta-9 Airfield Spur</small><span class="mf-av">14 available <svg width="8" height="8" viewBox="0 0 24 24" fill="#FACC15" stroke="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="mf-card mf-panel" style="padding-bottom:10px">
+                            <div class="mf-ph"><span class="mf-pt">Recovery activity log</span></div>
+                            <div class="mf-logrow">
+                              <span class="mf-logicon"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                              <span class="mf-logbody"><b>Recovery Initiative #7c41</b><span class="mf-lm">Fiber link restoration in Sector 09-G</span><span class="mf-pill">Demand raised</span></span>
+                              <span class="mf-tsr">Timestamp<br>14:02:22 UTC</span>
+                            </div>
+                            <div class="mf-logrow">
+                              <span class="mf-logicon mf-bl"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></span>
+                              <span class="mf-logbody"><b>Recovery Initiative #b3d8</b><span class="mf-lm">Fiber link restoration in Sector 09-G</span><span class="mf-pill">Demand raised</span></span>
+                              <span class="mf-tsr">Timestamp<br>14:02:22 UTC</span>
+                            </div>
+                            <div class="mf-logrow">
+                              <span class="mf-logicon"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                              <span class="mf-logbody"><b>Recovery Initiative #e94a</b><span class="mf-lm">Fiber link restoration in Sector 09-G</span><span class="mf-pill">Acknowledged</span></span>
+                              <span class="mf-tsr">Timestamp<br>14:02:22 UTC</span>
+                            </div>
+                            <div class="mf-logrow">
+                              <span class="mf-logicon mf-bl"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></span>
+                              <span class="mf-logbody"><b>Recovery Initiative #2f68</b><span class="mf-lm">Fiber link restoration in Sector 09-G</span><span class="mf-pill" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.12);color:#EF4444">Items reference logged</span></span>
+                              <span class="mf-tsr">Timestamp<br>14:02:22 UTC</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Ground Team Overview</div><div class="sd">The repair team's side: open demands, one-tap consume tiles carrying live balances, and the recovery activity log</div></figcaption>
+              </figure>
+
+              <!-- 4. Demand Review (RoleB/DemandReview.tsx) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — Demand Review</span></div>
+                <div class="app-shot-frame">
+                  <div class="mf-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="mf-top">
+                      <span class="mf-wordmark">NETWORK SERVICE RECOVERY</span>
+                      <span class="mf-who">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="mf-who-id"><b>Priya Nair</b><span>ROLE_B</span></span>
+                        <span class="mf-avatar"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z"/></svg></span>
+                      </span>
+                    </div>
+                    <div class="mf-screen">
+                      <div class="mf-rail">
+                        <nav>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M8 11h8M8 15h6"/></svg><span>Demands</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>User Access</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Inventory</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Spares Management</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></span>
+                        </nav>
+                        <div class="mf-rail-ft">v1.0.18</div>
+                      </div>
+                      <div class="mf-pane">
+                        <span class="mf-back"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Back to Dashboard</span>
+                        <h4>Demand Review: 7C41A9E2</h4>
+                        <div class="mf-card mf-panel" style="margin-top:11px;padding:14px 14px 16px">
+                          <!-- The four demand states, in the order the app steps
+                               through them, with their operator-facing labels. -->
+                          <div class="mf-stepper">
+                            <span class="mf-step mf-on"><i>1</i><b>Demand raised</b></span>
+                            <span class="mf-step"><i>2</i><b>Acknowledged</b></span>
+                            <span class="mf-step"><i>3</i><b>Pending delivery/accept.</b></span>
+                            <span class="mf-step"><i>4</i><b>Demand closed</b></span>
+                          </div>
+                          <div class="mf-two">
+                            <div>
+                              <div class="mf-lbl" style="color:#fff;font-size:8px;margin-bottom:4px">Details</div>
+                              <p class="mf-kv"><b>Location:</b> <span>Bravo-3 Forward Node</span></p>
+                              <p class="mf-kv"><b>Created At:</b> <span>Aug 10, 2026 11:08 PM</span></p>
+                              <p class="mf-kv"><b>Created By System:</b> <span>Yes</span></p>
+                              <span class="mf-btn mf-solid" style="margin-top:22px">Acknowledge Demand</span>
+                            </div>
+                            <div>
+                              <div class="mf-lbl" style="color:#fff;font-size:8px;margin-bottom:4px">Requested items (editable)</div>
+                              <p class="mf-kv">Fibre Splice Cassette</p>
+                              <span class="mf-field"><em>Requested Qty</em><b>24</b></span>
+                              <p class="mf-kv">Optical SFP+ Module</p>
+                              <span class="mf-field"><em>Requested Qty</em><b>12</b></span>
+                              <span class="mf-btn mf-ghost">Update Quantities</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Demand Review</div><div class="sd">One demand against the four-state lifecycle, its line items editable until the OS Cell acknowledges it</div></figcaption>
+              </figure>
+
+              <!-- 5. User Management Panel (RoleB/UserManagement.tsx) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — User Management</span></div>
+                <div class="app-shot-frame">
+                  <div class="mf-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="mf-top">
+                      <span class="mf-wordmark">NETWORK SERVICE RECOVERY</span>
+                      <span class="mf-who">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="mf-who-id"><b>Priya Nair</b><span>ROLE_B</span></span>
+                        <span class="mf-avatar"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z"/></svg></span>
+                      </span>
+                    </div>
+                    <div class="mf-screen">
+                      <div class="mf-rail">
+                        <nav>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M8 11h8M8 15h6"/></svg><span>Demands</span></span>
+                          <span class="mf-ri mf-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>User Access</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Inventory</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Spares Management</span></span>
+                          <span class="mf-ri"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></span>
+                        </nav>
+                        <div class="mf-rail-ft">v1.0.18</div>
+                      </div>
+                      <div class="mf-pane">
+                        <div class="mf-head">
+                          <div>
+                            <span class="mf-title">
+                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                              <h4>User Management Panel</h4>
+                            </span>
+                            <p class="mf-sub mf-caps">OS Cell administrative controls</p>
+                          </div>
+                          <span class="mf-btn mf-solid"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>Add User</span>
+                        </div>
+                        <div class="mf-tabs">
+                          <span class="mf-tab mf-on"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Users (6)</span>
+                          <span class="mf-tab"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Teams (3)</span>
+                        </div>
+                        <div class="mf-card mf-panel" style="margin-top:11px">
+                          <table>
+                            <colgroup><col style="width:24%"><col style="width:25%"><col style="width:25%"><col style="width:12%"><col style="width:14%"></colgroup>
+                            <tr><th>Operator identity</th><th>Email</th><th>Access level (role)</th><th>Status</th><th>Actions</th></tr>
+                            <tr>
+                              <td><span class="mf-who-cell"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Priya Nair</span></td>
+                              <td class="mf-em">ops.cell@nsr.example</td>
+                              <td><span class="mf-chip mf-admin">OS Cell (Beta) - Admin</span></td>
+                              <td><span class="mf-chip mf-ok">Active</span></td>
+                              <td><span class="mf-manage">Manage Access</span></td>
+                            </tr>
+                            <tr>
+                              <td><span class="mf-who-cell"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Jordan Tan</span></td>
+                              <td class="mf-em">ground.team@nsr.example</td>
+                              <td><span class="mf-chip mf-user">NSR Team (Alpha) - User</span></td>
+                              <td><span class="mf-chip mf-ok">Active</span></td>
+                              <td><span class="mf-manage">Manage Access</span></td>
+                            </tr>
+                            <tr>
+                              <td><span class="mf-who-cell"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Marcus Rahman</span></td>
+                              <td class="mf-em">m.rahman@nsr.example</td>
+                              <td><span class="mf-chip mf-user">NSR Team (Alpha) - User</span></td>
+                              <td><span class="mf-chip mf-ok">Active</span></td>
+                              <td><span class="mf-manage">Manage Access</span></td>
+                            </tr>
+                            <tr>
+                              <td><span class="mf-who-cell"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Kadir Osman</span></td>
+                              <td class="mf-em">k.osman@nsr.example</td>
+                              <td><span class="mf-chip mf-user">NSR Team (Alpha) - User</span></td>
+                              <td><span class="mf-chip mf-ok">Active</span></td>
+                              <td><span class="mf-manage">Manage Access</span></td>
+                            </tr>
+                            <tr>
+                              <td><span class="mf-who-cell"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Elena Vasquez</span></td>
+                              <td class="mf-em">e.vasquez@nsr.example</td>
+                              <td><span class="mf-chip mf-admin">OS Cell (Beta) - Admin</span></td>
+                              <td><span class="mf-chip mf-ok">Active</span></td>
+                              <td><span class="mf-manage">Manage Access</span></td>
+                            </tr>
+                            <tr>
+                              <td><span class="mf-who-cell"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Sam Whitfield</span></td>
+                              <td class="mf-em">s.whitfield@nsr.example</td>
+                              <td><span class="mf-chip mf-user">NSR Team (Alpha) - User</span></td>
+                              <td><span class="mf-chip mf-no">Inactive</span></td>
+                              <td><span class="mf-manage">Manage Access</span></td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">User Management</div><div class="sd">Operator, access level and status — the role gate that decides which of the two sides of the app a person sees</div></figcaption>
+              </figure>
+
+            </div>
+            </div>
+          </div>
         </div>
       </details>
 
@@ -1547,8 +2184,14 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     return { title: fig ? fig.textContent.trim() : '', desc: '' };
   }
 
+  // Hand-built screen mocks (.bf-mock, .mf-mock) each have a fixed
+  // authoring width, declared on the element as data-mock-width and
+  // defaulting to 480. A new mock family only has to join this list.
+  var MOCK_SEL = '.bf-mock, .mf-mock';
+  function mockWidth(mock) { return parseFloat(mock.getAttribute('data-mock-width')) || 480; }
+
   function fitMockScale(wrap, mock) {
-    var natural = 480; // .bf-mock is authored at a fixed 480px width
+    var natural = mockWidth(mock);
     var naturalHeight = mock.getBoundingClientRect().height;
     var availableW = body.clientWidth - 4;
     var availableH = body.clientHeight - 4;
@@ -1566,7 +2209,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
   function render(el) {
     body.innerHTML = '';
     var img = el.querySelector('img');
-    var mock = el.querySelector('.bf-mock');
+    var mock = el.querySelector(MOCK_SEL);
     if (img) {
       var clone = document.createElement('img');
       clone.src = img.currentSrc || img.src;
@@ -1577,7 +2220,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
       wrap.className = 'shot-lightbox-mockwrap';
       var mockClone = mock.cloneNode(true);
       mockClone.removeAttribute('aria-hidden');
-      mockClone.style.width = '480px';
+      mockClone.style.width = mockWidth(mockClone) + 'px';
       wrap.appendChild(mockClone);
       body.appendChild(wrap);
       fitMockScale(wrap, mockClone);
@@ -1653,7 +2296,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
   window.addEventListener('resize', function () {
     if (lightbox.hidden) return;
     var wrap = body.querySelector('.shot-lightbox-mockwrap');
-    var mock = body.querySelector('.bf-mock');
+    var mock = body.querySelector(MOCK_SEL);
     if (wrap && mock) fitMockScale(wrap, mock);
   });
   closeBtn.addEventListener('click', close);
