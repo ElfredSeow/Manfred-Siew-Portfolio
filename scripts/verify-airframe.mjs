@@ -121,6 +121,12 @@ function measure() {
     // which is the property being relied on: these must not dim when the
     // sun does.
     emissiveCount: solids.filter((mesh) => mesh.material && mesh.material.isMeshBasicMaterial).length,
+    halos: S.halos.map((h) => ({
+      isSprite: !!h.isSprite,
+      additive: h.material.blending === THREE.AdditiveBlending,
+      depthWrite: h.material.depthWrite,
+      baseScale: h.userData.baseScale ?? null,
+    })),
   };
 
   // Ruddervator mirror check. The two sides are built independently (never
@@ -250,6 +256,36 @@ async function main() {
   //    (Four meshes: the chine strip is built per side.) ──
   if (m.emissiveCount === 4) pass('emissive_surfaces', { count: m.emissiveCount });
   else fail('emissive_surfaces', { count: m.emissiveCount, expected: 4, note: 'engine slot + 2 chine strips + cockpit HUD' });
+
+  // ── Halos. Four: engine, two inlets, cockpit. ──
+  if (m.haloCount === 4) pass('halo_count', { count: m.haloCount });
+  else fail('halo_count', { count: m.haloCount, expected: 4 });
+
+  // Additive because light ADDS; depthWrite off because a halo must never
+  // carve a hole in whatever is behind it.
+  const blendOk = m.halos.length > 0 && m.halos.every((h) => h.isSprite && h.additive && h.depthWrite === false);
+  if (blendOk) pass('halo_blending', { halos: m.halos });
+  else fail('halo_blending', { halos: m.halos, note: 'every halo must be a Sprite with AdditiveBlending and depthWrite:false' });
+
+  // ── Engine ignition: a pure function of altitude, so it adds no clock.
+  //    Near-dark on the ramp, full by the end of rotation at 8000ft. ──
+  const ramp = await page.evaluate(() => {
+    const S = window.Stage;
+    const read = (alt) => {
+      S.apply(alt, 0);
+      return { opacity: S.halos[0].material.opacity, scale: S.halos[0].scale.x };
+    };
+    return { at0: read(0), at4000: read(4000), at8000: read(8000), at30000: read(30000) };
+  });
+  const rampOk =
+    ramp.at0.opacity < 0.25 &&
+    ramp.at8000.opacity > 0.9 &&
+    ramp.at4000.opacity > ramp.at0.opacity &&
+    ramp.at8000.opacity > ramp.at4000.opacity &&
+    Math.abs(ramp.at30000.opacity - ramp.at8000.opacity) < 0.01 &&
+    ramp.at8000.scale > ramp.at0.scale;
+  if (rampOk) pass('engine_ignition', ramp);
+  else fail('engine_ignition', { ...ramp, note: 'must rise monotonically from near-dark at 0 to full by 8000ft, then hold' });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });

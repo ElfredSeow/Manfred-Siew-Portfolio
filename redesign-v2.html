@@ -2687,9 +2687,70 @@ else {
     }
 
     const jet = buildAircraft();
-    /* Populated in full further down; declared here so the verification
-       handle can read .length from the first task onward. */
-    const halos = [];
+
+    /* ── HALOS ─────────────────────────────────────────────────────────
+       An emissive surface with nothing else done to it is a flat bright
+       colour. It reads as LIGHT only when light appears to spill off it
+       into the surrounding air, and that spill is the entire perceptual
+       content of a bloom pass.
+
+       So draw it directly. Additive radial-gradient billboards at each
+       glow source is how real-time rendering did this for a decade before
+       post-processing was affordable, and it produces the effect rather
+       than an approximation of it.
+
+       This is not a foreign technique in this file: the contact shadow
+       below builds a 128x128 canvas radial gradient and maps it onto a
+       plane for exactly the same reason — obtain the optical result
+       without paying for the machinery that would normally produce it.
+       Same pattern, gradient inverted, blending additive.
+
+       The alternative was EffectComposer + UnrealBloomPass, which would
+       pull a second unpkg module, force a render target, complicate the
+       transparent-canvas compositing this page depends on, and undo the
+       stage's whole performance story. Four sprites cost 24 triangles. */
+    const glowCanvas = document.createElement('canvas');
+    glowCanvas.width = glowCanvas.height = 128;
+    const gctx = glowCanvas.getContext('2d');
+    const glowGrad = gctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    /* These three stops ARE GLOW_HOT and GLOW_EDGE, written as rgba because
+       a canvas gradient cannot take a hex constant. Centre #FFB0A5, falloff
+       #E8685C to transparent. If the palette moves again, these move with
+       it — they are the easiest values in the file to miss, because a grep
+       for the hex will not find them. */
+    glowGrad.addColorStop(0,   'rgba(255,176,165,1)');    // #FFB0A5 — GLOW_HOT
+    glowGrad.addColorStop(.35, 'rgba(232,104,92,.55)');   // #E8685C — GLOW_EDGE
+    glowGrad.addColorStop(1,   'rgba(232,104,92,0)');     // #E8685C, faded out
+    gctx.fillStyle = glowGrad;
+    gctx.fillRect(0, 0, 128, 128);
+    const GLOW_TEX = new THREE.CanvasTexture(glowCanvas);
+
+    function halo(size, x, y, z) {
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: GLOW_TEX,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,      // a halo must never carve a hole in what is behind it
+        transparent: true,
+        opacity: 1,
+      }));
+      sprite.scale.set(size, size, 1);
+      sprite.position.set(x, y, z);
+      sprite.userData.baseScale = size;
+      return sprite;
+    }
+
+    /* Positions match the emissive surfaces they belong to: the nozzle at
+       the centre trailing point, the inlet mouths on the shoulders, and the
+       cockpit. Sprites are camera-facing, so these scale correctly through
+       the push-in without any per-beat handling. */
+    const halos = [
+      halo(1.75,    0, .10, -2.66),   // engine slot
+      halo( .42,  .52, .32,  1.46),   // inlet, right
+      halo( .42, -.52, .32,  1.46),   // inlet, left
+      halo( .30,    0, .32,  1.30),   // cockpit
+    ];
+    halos.forEach(h => jet.add(h));
+
     scene.add(jet);
 
     /* Ground contact shadow: a soft radial blob, not a shadow map. The single
@@ -2879,6 +2940,21 @@ else {
         (mix(j0.r[1], j1.r[1], jt) + Math.sin(time * .00035) * 11 * parked) * DEG,
         mix(j0.r[2], j1.r[2], jt) * DEG
       );
+
+      /* Engine ignition. The engine lights as the aircraft rotates: near
+         dark on the ramp, full by the end of rotation at 8,000ft.
+
+         This is a pure function of altitude and introduces NO second clock,
+         which is the constraint everything on this stage obeys. It is also
+         the one place the glow gets to do something rather than sit there.
+         To remove it, hold `ignition` at 1 — nothing else depends on it. */
+      const ignition = smooth(Math.min(1, Math.max(0, alt / 8000)));
+      const lit = .12 + .88 * ignition;
+      for (const h of halos) {
+        h.material.opacity = lit;
+        const s = h.userData.baseScale * (.55 + .45 * ignition);
+        h.scale.set(s, s, 1);
+      }
 
       shadow.position.set(jet.position.x, -1.45, jet.position.z);
       shadow.material.opacity = Math.max(0, 1 - alt / 4500);
