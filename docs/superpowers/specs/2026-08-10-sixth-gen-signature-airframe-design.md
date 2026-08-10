@@ -53,8 +53,52 @@ The fix is a shape that is unmistakably next-generation at a glance, and that ca
   this.
 - **No GLB.** `redesign-v2.html:2289-2293` rejects third-party models on licence and
   availability grounds. That reasoning is unchanged and this design stays procedural.
-- **No camera or altitude changes.** `CAM`, the sky ramp, and the tier gate are untouched.
-  The two exceptions in the `JET` table are named in §7.
+- **No altitude changes, and no camera changes beyond the one named below.** The sky ramp
+  and the tier gate are untouched. **No `a` value in either table has moved, or may move** —
+  that is the hard half of this constraint and it still holds absolutely. Every altitude in
+  `CAM` and `JET` is exactly where it was, and the seam altitudes (18000, 22000, 32000,
+  36000) are load-bearing for the reason `redesign-v2.html:2854-2867` gives.
+
+  **Revised 2026-08-10, author-approved.** This bullet originally read "`CAM`, the sky ramp,
+  and the tier gate are untouched." That is no longer true, and the constraint was relaxed
+  deliberately rather than violated. **One `CAM` keyframe's `p` (position) array changed:
+  waypoint 3's wide shot at altitude 36000 moved from `[8.6, 2.6, 11.0]` to
+  `[3.0, 8.5, -12.2]`, an astern-and-high pose.** `fov`, `roll`, `shift`, `look` and `a` are
+  all unchanged, and no other keyframe in `CAM` moved.
+
+  *Why the constraint had to give.* The nose is at +z and every one of the sixteen original
+  keyframes sat in front of the aircraft, so the sawtooth trailing edge — the feature §4.2
+  calls "the highest-value single feature in the design", and the whole reason the planform
+  has the outline it has — was **never once presented to a Tier-2 reader**. It read only in
+  the flat Tier-0 silhouette, which is exactly backwards: the readers with the least capable
+  hardware were the only ones seeing the design's central cue. Holding this bullet would
+  have preserved a camera table at the cost of the thing the camera exists to show. 36000
+  was chosen because it is measurably the only qualifying beat: 25/25 unoccluded open sky
+  (50000 and 62000 are 25/25 covered by opaque content beds), the largest the aircraft ever
+  gets at a wide shot, and far enough from its neighbours that the camera reaches astern
+  without passing through the airframe. Measurements in `task-11-report.md` §2.
+
+  The new hazard this creates — `CAM` interpolates position **linearly**, so a keyframe
+  astern of two keyframes ahead joins them by a straight line that could pass through the
+  aircraft — is held permanently by the `camera_path_clear` check in
+  `scripts/verify-airframe.mjs`, not by inspection.
+
+- **One CSS rule outside the stage may change: `#scene`'s sizing.** Also revised 2026-08-10
+  and author-approved. A `<canvas>` is a **replaced element**: it has an intrinsic size (its
+  `width`/`height` *attributes*), and `position:fixed; inset:0` cannot stretch a replaced
+  element the way it stretches a `<div>`. Because `renderer.setSize(W, H, false)` passes
+  `updateStyle=false`, three.js writes the backing-store size into those attributes —
+  `W × devicePixelRatio` — and writes no CSS size at all. At dPR 1 the attribute size happens
+  to equal the viewport and nothing looks wrong; at dPR ≥ 1.5 the canvas lays out at 1.5–2×
+  the viewport, anchored top-left, and the signature aircraft renders **off-screen entirely**
+  — on most laptops and effectively every phone. `#scene` therefore carries
+  `width:100%; height:100%`. This is a sizing fix, not a visual one: no colour token, no copy
+  and no pixel-ratio clamp changed. Held by `hidpi_canvas_fit`, which opens its own context
+  at `deviceScaleFactor: 2` because both existing harnesses run at 1 and neither could see
+  the bug. Rationale in `task-11-report.md` §1.
+
+  The two exceptions in the `JET` table, and the full list of permitted edits outside
+  `buildAircraft()`, are in §7.
 
 ## 4. Airframe
 
@@ -272,6 +316,31 @@ These are the only edits outside `buildAircraft()` and the materials block:
    300×140 viewBox is **deliberately non-proportional**: the aircraft is 6.2 × 6.0 and the
    box is not, so span and length are scaled independently. This matches the existing
    treatment and is acceptable for a silhouette standing in at low fidelity.
+
+**Two further edits, added and author-approved 2026-08-10.** The list above was written as
+"the only edits outside `buildAircraft()` and the materials block" and was three items long.
+Verification found two defects that could not be fixed inside those bounds, and the author
+approved both on 2026-08-10. They are recorded here so the list stays a true description of
+what shipped — and so that replaying the plan cannot silently revert them.
+
+4. **`CAM`, waypoint 3's wide shot only** (`redesign-v2.html:2910`). Position moved from
+   `[8.6, 2.6, 11.0]` to `[3.0, 8.5, -12.2]` — astern and high. `a`, `fov`, `roll`, `shift`
+   and `look` are unchanged, and **no other `CAM` keyframe moved.** Reason, in full, at §3:
+   every original keyframe sat forward of the nose, so the sawtooth of §4.2 was never visible
+   to a Tier-2 reader at any beat. 36000 is the only beat that is simultaneously unoccluded,
+   large, and far enough from its neighbours for the camera to reach astern without
+   traversing the airframe. The linear-interpolation hazard this introduces is held by
+   `camera_path_clear`. A side benefit: waypoint 3's wide was previously a near-copy of
+   waypoint 1's `[8.6, 2.4, 11.0]`, so the climb's three establishing shots had no visual
+   progression; now they do.
+
+5. **The `#scene` CSS rule** (`redesign-v2.html:206`). `width:100%; height:100%` added.
+   A canvas is a replaced element and `inset:0` cannot stretch one, so at
+   `devicePixelRatio ≥ 1.5` the stage laid out at 1.5–2× the viewport, anchored top-left, and
+   the signature rendered off-screen on most laptops and every phone. Full reasoning at §3.
+   This is the only CSS edit this design permits, it is a sizing fix only, and it is coupled
+   to `renderer.setSize(W, H, false)` at `redesign-v2.html:2974` — change one, change the
+   other. Both sites carry a comment naming the other. Held by `hidpi_canvas_fit`.
 
 ## 8. Cost
 
