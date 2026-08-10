@@ -267,6 +267,109 @@ async function main() {
   if (blendOk) pass('halo_blending', { halos: m.halos });
   else fail('halo_blending', { halos: m.halos, note: 'every halo must be a Sprite with AdditiveBlending and depthWrite:false' });
 
+  // ── Halo VISIBILITY, not halo properties. ────────────────────────────────
+  //    `halo_count` and `halo_blending` above assert that four sprites exist
+  //    and that each is additive with depthWrite off. Both were green for
+  //    weeks while the cockpit halo was ~90% depth-culled: the GLASS canopy is
+  //    transparent and three.js defaults transparent materials to
+  //    depthWrite TRUE, so the canopy laid down depth at z = 1.777 and
+  //    rejected the halo sitting inside it at z = 1.30. Every property was
+  //    correct and the light was not there. A property assertion cannot see
+  //    that; only the framebuffer can.
+  //
+  //    So: render the beat twice — halo visible, halo hidden — and difference
+  //    the luminance inside the halo's own projected screen box. Alpha is
+  //    premultiplied in, because the canvas composites over the CSS sky and a
+  //    pixel the aircraft does not cover must not be counted as light.
+  //
+  //    Both renders and both reads happen inside ONE page.evaluate: the
+  //    page's rAF loop recomputes the pose from the real scroll offset, and
+  //    the WebGL drawing buffer is not preserved across turns.
+  //
+  //    Each halo is measured at the beat it exists FOR, not at whichever beat
+  //    flatters it. Mean luminance per pixel rather than a raw sum, so the
+  //    threshold does not silently depend on viewport size. Measured values
+  //    with the canopy fixed: engine 12.8, inlets 14.6 and 14.6, cockpit 3.04.
+  //    With GLASS.depthWrite back to true the cockpit reads 0.288 — the
+  //    threshold of 1.0 sits ~3x below the worst real halo and ~3.5x above the
+  //    broken one, which is what makes this check a regression test rather
+  //    than a rubber stamp.
+  const HALO_BEATS = [
+    // name       index  altitude  why this beat
+    ['engine',      0,   36000],  // waypoint 3's astern wide: the nozzle faces the camera
+    ['inlet_right', 1,   42500],  // waypoint 3's push-in, camera on the right
+    ['inlet_left',  2,   28500],  // waypoint 2's push-in, mirrored to the left
+    ['cockpit',     3,   42500],  // the push-in that means "this part was mine"
+  ];
+  const HALO_MIN_LUM = 1.0;
+  const haloVis = await page.evaluate((beats) => {
+    const S = window.Stage;
+    const { THREE, renderer, camera, halos } = S;
+    const cv = renderer.domElement;
+    const read2d = document.createElement('canvas');
+    const rctx = read2d.getContext('2d', { willReadFrequently: true });
+
+    // Luminance sum inside a screen-space box, read out of a 2D copy of the
+    // WebGL canvas in the same turn the render happened.
+    const sumIn = (alt, box) => {
+      S.apply(alt, 0);
+      renderer.render(S.scene, camera);
+      read2d.width = cv.width; read2d.height = cv.height;
+      rctx.clearRect(0, 0, cv.width, cv.height);
+      rctx.drawImage(cv, 0, 0);
+      const sx = Math.max(0, Math.round(box.x0)), sy = Math.max(0, Math.round(box.y0));
+      const ex = Math.min(cv.width, Math.round(box.x1)), ey = Math.min(cv.height, Math.round(box.y1));
+      if (ex <= sx || ey <= sy) return { sum: 0, px: 0 };
+      const d = rctx.getImageData(sx, sy, ex - sx, ey - sy).data;
+      let sum = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        const a = d[i + 3] / 255;
+        sum += (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) * a;
+      }
+      return { sum, px: (ex - sx) * (ey - sy) };
+    };
+
+    // Where the sprite lands and how wide it is: project its world centre,
+    // then a point offset along the camera's right axis by half its scale.
+    const boxOf = (alt, h) => {
+      S.apply(alt, 0);
+      camera.updateMatrixWorld(true);
+      S.jet.updateMatrixWorld(true);
+      const c = h.getWorldPosition(new THREE.Vector3());
+      const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+      const edge = c.clone().addScaledVector(right, h.scale.x / 2);
+      const toPx = (v) => {
+        const p = v.clone().project(camera);
+        return [(p.x * .5 + .5) * cv.width, (-p.y * .5 + .5) * cv.height, p.z];
+      };
+      const [cx, cy, cz] = toPx(c);
+      const [ex] = toPx(edge);
+      const r = Math.max(6 * renderer.getPixelRatio(), Math.abs(ex - cx));
+      // 1.5x the sprite radius: the spill past the aperture is the point of a
+      // halo, so the box has to include air as well as the source.
+      return { x0: cx - r * 1.5, y0: cy - r * 1.5, x1: cx + r * 1.5, y1: cy + r * 1.5, behind: cz >= 1 };
+    };
+
+    return beats.map(([name, idx, alt]) => {
+      const h = halos[idx];
+      const box = boxOf(alt, h);
+      const on = sumIn(alt, box);
+      h.visible = false;
+      const off = sumIn(alt, box);
+      h.visible = true;
+      const contribution = on.sum - off.sum;
+      return {
+        halo: name, alt, px: on.px, behind: box.behind,
+        contribution: Math.round(contribution),
+        lumPerPx: on.px ? +(contribution / on.px).toFixed(3) : 0,
+      };
+    });
+  }, HALO_BEATS);
+  const haloDark = haloVis.filter((h) => h.lumPerPx < HALO_MIN_LUM || h.px === 0 || h.behind);
+  if (haloDark.length === 0) pass('halo_visibility', { halos: haloVis, threshold: HALO_MIN_LUM });
+  else fail('halo_visibility', { halos: haloVis, threshold: HALO_MIN_LUM, dark: haloDark.map((h) => h.halo),
+    note: 'every halo must measurably add light to the rendered frame at the beat it exists for; a halo whose properties are all correct can still be depth-rejected by transparent geometry in front of it (see GLASS.depthWrite in redesign-v2.html)' });
+
   // ── Engine ignition: a pure function of altitude, so it adds no clock.
   //    Near-dark on the ramp, full by the end of rotation at 8000ft. ──
   const ramp = await page.evaluate(() => {

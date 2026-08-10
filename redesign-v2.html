@@ -2507,9 +2507,27 @@ else {
     /* Low metalness on the canopy, deliberately. Without an environment map a
        metallic surface has nothing to reflect and renders as a black blob. A
        tinted dielectric picks up the hemisphere light instead and reads as
-       glass without needing anything to reflect. */
+       glass without needing anything to reflect.
+
+       depthWrite: false is not cosmetic — it is what lets the cockpit halo
+       exist. three.js defaults transparent materials to depthWrite TRUE, and
+       transparent objects render AFTER opaque ones, so the canopy was laying
+       down depth for a surface you can see through. The cockpit halo sits
+       INSIDE that surface, and every halo keeps depthTest on (they must, or
+       the engine glow would draw through the fuselage), so the halo was being
+       depth-rejected by the glass it is meant to shine through. The canopy's
+       front surface reaches z = 1.777 and the halo sits at z = 1.30, so from
+       any forward beat the glass is literally in front of the light inside it.
+       Measured at the 42500 push-in: the cockpit halo contributed 5,024
+       luminance units with this true and 52,925 with it false — 10.5x, at the
+       ONE beat that light exists for, the push-in that means "this part was
+       mine". Turning depth writes off for transparent glass is the standard
+       treatment anyway; the canopy still depth-TESTS, so it is still occluded
+       by anything genuinely in front of it. Held by `halo_visibility` in
+       scripts/verify-airframe.mjs. */
     const GLASS = new THREE.MeshStandardMaterial({ color: 0x33547D, roughness: .2, metalness: .08,
-                                                   transparent: true, opacity: .82 });
+                                                   transparent: true, opacity: .82,
+                                                   depthWrite: false });
     /* Darkened from its old value. It is no longer just a shading colour —
        it is the surround that makes the glow read as light. */
     const DARK  = new THREE.MeshStandardMaterial({ color: 0x2E3540, roughness: .68, metalness: .3  });
