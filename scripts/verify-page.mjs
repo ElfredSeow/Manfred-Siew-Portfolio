@@ -433,6 +433,7 @@ async function main() {
         // not match STALE and staleCount cannot see it. Without this field the
         // <head> could keep the wrong title while every check went green.
         metaDesc: (document.querySelector('meta[name="description"]') || {}).content || null,
+        raidBlurb: (document.querySelector('#timeline .tl-item .tl-desc') || {}).textContent || null,
       };
     }, { stale: STALE });
     const hero = norm(found.hero);
@@ -446,10 +447,16 @@ async function main() {
     if (hero !== experience) problems.push('P1-9: hero and experience are not byte-identical');
     if (roleBar !== null && roleBar !== TITLE.toLowerCase()) problems.push(`role bar normalises to "${roleBar}", want "${TITLE.toLowerCase()}"`);
     if (found.staleCount > 0) problems.push(`stale title still present ${found.staleCount}x`);
+    // The heading says architect. A blurb that only describes building
+    // contradicts it. Assert the developer-era wording is gone and that the
+    // deciding language the spec requires is present.
+    const blurb = norm(found.raidBlurb);
+    if (/Specialising in Power Apps/i.test(blurb)) problems.push('RAiD blurb still uses the developer-era wording');
+    if (!/choosing the platform/i.test(blurb)) problems.push('RAiD blurb does not describe deciding, only building');
     if (!found.metaDesc || !found.metaDesc.includes(TITLE)) problems.push('meta description does not carry the title of record');
     if (found.metaDesc && /Power Platform Developer/.test(found.metaDesc)) problems.push('meta description still carries the old title');
-    if (problems.length) fail('title_of_record', { problems, hero, experience, roleBar, staleCount: found.staleCount, metaDesc: found.metaDesc });
-    else pass('title_of_record', { hero, experience, roleBar, staleCount: found.staleCount });
+    if (problems.length) fail('title_of_record', { problems, hero, experience, roleBar, staleCount: found.staleCount, metaDesc: found.metaDesc, blurb });
+    else pass('title_of_record', { hero, experience, roleBar, staleCount: found.staleCount, blurb });
     await page.close();
   }
 
