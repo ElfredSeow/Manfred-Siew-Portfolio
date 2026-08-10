@@ -31,3 +31,6 @@ pnpm-debug.log*
 
 # Stray harness output (a JS `undefined` leaking into an output path)
 undefined/
+
+# Claude Code local hooks/config (machine-specific, not shareable)
+.claude/
