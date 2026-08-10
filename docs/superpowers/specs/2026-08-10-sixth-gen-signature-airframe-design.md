@@ -64,7 +64,22 @@ The fix is a shape that is unmistakably next-generation at a glance, and that ca
   deliberately rather than violated. **One `CAM` keyframe's `p` (position) array changed:
   waypoint 3's wide shot at altitude 36000 moved from `[8.6, 2.6, 11.0]` to
   `[3.0, 8.5, -12.2]`, an astern-and-high pose.** `fov`, `roll`, `shift`, `look` and `a` are
-  all unchanged, and no other keyframe in `CAM` moved.
+  all unchanged.
+
+  **Extended 2026-08-10, also author-approved.** This paragraph originally ended "and no
+  other keyframe in `CAM` moved", which is no longer true, and two further relaxations have
+  since been approved. **`CAM`'s `p[1]` (camera height only) rose at three wide beats** —
+  5000 `3.0 → 3.45`, 8000 `2.4 → 5.40`, 22000 `2.4 → 3.25` — because the `JET` table's pitch
+  signs were corrected in the same wave and the camera table had been implicitly leaning on
+  that error to tip the planform toward the viewer; without the raise, waypoint 1's
+  establishing shot presented 0.8° off edge-on. **And the `JET` table's seven non-zero pitch
+  values were negated**, because positive `rotation.x` on a +Z nose is nose *down* and the
+  aircraft had been climbing nose-down for the whole page. Both are argued in full at §7,
+  items 6 and 7, and both are held by harness checks (`planform_presentation`,
+  `climb_attitude`) rather than by this prose.
+
+  What survives from the original bullet, and survives absolutely, is the sentence above it:
+  **no `a` value in either table has moved, or may move.**
 
   *Why the constraint had to give.* The nose is at +z and every one of the sixteen original
   keyframes sat in front of the aircraft, so the sawtooth trailing edge — the feature §4.2
@@ -97,8 +112,8 @@ The fix is a shape that is unmistakably next-generation at a glance, and that ca
   at `deviceScaleFactor: 2` because both existing harnesses run at 1 and neither could see
   the bug. Rationale in `task-11-report.md` §1.
 
-  The two exceptions in the `JET` table, and the full list of permitted edits outside
-  `buildAircraft()`, are in §7.
+  The exceptions in the `JET` table — the two ground keyframes' `p`, and the seven pitch
+  signs — and the full list of permitted edits outside `buildAircraft()`, are in §7.
 
 ## 4. Airframe
 
@@ -293,7 +308,7 @@ alpha interaction at all.
 | `SKIN` | `#DCE2E9` | `#5C6675` | graphite, roughness .52, metalness .24 |
 | `DECK` | — | `#474F5C` | new; separates the deck from the planform |
 | `TRIM` | `#C2410C` | **removed** | see below — the ruddervators were its only user and are now `SKIN` |
-| `GLASS` | `#33547D` | unchanged | the low-metalness reasoning at `:2507-2510` still holds — there is still no environment map |
+| `GLASS` | `#33547D` | colour unchanged; **gains `depthWrite: false`** | the low-metalness reasoning at `:2507-2510` still holds — there is still no environment map. The depth flag is new, 2026-08-10; see below |
 | `DARK` | `#5A6675` | `#2E3540` | darkened; it is now the surround that makes the glow read |
 
 **Graphite, not the mid-tone this spec originally called for.** An earlier revision hedged
@@ -324,6 +339,31 @@ oversight: §5's own argument is that on a dark airframe the accent should read 
 aircraft's lights being on rather than as paint, and removing the paint is that argument
 carried to its conclusion. The airframe now carries no painted accent at all.
 
+**`GLASS` carries `depthWrite: false`, added and author-approved 2026-08-10.** The colour,
+roughness and metalness are untouched; this is a depth-buffer flag and nothing else. The row
+above said "unchanged" and that was no longer true.
+
+*Why.* `GLASS` is `transparent`, and three.js defaults transparent materials to
+`depthWrite: true`. Transparent objects render *after* opaque ones, so the canopy was laying
+down a depth buffer for a surface you can see through. The geometry makes that fatal rather
+than incidental: the canopy is a sphere of radius .34 scaled `(.62, .40, 1.55)` at z = 1.25,
+so its front surface reaches **z = 1.777**, while the cockpit halo of §5.1 sits at
+**z = 1.30 — inside it**. From every beat forward of the nose, the glass was in front of the
+light it exists to let through, and the halo failed the depth test. Measured at the 42500
+push-in, the cockpit halo contributed **5,024 luminance units before the fix and 52,925
+after** — it was roughly 90% invisible on the one beat whose entire job is to say "this part
+was mine". The engine and both inlet halos are unchanged *to the unit*.
+
+The halos keep `depthTest: true` — they must, or the engine glow would draw straight through
+the fuselage from any forward beat. Only the canopy's depth *writes* are off, which is the
+standard treatment for transparent glass and not a workaround: the canopy is still occluded
+by anything genuinely in front of it, and at the astern beat (36000) the cockpit halo is
+still correctly hidden by the airframe's own opaque geometry. Held by `halo_visibility`,
+which renders each beat twice — halo shown and hidden — and differences the luminance in the
+halo's own projected screen box. `halo_count` and `halo_blending` stayed green throughout the
+bug, because a property assertion cannot see an empty framebuffer. Measurements in
+`task-12-report.md` §2.
+
 ## 7. Consequential changes
 
 These are the only edits outside `buildAircraft()` and the materials block:
@@ -331,8 +371,15 @@ These are the only edits outside `buildAircraft()` and the materials block:
 1. **`JET` table, ground keyframes only** (`redesign-v2.html:2961-2962`). The old tube
    fuselage had its belly at y = −0.38; the new belly sits at −0.30. The two parked
    keyframes at altitude 0 and 2000 move from y = −0.95 to y = −1.03 so the aircraft still
-   sits on the ground rather than floating above it. **No other keyframe in either table
-   changes.**
+   sits on the ground rather than floating above it.
+
+   **Corrected 2026-08-10.** This item originally ended "**No other keyframe in either table
+   changes.**" That sentence is false and has been struck. Three further author-approved
+   changes to the two tables have shipped since it was written — the `CAM` repose at item 4,
+   the `JET` pitch signs at item 6, and the `CAM` camera heights at item 7 — and leaving the
+   sentence standing would make this document instruct an executor to revert them. What is
+   still true, and absolutely, is the narrower claim: **no `a` (altitude) value in either
+   table has changed.** The ground keyframes remain the only `JET` *position* edit.
 2. **Contact shadow plane** (`redesign-v2.html:2830`). 9 × 5.5 was sized for a long narrow
    tube. A delta's footprint is shorter and wider, so it becomes ~7.5 × 7.0. The blob
    texture and the fade-out on climb are unchanged.
@@ -344,11 +391,11 @@ These are the only edits outside `buildAircraft()` and the materials block:
    box is not, so span and length are scaled independently. This matches the existing
    treatment and is acceptable for a silhouette standing in at low fidelity.
 
-**Two further edits, added and author-approved 2026-08-10.** The list above was written as
+**Four further edits, added and author-approved 2026-08-10.** The list above was written as
 "the only edits outside `buildAircraft()` and the materials block" and was three items long.
-Verification found two defects that could not be fixed inside those bounds, and the author
-approved both on 2026-08-10. They are recorded here so the list stays a true description of
-what shipped — and so that replaying the plan cannot silently revert them.
+Verification found four defects that could not be fixed inside those bounds, and the author
+approved all four on 2026-08-10. They are recorded here so the list stays a true description
+of what shipped — and so that replaying the plan cannot silently revert them.
 
 4. **`CAM`, waypoint 3's wide shot only** (`redesign-v2.html:2932`). Position moved from
    `[8.6, 2.6, 11.0]` to `[3.0, 8.5, -12.2]` — astern and high. `a`, `fov`, `roll`, `shift`
@@ -368,6 +415,74 @@ what shipped — and so that replaying the plan cannot silently revert them.
    This is the only CSS edit this design permits, it is a sizing fix only, and it is coupled
    to `renderer.setSize(W, H, false)` at `redesign-v2.html:3015` — change one, change the
    other. Both sites carry a comment naming the other. Held by `hidpi_canvas_fit`.
+
+6. **`JET` table, the sign of every non-zero pitch** (`redesign-v2.html:2960-2970`). Seven
+   keyframes — 8000, 18000, 22000, 32000, 36000, 46000, 62000 — had `r[0]` negated. Nothing
+   else moved: no `a`, no `p`, no yaw and no roll. This is the change item 1's original
+   closing sentence forbade, and it is why that sentence was struck.
+
+   **Why.** The nose is at +Z, and a rotation of θ about X sends `(0, 0, z)` to
+   `(0, −z·sin θ, z·cos θ)` — so **positive `rotation.x` drives the nose toward −Y, which is
+   nose DOWN**. Every `r[0]` in the table was positive, including the keyframe commented
+   "rotation", which is aviation's word for the nose coming *up* on takeoff. Measured before
+   the fix: at 8,000 ft the nose apex sat at world y −0.779 with the centre trailing point at
+   +0.469. The aircraft was 12° nose-down at the moment it left the ground and stayed
+   tail-high for the entire climb — nose-down at **all thirteen** climb beats, on a page
+   whose argument is aerospace training. That is the one class of error this design cannot
+   afford to ship.
+
+   Held by `climb_attitude`, which asserts on the **world positions** of the planform's two
+   centreline extremes rather than on the sign of the table's numbers — the sign convention
+   is precisely the thing that was misread, so a check reading the sign would encode the same
+   misunderstanding. It also sweeps the whole climb in 250 ft steps, because a sign error in
+   an interpolated span between two keyframes would pass a keyframe-only check. Measurements
+   in `task-12-report.md` §3.
+
+7. **`CAM`, camera height at three wide beats** (`redesign-v2.html:2887-2895`). `p[1]` only,
+   on exactly three keyframes: 5000 `3.0 → 3.45`, 8000 `2.4 → 5.40`, 22000 `2.4 → 3.25`. No
+   `p[0]`, `p[2]`, `a`, `look`, `fov`, `roll` or `shift` changed at any keyframe, and no
+   other keyframe moved.
+
+   **Why.** This is item 6's bill. The `CAM` table had been implicitly leaning on the
+   nose-down error: a nose-down airframe tips its top surface *toward* a camera sitting in
+   front of it, which was roughly doubling how much planform the reader saw. Correcting the
+   pitch removed that, and nine of the ten wide shots began presenting less planform. At
+   **8000 — waypoint 1's establishing shot, the first clear look any reader gets at the
+   signature** — presentation fell to **0.8° off edge-on** and the aircraft rendered as a
+   flat dark sliver. Confirmed by looking at the frame, not only by the number.
+
+   The presentation angle (the planform's normal against the aircraft-to-camera vector, i.e.
+   how far the camera sits above the wing plane) is arithmetic: **presentation ≈ camera
+   elevation − nose-up pitch**. That rules out the two obvious alternatives. *Azimuth is not
+   a lever* — swinging abeam drives presentation toward zero. *More pitch is not a lever* —
+   it crosses through edge-on and inverts. Camera height is the only one, which is why the
+   edit is confined to `p[1]`.
+
+   | alt | `p[1]` | presentation |
+   |---|---|---|
+   | 5000 | 3.0 → 3.45 | 10.3° → 12.11° |
+   | 8000 | 2.4 → 5.40 | 0.8° → 12.07° |
+   | 22000 | 2.4 → 3.25 | 8.9° → 12.16° |
+
+   8000 is deliberately **not** restored to the full elevation that would return its pre-fix
+   presentation. That would put camera y at 7.71, close enough to the 18000 transit's 8.0
+   that the establishing shot stops reading as "just after rotation, on the deck" and starts
+   reading as a crane shot; the altitude gap between the beat and the transit is what makes
+   the climb read as a climb. 12° is the floor that keeps the blended delta legible, and it
+   is bought at the smallest camera move that reaches it.
+
+   **36000 is untouched.** The pitch fix *improved* that beat (27.4° → 36.9°), and it is the
+   only beat that shows the sawtooth of §4.2. Raising the camera also increases standoff, so
+   both `camera_framing` and `camera_path_clear` moved in the safe direction — the tightest
+   wide-shot margin, 5000's, went from 0.011 to 0.017 NDC.
+
+   Held by `planform_presentation`, a new check asserting an 11.5° floor at the five
+   reader-facing wide beats (0, 5000, 8000, 22000, 36000; the 18000/32000/46000 transits and
+   the 50000/62000 document-mode beats are excluded because the aircraft is a receding speck
+   or measurably occluded there). **`camera_framing` provably cannot see this class of
+   defect**: with the 8000 keyframe reverted it stays green *with a better margin than
+   before*, because an edge-on aircraft is still comfortably in frame. Framing and
+   presentation are different properties. Measurements in `task-13-report.md`.
 
 ## 8. Cost
 
@@ -431,3 +546,9 @@ what keeps the airframe from reading as hard-edged in the way the rule is guardi
 9. The engine halo ramps up across rotation and is at full by 8000 ft, with no visible step.
 10. Glow reads as light, not as paint: the halo must be visible spilling *past* the
     airframe's silhouette edge, not merely filling the nozzle aperture.
+11. **The planform is presented, not merely framed** (added 2026-08-10). Item 2 asks whether
+    the aircraft is *in frame*, and an edge-on aircraft is comfortably in frame — that gap is
+    how waypoint 1's establishing shot shipped at 0.8° off edge-on with `camera_framing`
+    green. At every reader-facing wide beat the planform must present at least 11.5° of face
+    to the camera, so the blended delta and its outline are legible rather than a sliver.
+    Held by `planform_presentation`; see §7 item 7.
