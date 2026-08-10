@@ -1424,23 +1424,38 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto(url);
 await page.waitForTimeout(6000);
 
-for (const alt of [0, 14500, 30000, 58000]) {
-  // Drive the pose AND force a repaint. The render loop only redraws when
-  // `dirty` is set, and apply() alone does not set it — without the
-  // renderer.render() call every screenshot would show the same frame.
-  await page.evaluate((a) => {
-    const S = window.Stage;
-    S.apply(a, 0);
-    S.renderer.render(S.scene, S.camera);
-  }, alt);
-  await page.screenshot({ path: path.join(OUT, `halo-${alt}.png`) });
+// SCROLL to each altitude rather than forcing it. Task 7 established that
+// calling Stage.apply() directly does not survive: altitude is derived from
+// scroll position, so the page's own rAF loop recomputes the pose from the
+// real scroll offset and overwrites the forced one before the screenshot
+// lands. Scrolling is also closer to what a reader actually sees.
+const shots = [
+  ['ground',  0.00],
+  ['wp1',     0.22],
+  ['cruise',  0.55],
+  ['space',   0.92],
+];
+
+for (const [name, frac] of shots) {
+  await page.evaluate((f) => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: max * f, behavior: 'instant' });
+  }, frac);
+  // Let the scroll settle, the altitude subscription fire, and the render
+  // loop draw the new pose.
+  await page.waitForTimeout(900);
+  const alt = await page.evaluate(() => Math.round(window.Flight.state.alt));
+  await page.screenshot({ path: path.join(OUT, `halo-${name}-alt${alt}.png`) });
+  console.log(`${name}: alt ${alt}`);
 }
 
 await browser.close();
 console.log('wrote 4 screenshots to', OUT);
 ```
 
-Run it against the scratchpad directory:
+Run it against the scratchpad directory. The filenames record the altitude each
+shot actually landed at, so you can confirm the four cover the ground, a
+waypoint, mid-climb and the near-navy sky rather than assuming they did:
 
 ```bash
 node scripts/shoot-halos.mjs "$SCRATCH"
