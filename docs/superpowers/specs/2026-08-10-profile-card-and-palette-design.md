@@ -257,7 +257,7 @@ Four bands, matching the reference top to bottom. Card keeps `--r-xl` (30px) and
 │  RAiD · Power Platform Centre      │  ③ identity
 │  of Excellence                     │
 │  Aerospace Engineering, TP         │
-│  (studying)                        │
+│  (graduated)                       │
 ├─────────────────┬──────────────────┤  1px solid var(--line)
 │ PROJECTS        │ ORGANISATIONS    │  ④ stat strip
 │ 23              │ 4                │

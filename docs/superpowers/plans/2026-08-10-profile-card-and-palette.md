@@ -518,7 +518,7 @@ Replace the entire `<aside class="hero-portrait" ...>` element — from `<aside`
 
           <div class="id-meta">
             <p class="id-team">RAiD · Power Platform Centre of Excellence</p>
-            <p class="id-edu">Aerospace Engineering, TP (studying)</p>
+            <p class="id-edu">Aerospace Engineering, TP (graduated)</p>
           </div>
 
           <div class="id-stats">
