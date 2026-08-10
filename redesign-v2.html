@@ -2649,6 +2649,40 @@ else {
       nozzle.position.set(0, .10, -2.45);
       jet.add(nozzle);
 
+      /* The hot core of the slot, sitting just aft of the nozzle's mouth so
+         the DARK box surrounds it on every side. That surround is not
+         decoration — without a bloom pass, an emissive surface reads as
+         light only by contrast with what is next to it. */
+      const slot = new THREE.Mesh(new THREE.PlaneGeometry(.92, .11), GLOW_HOT);
+      slot.rotation.y = Math.PI;
+      slot.position.set(0, .10, -2.63);
+      jet.add(slot);
+
+      /* Light strips along the chine edges. These are what make the
+         airframe read as lit from within rather than merely angular.
+
+         Endpoints are derived from HALF[2] and HALF[3] rather than typed
+         again, so the strip cannot drift off the edge it is tracing if the
+         planform is ever retuned. */
+      [-1, 1].forEach(side => {
+        const a = new THREE.Vector3(side * HALF[2][0], .085, HALF[2][1]);
+        const b = new THREE.Vector3(side * HALF[3][0], .085, HALF[3][1]);
+        const strip = new THREE.Mesh(new THREE.BoxGeometry(.05, .022, a.distanceTo(b)), GLOW_EDGE);
+        strip.position.copy(a).lerp(b, .5);
+        strip.rotation.y = Math.atan2(b.x - a.x, b.z - a.z);
+        jet.add(strip);
+      });
+
+      /* The one light on this airframe with narrative work to do. The
+         camera's push-in lands on the cockpit at every waypoint, and that
+         beat is the page's way of saying "this part was mine" — so the
+         cockpit is lit, and it is only legible during that beat, which is
+         the correct amount of visibility for it. */
+      const hud = new THREE.Mesh(new THREE.PlaneGeometry(.26, .12), GLOW_HOT);
+      hud.rotation.x = -Math.PI / 2.4;
+      hud.position.set(0, .30, 1.30);
+      jet.add(hud);
+
       return jet;
     }
 

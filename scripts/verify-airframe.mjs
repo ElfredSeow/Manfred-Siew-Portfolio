@@ -117,6 +117,10 @@ function measure() {
     // with a vertex-count threshold that would silently pick a different
     // mesh if the geometry were ever retuned.
     skinHex: planform ? planform.material.color.getHexString() : null,
+    // Unlit surfaces. MeshBasicMaterial has no `lights` uniform at all,
+    // which is the property being relied on: these must not dim when the
+    // sun does.
+    emissiveCount: solids.filter((mesh) => mesh.material && mesh.material.isMeshBasicMaterial).length,
   };
 
   // Ruddervator mirror check. The two sides are built independently (never
@@ -241,6 +245,11 @@ async function main() {
     rvSym.xMirrorMinDelta <= 0.005 && rvSym.xMirrorMaxDelta <= 0.005;
   if (rvSymOk) pass('ruddervator_symmetry', { ...rvSym, tolerance: 0.005 });
   else fail('ruddervator_symmetry', { ...rvSym, tolerance: 0.005 });
+
+  // ── Three emissive surfaces: engine slot, two chine strips, cockpit HUD.
+  //    (Four meshes: the chine strip is built per side.) ──
+  if (m.emissiveCount === 4) pass('emissive_surfaces', { count: m.emissiveCount });
+  else fail('emissive_surfaces', { count: m.emissiveCount, expected: 4, note: 'engine slot + 2 chine strips + cockpit HUD' });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });
