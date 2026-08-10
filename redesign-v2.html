@@ -2859,8 +2859,36 @@ else {
       { a: 26000, p:[-6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:   4, shift:  .20 },
       { a: 28500, p:[-4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll:  15, shift:  .20 },
       { a: 32000, p:[-2.0,  8.2, 27.0], look: ORIGIN,  fov: 46, roll:   0, shift:  .12 },
-      // ── waypoint 3 ──
-      { a: 36000, p:[ 8.6,  2.6, 11.0], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
+      // ── waypoint 3 ── the one beat that shows the sawtooth
+      /* This wide shot is ASTERN and high, and it is the only keyframe with a
+         negative z. Every other beat sits in front of the aircraft (the nose
+         is at +z), which meant the sawtooth trailing edge — the feature the
+         planform was designed around, and the one cue that says "sixth
+         generation" at a glance — was never once presented to a Tier-2
+         reader. It read only in the flat Tier-0 silhouette, which is exactly
+         backwards. From here the W-notch is the airframe's lower outline
+         against open sky: wingtip, forward notch, aft centre point, mirrored.
+
+         Astern also fixes a second problem for free. Waypoint 3's wide was
+         previously [8.6, 2.6, 11.0] — a near-copy of waypoint 1's [8.6, 2.4,
+         11.0], so the third waypoint's establishing shot repeated the first's
+         and the climb had no visual progression. It now reads as the camera
+         overtaking the aircraft and looking back at it.
+
+         Why not the departure at 62000, which is where a rear view would
+         naturally belong: at 62000 the airframe is entirely behind an opaque
+         content bed and is never seen. Measured on the real scrolled page, a
+         5x5 grid over the airframe's screen box is 25/25 covered at 50000 and
+         at 62000, and 25/25 open sky here at 36000 — this is the largest
+         unoccluded wide shot the page has. See task-11-report.md.
+
+         The altitude is untouched, as required: 36000 is a seam and smoothstep
+         must keep zeroing pose velocity on it. Only the position moved. The
+         camera does not pass through the airframe on either side of this
+         beat — closest approach is 8.52 units on the way in and 7.04 on the
+         way out, against a 3.1-unit airframe half-extent, and camera_path_clear
+         in scripts/verify-airframe.mjs holds that for every segment. */
+      { a: 36000, p:[ 3.0,  8.5,-12.2], look: ORIGIN,  fov: 31, roll:   0, shift: -.20 },
       { a: 40000, p:[ 6.8,  2.0,  9.4], look: ORIGIN,  fov: 26, roll:  -4, shift: -.20 },
       { a: 42500, p:[ 4.6,  1.9,  7.6], look: COCKPIT, fov: 22, roll: -15, shift: -.20 },
       { a: 46000, p:[ 2.0,  9.0, 30.0], look: ORIGIN,  fov: 48, roll:   0, shift: -.08 },

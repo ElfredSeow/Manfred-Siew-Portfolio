@@ -493,6 +493,47 @@ async function main() {
     pass('camera_framing', { framing });
   }
 
+  // ── The camera must never fly through the aircraft. CAM is interpolated
+  //    LINEARLY in position, so two keyframes on opposite sides of the
+  //    airframe are joined by a straight line that goes through it — a
+  //    keyframe at z = +38 followed by one at z = -40 puts the reader inside
+  //    the engine bay for a frame. Nothing else in the rig notices: the
+  //    keyframes themselves are both perfectly framed, and camera_framing
+  //    only samples keyframes, never the segments between them.
+  //
+  //    Now that one beat (36000) sits astern while its neighbours sit ahead,
+  //    two segments cross the aircraft's plane and this stops being a
+  //    theoretical concern. Samples every segment densely and asserts the
+  //    camera's closest approach to the origin stays outside a sphere that
+  //    encloses the whole airframe. ──
+  const path = await page.evaluate(() => {
+    const S = window.Stage;
+    // Enclosing radius, measured rather than assumed.
+    S.apply(0, 0);
+    const pos = S.jet.position.clone(), rot = S.jet.rotation.clone();
+    S.jet.position.set(0, 0, 0); S.jet.rotation.set(0, 0, 0);
+    S.jet.updateMatrixWorld(true);
+    const box = new S.THREE.Box3();
+    S.jet.traverse((o) => { if (o.isMesh) box.expandByObject(o); });
+    const radius = box.getBoundingSphere(new S.THREE.Sphere()).radius;
+    S.jet.position.copy(pos); S.jet.rotation.copy(rot); S.jet.updateMatrixWorld(true);
+
+    // Walk the whole climb, reading the camera position the rig actually
+    // produces rather than re-deriving the interpolation here.
+    let minDist = Infinity, minAlt = null;
+    for (let alt = 0; alt <= 62000; alt += 50) {
+      S.apply(alt, 0);
+      const d = S.camera.position.length();
+      if (d < minDist) { minDist = d; minAlt = alt; }
+    }
+    return { radius: +radius.toFixed(3), minDist: +minDist.toFixed(3), minAlt };
+  });
+  // The closest the rig ever legitimately gets is the push-in at ~4.6 units,
+  // so a margin of 1.0 over the enclosing radius is real headroom, not a
+  // rubber stamp.
+  if (path.minDist > path.radius + 1.0) pass('camera_path_clear', { ...path, required: +(path.radius + 1.0).toFixed(3) });
+  else fail('camera_path_clear', { ...path, required: +(path.radius + 1.0).toFixed(3), note: 'CAM interpolates position linearly; the straight line between two keyframes must not enter the airframe' });
+
   results.measured = m;
   await browser.close();
   console.log(JSON.stringify(results, null, 2));
