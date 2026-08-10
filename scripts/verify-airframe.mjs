@@ -277,15 +277,26 @@ async function main() {
     };
     return { at0: read(0), at4000: read(4000), at8000: read(8000), at30000: read(30000) };
   });
+  // The halo scale factor in redesign-v2.html is
+  // `baseScale * (.55 + .45 * ignition)`, so scale goes from 0.55x base at
+  // ignition=0 (altitude 0) to 1.0x base at ignition=1 (altitude 8000) — a
+  // ratio of 1/.55 ≈ 1.8182, i.e. about an 82% increase. A bare
+  // `at8000.scale > at0.scale` would pass on any nonzero increase,
+  // including a near-flat ramp, so the actual designed ratio is asserted
+  // with a real tolerance instead.
+  const expectedScaleRatio = (.55 + .45 * 1) / (.55 + .45 * 0); // = 1 / .55
+  const scaleRatio = ramp.at0.scale !== 0 ? ramp.at8000.scale / ramp.at0.scale : NaN;
+  const scaleRampOk = near(scaleRatio, expectedScaleRatio, 0.05);
   const rampOk =
     ramp.at0.opacity < 0.25 &&
     ramp.at8000.opacity > 0.9 &&
     ramp.at4000.opacity > ramp.at0.opacity &&
     ramp.at8000.opacity > ramp.at4000.opacity &&
     Math.abs(ramp.at30000.opacity - ramp.at8000.opacity) < 0.01 &&
-    ramp.at8000.scale > ramp.at0.scale;
-  if (rampOk) pass('engine_ignition', ramp);
-  else fail('engine_ignition', { ...ramp, note: 'must rise monotonically from near-dark at 0 to full by 8000ft, then hold' });
+    scaleRampOk;
+  const rampDetail = { ...ramp, scaleRatio, expectedScaleRatio, scaleTolerance: 0.05 };
+  if (rampOk) pass('engine_ignition', rampDetail);
+  else fail('engine_ignition', { ...rampDetail, note: 'must rise monotonically from near-dark at 0 to full by 8000ft, then hold, with halo scale ratio matching baseScale*(.55+.45*ignition)' });
 
   // ── Parked on the ground, not floating above it or sunk into it. The
   //    ground plane is at y = -1.45; the old airframe's belly sat 0.12
@@ -299,8 +310,12 @@ async function main() {
     return { jetY: S.jet.position.y, bellyWorldY: box.min.y, shadowY: -1.45 };
   });
   const clearance = ground.bellyWorldY - ground.shadowY;
-  if (clearance > 0 && clearance < 0.25) pass('ground_contact', { ...ground, clearance });
-  else fail('ground_contact', { ...ground, clearance, note: 'belly must sit just above y=-1.45: >0 (not sunk) and <0.25 (not floating)' });
+  // Tight band around the designed 0.10 clearance, not a wide "somewhere
+  // above the ramp" range — a loose band (e.g. 0 < clearance < 0.25) would
+  // still pass the pre-fix floating value of 0.182 and never catch a
+  // reverted parked keyframe.
+  if (near(clearance, 0.10, 0.03)) pass('ground_contact', { ...ground, clearance });
+  else fail('ground_contact', { ...ground, clearance, expected: 0.10, tolerance: 0.03, note: 'belly must sit ~0.10 above y=-1.45' });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });
