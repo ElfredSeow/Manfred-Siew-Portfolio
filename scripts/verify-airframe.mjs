@@ -354,6 +354,98 @@ async function main() {
     if (ok) pass('tier0_silhouette', detail); else fail('tier0_silhouette', detail);
   }
 
+  // ── Camera framing at every CAM keyframe. Not sampled — the spec is
+  //    explicit that all sixteen are checked, because the delta is
+  //    proportionally wider in plan than the airframe these distances were
+  //    tuned for and the rig rolls up to 15deg during push-ins.
+  //
+  //    Projects the airframe's eight bounding-box corners through the live
+  //    camera and asks whether they land inside the viewport. The aircraft
+  //    is ALLOWED to be cropped at push-in beats — that is the whole point
+  //    of a push-in — so this reports coverage rather than asserting it,
+  //    except for the wide shots, where nothing should be cut off. ──
+  const KEYFRAMES = [0, 5000, 8000, 12000, 14500, 18000, 22000, 26000, 28500, 32000, 36000, 40000, 42500, 46000, 50000, 62000];
+  const WIDE = new Set([0, 5000, 8000, 18000, 22000, 32000, 36000, 46000, 50000, 62000]);
+
+  //    The eight corners are reported, because they are the cheap summary of
+  //    where the airframe sits in frame. They are NOT what the wide-shot
+  //    assertion is made against, and that distinction is load-bearing on a
+  //    tailless delta: the widest points of the planform (the wingtips, at
+  //    z = -1.30) are nowhere near the rearmost point (the centre trailing
+  //    point, at z = -2.60, on the centreline). The bounding box's rear
+  //    outboard corners — (+-3.12, y, -2.63) — are therefore empty air, and
+  //    at the two 8000ft-class wide shots they project ~0.09 outside the
+  //    viewport while every real vertex is comfortably inside it. Asserting
+  //    on the corners would demand shrinking a wing that is demonstrably in
+  //    frame, and could not be satisfied anyway: the shrink needed to clear
+  //    an empty corner drives `span` and the wingtip vertex out of the
+  //    tolerances `bounding_box` and `planform_outline` already enforce.
+  //
+  //    So the assertion projects the real vertex set. It costs ~2,300
+  //    projections per keyframe, which at sixteen keyframes is nothing next
+  //    to the 6s the page already spends booting. ──
+  const framing = await page.evaluate((alts) => {
+    const S = window.Stage;
+    const { THREE, jet, camera } = S;
+    return alts.map((alt) => {
+      S.apply(alt, 0);
+      camera.updateMatrixWorld(true);
+      jet.updateMatrixWorld(true);
+      const box = new THREE.Box3();
+      jet.traverse((o) => { if (o.isMesh) box.expandByObject(o); });
+      let inside = 0;
+      const pts = [];
+      for (let i = 0; i < 8; i++) {
+        const v = new THREE.Vector3(
+          i & 1 ? box.max.x : box.min.x,
+          i & 2 ? box.max.y : box.min.y,
+          i & 4 ? box.max.z : box.min.z,
+        ).project(camera);
+        pts.push([+v.x.toFixed(3), +v.y.toFixed(3)]);
+        if (Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1 && v.z < 1) inside++;
+      }
+
+      // The silhouette itself. `vertsOutside` is the number of real vertices
+      // pushed off the viewport; `margin` is how much room the worst one has
+      // left, so a wide shot that is merely *about* to clip is visible in the
+      // output rather than reading as a clean pass.
+      const v = new THREE.Vector3();
+      let vertsOutside = 0, vertsTotal = 0, worstNdc = 0;
+      jet.traverse((o) => {
+        if (!o.isMesh) return;                 // Sprites billboard; they are not silhouette.
+        const p = o.geometry.attributes.position;
+        for (let i = 0; i < p.count; i++) {
+          v.fromBufferAttribute(p, i);
+          o.localToWorld(v);
+          v.project(camera);
+          vertsTotal++;
+          const d = Math.max(Math.abs(v.x), Math.abs(v.y));
+          if (d > worstNdc) worstNdc = d;
+          if (d > 1 || v.z >= 1) vertsOutside++;
+        }
+      });
+      return {
+        alt, cornersInside: inside, ndc: pts,
+        vertsTotal, vertsOutside,
+        worstNdc: +worstNdc.toFixed(3),
+        margin: +(1 - worstNdc).toFixed(3),
+      };
+    });
+  }, KEYFRAMES);
+
+  // A wide shot with any of the airframe off-screen means it is clipped at a
+  // beat where it is meant to be seen whole. Per spec 9.3, the fix for that
+  // is to shrink the span — NOT to retune keyframes.
+  const clippedWide = framing.filter((f) => WIDE.has(f.alt) && f.vertsOutside > 0);
+  // Any beat that shows nothing at all is a hard failure regardless.
+  const empty = framing.filter((f) => f.vertsOutside === f.vertsTotal);
+  if (clippedWide.length || empty.length) {
+    fail('camera_framing', { framing, clippedWide: clippedWide.map((f) => f.alt), empty: empty.map((f) => f.alt),
+      note: 'wide shots must contain the whole airframe; per spec 9.3 shrink the span rather than retuning CAM' });
+  } else {
+    pass('camera_framing', { framing });
+  }
+
   results.measured = m;
   await browser.close();
   console.log(JSON.stringify(results, null, 2));
