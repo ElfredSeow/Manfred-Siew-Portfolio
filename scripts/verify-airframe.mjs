@@ -98,6 +98,20 @@ function measure() {
       ? Math.abs(Math.abs(box.min.x) - Math.abs(box.max.x))
       : null,
     bellyY: box.min.y,
+    // Inlets on TOP. Inlets visible from below is the exact opposite of
+    // the grammar being invoked here, so their height is checked, not just
+    // their presence. Counts the BUMPS only — each inlet is a bump plus a
+    // dark mouth sitting at the same y and x, so a position-only filter
+    // would count four and never match.
+    inletsAboveDeck: solids.filter((mesh) =>
+      mesh.geometry.type === 'SphereGeometry' &&
+      mesh.position.y > 0.2 &&
+      Math.abs(mesh.position.x) > 0.3 &&
+      mesh.position.z > 0.5).length,
+    // Ruddervators carry their fore/aft offset inside the extruded shape,
+    // so mesh.position.z is 0 for both — outboard x is the only reliable
+    // discriminator, and nothing else on the airframe sits past x = 2.0.
+    ruddervators: solids.filter((mesh) => Math.abs(mesh.position.x) > 2.0).length,
   };
 
   jet.position.copy(pos);
@@ -163,6 +177,13 @@ async function main() {
   const bellyOk = near(m.bellyY, -0.30, 0.04);
   if (bellyOk) pass('belly_depth', { bellyY: m.bellyY, expected: -0.30, tolerance: 0.04 });
   else fail('belly_depth', { bellyY: m.bellyY, expected: -0.30, tolerance: 0.04 });
+
+  // ── Propulsion and control surfaces. ──
+  if (m.inletsAboveDeck === 2) pass('top_mounted_inlets', { count: m.inletsAboveDeck });
+  else fail('top_mounted_inlets', { count: m.inletsAboveDeck, expected: 2, note: 'two inlet bumps above the deck line, outboard of centre, forward of midpoint' });
+
+  if (m.ruddervators === 2) pass('canted_ruddervators', { count: m.ruddervators });
+  else fail('canted_ruddervators', { count: m.ruddervators, expected: 2 });
 
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });

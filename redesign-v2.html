@@ -2573,32 +2573,52 @@ else {
       belly.geometry.translate(0, -.08, 0);
       jet.add(belly);
 
-      const tail = plate([[-1.35,-2.7],[0,-2.1],[1.35,-2.7],[1.35,-2.95],[0,-2.6],[-1.35,-2.95]], .1, SKIN);
-      tail.geometry.rotateX(Math.PI / 2);
-      tail.geometry.translate(0, .3, 0);
-      jet.add(tail);
-
-      const fin = plate([[-1.55,.28],[-2.35,1.62],[-2.72,1.62],[-2.5,.26]], .1, TRIM);
-      fin.geometry.rotateY(-Math.PI / 2);
-      fin.geometry.translate(.05, 0, 0);
-      jet.add(fin);
-
       const canopy = new THREE.Mesh(new THREE.SphereGeometry(.34, 24, 16), GLASS);
       canopy.scale.set(.85, .72, 2.1);
       canopy.position.set(0, .3, 1.25);
       jet.add(canopy);
 
-      const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(.3, .24, .55, 24, 1, true), DARK);
-      nozzle.rotation.x = Math.PI / 2;
-      nozzle.position.set(0, 0, -3.1);
-      jet.add(nozzle);
+      /* Canted ruddervators. No vertical fin at all is the single most
+         legible "this is not a current-generation fighter" statement
+         available, so these have to do the fin's job while staying small
+         enough that the silhouette still reads tailless.
 
+         Built per side rather than mirrored, for the winding reason. The
+         shape's [z, y] pairs become fore/aft and height after rotateY, the
+         same construction the old vertical fin used. TRIM keeps the page's
+         orange accent somewhere on the airframe now the nose cone is gone. */
       [-1, 1].forEach(side => {
-        const intake = new THREE.Mesh(new THREE.CylinderGeometry(.19, .19, .9, 18, 1, true), DARK);
-        intake.rotation.x = Math.PI / 2;
-        intake.position.set(side * .44, -.08, .55);
-        jet.add(intake);
+        const rv = plate([[-0.95, 0], [-1.60, .55], [-1.85, .55], [-1.65, 0]], .08, TRIM);
+        rv.geometry.rotateY(-Math.PI / 2);
+        // Cant 35deg outward from vertical: the tip leans away from centre.
+        rv.geometry.rotateZ(side * -35 * Math.PI / 180);
+        rv.position.set(side * 2.35, .04, 0);
+        jet.add(rv);
       });
+
+      /* Inlets on TOP of the shoulders, hidden from below. Inlets slung
+         underneath — which is what this airframe had — is the exact
+         opposite of the grammar being invoked. A smooth bump rather than a
+         cylinder: there is no separate duct, it is a swelling of the deck. */
+      [-1, 1].forEach(side => {
+        const bump = new THREE.Mesh(new THREE.SphereGeometry(.30, 18, 12), SKIN);
+        bump.scale.set(.85, .52, 1.75);
+        bump.position.set(side * .52, .32, .95);
+        jet.add(bump);
+
+        const mouth = new THREE.Mesh(new THREE.CircleGeometry(.17, 16), DARK);
+        mouth.scale.set(1, .62, 1);
+        mouth.position.set(side * .52, .32, 1.44);
+        jet.add(mouth);
+      });
+
+      /* A flat, wide exhaust slot rather than a round cylinder. The
+         contrast with the old nozzle is deliberate and is doing as much
+         work as the sawtooth: round exhausts belong to the airframe this
+         one replaces. */
+      const nozzle = new THREE.Mesh(new THREE.BoxGeometry(1.05, .16, .35), DARK);
+      nozzle.position.set(0, .10, -2.45);
+      jet.add(nozzle);
 
       return jet;
     }
