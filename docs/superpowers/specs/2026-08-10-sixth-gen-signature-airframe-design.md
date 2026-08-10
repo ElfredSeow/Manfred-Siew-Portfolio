@@ -140,7 +140,7 @@ Three emissive surfaces, all `MeshBasicMaterial`.
 `MeshBasicMaterial` rather than `MeshStandardMaterial` with an `emissive` channel, for two
 reasons: it is cheaper, and it is **unlit**, so it holds constant brightness while
 `redesign-v2.html:2646` dims the sun from 2.1 to 1.25 across the climb. The glow therefore
-gets relatively *stronger* as the sky ramps to `#12244A`. That is free, and it is the
+gets relatively *stronger* as the sky ramps to `#1B2C42`. That is free, and it is the
 right direction — the airframe should look most alive at altitude.
 
 | Element | Where | Colour | Role |
@@ -219,13 +219,13 @@ alpha interaction at all.
 |---|---|---|---|
 | `SKIN` | `#DCE2E9` | `#5C6675` | graphite, roughness .52, metalness .24 |
 | `DECK` | — | `#474F5C` | new; separates the deck from the planform |
-| `TRIM` | `#C2410C` | unchanged | |
+| `TRIM` | `#C2410C` | `#B84630` | tracks `--accent-strong`, which moved in the 2026-08-10 re-tint (see §5's revision note) |
 | `GLASS` | `#33547D` | unchanged | the low-metalness reasoning at `:2369-2372` still holds — there is still no environment map |
 | `DARK` | `#5A6675` | `#2E3540` | darkened; it is now the surround that makes the glow read |
 
 **Graphite, not the mid-tone this spec originally called for.** An earlier revision hedged
 to `#9AA3AE` because the emissive elements were expected to be weak, which meant the
-airframe's own value had to carry legibility against the `#12244A` sky at altitude. The
+airframe's own value had to carry legibility against the `#1B2C42` sky at altitude. The
 halos at §5.1 remove that dependency: light spilling off the airframe reads against a dark
 sky far better than a pale surface does, and it reads *as an aircraft with its lights on*
 rather than as a bright cut-out.
@@ -265,7 +265,7 @@ unchanged, and no post-processing pass is added.
 ## 9. Risks
 
 ### 9.1 The airframe goes too dark at altitude
-Reduced, not eliminated. The halos at §5.1 are what carry legibility against `#12244A`, so
+Reduced, not eliminated. The halos at §5.1 are what carry legibility against `#1B2C42`, so
 this risk now depends on the halos landing rather than on the skin value. If the aircraft
 still loses legibility at altitude, raise halo opacity and the rim light's contribution
 first; lighten `SKIN` only after those are exhausted, and **never** raise sun intensity,
