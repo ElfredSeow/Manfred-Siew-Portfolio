@@ -420,6 +420,53 @@ async function main() {
   if (near(clearance, 0.10, 0.03)) pass('ground_contact', { ...ground, clearance });
   else fail('ground_contact', { ...ground, clearance, expected: 0.10, tolerance: 0.03, note: 'belly must sit ~0.10 above y=-1.45' });
 
+  // ── Climb attitude. The nose is at +Z, and a rotation of theta about X
+  //    sends (0,0,z) to (0, -z*sin(theta), z*cos(theta)) — so POSITIVE
+  //    rotation.x is nose DOWN. The JET table's `r[0]` was positive at every
+  //    keyframe, including the one commented "rotation", which in aviation is
+  //    the word for the nose coming UP on takeoff. Measured before the fix:
+  //    at 8,000ft the nose apex sat at world y -0.779 and the centre trailing
+  //    point at +0.469, i.e. 12 degrees nose-down at the moment of lift-off,
+  //    and tail-high for the entire climb. On a portfolio whose argument is
+  //    aerospace training that is the one kind of error that costs something.
+  //
+  //    Asserted on WORLD positions of the planform's two centreline extremes
+  //    rather than on the sign of the table's numbers, because the sign
+  //    convention is exactly the thing that was misread. Both points sit on
+  //    x = 0, so roll (which the table does use) barely perturbs their height
+  //    and cannot flip the comparison.
+  const PITCHED = [8000, 18000, 22000, 32000, 36000, 46000, 62000];  // every keyframe with non-zero pitch
+  const climb = await page.evaluate((alts) => {
+    const S = window.Stage;
+    const { THREE, jet } = S;
+    const NOSE = new THREE.Vector3(0, .08,  3.40);   // planform nose apex
+    const TAIL = new THREE.Vector3(0, .08, -2.60);   // centre trailing point
+    const at = (alt) => {
+      S.apply(alt, 0);
+      jet.updateMatrixWorld(true);
+      const n = jet.localToWorld(NOSE.clone());
+      const t = jet.localToWorld(TAIL.clone());
+      return { alt, pitchDeg: +(jet.rotation.x * 180 / Math.PI).toFixed(2),
+               noseY: +n.y.toFixed(3), tailY: +t.y.toFixed(3),
+               noseAboveTail: +(n.y - t.y).toFixed(3) };
+    };
+    // The keyframes, and then the whole climb densely — a sign error at one
+    // keyframe would be caught by the first, but a sign error only in the
+    // interpolated span between two would not.
+    const sweep = [];
+    for (let alt = 0; alt <= 62000; alt += 250) sweep.push(at(alt));
+    return { beats: alts.map(at), worstSweep: sweep.reduce((a, b) => (b.noseAboveTail < a.noseAboveTail ? b : a)) };
+  }, PITCHED);
+  //    0.4 units of nose-over-tail is roughly 4 degrees on a 6-unit airframe —
+  //    below the shallowest keyframe (5 deg -> 0.523) and far above zero, so
+  //    it cannot be satisfied by an aircraft that is merely level.
+  const noseDown = climb.beats.filter((b) => b.noseAboveTail < 0.4 || b.pitchDeg >= 0);
+  const climbOk = noseDown.length === 0 && climb.worstSweep.noseAboveTail >= -0.001;
+  const climbDetail = { beats: climb.beats, worstSweep: climb.worstSweep, minNoseAboveTail: 0.4 };
+  if (climbOk) pass('climb_attitude', climbDetail);
+  else fail('climb_attitude', { ...climbDetail, noseDown: noseDown.map((b) => b.alt),
+    note: 'positive rotation.x is nose DOWN on a +Z nose; every pitched keyframe must put the nose apex above the centre trailing point, and no interpolated point in the climb may be nose-down' });
+
   if (pageErrors.length) fail('no_page_errors', { pageErrors });
   else pass('no_page_errors', { pageErrors });
 

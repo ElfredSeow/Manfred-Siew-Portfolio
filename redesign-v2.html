@@ -2934,16 +2934,35 @@ else {
       { a: 62000, p:[  .5, 15.0, 52.0], look: ORIGIN,  fov: 52, roll:   0, shift:    0 }
     ];
 
+    /* `r` is [pitch, yaw, roll] in degrees, fed straight into
+       jet.rotation.set(). The SIGN OF PITCH IS NOT INTUITIVE and was wrong
+       here from the first version of this rig until 2026-08-10.
+
+       The nose is at +Z. A rotation of theta about X sends a point (0,0,z) to
+       (0, -z*sin(theta), z*cos(theta)) — so POSITIVE rotation.x drives the
+       nose toward -Y, which is nose DOWN. The keyframe below marked
+       "rotation" — aviation's word for the nose coming up on takeoff — carried
+       r:[12, 0, 0], and measurement confirmed what that means: at 8,000ft the
+       nose apex sat at world y -0.779 with the centre trailing point at
+       +0.469. The aircraft was 12 degrees nose-down at the moment it leaves
+       the ground and stayed tail-high for the entire climb, on a page whose
+       argument is aerospace training.
+
+       Every non-zero pitch value is therefore negated. Nothing else moved: no
+       `a` value, no `p` value, no yaw and no roll. If you are ever tempted to
+       "correct" these back to positive, run climb_attitude in
+       scripts/verify-airframe.mjs first — it measures the nose and the
+       trailing point in world space at every beat and will go red. */
     const JET = [
-      { a:     0, p:[0, -1.03, 0], r:[  0, 0,  0] },   // on the ground
+      { a:     0, p:[0, -1.03, 0], r:[  0, 0,  0] },   // on the ground, level
       { a:  2000, p:[0, -1.03, 0], r:[  0, 0,  0] },
-      { a:  8000, p:[0, -.15, 0], r:[ 12, 0,  0] },   // rotation
-      { a: 18000, p:[0,  .10, 0], r:[  7, 0, -7] },
-      { a: 22000, p:[0,  .10, 0], r:[  6, 0,  7] },
-      { a: 32000, p:[0,  .18, 0], r:[  6, 0, -6] },
-      { a: 36000, p:[0,  .18, 0], r:[  5, 0,  5] },
-      { a: 46000, p:[0,  .28, 0], r:[  6, 0,  0] },
-      { a: 62000, p:[0,  .85, 0], r:[ 10, 0,  0] }
+      { a:  8000, p:[0, -.15, 0], r:[-12, 0,  0] },   // rotation: nose UP
+      { a: 18000, p:[0,  .10, 0], r:[ -7, 0, -7] },
+      { a: 22000, p:[0,  .10, 0], r:[ -6, 0,  7] },
+      { a: 32000, p:[0,  .18, 0], r:[ -6, 0, -6] },
+      { a: 36000, p:[0,  .18, 0], r:[ -5, 0,  5] },
+      { a: 46000, p:[0,  .28, 0], r:[ -6, 0,  0] },
+      { a: 62000, p:[0,  .85, 0], r:[-10, 0,  0] }
     ];
 
     const smooth = t => t * t * (3 - 2 * t);
