@@ -53,6 +53,7 @@ img,video{ max-width:100%; height:auto; }
 a{ color:inherit; text-decoration:inherit; }
 button{ font:inherit; color:inherit; margin:0; padding:0; background-color:transparent; background-image:none; cursor:pointer; }
 [hidden]{ display:none; }
+#miles-mavis{ position:absolute; }
 body{ margin:0; background:var(--bg); color:var(--body); font-family:"Instrument Sans",system-ui,sans-serif; font-size:var(--fs-body); line-height:1.65; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
 ::selection{ background:var(--brand-soft); color:var(--ink); }
 a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-offset:3px; }
@@ -3035,8 +3036,9 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
   // work out that the thing they clicked through for is behind another click.
   function openFromHash() {
     if (!location.hash) return;
+    var hash = location.hash === '#miles-mavis' ? '#mavis' : location.hash;
     var target;
-    try { target = document.querySelector(location.hash); } catch (e) { return; }
+    try { target = document.querySelector(hash); } catch (e) { return; }
     if (target && target.tagName === 'DETAILS') {
       target.open = true;
       target.scrollIntoView({ block: 'center' });

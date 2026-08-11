@@ -97,13 +97,13 @@ check('miles row: chips are the real stack',
   miles.found && JSON.stringify(miles.chips) === JSON.stringify(
     ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Supabase', 'Lovable']),
   miles.found ? JSON.stringify(miles.chips) : 'n/a');
-check('mavis row: order precedes miles row', mavis.found && miles.found && (async () => {
-  const order = await page.evaluate(() => {
-    const rows = Array.prototype.slice.call(document.querySelectorAll('details.log-row'));
-    return rows.map((r) => r.id).filter(Boolean);
-  });
-  return order.indexOf('mavis') !== -1 && order.indexOf('mavis') < order.indexOf('miles');
-})());
+const rowOrder = await page.evaluate(() => {
+  const rows = Array.prototype.slice.call(document.querySelectorAll('details.log-row'));
+  return rows.map((r) => r.id).filter(Boolean);
+});
+check('mavis row: order precedes miles row',
+  mavis.found && miles.found && rowOrder.indexOf('mavis') !== -1 && rowOrder.indexOf('mavis') < rowOrder.indexOf('miles'),
+  JSON.stringify(rowOrder));
 
 // ── Check group 2: forbidden claims ──────────────────────────────────
 const bothText = (mavis.text || '') + (miles.text || '');
@@ -120,6 +120,14 @@ const legacy = await page.evaluate(() => {
   return { found: !!el, tag: el ? el.tagName : null };
 });
 check('legacy #miles-mavis id still resolves', legacy.found, JSON.stringify(legacy));
+
+// Hash navigation: verify that visiting #miles-mavis opens the #mavis row
+await page.goto(PAGE_URL + '#miles-mavis', { waitUntil: 'load' });
+const hashNavResult = await page.evaluate(() => {
+  const mavisRow = document.getElementById('mavis');
+  return { mavisOpen: mavisRow ? mavisRow.open : null };
+});
+check('legacy hash #miles-mavis navigates to and opens #mavis', hashNavResult.mavisOpen === true, `mavis.open=${hashNavResult.mavisOpen}`);
 
 const bodyText = await page.evaluate(() => document.body.textContent);
 check('page: old merged title removed', !/>MILES \/ MAVIS</.test(await page.content()));
