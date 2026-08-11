@@ -478,30 +478,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .bf-mock .bf-member{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:6px;font-size:12.5px}
 .bf-mock .bf-member .bf-cs{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:600;letter-spacing:.05em}
 .bf-mock .bf-badge.bf-green{background:var(--bf-success-tint);color:var(--bf-success)}
-/* Fidelity fixes below — matching src/pages/dashboard.tsx, src/components/
-   dashboard/{count-tile,task-card,status-board}.tsx, src/pages/quiz-taking.tsx
-   and src/components/dashboard/status-badge.tsx in raid-ppcoe/BOLDFACE, not
-   the earlier hand-simplified version of these three screens. */
-.bf-mock .bf-tile .bf-lbl svg{flex-shrink:0}
-.bf-mock .bf-peers{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--bf-fg-4);margin-top:3px}
-.bf-mock .bf-badge.bf-amber{background:rgba(0,118,179,.15);color:var(--bf-brand-fg)}
-.bf-mock .bf-back{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--bf-fg-2);margin-bottom:12px}
-.bf-mock .bf-progress-row{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);margin:10px 0 16px}
-.bf-mock .bf-progress-row .bf-progress{flex:1;margin:0}
-.bf-mock .bf-progress-count{font-size:10px;font-weight:600;color:var(--bf-fg-2);white-space:nowrap}
-.bf-mock .bf-sec-title{font-size:13.5px;font-weight:600;color:var(--bf-fg-1);margin:2px 0 10px}
-.bf-mock .bf-qnum{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-4);margin:14px 0 6px}
-.bf-mock .bf-qnum:first-of-type{margin-top:0}
-.bf-mock .bf-dback{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--bf-brand-fg);background:var(--bf-bg-1);border:1px solid var(--bf-stroke-2);border-radius:8px;padding:5px 10px;margin-bottom:10px}
-.bf-mock .bf-dhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
-.bf-mock .bf-dsub{font-size:9.5px;color:var(--bf-fg-4);margin-bottom:12px}
-.bf-mock .bf-dtable{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:1px;background:var(--bf-stroke-2);border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);overflow:hidden;font-size:11px}
-.bf-mock .bf-dtable>div{background:var(--bf-bg-1);padding:8px 10px}
-.bf-mock .bf-dtable>div.bf-hd{background:var(--bf-bg-2);font-weight:600;text-align:center}
-.bf-mock .bf-dtable .bf-hd small{display:block;font-weight:400;text-transform:none;letter-spacing:0;color:var(--bf-fg-4);font-size:8.5px;margin-top:1px}
-.bf-mock .bf-dtable .bf-dcell{display:flex;justify-content:center}
-.bf-mock .bf-dcs{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:600;letter-spacing:.05em;font-size:11.5px;color:var(--bf-fg-1)}
-.bf-mock .bf-dname{font-size:9px;color:var(--bf-fg-4);margin-top:1px}
 /* Gallery thumbnails (.app-shots, borrowed from FUEL Up's real-screenshot
    gallery): each .bf-mock here has no real image to crop with object-fit,
    so it is laid out at a fixed intrinsic width and scaled down to fit the
