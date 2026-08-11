@@ -210,7 +210,7 @@ project log, so nothing here is a new claim:
 | Clause | Evidence in the log |
 |---|---|
 | *choosing the platform to match* | MILES / MAVIS, `:1518` — "proved in Power Apps first, then rebuilt as a full-stack application with Lovable once per-user licensing stopped being viable". This is the single best evidence for the architect title: a platform decision, re-made under a licensing constraint. |
-| *React on Dataverse* | RAiD Facility Booking System, `:1550` / `:1562` — Dataverse + React + PowerApps Code Apps |
+| *React on Dataverse* | RSAF Facility Booking App, `:1550` / `:1562` — Dataverse + React + PowerApps Code Apps |
 | *full-stack rebuild* | MILES / MAVIS, `:1518`; 815 SQN bootcamp, `:1773` |
 | *AI agent work* | SAGE Copilot AI, `:1740`; R&D for Vibe-Coding Code Apps, `:1713` |
 | *tooling the rest of the team builds on* | PowerDocu, `:1727`; Comprehensive Guide for New Interns, `:1780`; Code Apps Policy Approval (M365 Tenant), `:1686` |

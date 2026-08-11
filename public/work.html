@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Work · Manfred Siew</title>
-<meta name="description" content="Three case studies — GRID, MILES / MAVIS, and the Vibe Coding Masterclass — with process, and what the AI actually does in each.">
+<meta name="description" content="Three case studies: GRID, MILES / MAVIS, and the Vibe Coding Masterclass. The process behind each one, and what the AI actually does in it.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Manfred Siew">
 <meta property="og:title" content="Work · Manfred Siew">
-<meta property="og:description" content="Three case studies — GRID, MILES / MAVIS, and the Vibe Coding Masterclass — with process, and what the AI actually does in each.">
+<meta property="og:description" content="Three case studies: GRID, MILES / MAVIS, and the Vibe Coding Masterclass. The process behind each one, and what the AI actually does in it.">
 <meta property="og:url" content="https://manfred-siew.web.app/work">
 <meta property="og:image" content="https://manfred-siew.web.app/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Manfred Siew — Aerospace Engineering and software development">
+<meta property="og:image:alt" content="Manfred Siew, Aerospace Engineering and software development">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -153,8 +153,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .page-eyebrow{ position:relative; font-size:.875rem; font-weight:600; color:var(--banner-soft); margin-bottom:.5rem; }
 .page-title{ position:relative; color:#FFF; font-size:clamp(2.1rem,4.6vw,3.2rem); font-weight:700; letter-spacing:-.03em; line-height:1.05; }
 .page-lede{ position:relative; margin-top:.75rem; max-width:56ch; color:#DDE6F8; font-size:1.125rem; line-height:1.6; }
-.page-note{ position:relative; margin-top:1rem; font-size:.875rem; color:var(--banner-soft); }
-.page-note .needs-copy{ color:var(--amber-base); font-weight:600; }
 
 /* ── CASE STUDY CARDS ─────────────────────────────────────────────────── */
 .work-band{ padding:3rem 0 5rem; }
@@ -185,11 +183,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .case[data-hue="coral"] .step-n{ background:var(--coral-ink); }
 .process li div{ font-size:1rem; line-height:1.55; color:var(--body); }
 .process b{ display:block; color:var(--ink); font-weight:600; margin-bottom:.25rem; }
-.needs-copy{
-  display:inline-block; margin-top:.25rem; font-size:.75rem; font-weight:600;
-  color:var(--amber-ink); background:var(--amber-tint); border-radius:var(--r-xs);
-  padding:.25rem .5rem;
-}
 
 .split-panels{ display:grid; gap:1rem; margin-top:1.75rem; }
 @media (min-width:720px){ .split-panels{ grid-template-columns:1fr 1fr; } }
@@ -209,7 +202,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .gov-list li::before{ content:""; flex:none; width:.5rem; height:.5rem; margin-top:.5rem; border-radius:50%; background:var(--ink); opacity:.35; }
 .gov-copy{ color:var(--body); }
 .link-brand{ color:var(--brand-ink); }
-.page-note-flag{ background:transparent; color:var(--amber-base); padding:0; }
 
 .js [data-reveal]{ opacity:0; transform:translateY(14px); }
 .js [data-reveal].is-visible{ opacity:1; transform:none; transition:opacity 640ms var(--e-out), transform 640ms var(--e-out); }
@@ -250,11 +242,10 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
       <h1 class="page-title">Build. Scale. Teach.</h1>
       <p class="page-lede">
         Three case studies, each answering a different question, in the same
-        six steps: who hit the problem, how I framed it, what my role was,
+        steps: who hit the problem, how I framed it, what my role was,
         what changed after the first version, who validated it, and what
         I would do differently.
       </p>
-      <p class="page-note"><span class="needs-copy page-note-flag">Draft copy</span> — amber chips below mark what only Manfred can answer.</p>
     </div>
   </div>
 </section>
@@ -270,7 +261,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         </div>
         <h2 class="case-title">GRID</h2>
         <p class="case-context">
-          GRID — Good Receipt and Invoice Digitalisation — is a repository app for
+          GRID, short for Good Receipt and Invoice Digitalisation, is a repository app for
           goods receipts and invoices from every unit across MINDEF SAF, not just fuel
           claims from vehicle operators. Whoever receives the goods photographs the
           receipt, an AI model reads it, and an RPA flow built by a partner team files
@@ -279,12 +270,11 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         <p class="case-thesis">Nobody skips the finance form on purpose. They skip it because the next task is already in front of them.</p>
 
         <ol class="process" role="list">
-          <li><span class="step-n">1</span><div><b>The person.</b> Personnel across MINDEF SAF's units receive goods and are meant to log the receipt into a finance form, so it lands in an auditable repository and the finance team knows what payment is owed. In practice, whoever received the goods is already on to the next task, so receipts go unlogged — a gap in the audit trail and a delay finance only discovers when they go looking for it.</div></li>
-          <li><span class="step-n">2</span><div><b>Framing.</b> I read it less as a missing-form problem — the finance form already existed — and more as a capture-and-handoff problem: the record needed to get created reliably despite people being busy, and in a shape a downstream automation could act on without anyone re-typing it. Receipts also arrive in whatever format the issuing company printed them in, so intake had to normalise that variation before the repository or the RPA flow could depend on it.<br><span class="needs-copy">Add: what you considered and rejected</span></div></li>
-          <li><span class="step-n">3</span><div><b>My role.</b> Lead developer. I designed and built the intake app — capture, AI-assisted extraction across varying receipt formats, and repository storage — on PowerApps and Vite, developed spec-first with Claude Code's Superpowers workflow. A team of five: a product owner, a data analyst, and two RPA developers who built the flow that reads my app's output and files it into the finance forms. Two months.</div></li>
+          <li><span class="step-n">1</span><div><b>The person.</b> Personnel across MINDEF SAF's units receive goods and are meant to log the receipt into a finance form, so it lands in an auditable repository and the finance team knows what payment is owed. In practice, whoever received the goods is already on to the next task, so receipts go unlogged. That leaves a gap in the audit trail and a delay finance only discovers when they go looking for it.</div></li>
+          <li><span class="step-n">2</span><div><b>Framing.</b> I read it less as a missing-form problem, since the finance form already existed, and more as a capture-and-handoff problem: the record needed to get created reliably despite people being busy, and in a shape a downstream automation could act on without anyone re-typing it. Receipts also arrive in whatever format the issuing company printed them in, so intake had to normalise that variation before the repository or the RPA flow could depend on it.</div></li>
+          <li><span class="step-n">3</span><div><b>My role.</b> Lead developer. I designed and built the intake app (capture, AI-assisted extraction across varying receipt formats, and repository storage) on PowerApps and Vite, developed spec-first with Claude Code's Superpowers workflow. A team of five: a product owner, a data analyst, and two RPA developers who built the flow that reads my app's output and files it into the finance forms. Two months.</div></li>
           <li><span class="step-n">4</span><div><b>Iteration.</b> The obstacle I handled largely alone was the interface with the RPA team: I had to learn what UiPath needed from my app's output before I could shape it to trigger their flow reliably, rather than assume a format and find out later it didn't fit. Goods receipts also come from whichever company issued them, in whatever layout that company uses, so extraction had to hold up across formats I hadn't seen yet rather than one template hard-coded to a single issuer.</div></li>
-          <li><span class="step-n">5</span><div><b>Validation.</b> In pilot now, ahead of the planned rollout across MINDEF SAF.<br><span class="needs-copy">Add: who's running the pilot, or a unit/user count</span></div></li>
-          <li><span class="step-n">6</span><div><b>What I'd do differently.</b> <span class="needs-copy">Add: one honest line</span></div></li>
+          <li><span class="step-n">5</span><div><b>Validation.</b> In pilot now, ahead of the planned rollout across MINDEF SAF.</div></li>
         </ol>
 
         <div class="split-panels">
@@ -319,15 +309,15 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
           vehicles, and giving the people who own a fleet one view of its
           serviceability and its defect trends.
         </p>
-        <p class="case-thesis">Owning a feature means finishing it. Owning a platform means deciding what it will still be able to carry in two years.</p>
+        <p class="case-thesis">A process you were told about in one interview is a claim, not a fact. It stays a claim until someone else doing the same job has been asked the same question.</p>
 
         <ol class="process" role="list">
-          <li><span class="step-n">1</span><div><b>The person.</b> Operational and maintenance workflows were spread across manual steps with no single record of who was qualified for what.<br><span class="needs-copy">Add: who hit this problem and what it was costing them</span></div></li>
-          <li><span class="step-n">2</span><div><b>Framing.</b> The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model rather than fields bolted on later.<br><span class="needs-copy">Add: what you decided the problem actually was, and what you ruled out</span></div></li>
-          <li><span class="step-n">3</span><div><b>My role.</b> Full-stack developer &amp; solution owner. I was Solution Owner as well as a developer, so the scope decisions were mine to make and defend. I designed the role and qualification model, built the workflow automation and the reporting surface, and did the scalability planning for enterprise rollout.<br><span class="needs-copy">Add: timeline, team size, or the hard constraint</span></div></li>
-          <li><span class="step-n">4</span><div><b>Iteration.</b> The first version was a Power Apps prototype, built on the assumption that everyone using it was RSAF personnel with a defence mail account. They weren't — the user base reached beyond the RSAF, and per-user Power Apps licensing was never going to cover people who sat outside it. So it was rebuilt as a full-stack application that owns its own accounts.<br><span class="needs-copy">Add: one obstacle you handled alone</span></div></li>
-          <li><span class="step-n">5</span><div><b>Validation.</b> <span class="needs-copy">Add: who used it, signed it off, or tested it</span></div></li>
-          <li><span class="step-n">6</span><div><b>What I'd do differently.</b> <span class="needs-copy">Add: one honest line</span></div></li>
+          <li><span class="step-n">1</span><div><b>The person.</b> The people running and maintaining the Air Specialist Vehicle fleet. Operational and maintenance workflows were spread across manual steps with no single record of who was qualified for what, so the state of the fleet had to be assembled by asking around rather than looked up.</div></li>
+          <li><span class="step-n">2</span><div><b>Framing.</b> The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model rather than fields bolted on later.</div></li>
+          <li><span class="step-n">3</span><div><b>My role.</b> Full-stack developer. I was not the solution owner on this one: scope sat with the product owner, and I owned the build. I designed the role and qualification model, built the workflow automation and the reporting surface, and did the scalability planning for enterprise rollout.</div></li>
+          <li><span class="step-n">4</span><div><b>Iteration.</b> Two things had to change. The first was the platform: the original Power Apps prototype assumed everyone using it was RSAF personnel with a defence mail account, and they weren't, so per-user licensing was never going to cover the people who sat outside it and the app was rebuilt as a full-stack application that owns its own accounts. The second was the requirements themselves. The process captured in the interviews turned out not to be the process on the ground, because the people we spoke to did not know the full detail of how the work actually ran. When the app shipped, ground users found it cut across their workflow rather than fitting it, and they said so.</div></li>
+          <li><span class="step-n">5</span><div><b>Validation.</b> The product owner and the stakeholder groups who would be using the system signed it off. Rather than treat our own write-up as settled, we took the pain points back to those groups and asked whether we had read them correctly from the ground up.</div></li>
+          <li><span class="step-n">6</span><div><b>What I'd do differently.</b> Interview more than one person per role, and do it before any build work starts. One representative gives you their version of the process, which is not always the version being worked to on the ground. I would get several people in the same role into the same discussion, have them talk through their own pain points, and have them cross-check each other's account, because two people in the same job often see the problem differently and the gap between them is usually where the real issue is.</div></li>
         </ol>
 
         <div class="split-panels">
@@ -358,17 +348,17 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         <p class="case-context">
           A large-scale masterclass on vibe-coding (directing AI coding agents from a
           spec to a working app, and reviewing everything they produce), run for a
-          mixed cohort of citizen developers and engineers, and co-delivered with
-          external academic institutions.
+          mixed cohort of citizen developers and engineers, joined by staff from
+          Nanyang Polytechnic (NYP).
         </p>
         <p class="case-thesis">The fastest way to find out whether you actually understand a practice is to stand in front of a room and teach it.</p>
 
         <ol class="process" role="list">
           <li><span class="step-n">1</span><div><b>The person.</b> RSAF personnel and staff from Nanyang Polytechnic, most of them not from a technical background. The vocabulary was the barrier before the tooling was: people who could not follow the lingo lost interest before they got far enough to find out whether the practice was any use to them.</div></li>
-          <li><span class="step-n">2</span><div><b>Framing.</b> I decided the gap was confidence and vocabulary rather than tooling. The software was not hard to get hold of, but the language around it made people assume the practice was not for them. The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.<br><span class="needs-copy">Add: what you considered and rejected</span></div></li>
-          <li><span class="step-n">3</span><div><b>My role.</b> Lead instructor. I organised and led it. I wrote the training materials and the hands-on labs, sequenced the syllabus, coordinated delivery with the external academic partners, and taught the sessions. Run on 6 August for a cohort of 170.<br><span class="needs-copy">Add: the year</span></div></li>
-          <li><span class="step-n">4</span><div><b>Iteration.</b> Three things changed between the first run and the ones after it. I had not said clearly enough what attendees needed to bring or install, so later runs stated the device and the software up front. The room was too shy to ask out loud, so I added an anonymous question channel. And nobody left the first run with a record of it, so later runs ended with a written summary. The obstacle I handled alone was holding a non-technical room's attention — I broke each demonstration into its smallest parts and used the AI chat panel in the IDE to show what the agent was doing.</div></li>
-          <li><span class="step-n">5</span><div><b>Validation.</b> External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</div></li>
+          <li><span class="step-n">2</span><div><b>Framing.</b> I decided the gap was confidence and vocabulary rather than tooling. The software was not hard to get hold of, but the language around it made people assume the practice was not for them. The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</div></li>
+          <li><span class="step-n">3</span><div><b>My role.</b> Lead instructor. I organised and led it. I wrote the training materials and the hands-on labs, sequenced the syllabus, and taught the sessions. Run on 6 August for a cohort of 170.</div></li>
+          <li><span class="step-n">4</span><div><b>Iteration.</b> Three things changed between the first run and the ones after it. I had not said clearly enough what attendees needed to bring or install, so later runs stated the device and the software up front. The room was too shy to ask out loud, so I added an anonymous question channel. And nobody left the first run with a record of it, so later runs ended with a written summary. The obstacle I handled alone was holding a non-technical room's attention. I broke each demonstration into its smallest parts and used the AI chat panel in the IDE to show what the agent was doing.</div></li>
+          <li><span class="step-n">5</span><div><b>Validation.</b> Staff from Nanyang Polytechnic attended alongside RSAF personnel. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</div></li>
           <li><span class="step-n">6</span><div><b>What I'd do differently.</b> I would drop the live terminal walkthrough. Pasting a documentation URL into the AI chat and letting the room watch it work keeps everyone on one idea, instead of tracking what I had just clicked.</div></li>
         </ol>
 
@@ -404,7 +394,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
           <p class="gov-copy">
             Pushing an organisation towards AI-assisted development and then signing off on
             its security are usually two different people. On the Flight Simulator Scheduling
-            System and the Project Management Tracker they were the same one — I acted as
+            System and the Project Management Tracker they were the same one, because I acted as
             Security Reviewer on both. Both are in the <a class="link-inline link-brand" href="/projects">project log</a>.
           </p>
           <ul class="gov-list" role="list">
@@ -428,7 +418,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         <p class="h2">Ready for what's <span class="on-brand">next.</span></p>
         <p class="lede contact-lede">
           Looking for a role that uses both sides, aerospace and IT, and adds
-          something I do not have yet. Send me a note — I usually reply within a day.
+          something I do not have yet. Send me a note and I usually reply within a day.
         </p>
       </div>
       <div class="card contact-card">

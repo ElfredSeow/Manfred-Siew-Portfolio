@@ -478,6 +478,31 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .bf-mock .bf-member{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:6px;font-size:12.5px}
 .bf-mock .bf-member .bf-cs{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:600;letter-spacing:.05em}
 .bf-mock .bf-badge.bf-green{background:var(--bf-success-tint);color:var(--bf-success)}
+/* Fidelity fixes below — matching src/pages/dashboard.tsx, src/components/
+   dashboard/{count-tile,task-card,status-board}.tsx, src/pages/quiz-taking.tsx
+   and src/components/dashboard/status-badge.tsx in raid-ppcoe/BOLDFACE, not
+   the earlier hand-simplified version of these three screens. */
+.bf-mock .bf-tile .bf-lbl svg{flex-shrink:0}
+.bf-mock .bf-peers{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--bf-fg-4);margin-top:3px}
+.bf-mock .bf-badge.bf-amber{background:rgba(0,118,179,.15);color:var(--bf-brand-fg)}
+.bf-mock .bf-back{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--bf-fg-2);margin-bottom:12px}
+.bf-mock .bf-progress-row{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);margin:10px 0 16px}
+.bf-mock .bf-progress-row .bf-progress{flex:1;margin:0}
+.bf-mock .bf-progress-count{font-size:10px;font-weight:600;color:var(--bf-fg-2);white-space:nowrap}
+.bf-mock .bf-sec-title{font-size:13.5px;font-weight:600;color:var(--bf-fg-1);margin:2px 0 10px}
+.bf-mock .bf-qnum{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-4);margin:14px 0 6px}
+.bf-mock .bf-qnum:first-of-type{margin-top:0}
+.bf-mock .bf-dback{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--bf-brand-fg);background:var(--bf-bg-1);border:1px solid var(--bf-stroke-2);border-radius:8px;padding:5px 10px;margin-bottom:10px}
+.bf-mock .bf-dhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.bf-mock .bf-dsub{font-size:9.5px;color:var(--bf-fg-4);margin-bottom:12px}
+.bf-mock .bf-dtable{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:1px;background:var(--bf-stroke-2);border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);overflow:hidden;font-size:11px}
+.bf-mock .bf-dtable>div{background:var(--bf-bg-1);padding:8px 10px}
+.bf-mock .bf-dtable>div.bf-hd{background:var(--bf-bg-2);font-weight:600;text-align:center}
+.bf-mock .bf-dtable>div.bf-hd:first-child{text-align:left}
+.bf-mock .bf-dtable .bf-hd small{display:block;font-weight:400;text-transform:none;letter-spacing:0;color:var(--bf-fg-4);font-size:8.5px;margin-top:1px}
+.bf-mock .bf-dtable .bf-dcell{display:flex;justify-content:center}
+.bf-mock .bf-dcs{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:600;letter-spacing:.05em;font-size:11.5px;color:var(--bf-fg-1)}
+.bf-mock .bf-dname{font-size:9px;color:var(--bf-fg-4);margin-top:1px}
 /* Gallery thumbnails (.app-shots, borrowed from FUEL Up's real-screenshot
    gallery): each .bf-mock here has no real image to crop with object-fit,
    so it is laid out at a fixed intrinsic width and scaled down to fit the
@@ -1102,6 +1127,43 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .soar-mock .soar-tg-pwr{background:rgba(16,185,129,.14);color:var(--soar-good)}
 .soar-mock .soar-tg-pwr.soar-tg-off{background:rgba(239,68,68,.16);color:var(--soar-break)}
 
+/* Weekly Schedule */
+.soar-mock .soar-cal-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.soar-mock .soar-h1-row{display:flex;align-items:center;gap:8px}
+.soar-mock .soar-state{display:inline-flex;align-items:center;gap:4px;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.3);color:var(--soar-good);border-radius:999px;padding:2px 8px;font-family:var(--soar-mono);font-size:7px;letter-spacing:.13em;font-weight:700}
+.soar-mock .soar-navweek{display:flex;align-items:center;gap:8px;margin-top:5px}
+.soar-mock .soar-today{font-family:var(--soar-mono);font-size:7.5px;letter-spacing:.13em;color:var(--soar-primary-2);font-weight:700}
+.soar-mock .soar-week{font-size:9.5px;color:var(--soar-fg-2)}
+.soar-mock .soar-cal-acts{display:flex;gap:7px;flex-shrink:0}
+.soar-mock .soar-cal-btn{display:flex;align-items:center;gap:5px;border-radius:8px;padding:6px 11px;font-size:9px;font-weight:700}
+.soar-mock .soar-cal-btn.soar-lock{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:var(--soar-covering)}
+.soar-mock .soar-cal-btn.soar-create{background:var(--soar-primary);color:#fff}
+.soar-mock .soar-legend{display:flex;flex-wrap:wrap;gap:14px;background:var(--soar-card);border:1px solid var(--soar-border);border-radius:var(--soar-r);padding:7px 11px;margin-top:9px}
+.soar-mock .soar-lg{display:flex;align-items:center;gap:5px;font-size:8px;color:var(--soar-fg-3)}
+.soar-mock .soar-sw{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.soar-mock .soar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.soar-mock .soar-day-h{background:var(--soar-card);border:1px solid var(--soar-border);border-radius:8px;text-align:center;padding:6px 4px}
+.soar-mock .soar-dn{display:block;font-size:9.5px;font-weight:700;color:var(--soar-fg)}
+.soar-mock .soar-dd{display:block;font-size:7.5px;color:var(--soar-fg-4)}
+.soar-mock .soar-wave-h{display:flex;align-items:center;gap:5px;margin:8px 0 4px;font-family:var(--soar-mono);font-size:7px;letter-spacing:.14em;font-weight:700}
+.soar-mock .soar-wave-h.soar-am{color:var(--soar-am)}
+.soar-mock .soar-wave-h.soar-pm{color:var(--soar-pm)}
+.soar-mock .soar-wave-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.soar-mock .soar-slot{display:flex;align-items:center;justify-content:space-between;padding:0 1px 3px;font-family:var(--soar-mono);font-size:6.5px;letter-spacing:.1em;color:var(--soar-fg-4)}
+.soar-mock .soar-slot-t{display:flex;align-items:center;gap:3px}
+.soar-mock .soar-mission{background:var(--soar-card);border:1px solid var(--soar-border);border-radius:8px;padding:6px 7px;margin-bottom:6px;position:relative}
+.soar-mock .soar-mission.soar-break-c{border-color:rgba(239,68,68,.55)}
+.soar-mock .soar-mission.soar-cover-c{border-color:rgba(245,158,11,.55)}
+.soar-mock .soar-flag{position:absolute;top:5px;right:6px}
+.soar-mock .soar-sim{font-size:8.5px;font-weight:700;color:var(--soar-fg);margin-bottom:3px}
+.soar-mock .soar-pr{display:flex;align-items:center;gap:5px;font-size:8px;color:var(--soar-fg-2);padding:1px 0}
+.soar-mock .soar-tagq,.soar-mock .soar-tagp{width:11px;height:11px;border-radius:3px;display:grid;place-items:center;font-size:6.5px;font-weight:700;flex-shrink:0}
+.soar-mock .soar-tagq{background:rgba(59,130,246,.2);color:#93c5fd}
+.soar-mock .soar-tagp{background:rgba(168,85,247,.2);color:#d8b4fe}
+.soar-mock .soar-unassigned{color:var(--soar-break)}
+.soar-mock .soar-obs{display:flex;align-items:center;gap:5px;font-size:7.5px;color:var(--soar-fg-4);padding:2px 0;border-top:1px solid var(--soar-border);margin-top:4px;padding-top:4px}
+.soar-mock .soar-reqcov{display:block;text-align:center;border:1px solid rgba(245,158,11,.4);color:var(--soar-covering);border-radius:6px;padding:3px 0;margin-top:5px;font-family:var(--soar-mono);font-size:6.5px;letter-spacing:.11em;font-weight:700}
+
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
    out responsively, so it shrinks uniformly on a phone and keeps
@@ -1233,7 +1295,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
       <div class="filter-row filter-row--org" role="group" aria-label="Filter projects by organisation">
         <button type="button" class="pill" data-org="all" aria-pressed="true">All entries</button>
         <button type="button" class="pill" data-org="RAiD" aria-pressed="false">RSAF (RAiD)</button>
-        <button type="button" class="pill" data-org="RSAF" aria-pressed="false">RSAF (other units)</button>
         <button type="button" class="pill" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
         <button type="button" class="pill" data-org="Freelance" aria-pressed="false">Freelance</button>
         <button type="button" class="pill" data-org="Open source" aria-pressed="false">Open source</button>
@@ -1247,10 +1308,10 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
   <div class="shell">
     <div class="log-list" id="logList">
 
-      <details class="log-row" data-org="RSAF" data-cat="simulation">
+      <details class="log-row" data-org="RAiD" data-cat="simulation">
         <summary>
           <span class="lt">Aircraft Refuelling Strategy Planner (FUEL)</span>
-          <span class="tag tag-sky">Simulation</span><span class="lorg">RSAF</span>
+          <span class="tag tag-sky">Simulation</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
@@ -1291,10 +1352,10 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         </div>
       </details>
 
-      <details class="log-row" data-org="RSAF" data-cat="simulation">
+      <details class="log-row" data-org="RAiD" data-cat="simulation">
         <summary>
           <span class="lt">Supply &amp; Demand Logistics Pipeline (MatFlow)</span>
-          <span class="tag tag-sky">Simulation</span><span class="lorg">RSAF</span>
+          <span class="tag tag-sky">Simulation</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
@@ -1811,7 +1872,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                       <div class="bf-pane">
                         <p class="bf-eyebrow">Pilot overview</p>
                         <h4>Dashboard</h4>
-                        <p class="bf-desc">BOLDFACE progress at a glance.</p>
+                        <p class="bf-desc">Boldface progress at a glance.</p>
                         <div class="bf-metrics">
                           <div class="bf-card bf-ringcard">
                             <div class="bf-ring">
@@ -1828,35 +1889,35 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                             </div>
                           </div>
                           <div class="bf-tiles">
-                            <div class="bf-card bf-tile"><div class="bf-lbl">Outstanding · Weekly</div><div class="bf-val bf-brand">1</div><div class="bf-sm">Weekly quizzes still due</div></div>
-                            <div class="bf-card bf-tile"><div class="bf-lbl">Outstanding · Monthly</div><div class="bf-val bf-brand">1</div><div class="bf-sm">Monthly quizzes still due</div></div>
-                            <div class="bf-card bf-tile"><div class="bf-lbl">Completed</div><div class="bf-val bf-good">7</div><div class="bf-sm">of 9 this cycle</div></div>
+                            <div class="bf-card bf-tile"><div class="bf-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--bf-brand-fg)"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>Outstanding · Weekly</div><div class="bf-val bf-brand">1</div><div class="bf-sm">Weekly quizzes still due</div></div>
+                            <div class="bf-card bf-tile"><div class="bf-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--bf-brand-fg)"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg>Outstanding · Monthly</div><div class="bf-val bf-brand">1</div><div class="bf-sm">Monthly quizzes still due</div></div>
+                            <div class="bf-card bf-tile"><div class="bf-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--bf-success)"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Completed</div><div class="bf-val bf-good">7</div><div class="bf-sm">of 9 this cycle</div></div>
                           </div>
                         </div>
                         <div class="bf-vboard">
                           <div class="bf-vb-hd">Status board</div>
-                          <p class="bf-vb-sub">Outstanding by vocation. Select one to see who.</p>
+                          <p class="bf-vb-sub">How many aircrew are still outstanding, by vocation. Select a vocation to see who.</p>
                           <div class="bf-seg-row">
                             <div class="bf-seg"><span class="bf-sl">Scope</span><span class="bf-grp"><span class="bf-opt bf-on">Squadron</span><span class="bf-opt">Platform</span></span></div>
                             <div class="bf-seg"><span class="bf-sl">Show</span><span class="bf-grp"><span class="bf-opt bf-on">Outstanding</span><span class="bf-opt">Completed</span></span></div>
                           </div>
                           <div class="bf-vgrid">
                             <div class="bf-card bf-vtile">
-                              <div class="bf-vt-top"><span class="bf-vt-voc">Pilot</span><span class="bf-vt-tot">6</span></div>
+                              <div class="bf-vt-top"><span class="bf-vt-voc">Pilot</span><span class="bf-vt-tot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>6</span></div>
                               <div class="bf-vt-num bf-red">2</div>
-                              <div class="bf-vt-sm">outstanding · of 6</div>
+                              <div class="bf-vt-sm">outstanding · of 6 aircrew</div>
                               <div class="bf-vt-bar"><i class="bf-red" style="width:67%"></i></div>
                             </div>
                             <div class="bf-card bf-vtile">
-                              <div class="bf-vt-top"><span class="bf-vt-voc">WSO</span><span class="bf-vt-tot">4</span></div>
+                              <div class="bf-vt-top"><span class="bf-vt-voc">WSO</span><span class="bf-vt-tot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>4</span></div>
                               <div class="bf-vt-num bf-red">1</div>
-                              <div class="bf-vt-sm">outstanding · of 4</div>
+                              <div class="bf-vt-sm">outstanding · of 4 aircrew</div>
                               <div class="bf-vt-bar"><i class="bf-red" style="width:75%"></i></div>
                             </div>
                             <div class="bf-card bf-vtile">
-                              <div class="bf-vt-top"><span class="bf-vt-voc">Loadmaster</span><span class="bf-vt-tot">3</span></div>
+                              <div class="bf-vt-top"><span class="bf-vt-voc">Loadmaster</span><span class="bf-vt-tot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>3</span></div>
                               <div class="bf-vt-num bf-good">0</div>
-                              <div class="bf-vt-sm">all 3 clear</div>
+                              <div class="bf-vt-sm">outstanding · of 3 aircrew</div>
                               <div class="bf-vt-bar"><i class="bf-good" style="width:100%"></i></div>
                             </div>
                           </div>
@@ -1864,12 +1925,14 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                         <div class="bf-upnext">
                           <div class="bf-upnext-h">Up next</div>
                           <div class="bf-card bf-task"><span class="bf-spine bf-red"></span>
-                            <div><b>C-130 BOLDFACE — Weekly</b> <span class="bf-badge bf-red">Overdue</span>
-                              <div class="bf-meta">4 / 9 answered</div></div>
+                            <div><b>C-130 BOLDFACE — Weekly</b> <span class="bf-badge bf-red">Overdue</span> <span class="bf-badge bf-red">1 day overdue</span>
+                              <div class="bf-meta">Weekly · C-130 · 4 / 9 answered</div>
+                              <div class="bf-peers"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>5 / 8 peers completed</span></div></div>
                             <span class="bf-open-btn">Open →</span></div>
                           <div class="bf-card bf-task"><span class="bf-spine bf-blue"></span>
-                            <div><b>F-16 BOLDFACE — Monthly</b> <span class="bf-badge bf-blue">Outstanding</span>
-                              <div class="bf-meta">1 / 4 answered</div></div>
+                            <div><b>F-16 BOLDFACE — Monthly</b> <span class="bf-badge bf-blue">Outstanding</span> <span class="bf-badge bf-blue">6 days left</span>
+                              <div class="bf-meta">Monthly · F-16 · 1 / 4 answered</div>
+                              <div class="bf-peers"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>3 / 6 peers completed</span></div></div>
                             <span class="bf-open-btn">Open →</span></div>
                         </div>
                       </div>
@@ -1884,21 +1947,24 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                   <div class="bf-mock" aria-hidden="true">
                     <div class="bf-screen">
                       <div class="bf-pane" style="padding:22px 26px">
-                        <p class="bf-eyebrow" style="color:var(--bf-brand-fg)">← Quizzes</p>
-                        <h4 style="margin-top:4px">C-130 BOLDFACE — Weekly</h4>
-                        <p class="bf-desc">4 of 9 answered</p>
-                        <div class="bf-progress" aria-hidden="true"><i></i></div>
+                        <div class="bf-back"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Back</div>
+                        <p class="bf-eyebrow">C-130 · Weekly</p>
+                        <h4 style="margin-top:2px">C-130 BOLDFACE — Weekly</h4>
+                        <div class="bf-progress-row"><div class="bf-progress" aria-hidden="true"><i></i></div><span class="bf-progress-count">4 / 9</span></div>
                         <div class="bf-card" style="padding:14px 18px">
-                          <p class="bf-eyebrow" style="font-size:9px;margin-bottom:6px">Engine Fire on Ground</p>
+                          <p class="bf-eyebrow" style="font-size:9px">Section</p>
+                          <h5 class="bf-sec-title">Engine Fire on Ground</h5>
+                          <div class="bf-qnum">Question 1</div>
                           <p class="bf-qline">Engine condition lever — <span class="bf-blank">FEATHER</span>
 Fire handle — <span class="bf-blank">PULL</span>
 Agent — <span class="bf-blank">DISCHARGE</span></p>
-                        </div>
-                        <div class="bf-qtable" role="table" aria-label="Engine shutdown switches checklist">
-                          <div class="bf-hd" role="columnheader">Switch</div><div class="bf-hd" role="columnheader">Position</div>
-                          <div role="cell">Throttles</div><div role="cell"><span class="bf-blank">GROUND IDLE</span></div>
-                          <div role="cell">Condition levers</div><div role="cell"><span class="bf-blank">FEATHER</span></div>
-                          <div role="cell">Boost pumps</div><div role="cell"><span class="bf-blank">OFF</span></div>
+                          <div class="bf-qnum">Question 2</div>
+                          <div class="bf-qtable" role="table" aria-label="Engine shutdown switches checklist">
+                            <div class="bf-hd" role="columnheader">Switch</div><div class="bf-hd" role="columnheader">Position</div>
+                            <div role="cell">Throttles</div><div role="cell"><span class="bf-blank">GROUND IDLE</span></div>
+                            <div role="cell">Condition levers</div><div role="cell"><span class="bf-blank">FEATHER</span></div>
+                            <div role="cell">Boost pumps</div><div role="cell"><span class="bf-blank">OFF</span></div>
+                          </div>
                         </div>
                         <div class="bf-mastery"><svg class="bf-lock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
                           Submit unlocks at 100%. Mastery on every memory item is enforced.</div>
@@ -1906,7 +1972,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
                     </div>
                   </div>
                 </div>
-                <figcaption class="app-shot-cap"><div class="st">Assessment</div><div class="sd">Inline fill-in-the-blank BOLDFACE items and a checklist table; submit unlocks only at 100% mastery</div></figcaption>
+                <figcaption class="app-shot-cap"><div class="st">Assessment</div><div class="sd">Each question sits in a numbered card inside its section; inline fill-in-the-blank and a checklist table, submit unlocking only at 100% mastery</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE · Status board</span></div>
@@ -1914,25 +1980,24 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
                   <div class="bf-mock" aria-hidden="true">
                     <div class="bf-screen">
                       <div class="bf-pane" style="padding:22px 26px">
-                        <p class="bf-eyebrow">Community</p>
-                        <h4>Status board</h4>
-                        <p class="bf-desc">Squadron readiness this cycle.</p>
-                        <div class="bf-seg-row">
-                          <div class="bf-seg"><span class="bf-sl">Scope</span><span class="bf-grp"><span class="bf-opt bf-on">Squadron</span><span class="bf-opt">Platform</span></span></div>
-                          <div class="bf-seg"><span class="bf-sl">View</span><span class="bf-grp"><span class="bf-opt bf-on">Outstanding</span><span class="bf-opt">Completed</span></span></div>
-                        </div>
-                        <div class="bf-vgroup"><div class="bf-vh">Pilot</div>
-                          <div class="bf-card bf-member"><span class="bf-cs">KING</span><span class="bf-badge bf-green">Completed</span></div>
-                          <div class="bf-card bf-member"><span class="bf-cs">VIPER</span><span class="bf-badge bf-blue">Outstanding</span></div>
-                        </div>
-                        <div class="bf-vgroup"><div class="bf-vh">Loadmaster</div>
-                          <div class="bf-card bf-member"><span class="bf-cs">ATLAS</span><span class="bf-badge bf-red">Overdue</span></div>
+                        <div class="bf-dback"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>All vocations</div>
+                        <div class="bf-dhead"><h4>Pilot</h4><span class="bf-dsub">Squadron · 2 outstanding of 6 aircrew</span></div>
+                        <div class="bf-dtable" role="table" aria-label="Pilot aircrew status by quiz">
+                          <div class="bf-hd" role="columnheader">Aircrew</div>
+                          <div class="bf-hd" role="columnheader">C-130<small>weekly</small></div>
+                          <div class="bf-hd" role="columnheader">F-16<small>monthly</small></div>
+                          <div role="cell"><div class="bf-dcs">VIPER</div><div class="bf-dname">Lim · 143 Sqn</div></div>
+                          <div role="cell" class="bf-dcell"><span class="bf-badge bf-red">Overdue</span></div>
+                          <div role="cell" class="bf-dcell"><span class="bf-badge bf-blue">Outstanding</span></div>
+                          <div role="cell"><div class="bf-dcs">ATLAS</div><div class="bf-dname">Farid · 143 Sqn</div></div>
+                          <div role="cell" class="bf-dcell"><span class="bf-badge bf-blue">Outstanding</span></div>
+                          <div role="cell" class="bf-dcell"><span class="bf-badge bf-amber">Upcoming</span></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <figcaption class="app-shot-cap"><div class="st">Status board</div><div class="sd">Peer readiness by vocation, scoped to squadron or platform</div></figcaption>
+                <figcaption class="app-shot-cap"><div class="st">Status board</div><div class="sd">Selecting a vocation tile drills into a per-aircrew table, one status column per quiz</div></figcaption>
               </figure>
             </div>
             </div>
@@ -2357,10 +2422,10 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </div>
       </details>
 
-      <details class="log-row" data-org="RSAF" data-cat="enterprise">
+      <details class="log-row" data-org="RAiD" data-cat="enterprise">
         <summary>
           <span class="lt">FUEL Up</span>
-          <span class="tag tag-violet">Enterprise</span><span class="lorg">RSAF</span>
+          <span class="tag tag-violet">Enterprise</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
@@ -2425,7 +2490,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
 
       <details class="log-row" id="facility-booking" data-org="RAiD" data-cat="enterprise" open>
         <summary>
-          <span class="lt">RAiD Facility Booking System</span>
+          <span class="lt">RSAF Facility Booking App</span>
           <span class="tag tag-violet">Enterprise</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
@@ -2455,7 +2520,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               </div>
             </div>
             <div class="app-shots-wrap">
-            <div class="app-shots" role="list" aria-label="RAiD Facility Booking System app screens, captured from the running app">
+            <div class="app-shots" role="list" aria-label="RSAF Facility Booking App app screens, captured from the running app">
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook · Dashboard</span></div>
                 <div class="app-shot-frame"><img src="facility-booking/dashboard.png" loading="lazy" alt="RAiD Facility Booking dashboard: pending/approved/upcoming stat cards, a today/tomorrow agenda list, and a facilities quick-book panel"></div>
@@ -2473,7 +2538,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook · Management</span></div>
-                <div class="app-shot-frame"><img src="facility-booking/management.png" loading="lazy" alt="RAiD Facility Booking approver console: a pending-requests table with requester, facility, date and time, purpose, and approve or reject row actions"></div>
+                <div class="app-shot-frame"><img src="facility-booking/management.png" loading="lazy" alt="RSAF Facility Booking Approver console: a pending-requests table with requester, facility, date and time, purpose, and approve or reject row actions"></div>
                 <figcaption class="app-shot-cap"><div class="st">Management console</div><div class="sd">Approver queue with per-row approve/reject, plus facilities, user roles and audit log tabs</div></figcaption>
               </figure>
             </div>
@@ -2526,6 +2591,226 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             </div>
             <div class="app-shots-wrap">
             <div class="app-shots" role="list" aria-label="SOAR Duty Scheduler app screens, rebuilt in HTML and CSS from the app's own interface code, design tokens and captured screens — not photos, not invented">
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">SOAR — Weekly Schedule</span></div>
+                <div class="app-shot-frame">
+                  <div class="soar-mock" data-mock-width="720" data-screen="calendar" aria-hidden="true">
+                    <div class="soar-screen">
+                      <div class="soar-rail">
+                        <div class="soar-brand"><span class="soar-wordmark">SOAR</span><span class="soar-sub">Duty Scheduler</span></div>
+                        <div class="soar-nav">
+                          <span class="soar-ni soar-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>Calendar</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>My Schedule</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg><span>Covering</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg><span>Admin</span></span>
+                        </div>
+                        <div class="soar-rail-ft">
+                          <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><span>Light Mode</span></span>
+                          <span class="soar-user"><span class="soar-av">T</span><span class="soar-uinfo"><span class="soar-un">t.rahman@soar.demo</span><span class="soar-ur">Admin</span></span></span>
+                          <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span>Logout</span></span>
+                          <span class="soar-ver">v1.0.11</span>
+                        </div>
+                      </div>
+                      <div class="soar-pane">
+                        <div class="soar-cal-hd">
+                          <div>
+                            <div class="soar-h1-row"><span class="soar-h1">Weekly Schedule</span><span class="soar-state"><span class="soar-wave-dot"></span>OPEN</span></div>
+                            <div class="soar-navweek">
+                              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+                              <span class="soar-today">TODAY</span>
+                              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                              <span class="soar-week">Week of August 10th, 2026</span>
+                            </div>
+                          </div>
+                          <div class="soar-cal-acts">
+                            <span class="soar-cal-btn soar-lock"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Lock Week</span>
+                            <span class="soar-cal-btn soar-create"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>Create Mission</span>
+                          </div>
+                        </div>
+                        <div class="soar-legend">
+                          <span class="soar-lg"><span class="soar-sw" style="background:#3b82f6"></span>QFI Assigned</span>
+                          <span class="soar-lg"><span class="soar-sw" style="background:#a855f7"></span>Psych Assigned</span>
+                          <span class="soar-lg"><span class="soar-sw" style="background:#ef4444"></span>Unassigned</span>
+                          <span class="soar-lg"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Broken Pair</span>
+                          <span class="soar-lg"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>Covering Mission</span>
+                        </div>
+                        <div class="soar-grid">
+                          <div class="soar-day-h"><span class="soar-dn">Monday</span><span class="soar-dd">Aug 10</span></div>
+                          <div class="soar-day-h"><span class="soar-dn">Tuesday</span><span class="soar-dd">Aug 11</span></div>
+                          <div class="soar-day-h"><span class="soar-dn">Wednesday</span><span class="soar-dd">Aug 12</span></div>
+                          <div class="soar-day-h"><span class="soar-dn">Thursday</span><span class="soar-dd">Aug 13</span></div>
+                          <div class="soar-day-h"><span class="soar-dn">Friday</span><span class="soar-dd">Aug 14</span></div>
+                        </div>
+                        <div class="soar-grid" style="margin-top:0">
+
+                          <!-- Monday -->
+                          <div>
+                            <div class="soar-wave-h soar-am"><span class="soar-wave-dot"></span>AM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>08:00</span><span>WAVE 1</span></div>
+                            <div class="soar-mission" data-cell="mon-w1">
+                              <div class="soar-sim">Sim 1</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>T Rahman</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>L Okafor</div>
+                              <span class="soar-reqcov">REQUEST COVERAGE</span>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>10:15</span><span>WAVE 2</span></div>
+                            <div class="soar-mission" data-cell="mon-w2">
+                              <div class="soar-sim">Sim 2</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>S Whitfield</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>A Delgado</div>
+                            </div>
+                            <div class="soar-wave-h soar-pm"><span class="soar-wave-dot"></span>PM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>13:30</span><span>WAVE 3</span></div>
+                            <div class="soar-mission" data-cell="mon-w3">
+                              <div class="soar-sim">Sim 1</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>K Nakamura</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>M Bianchi</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>15:45</span><span>WAVE 4</span></div>
+                            <div class="soar-mission" data-cell="mon-w4">
+                              <div class="soar-sim">Sim 3</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>R Alvarez</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>D Kowalski</div>
+                            </div>
+                          </div>
+
+                          <!-- Tuesday -->
+                          <div>
+                            <div class="soar-wave-h soar-am"><span class="soar-wave-dot"></span>AM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>08:00</span><span>WAVE 1</span></div>
+                            <div class="soar-mission" data-cell="tue-w1">
+                              <div class="soar-sim">Sim 2</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>T Rahman</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>M Bianchi</div>
+                              <span class="soar-reqcov">REQUEST COVERAGE</span>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>10:15</span><span>WAVE 2</span></div>
+                            <div class="soar-mission" data-cell="tue-w2">
+                              <div class="soar-sim">Sim 4</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>P Nguyen</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>L Okafor</div>
+                            </div>
+                            <div class="soar-wave-h soar-pm"><span class="soar-wave-dot"></span>PM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>13:30</span><span>WAVE 3</span></div>
+                            <div class="soar-mission soar-break-c" data-cell="tue-w3">
+                              <span class="soar-flag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+                              <div class="soar-sim">Sim 1</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>S Whitfield</div>
+                              <div class="soar-pr soar-unassigned"><span class="soar-tagp">P</span>Unassigned</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>15:45</span><span>WAVE 4</span></div>
+                            <div class="soar-mission" data-cell="tue-w4">
+                              <div class="soar-sim">Sim 3</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>K Nakamura</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>A Delgado</div>
+                            </div>
+                          </div>
+
+                          <!-- Wednesday -->
+                          <div>
+                            <div class="soar-wave-h soar-am"><span class="soar-wave-dot"></span>AM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>08:00</span><span>WAVE 1</span></div>
+                            <div class="soar-mission" data-cell="wed-w1">
+                              <div class="soar-sim">Sim 5</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>R Alvarez</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>D Kowalski</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>10:15</span><span>WAVE 2</span></div>
+                            <div class="soar-mission" data-cell="wed-w2">
+                              <div class="soar-sim">Sim 2</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>T Rahman</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>A Delgado</div>
+                              <span class="soar-reqcov">REQUEST COVERAGE</span>
+                            </div>
+                            <div class="soar-wave-h soar-pm"><span class="soar-wave-dot"></span>PM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>13:30</span><span>WAVE 3</span></div>
+                            <div class="soar-mission soar-cover-c" data-cell="wed-w3">
+                              <span class="soar-flag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg></span>
+                              <div class="soar-sim">Sim 4</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>P Nguyen</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>M Bianchi</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>15:45</span><span>WAVE 4</span></div>
+                            <div class="soar-mission" data-cell="wed-w4">
+                              <div class="soar-sim">Sim 1</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>K Nakamura</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>L Okafor</div>
+                            </div>
+                          </div>
+
+                          <!-- Thursday -->
+                          <div>
+                            <div class="soar-wave-h soar-am"><span class="soar-wave-dot"></span>AM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>08:00</span><span>WAVE 1</span></div>
+                            <div class="soar-mission" data-cell="thu-w1">
+                              <div class="soar-sim">Sim 3</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>S Whitfield</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>D Kowalski</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>10:15</span><span>WAVE 2</span></div>
+                            <div class="soar-mission" data-cell="thu-w2">
+                              <div class="soar-sim">Sim 1</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>T Rahman</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>L Okafor</div>
+                              <div class="soar-obs"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>J Farrow</div>
+                              <span class="soar-reqcov">REQUEST COVERAGE</span>
+                            </div>
+                            <div class="soar-wave-h soar-pm"><span class="soar-wave-dot"></span>PM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>13:30</span><span>WAVE 3</span></div>
+                            <div class="soar-mission soar-break-c" data-cell="thu-w3">
+                              <span class="soar-flag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+                              <div class="soar-sim">Sim 5</div>
+                              <div class="soar-pr soar-unassigned"><span class="soar-tagq">Q</span>Unassigned</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>M Bianchi</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>15:45</span><span>WAVE 4</span></div>
+                            <div class="soar-mission" data-cell="thu-w4">
+                              <div class="soar-sim">Sim 2</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>R Alvarez</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>A Delgado</div>
+                            </div>
+                          </div>
+
+                          <!-- Friday -->
+                          <div>
+                            <div class="soar-wave-h soar-am"><span class="soar-wave-dot"></span>AM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>08:00</span><span>WAVE 1</span></div>
+                            <div class="soar-mission" data-cell="fri-w1">
+                              <div class="soar-sim">Sim 4</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>K Nakamura</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>M Bianchi</div>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>10:15</span><span>WAVE 2</span></div>
+                            <div class="soar-mission soar-cover-c" data-cell="fri-w2">
+                              <span class="soar-flag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg></span>
+                              <div class="soar-sim">Sim 2</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>P Nguyen</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>D Kowalski</div>
+                            </div>
+                            <div class="soar-wave-h soar-pm"><span class="soar-wave-dot"></span>PM WAVE</div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>13:30</span><span>WAVE 3</span></div>
+                            <div class="soar-mission" data-cell="fri-w3">
+                              <div class="soar-sim">Sim 1</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>T Rahman</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>L Okafor</div>
+                              <span class="soar-reqcov">REQUEST COVERAGE</span>
+                            </div>
+                            <div class="soar-slot"><span class="soar-slot-t"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>15:45</span><span>WAVE 4</span></div>
+                            <div class="soar-mission" data-cell="fri-w4">
+                              <div class="soar-sim">Sim 3</div>
+                              <div class="soar-pr"><span class="soar-tagq">Q</span>S Whitfield</div>
+                              <div class="soar-pr"><span class="soar-tagp">P</span>A Delgado</div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Weekly Schedule</div><div class="sd">Five days, two waves, four slots. Broken pairs and covering missions are flagged in the grid, not buried</div></figcaption>
+              </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
                 <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">SOAR — Operations Dashboard</span></div>
                 <div class="app-shot-frame">
@@ -2931,16 +3216,16 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </div>
       </details>
 
-      <details class="log-row" data-org="RSAF" data-cat="enablement">
+      <details class="log-row" data-org="RAiD" data-cat="enablement">
         <summary>
           <span class="lt">Vibe Coding Masterclass</span>
-          <span class="tag tag-coral">Enablement</span><span class="lorg">RSAF · NYP</span>
+          <span class="tag tag-coral">Enablement</span><span class="lorg">RAiD · NYP</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>A large-scale masterclass on vibe-coding (directing AI coding agents from a spec to a working app, and reviewing everything they produce), run for a mixed cohort of citizen developers and engineers, and co-delivered with external academic institutions.</p>
+          <p>A large-scale masterclass on vibe-coding (directing AI coding agents from a spec to a working app, and reviewing everything they produce), run for a mixed cohort of citizen developers and engineers, joined by staff from Nanyang Polytechnic (NYP).</p>
           <div><div class="lab">What it does</div><p>The syllabus covered prompt-driven development, rapid prototyping and Power Apps deployment.</p></div>
-          <div><div class="lab">Outcome</div><p class="note">External academic institutions co-delivered the training rather than attending it. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
+          <div><div class="lab">Outcome</div><p class="note">Staff from Nanyang Polytechnic attended alongside RSAF personnel. Internally the masterclass was recognised in PPCoE updates, and attendance held across the cohort.</p></div>
           <div class="shot-pair">
             <figure class="shot" tabindex="0">
               <img src="vibe-coding-masterclass-podium.jpg" loading="lazy"
@@ -3006,7 +3291,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <div><div class="lab">What it does</div>
             <ul class="feat" role="list">
               <li>Holds an approval gate: no change to code, files, data model, dependencies or structure until a complete implementation plan has been shown and accepted</li>
-              <li>Requires 2–3 distinct approaches on anything substantial, conventional and unconventional, before one is chosen</li>
+              <li>Requires two or three distinct approaches on anything substantial, conventional and unconventional, before one is chosen</li>
               <li>Bans unrequested features, pages, integrations and redesigns mid-implementation</li>
               <li>Instructs the assistant to stop the moment an assumption turns out to be false, and to be direct rather than agreeable</li>
             </ul></div>
@@ -3140,10 +3425,10 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </div>
       </details>
 
-      <details class="log-row" data-org="RSAF" data-cat="platform">
+      <details class="log-row" data-org="RAiD" data-cat="platform">
         <summary>
           <span class="lt">Project Management Tracker</span>
-          <span class="tag tag-indigo">Scaling</span><span class="lorg">RSAF</span>
+          <span class="tag tag-indigo">Scaling</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">

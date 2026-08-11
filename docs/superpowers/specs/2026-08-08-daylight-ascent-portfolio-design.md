@@ -320,7 +320,7 @@ Two name collisions were identified and must be resolved by the author before
 implementation, since only one description of each can be correct:
 
 - `SOAR Schedule App` vs `Flight Simulator Scheduling System`
-- `Facility Booking App` vs `RAiD Facility Booking System` — note the two existing
+- `Facility Booking App` vs `RSAF Facility Booking App` — note the two existing
   descriptions **conflict**: the concept file claims enterprise-grade with 4-tier RBAC,
   audit logging and multi-tenant architecture; the newer summary reduces it to
   "developed and demonstrated" a booking platform. The more modest description is the
@@ -502,7 +502,7 @@ the 62,000 ft ceiling rather than stopping ~1,000 ft short.
 - **Resolved by the author:** `SOAR Schedule App` is the Flight Simulator
   Scheduling System. The codename is not published; the row is titled
   "Flight Simulator Scheduling System".
-- **Still open:** `RAiD Facility Booking System`. §9.1 said to prefer the
+- **Still open:** `RSAF Facility Booking App`. §9.1 said to prefer the
   modest description absent confirmation. The implementation instead
   **merged** them — the six capabilities from the author's own existing page
   plus the newer summary's "demonstrated to stakeholders in a dedicated

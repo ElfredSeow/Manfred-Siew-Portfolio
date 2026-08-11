@@ -13,7 +13,8 @@
 Copied from `docs/superpowers/specs/2026-08-11-soar-duty-scheduler-screens-design.md`. Every task's requirements implicitly include this section.
 
 - **No BOLDFACE, MatFlow or GRID code is modified.** `.soar-mock` registers by appending to three lists. A `git diff` must show no `.bf-mock`, `.mf-mock` or `.gr-mock` line altered.
-- **No new dependency, no new external request, no build step, no image file.** The page must still load zero fonts, images or scripts from any external host.
+- **No new dependency, no new external request, no build step, no image file.** This work must add nothing that fetches from an external host — the `.soar-mock` screens load no font file, no image and no script of their own.
+  **Correction, found during Task 1:** the page already loads Google Fonts from its `<head>` (`fonts.googleapis.com` preconnect + stylesheet, `public/projects.html:20-22`), so a run reports ~4 external requests before this work begins. The earlier wording — "the page must still load zero fonts, images or scripts from any external host" — was factually wrong about the page and is superseded. The measurable requirement is **no increase** against the baseline captured at BASE, not zero. Removing the site's existing font loading is out of scope.
 - **Every screen fact comes from the four captures** in `Project Management/SOAR Scheduling Marketing Content/marketing-pr/SOAR-Duty-Scheduling-App/screens/`. No name, number, time, simulator, role tag or flag may be invented or "tidied".
 - **No adoption, user-count, time-saved or ROI figures.** None exist in the source repo. None may be inferred.
 - **Never describe role enforcement as a security boundary.** The source repo's README states enforcement is client-side and that Dataverse security roles must mirror the matrix. "Role-aware" is allowed; anything implying a security guarantee is not.
@@ -202,7 +203,7 @@ The `What I learned` paragraph is byte-identical to what was there. Do not rewor
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `node scripts/verify-soar.mjs`
-Expected: PASS on all 9 checks. `external requests: 0`.
+Expected: PASS on all 9 checks. The run also prints `external requests: 4` — the page's pre-existing Google Fonts links, which this work neither adds nor removes. That line is informational output, not a check.
 
 - [ ] **Step 5: Commit**
 
@@ -316,6 +317,8 @@ const dash = await page.evaluate(() => {
     axis: Array.prototype.slice.call(mock.querySelectorAll('.soar-ax')).map((a) => a.textContent.trim()),
     stable: (mock.querySelector('.soar-stable') || {}).textContent || '',
     gaps: (mock.querySelector('.soar-gaps') || {}).textContent || '',
+    stableVal: (mock.querySelector('.soar-stable b') || {}).textContent || '',
+    gapsVal: (mock.querySelector('.soar-gaps b') || {}).textContent || '',
   };
 });
 
@@ -343,7 +346,13 @@ check('dashboard: y-axis is 0/4/8/12/16',
   dash.found && JSON.stringify(dash.axis) === JSON.stringify(['16', '12', '8', '4', '0']),
   JSON.stringify(dash.axis));
 check('dashboard: stability figures match the capture',
-  dash.found && /90\.0%/.test(dash.stable) && /\b2\b/.test(dash.gaps),
+  // .soar-stable/.soar-gaps concatenate two adjacent inline elements with
+  // no whitespace between them ("Stable Pairs90.0%" / "Critical Gaps2"),
+  // so a \b-anchored regex on the trailing number has no word boundary
+  // against the preceding letter and always fails. Read each <b> value
+  // directly (captured as stableVal/gapsVal above) instead of pattern-
+  // matching inside the concatenated blob.
+  dash.found && dash.stableVal === '90.0%' && dash.gapsVal === '2',
   `${dash.stable} | ${dash.gaps}`);
 ```
 
@@ -427,6 +436,7 @@ Find the end of the `.gr-mock` style block (the last rule whose selector starts 
 .soar-mock .soar-rail-ft{border-top:1px solid var(--soar-border);padding:8px 8px 6px;display:flex;flex-direction:column;gap:6px}
 .soar-mock .soar-rf{display:flex;align-items:center;gap:7px;padding:2px 4px;font-size:8.5px;color:var(--soar-fg-3)}
 .soar-mock .soar-user{display:flex;align-items:center;gap:6px;padding:2px 4px}
+.soar-mock .soar-uinfo{display:flex;flex-direction:column}
 .soar-mock .soar-av{width:15px;height:15px;border-radius:50%;background:var(--soar-primary);color:#fff;display:grid;place-items:center;font-size:7.5px;font-weight:700;flex-shrink:0}
 .soar-mock .soar-un{font-size:7.5px;font-weight:600;color:var(--soar-fg);line-height:1.25}
 .soar-mock .soar-ur{font-size:7px;color:var(--soar-fg-4);line-height:1.25}
@@ -563,7 +573,7 @@ Inside the SOAR entry's `<div class="log-body">`, **after** the `Built with` div
                         </div>
                         <div class="soar-rail-ft">
                           <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><span>Light Mode</span></span>
-                          <span class="soar-user"><span class="soar-av">T</span><span><span class="soar-un">t.rahman@soar.demo</span><span class="soar-ur">Admin</span></span></span>
+                          <span class="soar-user"><span class="soar-av">T</span><span class="soar-uinfo"><span class="soar-un">t.rahman@soar.demo</span><span class="soar-ur">Admin</span></span></span>
                           <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span>Logout</span></span>
                           <span class="soar-ver">v1.0.11</span>
                         </div>
@@ -653,10 +663,16 @@ check('covering: three request cards matching the capture',
   ]), JSON.stringify(cov.reqs.map((r) => `${r.date}|${r.sim}|${r.by}|${r.rep}`)));
 check('covering: every card carries its reason and both actions',
   cov.found && cov.reqs.length === 3 && cov.reqs.every((r) => r.reason.length > 20 && r.approve && r.reject));
-check('covering: reasons are the captured text',
-  cov.found && /Medical appointment scheduled at short notice/.test(cov.reqs[0].reason)
-  && /Recalled to squadron duty/.test(cov.reqs[1].reason)
-  && /Currency renewal course clashes/.test(cov.reqs[2].reason));
+check('covering: reasons are the captured text, exactly',
+  // Anchor-phrase substring checks let a corrupted reason (dropped clause,
+  // swapped punctuation, wrong dash character) still pass as long as one
+  // phrase survives. Compare the full string instead, byte-identical to
+  // the capture, quote marks and em dash included.
+  cov.found && JSON.stringify(cov.reqs.map((r) => r.reason)) === JSON.stringify([
+    '"Medical appointment scheduled at short notice — unable to attend the afternoon wave."',
+    '"Recalled to squadron duty for the Thursday PM wave. Handover notes prepared."',
+    '"Currency renewal course clashes with the Wednesday PM slot."',
+  ]), JSON.stringify(cov.reqs.map((r) => r.reason)));
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -1408,7 +1424,16 @@ for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
 }
 
 check('page: zero console messages', consoleMsgs.length === 0, String(consoleMsgs.length));
-check('page: zero external requests', external.length === 0, String(external.length));
+
+// The page loads Google Fonts from its <head> — pre-existing and out of
+// scope for this work. The requirement is that .soar-mock adds NO external
+// request of its own, so assert against the known baseline rather than
+// against zero, and name any host that is not the font CDN.
+const EXTERNAL_BASELINE = 4; // fonts.googleapis.com preconnect + css2, fonts.gstatic.com preconnect
+const nonFont = external.filter((u) => !/^https:\/\/fonts\.(googleapis|gstatic)\.com/.test(u));
+check('page: this work adds no external request',
+  external.length <= EXTERNAL_BASELINE, `${external.length} vs baseline ${EXTERNAL_BASELINE}`);
+check('page: no non-font external host', nonFont.length === 0, JSON.stringify(nonFont));
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -1442,7 +1467,7 @@ The `nth-child(n+4)` rule drops Thursday and Friday on a phone, in both the day-
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `node scripts/verify-soar.mjs`
-Expected: PASS on every check in every group. `console messages: 0`, `external requests: 0`.
+Expected: PASS on every check in every group. `console messages: 0`; `external requests: 4`, all of them the page's pre-existing Google Fonts hosts.
 
 Then run the required regression diff:
 

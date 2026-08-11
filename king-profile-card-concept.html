@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manfred Siew — "KING" · Profile Card Concept</title>
+<meta name="description" content="Concept layout: an IGL-card treatment of Manfred Siew's portfolio home, built from his own bear mark and event photo.">
+<link rel="icon" href="photo_2026-03-05_15-41-15.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   KING CARD — concept pass
+
+   Source: an IGL/team-captain profile-card screen (dark HUD, one blue,
+   a player cutout, stat bars, a "team identity" tile). The pattern is
+   worth borrowing — Manfred already made himself a callsign lockup
+   ("MANFRED SIEW / KING", roaring-bear mark) — so this reskins the same
+   card grammar around that identity instead of a game roster.
+
+   Two liberties from the brief:
+   1. No angular HUD notches. His stated preference is round: one
+      radius system, nothing decorating a square corner. So the card
+      grammar stays, the corner treatment doesn't.
+   2. The event photo has a loud orange/yellow conference wall behind
+      him. There's no clean cutout of him available, so the "cropped
+      and cleared" ask is done live in CSS: grayscale + a blue duotone
+      (mix-blend-mode:color) + an edge mask, matching the reference
+      photo's own blue-toned treatment rather than faking a hard alpha
+      cutout. The banner logo (bear on true black) needs no such
+      trick — mix-blend-mode:screen drops flat black for free, so it
+      doubles as the watermark and the nav mark just by re-cropping it.
+
+   Stat numbers and the milestones list are flagged inline (mono
+   // notes) wherever the source data is a placeholder, not a verified
+   fact — see MEMORY: portfolio-author-supplied-copy. Verified facts
+   (RAiD role, GRID, the 29 open-source repos, contact links) are the
+   real ones from the live site. */
+
+:root{
+  --bg:#05070d; --bg-2:#0a0f1e;
+  --surface:#0b1120; --surface-2:#101a30; --surface-3:#141f38;
+  --line:rgba(148,178,232,.16); --line-strong:rgba(148,178,232,.34);
+  --ink:#F4F7FD; --body:#B9C6E0; --muted:#93A2C2;
+  --accent:#3E7BFF; --accent-2:#8FB4FF; --accent-dim:rgba(62,123,255,.14);
+  --warm:#FF8A5B; --good:#39D98A;
+
+  --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:28px; --r-pill:999px;
+
+  --e-out:cubic-bezier(.23,1,.32,1);
+  --d-press:120ms; --d-hover:180ms; --d-enter:520ms;
+
+  --sh-card:0 1px 2px rgba(0,0,0,.3), 0 24px 60px -30px rgba(0,0,0,.7);
+}
+
+*,::before,::after{ box-sizing:border-box; border-width:0; border-style:solid; border-color:var(--line); }
+html{ scroll-behavior:smooth; scroll-padding-top:5.5rem; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{ margin:0; font-size:inherit; font-weight:inherit; }
+p,dl,dd,dt{ margin:0; }
+ul{ margin:0; padding:0; list-style:none; }
+img{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; background:none; padding:0; cursor:pointer; }
+::selection{ background:var(--accent-dim); color:var(--ink); }
+a:focus-visible, button:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+
+.mono{ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+.note{ color:var(--muted); font-size:.72rem; letter-spacing:.02em; }
+
+.shell{ margin-inline:auto; width:100%; max-width:1360px; padding-inline:1.25rem; }
+@media (min-width:640px){ .shell{ padding-inline:2rem; } }
+
+.skip{ position:absolute; left:-9999px; top:0; z-index:50; background:var(--surface); border:1px solid var(--line-strong); border-radius:var(--r-pill); padding:.6rem 1.1rem; }
+.skip:focus-visible{ left:1rem; top:1rem; }
+
+/* ── page texture ─────────────────────────────────────────────────── */
+.scene{ position:relative; isolation:isolate; overflow:hidden; }
+.scene::before{
+  content:""; position:absolute; inset:0; z-index:-2;
+  background:
+    radial-gradient(1100px 700px at 82% -8%, rgba(62,123,255,.16), transparent 62%),
+    radial-gradient(900px 600px at -6% 60%, rgba(62,123,255,.08), transparent 55%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+.scene::after{
+  content:""; position:absolute; inset:0; z-index:-1; opacity:.05; pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(148,178,232,.5) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(148,178,232,.5) 0 1px, transparent 1px 42px);
+}
+
+/* ── NAV ──────────────────────────────────────────────────────────── */
+.nav{ position:sticky; top:0; z-index:30; -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); background:rgba(5,7,13,.72); border-bottom:1px solid var(--line); }
+.nav-row{ display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; padding-block:.9rem; }
+.brand{ display:flex; align-items:center; gap:.6rem; margin-right:auto; }
+.brand-mark{ width:40px; height:40px; border-radius:50%; overflow:hidden; border:1.5px solid var(--line-strong); background:#000; flex:none; }
+.brand-mark img{ width:100%; height:100%; object-fit:cover; transform:scale(3.6); transform-origin:14% 42%; }
+.brand-name{ font-weight:700; color:var(--ink); font-size:.95rem; letter-spacing:.01em; }
+.brand-name span{ color:var(--accent-2); }
+
+.nav-links{ display:flex; align-items:center; gap:.25rem; }
+.nav-links a{
+  font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.06em;
+  color:var(--muted); padding:.55rem .8rem; border-radius:var(--r-sm);
+  transition:color var(--d-hover) ease, background-color var(--d-hover) ease;
+}
+.nav-links a.active{ color:var(--ink); }
+.nav-links a.active::after{ content:""; }
+@media (hover:hover) and (pointer:fine){
+  .nav-links a:hover{ color:var(--ink); background:rgba(255,255,255,.04); }
+}
+.nav-links a:active{ transform:scale(.97); }
+
+.status-pill{
+  display:inline-flex; align-items:center; gap:.5rem;
+  border:1px solid var(--line-strong); border-radius:var(--r-pill);
+  padding:.45rem .95rem; font-family:"IBM Plex Mono",monospace; font-size:.72rem;
+  letter-spacing:.08em; color:var(--body);
+}
+.status-dot{ width:7px; height:7px; border-radius:50%; background:var(--good); animation:pulse 2.4s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.5; transform:scale(.75);} }
+@media (prefers-reduced-motion:reduce){ .status-dot{ animation:none; } }
+
+/* ── HERO ─────────────────────────────────────────────────────────── */
+.hero{ position:relative; padding-block:3.5rem 3rem; }
+.hero-grid{ display:grid; gap:2.5rem; grid-template-columns:1fr; }
+@media (min-width:1080px){ .hero-grid{ grid-template-columns:1.15fr .85fr; align-items:start; gap:3rem; } }
+
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.08em;
+  color:var(--accent-2); margin-bottom:1rem; display:flex; flex-wrap:wrap; gap:.5rem; align-items:center;
+}
+.kicker .sep{ color:var(--line-strong); }
+
+.h1{ font-size:clamp(2.6rem,6vw,4.6rem); font-weight:700; line-height:.98; letter-spacing:-.03em; color:var(--ink); }
+.h1-king{ display:block; height:clamp(2.4rem,5.6vw,4.1rem); width:auto; margin-top:.3rem; }
+
+.tagline{ margin-top:1.3rem; color:var(--muted); font-size:.95rem; }
+
+.lede{ margin-top:1.4rem; max-width:52ch; font-size:1.05rem; color:var(--body); }
+
+.cta-row{ display:flex; flex-wrap:wrap; gap:.85rem; margin-top:1.9rem; }
+.btn{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-family:"IBM Plex Mono",monospace; font-size:.82rem; letter-spacing:.04em;
+  padding:.85rem 1.35rem; border-radius:var(--r-pill);
+  transition:transform var(--d-press) var(--e-out), background-color var(--d-hover) ease, border-color var(--d-hover) ease;
+}
+.btn-primary{ background:var(--accent); color:#04101f; font-weight:600; }
+@media (hover:hover) and (pointer:fine){ .btn-primary:hover{ background:var(--accent-2); } }
+.btn-primary:active{ transform:scale(.97); }
+.btn-ghost{ border:1px solid var(--line-strong); color:var(--ink); }
+@media (hover:hover) and (pointer:fine){ .btn-ghost:hover{ border-color:var(--accent); background:rgba(62,123,255,.08); } }
+.btn-ghost:active{ transform:scale(.97); }
+
+/* stat bars */
+.stats{ margin-top:2.6rem; }
+.stats-head{ display:flex; align-items:baseline; gap:.75rem; margin-bottom:1.1rem; }
+.stats-title{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.08em; color:var(--accent-2); }
+.stats-rule{ flex:1; height:1px; background:linear-gradient(90deg, var(--line-strong), transparent); }
+.stat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.4rem 2rem; }
+@media (min-width:560px) and (max-width:1079px){ .stat-grid{ grid-template-columns:repeat(4,1fr); } }
+@media (min-width:1080px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
+.stat-label{ font-size:.82rem; color:var(--body); display:flex; justify-content:space-between; gap:.5rem; }
+.stat-label b{ font-family:"IBM Plex Mono",monospace; color:var(--ink); font-weight:600; }
+.stat-track{ margin-top:.5rem; height:5px; border-radius:var(--r-pill); background:var(--surface-2); overflow:hidden; }
+.stat-fill{ height:100%; border-radius:inherit; background:linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin:left; transform:scaleX(0); animation:fill var(--d-enter) var(--e-out) forwards; animation-delay:var(--delay,0ms); }
+.stat-fill.growth{ background:linear-gradient(90deg, var(--warm), #ffb38a); }
+@keyframes fill{ to{ transform:scaleX(1); } }
+@media (prefers-reduced-motion:reduce){ .stat-fill{ animation:none; transform:scaleX(1); } }
+.stats-note{ margin-top:1rem; }
+
+/* right column: photo + cards */
+.side{ display:flex; flex-direction:column; gap:1rem; }
+
+.portrait-card{
+  position:relative; border-radius:var(--r-xl); overflow:hidden; aspect-ratio:9/8;
+  border:1px solid var(--line-strong); box-shadow:var(--sh-card);
+}
+.portrait-card img{ width:100%; height:100%; object-fit:cover; object-position:52% 22%; filter:grayscale(.9) contrast(1.1) brightness(.82); }
+.portrait-tint{ position:absolute; inset:0; background:linear-gradient(205deg, rgba(62,123,255,.55), rgba(5,8,16,.92) 68%); mix-blend-mode:color; }
+.portrait-fade{ position:absolute; inset:0; background:linear-gradient(to top, var(--surface) 0%, rgba(11,17,32,0) 34%); }
+.portrait-caption{ position:absolute; left:1.25rem; right:1.25rem; bottom:1rem; display:flex; align-items:baseline; justify-content:space-between; }
+.portrait-caption .tag{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.06em; color:var(--accent-2); }
+.portrait-caption .role{ font-size:.82rem; color:var(--ink); font-weight:600; }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:1.4rem; }
+.card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+.card-title{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; color:var(--muted); }
+
+.profile-top{ display:flex; align-items:center; gap:.9rem; }
+.avatar{ width:52px; height:52px; border-radius:50%; overflow:hidden; border:1.5px solid var(--accent); flex:none; }
+.avatar img{ width:100%; height:100%; object-fit:cover; object-position:52% 14%; filter:grayscale(.7) contrast(1.05); }
+.profile-name{ display:flex; align-items:center; gap:.4rem; color:var(--ink); font-weight:700; font-size:1.02rem; }
+.check{ color:var(--accent); flex:none; }
+.profile-role{ font-size:.8rem; color:var(--muted); }
+
+.dl-grid{ margin-top:1.1rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.dl-grid dt{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.08em; color:var(--muted); }
+.dl-grid dd{ margin-top:.2rem; font-size:.86rem; color:var(--ink); }
+
+.quote-card{ position:relative; padding-left:2.5rem; }
+.quote-mark{ position:absolute; top:.9rem; left:1.1rem; font-size:2.6rem; color:var(--warm); opacity:.5; font-family:Georgia,serif; line-height:1; }
+.quote-en{ color:var(--body); font-size:.92rem; line-height:1.55; }
+
+/* ── DASH: bottom four-panel row ─────────────────────────────────── */
+.dash{ padding-block:1rem 4rem; }
+.dash-grid{ display:grid; gap:1.1rem; grid-template-columns:1fr; }
+@media (min-width:720px){ .dash-grid{ grid-template-columns:1fr 1fr; } }
+@media (min-width:1200px){ .dash-grid{ grid-template-columns:1.2fr 1fr 1fr 1.1fr; } }
+
+.panel{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:1.5rem; display:flex; flex-direction:column; }
+.panel-title{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.1em; color:var(--muted); margin-bottom:1.1rem; }
+
+.work-thumb{ border-radius:var(--r-md); aspect-ratio:16/10; background:
+  linear-gradient(135deg, var(--surface-3), var(--surface-2));
+  border:1px solid var(--line); position:relative; overflow:hidden; margin-bottom:1rem; }
+.work-thumb::before{ content:""; position:absolute; inset:0;
+  background-image:repeating-linear-gradient(90deg, rgba(148,178,232,.14) 0 1px, transparent 1px 18px);
+}
+.work-thumb::after{ content:"GRID"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:"IBM Plex Mono",monospace; font-size:.85rem; letter-spacing:.14em; color:var(--accent-2); }
+.work-cat{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.08em; color:var(--accent-2); }
+.work-title{ margin-top:.4rem; color:var(--ink); font-weight:700; font-size:1.02rem; }
+.work-desc{ margin-top:.5rem; font-size:.85rem; color:var(--body); }
+.panel-link{ margin-top:auto; padding-top:1rem; font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--accent-2); display:inline-flex; align-items:center; gap:.4rem; }
+.panel-link svg{ transition:transform var(--d-hover) var(--e-out); }
+@media (hover:hover) and (pointer:fine){ .panel a.panel-link:hover svg{ transform:translateX(3px); } }
+
+.list-icon{ display:flex; flex-direction:column; gap:.85rem; }
+.list-icon li{ display:flex; align-items:center; gap:.7rem; font-size:.88rem; color:var(--body); }
+.dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); flex:none; }
+
+.tools-grid{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem 1rem; }
+.tool-chip{ display:flex; align-items:center; gap:.6rem; font-size:.85rem; color:var(--body); }
+.tool-swatch{ width:8px; height:8px; border-radius:2px; background:var(--accent-2); flex:none; }
+
+.milestone-list{ display:flex; flex-direction:column; gap:.9rem; }
+.milestone-list li{ display:flex; gap:.7rem; font-size:.84rem; color:var(--body); line-height:1.5; }
+.milestone-list b{ color:var(--ink); font-weight:600; }
+
+/* ── FOOTER ───────────────────────────────────────────────────────── */
+.foot{ border-top:1px solid var(--line); }
+.foot-row{ display:flex; flex-wrap:wrap; align-items:center; gap:1rem; padding-block:1.3rem; }
+.foot-tag{ display:flex; align-items:center; gap:.7rem; font-family:"IBM Plex Mono",monospace; font-size:.75rem; letter-spacing:.06em; color:var(--muted); }
+.foot-mono-badge{ width:26px; height:26px; border-radius:6px; border:1px solid var(--line-strong); display:grid; place-items:center; font-size:.68rem; color:var(--body); }
+.foot-links{ margin-left:auto; display:flex; align-items:center; gap:1.1rem; }
+.foot-links a{ color:var(--muted); display:inline-flex; transition:color var(--d-hover) ease; }
+@media (hover:hover) and (pointer:fine){ .foot-links a:hover{ color:var(--accent-2); } }
+.foot-links a:active{ transform:scale(.94); }
+.foot-email{ font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--body); }
+
+/* entrance choreography — brand-register first load only */
+.enter{ opacity:0; transform:translateY(14px); animation:enter var(--d-enter) var(--e-out) forwards; animation-delay:var(--ed,0ms); }
+@keyframes enter{ to{ opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce){ .enter{ animation:none; opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#dash">Skip to work</a>
+
+<div class="scene">
+
+  <header class="nav">
+    <div class="shell nav-row">
+      <a href="#top" class="brand">
+        <span class="brand-mark"><img src="photo_2026-03-05_15-41-15.jpg" alt="Manfred Siew's bear mark"></span>
+        <span class="brand-name">MANFRED SIEW <span>"KING"</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#top" class="active">HOME</a>
+        <a href="#dash">WORK</a>
+        <a href="#dash">EXPERIENCE</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+      <span class="status-pill"><span class="status-dot" aria-hidden="true"></span>AVAILABLE</span>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="shell hero-grid">
+
+      <div>
+        <p class="kicker enter" style="--ed:60ms">
+          AEROSPACE ENGINEER <span class="sep">/</span> SOLUTION ARCHITECT <span class="sep">/</span> AI ENGINEER
+        </p>
+        <h1 class="h1 enter" style="--ed:120ms">
+          MANFRED SIEW
+          <img class="h1-king" src="king-wordmark.png" alt="King, my callsign">
+        </h1>
+
+        <p class="tagline enter" style="--ed:220ms">The presence of a king. The pulse of the mission.</p>
+
+        <p class="lede enter" style="--ed:260ms">
+          Trained in Aerospace Engineering, self-taught in software. Currently
+          building enterprise systems as a Forward Deployed Solution Architect
+          at RAiD, working toward AI engineering.
+        </p>
+
+        <div class="cta-row enter" style="--ed:320ms">
+          <a class="btn btn-primary" href="#dash">VIEW MY WORK →</a>
+          <a class="btn btn-ghost" href="resume.pdf">DOWNLOAD RESUME ⭳</a>
+        </div>
+
+        <div class="stats enter" style="--ed:380ms">
+          <div class="stats-head">
+            <span class="stats-title">CAPABILITY SNAPSHOT</span>
+            <span class="stats-rule" aria-hidden="true"></span>
+          </div>
+          <div class="stat-grid">
+            <div>
+              <p class="stat-label">SYSTEMS ARCHITECTURE <b>90%</b></p>
+              <div class="stat-track"><div class="stat-fill" style="width:90%;--delay:120ms" role="img" aria-label="90 percent"></div></div>
+            </div>
+            <div>
+              <p class="stat-label">PROCESS AUTOMATION <b>85%</b></p>
+              <div class="stat-track"><div class="stat-fill" style="width:85%;--delay:220ms" role="img" aria-label="85 percent"></div></div>
+            </div>
+            <div>
+              <p class="stat-label">STAKEHOLDER DELIVERY <b>88%</b></p>
+              <div class="stat-track"><div class="stat-fill" style="width:88%;--delay:320ms" role="img" aria-label="88 percent"></div></div>
+            </div>
+            <div>
+              <p class="stat-label">AI ENGINEERING <b>55% · growing</b></p>
+              <div class="stat-track"><div class="stat-fill growth" style="width:55%;--delay:420ms" role="img" aria-label="55 percent, growing"></div></div>
+            </div>
+          </div>
+          <p class="note mono stats-note">// self-rated placeholders — swap for numbers you're willing to defend before this ships</p>
+        </div>
+
+        <div class="card quote-card enter" style="--ed:440ms">
+          <span class="quote-mark" aria-hidden="true">"</span>
+          <p class="quote-en">Good design is no accident. It's the result of preparation and calculated decisions.</p>
+        </div>
+      </div>
+
+      <div class="side enter" style="--ed:200ms">
+        <div class="portrait-card">
+          <img src="19fe78cb5186f.png" alt="Manfred Siew presenting at a podium, microphone in hand">
+          <div class="portrait-tint" aria-hidden="true"></div>
+          <div class="portrait-fade" aria-hidden="true"></div>
+          <div class="portrait-caption">
+            <span class="tag">LIVE // NYP</span>
+            <span class="role">SPEAKING</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-title">IDENTITY</span></div>
+          <div class="profile-top">
+            <span class="avatar"><img src="19fe78cb5186f.png" alt=""></span>
+            <div>
+              <p class="profile-name">KING <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 2 7v6c0 5.2 3.8 9.7 10 11 6.2-1.3 10-5.8 10-11V7l-10-5zm-1.4 14.4L6 11.8l1.4-1.4 3.2 3.2 6-6L18 9.2l-7.4 7.2z"/></svg></p>
+              <p class="profile-role">SOLUTION ARCHITECT</p>
+            </div>
+          </div>
+          <dl class="dl-grid">
+            <div><dt>COUNTRY</dt><dd>SINGAPORE</dd></div>
+            <div><dt>TRAINED IN</dt><dd>AEROSPACE ENG.</dd></div>
+            <div><dt>CURRENT</dt><dd>RAiD (RSAF)</dd></div>
+            <div><dt>APPROACH</dt><dd>SYSTEMATIC · CALM</dd></div>
+          </dl>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="dash" id="dash">
+    <div class="shell dash-grid">
+
+      <div class="panel">
+        <span class="panel-title">FEATURED WORK</span>
+        <div class="work-thumb" aria-hidden="true"></div>
+        <span class="work-cat">ENTERPRISE · GOVTECH</span>
+        <p class="work-title">GRID — Receipt &amp; Invoice Digitalisation</p>
+        <p class="work-desc">SAF-wide capture and reconciliation, replacing manual paper receipt processing.</p>
+        <a class="panel-link" href="#dash">VIEW CASE STUDY <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div class="panel">
+        <span class="panel-title">WHAT I DO</span>
+        <ul class="list-icon">
+          <li><span class="dot" aria-hidden="true"></span>Aerospace Engineering</li>
+          <li><span class="dot" aria-hidden="true"></span>Software &amp; AI</li>
+          <li><span class="dot" aria-hidden="true"></span>Solution Architecture</li>
+          <li><span class="dot" aria-hidden="true"></span>Automation &amp; Tooling</li>
+        </ul>
+        <a class="panel-link" href="#dash">VIEW ALL PROJECTS <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div class="panel">
+        <span class="panel-title">TOOLS I USE</span>
+        <div class="tools-grid">
+          <span class="tool-chip"><span class="tool-swatch" aria-hidden="true"></span>Python</span>
+          <span class="tool-chip"><span class="tool-swatch" aria-hidden="true"></span>React</span>
+          <span class="tool-chip"><span class="tool-swatch" aria-hidden="true"></span>Supabase</span>
+          <span class="tool-chip"><span class="tool-swatch" aria-hidden="true"></span>Figma</span>
+          <span class="tool-chip"><span class="tool-swatch" aria-hidden="true"></span>Docker</span>
+          <span class="tool-chip"><span class="tool-swatch" aria-hidden="true"></span>GitHub</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="panel-title">MILESTONES</span>
+        <ul class="milestone-list">
+          <li><span class="dot" aria-hidden="true" style="margin-top:.5em;background:var(--warm)"></span><span><b>RAiD</b> — Forward Deployed Solution Architect (Intern)</span></li>
+          <li><span class="dot" aria-hidden="true" style="margin-top:.5em;background:var(--warm)"></span><span><b>GRID</b> shipped SAF-wide</span></li>
+          <li><span class="dot" aria-hidden="true" style="margin-top:.5em;background:var(--warm)"></span><span><b>29 open-source</b> projects, github.com/ElfredSeow</span></li>
+        </ul>
+        <p class="note mono" style="margin-top:auto;padding-top:1rem">// verified from live site — swap in awards/certs as they land</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="foot" id="contact">
+    <div class="shell foot-row">
+      <span class="foot-tag">
+        <span class="foot-mono-badge">M.</span>
+        /// BUILT DELIBERATE. ENGINEERED FORWARD.
+      </span>
+      <div class="foot-links">
+        <a href="mailto:Manfredsiew@hotmail.sg" class="foot-email">Manfredsiew@hotmail.sg</a>
+        <a href="https://github.com/ElfredSeow" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.03 3.26 9.29 7.79 10.8.57.1.78-.25.78-.55v-2.1c-3.17.69-3.84-1.36-3.84-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.8 10.8 0 0 1 5.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.66 5.34-5.2 5.62.41.35.77 1.04.77 2.1v3.11c0 .3.21.66.79.55 4.52-1.51 7.78-5.77 7.78-10.8C23.5 5.74 18.27.5 12 .5Z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/manfred-siew-25b4762aa" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

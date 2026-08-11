@@ -59,6 +59,11 @@ stated in either `MARKETING_SPEC.md`, so none is claimed anywhere in this change
 (3,100+ lines in `projects.html`). Every line number in this spec refers to that **working-tree**
 state, not to `HEAD`. Re-confirm the anchors before editing if the tree has moved on.
 
+**Line numbers in this file are approximate — search for the anchor string instead.** `grep` and the
+Read tool disagree by about six lines on `public/projects.html` (`MOCK_SEL` reports at `:2898` from
+one and `:2904` from the other), which the file's CRLF line endings explain. Every location cited
+here is also given as a quoted anchor string. **Trust the string, not the number.**
+
 **The SOAR spec is written but not implemented.** `docs/superpowers/specs/2026-08-11-soar-duty-scheduler-screens-design.md`
 (commits `237da6d`, `9a30d56`) specifies a `.soar-mock` family, but `MOCK_SEL` at
 `public/projects.html:2898` is still `'.bf-mock, .mf-mock, .gr-mock'` and no `.soar-mock` rule
@@ -267,7 +272,8 @@ tick"). Glyphs used: `layout-grid`, `file-text`, `calendar-check`, `wrench`, `ba
 
 ### Sizing
 
-Authored at a fixed **720 × 450** and scaled to the existing 288px (18rem) `.app-shot-frame`:
+Authored at a fixed **720px width** and a **natural, content-determined height**, scaled to the
+existing 288px (18rem) `.app-shot-frame`:
 
 ```css
 .app-shot-frame .mavis-mock{width:720px;transform:scale(.4);transform-origin:top left}
@@ -279,9 +285,20 @@ the app's 1440px capture viewport, so proportions carry over directly from the s
 
 As `.mf-mock` and `.gr-mock` already record in their own comments, **the one liberty is
 legibility**: text below roughly 7px stops rendering as text, so the smallest micro-labels sit
-slightly above a strict proportional reduction. Because the sources are tall pages, each mock shows
-the top of its screen within the 450px height — the same "peek at the top of a taller screen" crop
-that a real screenshot in this frame gets, and exactly what the comment at `:483-486` describes.
+slightly above a strict proportional reduction.
+
+**Height follows `.mf-mock`, not `.gr-mock`.** `.gr-mock` declares `height:450px` and curates its
+content to fit; `.mf-mock` declares no height at all and lets `.app-shot-frame` (`aspect-ratio:8/5;
+overflow:hidden`) crop it. `.mavis-mock` follows `.mf-mock`: no `height`, so each screen carries its
+real content and the thumbnail shows the top 450px — the same "peek at the top of a taller screen"
+crop a real screenshot in this frame gets, and exactly what the comment at `:483-486` describes.
+
+**But the lightbox never scales below 1.** `fitMockScale` ends in
+`scale = Math.max(1, scale)` (near `public/projects.html:2925`), so a mock taller than the available
+dialog height renders at natural size and the body scrolls. On a 900px viewport the usable height is
+roughly 700px. Each screen is therefore **budgeted to about 700px tall**, and where the source page
+runs longer than that the screen stops at a section boundary rather than mid-card. The two places
+this bites are recorded in §5.1 and §5.4.
 
 A `@media (max-width:520px)` rule collapses the navbar to a wordmark plus an icon strip, drops the
 dashboard's four stat tiles to two columns and the PM board's three Call-In cards to one, mirroring
@@ -361,18 +378,13 @@ undergoing CM, ready for collection, and active ADDLs`, `View All` right. Three 
 | `clipboard-check` (green) | **2** | Ready for Collection | Vehicles ready for collection after CM |
 | `info` (cyan) | **2** | Active ADDL | Acceptable Defect Deferred Logs currently active |
 
-`Preventive Maintenance Summary` card — `settings`-glyphed heading over `Vehicles/equipment
-currently in scheduled PM`, `View All` right. Six tiles: `calendar-clock` blue **7** Upcoming PM ·
-`calendar-x` red **2** Overdue PM · `phone-call` amber **3** Call-In · `circle-arrow-right` purple
-**2** Handed Over · `wrench` blue **2** In Maintenance · `clipboard-check` green **1** Ready for
-Collection.
-
-`Pending Your Approval` — an amber-bordered, amber-tinted card with an `alert-circle` heading over
-`Defects awaiting System Manager approval`, an amber `1 pending` chip right, and one row:
-**MID 4455** / `Alternator undercharging at idle` / an amber-outlined `Review` button.
-
-Footer strip: `© 2026 MAVIS - Maintenance And Vehicle Inspection Support App. All rights reserved.`
-with `Privacy Policy · Terms of Service · Support` right.
+**The screen stops here, at about 700px.** Three further blocks are visible in the capture and are
+**not** built, for the height reason in §4: the `Preventive Maintenance Summary` (six tiles —
+Upcoming PM 7, Overdue PM 2, Call-In 3, Handed Over 2, In Maintenance 2, Ready for Collection 1),
+the amber `Pending Your Approval` card (`MID 4455` / `Alternator undercharging at idle` / `1 pending`),
+and the page footer. The PM story is not lost — it has its own screen at §5.3. Recorded here so the
+omission is a decision on the record, not an oversight, and so nobody later "completes" the screen
+and silently pushes the lightbox into scrolling.
 
 Caption: **Fleet Overview** — "Availability is computed from three independent unserviceability
 sources, not typed in — so the dashboard and the database cannot disagree."
@@ -479,14 +491,12 @@ navy · Aircraft Tug `#0ea5e9` · Ground Power Unit `#22c55e` · Prime Mover `#f
 Vehicle `#8b5cf6` · Refueller `#ef4444`. Built as flex columns with percentage heights, not an SVG
 chart — the technique `.gr-mock` already uses.
 
-Two half-width cards beneath:
-
-- `Top subsystems` / `Most reported subsystems in range.` — horizontal navy bars on a `0–4` x-axis:
-  Bodywork **4** · Electrical **2** · Steering **2** · Braking **1** · Hydraulics **1** ·
-  Transmission **1** · Cooling **1**.
-- `By type` / `Defect count grouped by type.` — vertical `#0ea5e9` bars on a `0 / 2 / 4 / 6 / 8`
-  y-axis, with angled x-labels: Prime Mover **5** · Air Start Unit **2** · Aircraft Tug **2** ·
-  Refueller **1** · Recovery Vehicle **1** · Ground Power Unit **1**.
+**The screen stops here, at about 700px.** Two half-width cards sit beneath in the capture and are
+**not** built, for the height reason in §4: `Top subsystems` (horizontal navy bars — Bodywork 4,
+Electrical 2, Steering 2, Braking 1, Hydraulics 1, Transmission 1, Cooling 1) and `By type`
+(vertical `#0ea5e9` bars — Prime Mover 5, Air Start Unit 2, Aircraft Tug 2, Refueller 1, Recovery
+Vehicle 1, Ground Power Unit 1). The stacked chart above already carries the analytics claim; these
+two restate it in another form. Recorded for the same reason as §5.1.
 
 Caption: **Reports** — "Defect trending, rejection rate, fleet availability and projection, read
 from the same store the work is recorded in. Demonstration dataset — every asset number, defect,

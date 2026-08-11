@@ -637,7 +637,7 @@ Every clause is backed by a row already in the project log, so this adds no clai
 | Clause | Backing row |
 |---|---|
 | choosing the platform to match | MILES / MAVIS — "proved in Power Apps first, then rebuilt as a full-stack application with Lovable once per-user licensing stopped being viable" |
-| React on Dataverse | RAiD Facility Booking System — Dataverse + React + PowerApps Code Apps |
+| React on Dataverse | RSAF Facility Booking App — Dataverse + React + PowerApps Code Apps |
 | a full-stack rebuild | MILES / MAVIS; the 815 SQN bootcamp |
 | AI agent work | SAGE Copilot AI; R&D for Vibe-Coding Code Apps |
 | the tooling the rest of the team builds on | PowerDocu; Comprehensive Guide for New Interns; Code Apps Policy Approval (M365 Tenant) |

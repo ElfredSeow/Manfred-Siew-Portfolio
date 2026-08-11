@@ -300,6 +300,67 @@ check('admin: J Farrow is the only inactive assessor',
     === JSON.stringify(['J Farrow']),
   JSON.stringify(adm.found ? adm.people.filter((p) => p.off).map((p) => p.name) : []));
 
+// ── Check group 8: Weekly Schedule ───────────────────────────────────
+const cal = await page.evaluate(() => {
+  const mock = document.querySelector('.soar-mock[data-screen="calendar"]');
+  if (!mock) return { found: false };
+  const missions = Array.prototype.slice.call(mock.querySelectorAll('.soar-mission'));
+  return {
+    found: true,
+    active: (mock.querySelector('.soar-ni.soar-on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.soar-h1') || {}).textContent.trim(),
+    week: (mock.querySelector('.soar-week') || {}).textContent.trim(),
+    state: (mock.querySelector('.soar-state') || {}).textContent.trim(),
+    actions: Array.prototype.slice.call(mock.querySelectorAll('.soar-cal-btn')).map((b) => b.textContent.trim()),
+    legend: Array.prototype.slice.call(mock.querySelectorAll('.soar-lg')).map((l) => l.textContent.trim()),
+    days: Array.prototype.slice.call(mock.querySelectorAll('.soar-day-h')).map((d) => d.textContent.trim()),
+    slots: Array.prototype.slice.call(mock.querySelectorAll('.soar-slot-t')).map((s) => s.textContent.trim()),
+    missionCount: missions.length,
+    broken: missions.filter((m) => m.classList.contains('soar-break-c'))
+      .map((m) => m.getAttribute('data-cell')),
+    covering: missions.filter((m) => m.classList.contains('soar-cover-c'))
+      .map((m) => m.getAttribute('data-cell')),
+    unassigned: Array.prototype.slice.call(mock.querySelectorAll('.soar-unassigned')).length,
+  };
+});
+
+check('calendar: screen exists', cal.found);
+check('calendar: Calendar is the active nav item', cal.found && cal.active === 'Calendar', cal.active);
+check('calendar: heading, week and OPEN state match the capture',
+  cal.found && cal.h1 === 'Weekly Schedule'
+  && cal.week === 'Week of August 10th, 2026' && cal.state === 'OPEN',
+  `${cal.h1} | ${cal.week} | ${cal.state}`);
+check('calendar: Lock Week + Create Mission actions',
+  cal.found && JSON.stringify(cal.actions) === JSON.stringify(['Lock Week', 'Create Mission']),
+  JSON.stringify(cal.actions));
+check('calendar: five-item legend',
+  cal.found && JSON.stringify(cal.legend) === JSON.stringify(
+    ['QFI Assigned', 'Psych Assigned', 'Unassigned', 'Broken Pair', 'Covering Mission']),
+  JSON.stringify(cal.legend));
+check('calendar: five day columns Mon 10 to Fri 14',
+  cal.found && JSON.stringify(cal.days) === JSON.stringify([
+    'MondayAug 10', 'TuesdayAug 11', 'WednesdayAug 12', 'ThursdayAug 13', 'FridayAug 14',
+  ]), JSON.stringify(cal.days));
+check('calendar: 20 wave-slot headers (4 per day)',
+  cal.found && cal.slots.length === 20, String(cal.slots.length));
+check('calendar: slot times repeat 08:00/10:15/13:30/15:45 per day',
+  cal.found && cal.slots.every((s, i) => s === ['08:00', '10:15', '13:30', '15:45'][i % 4]),
+  JSON.stringify(cal.slots.slice(0, 4)));
+check('calendar: 20 missions', cal.found && cal.missionCount === 20, String(cal.missionCount));
+check('calendar: exactly the two captured broken pairs',
+  cal.found && JSON.stringify(cal.broken) === JSON.stringify(['tue-w3', 'thu-w3']),
+  JSON.stringify(cal.broken));
+check('calendar: exactly the two captured covering missions',
+  cal.found && JSON.stringify(cal.covering) === JSON.stringify(['wed-w3', 'fri-w2']),
+  JSON.stringify(cal.covering));
+check('calendar: two Unassigned slots, one per broken pair',
+  cal.found && cal.unassigned === 2, String(cal.unassigned));
+const galleryOrder = await page.evaluate(() =>
+  Array.prototype.slice.call(document.querySelectorAll('.soar-mock')).map((m) => m.getAttribute('data-screen')));
+check('calendar: Weekly Schedule leads the gallery, before the Dashboard screen',
+  JSON.stringify(galleryOrder) === JSON.stringify(['calendar', 'dashboard', 'covering', 'admin']),
+  JSON.stringify(galleryOrder));
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 
