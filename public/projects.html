@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projects · Manfred Siew</title>
-<meta name="description" content="Twenty-seven projects, filterable by category and organisation — Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
+<meta name="description" content="Twenty-seven projects, filterable by category and organisation: Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Manfred Siew">
 <meta property="og:title" content="Projects · Manfred Siew">
-<meta property="og:description" content="Twenty-seven projects, filterable by category and organisation — Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
+<meta property="og:description" content="Twenty-seven projects, filterable by category and organisation: Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
 <meta property="og:url" content="https://manfred-siew.web.app/projects">
 <meta property="og:image" content="https://manfred-siew.web.app/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Manfred Siew — Aerospace Engineering and software development">
+<meta property="og:image:alt" content="Manfred Siew, Aerospace Engineering and software development">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -250,7 +250,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .log-body .note{ color:var(--body); font-size:1rem; line-height:1.55; }
 .chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.5rem; }
 .chips span{ font-size:.75rem; background:var(--tint); color:var(--body); border-radius:var(--r-pill); padding:.25rem .75rem; }
-.needs-copy{ display:inline-block; font-size:.75rem; font-weight:600; color:var(--amber-ink); background:var(--amber-tint); border-radius:var(--r-xs); padding:.25rem .5rem; }
 .feat{ display:grid; gap:.5rem; }
 .feat li{ display:flex; gap:.5rem; align-items:flex-start; font-size:1rem; color:var(--body); }
 .feat li::before{ content:""; flex:none; width:.5rem; height:.5rem; margin-top:.5rem; border-radius:50%; background:var(--ink); opacity:.35; }
@@ -343,7 +342,8 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .shot-lightbox-body img{ max-width:100%; max-height:76vh; width:auto; height:auto; object-fit:contain; border-radius:var(--r-sm); }
 .shot-lightbox-mockwrap{ position:relative; border-radius:var(--r-sm); }
 .shot-lightbox-mockwrap .bf-mock,
-.shot-lightbox-mockwrap .mf-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
+.shot-lightbox-mockwrap .mf-mock,
+.shot-lightbox-mockwrap .gr-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
 .shot-lightbox-cap{ padding:.9rem 1.5rem 1.25rem; }
 .shot-lightbox-cap .st{ font-size:.9375rem; font-weight:600; color:var(--ink); }
 .shot-lightbox-cap .sd{ font-size:.8125rem; line-height:1.4; color:var(--muted); margin-top:.15rem; }
@@ -488,6 +488,8 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
    viewport) rather than 480px, so 0.4 lands it on the same 288px frame
    width. Its data-mock-width tells the lightbox the same number. */
 .app-shot-frame .mf-mock{width:720px;transform:scale(.4);transform-origin:top left}
+/* .gr-mock is authored at the same 720px half-scale as .mf-mock. */
+.app-shot-frame .gr-mock{width:720px;transform:scale(.4);transform-origin:top left}
 @media (max-width:520px){
   .bf-mock .bf-metrics,.bf-mock .bf-vgrid{grid-template-columns:1fr}
   .bf-mock .bf-rail{width:48px}
@@ -666,6 +668,315 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
    that is scaled, not laid out responsively, so it shrinks uniformly on
    a phone and keeps showing the app's real desktop layout. Stacking its
    columns would make it stop being the screen it claims to be. */
+
+/* ── GRID screen mockups ──────────────────────────────────────────────
+   Rebuilt from the app's own interface code — not invented, not a photo.
+
+   Source: raid-ppcoe/Invoice_Scanner_Code_App —
+     src/App.tsx            the 220px sidebar shell, the GridMark
+                            component (line 295: 2×2 cells, opacities
+                            1 / .5 / .7 / 1, radius 32% of size), the
+                            nav item list and its role gating, and the
+                            'upload' / 'inbox' / 'reports' / 'adminHub'
+                            branches of currentView
+     InvoiceListPane.tsx    the five status tabs and their dot colours,
+                            CHIP_CLS / CHIP_LABEL, the aging badge
+                            thresholds (5d warn, 10d late) and row layout
+     AdminHub.tsx           the four setup steps, their sub-labels, and
+                            the step banner sentences
+     src/index.css          .grid-bg — the 28px background lattice that
+                            gives the product its name
+   Cross-checked against raid-ppcoe/GRID-Marketing's MARKETING_SPEC.md
+   App Fidelity Map. Every heading, tab name, button label, placeholder
+   and banner sentence is the app's own string, verbatim. Only the
+   invoice rows, supplier names and the signed-in user are fictional
+   stand-ins — the live deployment's data is not ours to show — and the
+   suppliers are invented companies at example.org.
+
+   Authored at 720px, exactly half the 1440px desktop the app lays out
+   for, so every size below is the app's real value halved and the
+   layout is the app's layout rather than a re-proportioned one.
+   .app-shot-frame scales it to 0.4 for the 8:5 thumbnail; the lightbox
+   scales it back up. As with .mf-mock the one liberty is legibility:
+   text below about 7px stops rendering as text, so the smallest labels
+   sit a little above a strict 50%. Tokens are gr- prefixed and every
+   rule is qualified with the .gr-mock ancestor so it outranks this
+   page's own descendant rules (.log-body p and friends). */
+.gr-mock{
+  --gr-dark:#0E1116; --gr-blue:#2563EB; --gr-blue2:#3B82F6; --gr-bg:#FBFBFC;
+  --gr-ink:#1e293b; --gr-fg-2:#475569; --gr-fg-3:#64748b; --gr-fg-4:#94a3b8;
+  --gr-line:#e2e8f0; --gr-line-2:#f1f5f9; --gr-tint:#f8fafc;
+  --gr-amber-bg:#fffbeb; --gr-amber-br:#fde68a; --gr-amber-fg:#b45309; --gr-amber-dot:#f59e0b;
+  --gr-green-bg:#ecfdf5; --gr-green-br:#a7f3d0; --gr-green-fg:#047857; --gr-green-dot:#34d399;
+  --gr-red-bg:#fef2f2;   --gr-red-br:#fecaca;   --gr-red-fg:#b91c1c;   --gr-red-dot:#f87171;
+  --gr-blue-bg:#eff6ff;  --gr-blue-br:#bfdbfe;  --gr-blue-fg:#1d4ed8;  --gr-blue-dot:#60a5fa;
+  width:720px; height:450px; display:flex; overflow:hidden;
+  font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--gr-bg); color:var(--gr-ink); line-height:1.35;
+}
+.gr-mock p,.gr-mock b,.gr-mock i,.gr-mock em,.gr-mock small,.gr-mock span,.gr-mock div,
+.gr-mock h4,.gr-mock h5,.gr-mock label,.gr-mock u,.gr-mock th,.gr-mock td{margin:0;font-size:inherit;line-height:inherit;color:inherit;font-style:normal;font-weight:inherit;text-decoration:none}
+.gr-mock table{border-collapse:collapse;width:100%}
+
+/* The GRID mark — App.tsx:295 GridMark, rendered at half its 28px size.
+   The four cell opacities are the component's own, and they are what
+   makes the 2×2 read as depth rather than four equal squares. */
+.gr-mock .gr-mark{
+  width:var(--s);height:var(--s);border-radius:calc(var(--s) * .32);background:var(--gr-blue);
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:calc(var(--s) * .07);padding:calc(var(--s) * .18);
+  box-shadow:0 4px 10px -4px rgba(37,99,235,.6);flex-shrink:0;box-sizing:border-box;
+}
+.gr-mock .gr-mark i{background:#fff;border-radius:calc(var(--s) * .07);display:block}
+.gr-mock .gr-mark i:nth-child(2){opacity:.5}
+.gr-mock .gr-mark i:nth-child(3){opacity:.7}
+
+/* Sidebar — App.tsx:1715, a fixed 220px #0E1116 rail with the
+   .grid-bg-dark lattice over it at 60% opacity. */
+.gr-mock .gr-side{
+  width:110px;flex-shrink:0;background:var(--gr-dark);color:#fff;
+  display:flex;flex-direction:column;position:relative;
+}
+.gr-mock .gr-side::before{
+  content:"";position:absolute;inset:0;opacity:.6;pointer-events:none;
+  background-image:linear-gradient(to right,rgba(255,255,255,.045) 1px,transparent 1px),
+                   linear-gradient(to bottom,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:14px 14px;
+}
+.gr-mock .gr-logo{position:relative;display:flex;align-items:center;gap:5px;padding:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.gr-mock .gr-logo b{display:block;font-size:7px;font-weight:800;letter-spacing:.08em;line-height:1}
+.gr-mock .gr-logo small{display:block;font-size:6px;color:#64748b;margin-top:2px;line-height:1}
+.gr-mock .gr-nav{position:relative;display:flex;flex-direction:column;gap:1px;padding:6px 5px 0}
+.gr-mock .gr-ni{
+  position:relative;display:flex;align-items:center;gap:5px;padding:4px 5px;border-radius:4px;
+  font-size:7px;font-weight:600;color:#94a3b8;
+}
+.gr-mock .gr-ni svg{flex-shrink:0}
+.gr-mock .gr-ni.gr-on{color:#fff;background:rgba(255,255,255,.07)}
+.gr-mock .gr-ni.gr-on::before{content:"";position:absolute;left:-5px;top:50%;transform:translateY(-50%);width:1.5px;height:8px;border-radius:0 1px 1px 0;background:var(--gr-blue2)}
+.gr-mock .gr-ni .gr-nb{
+  margin-left:auto;display:grid;place-items:center;min-width:8px;height:8px;padding:0 3px;
+  border-radius:999px;background:var(--gr-blue2);color:#fff;font-size:6px;font-weight:800;
+}
+.gr-mock .gr-spacer{position:relative;flex:1}
+.gr-mock .gr-who{position:relative;display:flex;align-items:center;gap:5px;padding:6px;border-top:1px solid rgba(255,255,255,.06)}
+.gr-mock .gr-who-av{width:14px;height:14px;border-radius:50%;background:var(--gr-blue);display:grid;place-items:center;font-size:6px;font-weight:800;color:#fff;flex-shrink:0}
+.gr-mock .gr-who-id{min-width:0;flex:1}
+.gr-mock .gr-who-id b{display:block;font-size:6.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gr-mock .gr-who-id small{display:block;font-size:6px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gr-mock .gr-who-id u{display:block;font-size:6px;color:#60a5fa;text-decoration:underline;margin-top:1px}
+.gr-mock .gr-who svg{color:#64748b;flex-shrink:0}
+
+/* Main column — every view opens with the same sticky page header and
+   sits on .grid-bg (App.tsx, e.g. lines 1813-1826). */
+.gr-mock .gr-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.gr-mock .gr-head{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0;
+  padding:6px 12px;background:rgba(255,255,255,.8);border-bottom:1px solid rgba(226,232,240,.8);
+}
+.gr-mock .gr-head-l{display:flex;align-items:center;gap:5px;min-width:0}
+.gr-mock .gr-head svg{color:var(--gr-blue);flex-shrink:0}
+.gr-mock .gr-head b{display:block;font-size:7.5px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.gr-mock .gr-head small{display:block;font-size:6px;color:var(--gr-fg-3);margin-top:1px}
+.gr-mock .gr-pill{
+  display:flex;align-items:center;gap:3px;flex-shrink:0;font-size:6px;font-weight:500;color:var(--gr-fg-2);
+  background:#fff;border:1px solid var(--gr-line);border-radius:999px;padding:3px 6px;
+}
+.gr-mock .gr-pill::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gr-blue)}
+.gr-mock .gr-body{
+  flex:1;min-height:0;overflow:hidden;background-color:var(--gr-bg);
+  background-image:linear-gradient(to right,rgba(15,23,42,.04) 1px,transparent 1px),
+                   linear-gradient(to bottom,rgba(15,23,42,.04) 1px,transparent 1px);
+  background-size:14px 14px;
+}
+.gr-mock .gr-card{background:#fff;border:1px solid var(--gr-line);border-radius:8px}
+
+/* 1 · Upload Documents — App.tsx 1828-1945, the idle drop zone plus the
+   three info cards that only render while scanStatus === 'idle'. */
+.gr-mock .gr-up{height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
+.gr-mock .gr-up-in{width:100%;max-width:256px;display:flex;flex-direction:column;gap:8px}
+.gr-mock .gr-drop{
+  border:1px dashed #cbd5e1;background:rgba(255,255,255,.7);border-radius:8px;
+  padding:24px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.gr-mock .gr-drop-ic{
+  width:28px;height:28px;border-radius:8px;border:1px solid var(--gr-blue);color:var(--gr-blue);
+  display:grid;place-items:center;margin-bottom:8px;
+}
+.gr-mock .gr-drop h4{font-size:8px;font-weight:800;letter-spacing:-.01em}
+.gr-mock .gr-drop p{font-size:6.5px;color:var(--gr-fg-3);margin-top:4px;max-width:160px;line-height:1.5}
+.gr-mock .gr-btn-dark{margin-top:8px;background:#0f172a;color:#fff;font-size:7px;font-weight:700;padding:5px 12px;border-radius:5px}
+.gr-mock .gr-drop .gr-hint{font-size:6px;color:var(--gr-fg-4);margin-top:6px}
+.gr-mock .gr-info{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gr-mock .gr-info>div{background:#fff;border:1px solid var(--gr-line);border-radius:6px;padding:6px;text-align:center}
+.gr-mock .gr-info svg{color:var(--gr-blue);margin:0 auto 3px}
+.gr-mock .gr-info b{display:block;font-size:6px;font-weight:700;color:var(--gr-fg-2)}
+.gr-mock .gr-info small{display:block;font-size:6px;color:var(--gr-fg-4);margin-top:1px}
+
+/* 2 · Invoices — App.tsx 2113-2126, a 46% list pane against the
+   validation form, split by a single hairline. */
+.gr-mock .gr-split{display:flex;height:100%;min-height:0}
+.gr-mock .gr-list{width:46%;min-width:0;flex-shrink:0;border-right:1px solid var(--gr-line);background:#fff;display:flex;flex-direction:column}
+.gr-mock .gr-list-top{padding:6px 6px 0;flex-shrink:0}
+.gr-mock .gr-search-row{display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.gr-mock .gr-search{position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:4px;border:1px solid var(--gr-line);background:var(--gr-tint);border-radius:5px;padding:4px 5px}
+.gr-mock .gr-search svg{color:var(--gr-fg-4);flex-shrink:0}
+.gr-mock .gr-search span{font-size:6px;color:var(--gr-fg-4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gr-mock .gr-mini{flex-shrink:0;font-size:6px;font-weight:600;color:var(--gr-fg-2);border:1px solid var(--gr-line);background:#fff;border-radius:5px;padding:4px 5px;white-space:nowrap}
+/* The app's tab strip is overflow-x-auto, so at rest it shows what fits
+   and the rest scrolls — hence overflow:hidden here rather than a
+   shortened label. Every label is the app's own (TAB_META). */
+.gr-mock .gr-tabs{display:flex;overflow:hidden;border-bottom:1px solid var(--gr-line)}
+.gr-mock .gr-tab{display:flex;align-items:center;gap:2px;padding:4px 2px;font-size:6.5px;font-weight:700;color:var(--gr-fg-3);border-bottom:1px solid transparent;margin-bottom:-1px;white-space:nowrap;flex-shrink:0}
+.gr-mock .gr-tab.gr-on{color:var(--gr-blue);border-bottom-color:var(--gr-blue)}
+.gr-mock .gr-tab .gr-dot{width:3px;height:3px;border-radius:50%;flex-shrink:0}
+.gr-mock .gr-tab .gr-ct{font-size:6px;font-weight:800;padding:0 2px;border-radius:999px;background:var(--gr-line-2);color:var(--gr-fg-3)}
+.gr-mock .gr-tab.gr-on .gr-ct{background:var(--gr-blue-bg);color:var(--gr-blue)}
+.gr-mock .gr-rows{flex:1;min-height:0;overflow:hidden}
+.gr-mock .gr-row{
+  display:grid;grid-template-columns:1fr auto;column-gap:5px;row-gap:1px;align-items:center;
+  padding:5px 8px;border-bottom:1px solid var(--gr-line-2);
+}
+.gr-mock .gr-row.gr-sel{background:var(--gr-blue-bg);box-shadow:inset 1.5px 0 0 var(--gr-blue)}
+.gr-mock .gr-row .gr-sup{display:flex;align-items:center;gap:4px;min-width:0}
+.gr-mock .gr-row .gr-sup b{font-size:6.5px;font-weight:700;color:var(--gr-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gr-mock .gr-age{flex-shrink:0;font-size:6px;font-weight:800;padding:0 3px;border-radius:999px}
+.gr-mock .gr-age.gr-warn{background:var(--gr-amber-bg);color:#d97706}
+.gr-mock .gr-age.gr-late{background:var(--gr-red-bg);color:#dc2626}
+.gr-mock .gr-row .gr-amt{font-size:6.5px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.gr-mock .gr-row .gr-meta{grid-column:1;font-size:6px;color:var(--gr-fg-4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gr-mock .gr-row .gr-chip{grid-column:2;justify-self:end}
+.gr-mock .gr-chip{display:inline-flex;padding:0 4px;border-radius:999px;font-size:6px;font-weight:700;border:1px solid;white-space:nowrap}
+.gr-mock .gr-chip.gr-c-turn{background:var(--gr-amber-bg);color:var(--gr-amber-fg);border-color:var(--gr-amber-br)}
+.gr-mock .gr-chip.gr-c-back{background:var(--gr-red-bg);color:var(--gr-red-fg);border-color:var(--gr-red-br)}
+.gr-mock .gr-chip.gr-c-wait{background:var(--gr-blue-bg);color:var(--gr-blue-fg);border-color:var(--gr-blue-br)}
+.gr-mock .gr-chip.gr-c-done{background:var(--gr-green-bg);color:var(--gr-green-fg);border-color:var(--gr-green-br)}
+
+.gr-mock .gr-form{flex:1;min-width:0;padding:8px;overflow:hidden}
+.gr-mock .gr-form>.gr-card{padding-bottom:12px}
+.gr-mock .gr-form-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;padding:7px 10px;border-bottom:1px solid var(--gr-line-2)}
+.gr-mock .gr-form-hd h4{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:var(--gr-ink)}
+.gr-mock .gr-form-hd h4 svg{color:var(--gr-fg-4)}
+.gr-mock .gr-form-sub{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
+.gr-mock .gr-form-sub .gr-fn{font-size:6px;color:var(--gr-fg-3)}
+.gr-mock .gr-doc{display:inline-flex;align-items:center;gap:3px;font-size:6px;font-weight:600;color:#2563eb;background:var(--gr-blue-bg);border:1px solid #dbeafe;border-radius:5px;padding:3px 6px}
+.gr-mock .gr-ready{display:inline-flex;align-items:center;gap:3px;flex-shrink:0;font-size:6px;font-weight:700;color:var(--gr-green-fg);background:var(--gr-green-bg);border:1px solid #d1fae5;border-radius:999px;padding:4px 7px}
+.gr-mock .gr-sec{padding:12px 10px 0}
+.gr-mock .gr-sec h5{font-size:6.5px;font-weight:700;color:var(--gr-ink);margin-bottom:6px}
+.gr-mock .gr-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px;background:var(--gr-tint);border:1px solid var(--gr-line-2);border-radius:6px}
+.gr-mock .gr-f{display:flex;flex-direction:column;gap:3px;min-width:0}
+.gr-mock .gr-f.gr-w2{grid-column:span 2}
+.gr-mock .gr-f label{font-size:6px;font-weight:600;color:var(--gr-fg-2)}
+.gr-mock .gr-f .gr-in{display:flex;align-items:center;gap:4px;border:1px solid var(--gr-line);background:var(--gr-tint);border-radius:5px;padding:3px 5px;font-size:6.5px;color:var(--gr-ink);min-width:0}
+.gr-mock .gr-f .gr-in svg{color:var(--gr-fg-4);flex-shrink:0}
+.gr-mock .gr-f .gr-in span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* 3 · Run Reports — App.tsx 1966-2090: five KPI cards, the YTD bar
+   chart and the supplier donut, then the All Invoices table. */
+.gr-mock .gr-rep{height:100%;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.gr-mock .gr-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.gr-mock .gr-kpi{background:#fff;border:1px solid var(--gr-line);border-radius:6px;padding:6px}
+.gr-mock .gr-kpi .gr-k{font-size:6px;font-weight:700;color:var(--gr-fg-4);letter-spacing:.1em;text-transform:uppercase}
+.gr-mock .gr-kpi .gr-v{font-size:10px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.gr-mock .gr-kpi .gr-v.gr-good{color:var(--gr-green-fg)}
+.gr-mock .gr-kpi .gr-v.gr-warn{color:#d97706}
+.gr-mock .gr-kpi .gr-s{font-size:6px;color:var(--gr-fg-4);margin-top:2px}
+.gr-mock .gr-charts{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-shrink:0}
+.gr-mock .gr-chart{background:#fff;border:1px solid var(--gr-line);border-radius:8px;padding:8px 10px}
+.gr-mock .gr-chart .gr-ct-h{font-size:7px;font-weight:800;border-bottom:1px solid var(--gr-line-2);padding-bottom:6px;margin-bottom:8px}
+/* Bars are Recharts' own #2563EB with a 4px top radius, halved to 2px,
+   on the 12-month YTD axis App.tsx:1499 builds. */
+/* h-48 (192px) halved. The All Invoices table below gets whatever is
+   left, which is three rows — the same three the real app shows before
+   its own scroll boundary at this viewport height. */
+.gr-mock .gr-bars{position:relative;height:96px;display:flex;align-items:flex-end;gap:3px;padding-bottom:10px}
+/* Recharts CartesianGrid strokeDasharray="3 3" vertical={false} — four
+   dashed horizontal rules across the plot, dashes halved to 1.5/1.5. */
+.gr-mock .gr-bars::before{
+  content:"";position:absolute;left:0;right:0;top:0;bottom:10px;
+  background-image:
+    repeating-linear-gradient(to right,var(--gr-line) 0 1.5px,transparent 1.5px 3px),
+    repeating-linear-gradient(to right,var(--gr-line) 0 1.5px,transparent 1.5px 3px),
+    repeating-linear-gradient(to right,var(--gr-line) 0 1.5px,transparent 1.5px 3px),
+    repeating-linear-gradient(to right,var(--gr-line) 0 1.5px,transparent 1.5px 3px);
+  background-size:100% 1px;background-repeat:no-repeat;
+  background-position:0 0,0 21.5px,0 43px,0 64.5px;
+}
+.gr-mock .gr-bar{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.gr-mock .gr-bar i{display:block;width:100%;background:var(--gr-blue);border-radius:2px 2px 0 0}
+.gr-mock .gr-bar span{position:absolute;bottom:-10px;font-size:6px;color:var(--gr-fg-4)}
+.gr-mock .gr-donut-wrap{height:96px;display:flex;align-items:center;justify-content:center;gap:10px}
+.gr-mock .gr-donut{
+  width:80px;height:80px;border-radius:50%;flex-shrink:0;
+  -webkit-mask:radial-gradient(circle,transparent 25px,#000 25px);
+          mask:radial-gradient(circle,transparent 25px,#000 25px);
+}
+.gr-mock .gr-legend{display:flex;flex-direction:column;gap:3px;min-width:0}
+.gr-mock .gr-legend span{display:flex;align-items:center;gap:4px;font-size:6px;color:var(--gr-fg-2);white-space:nowrap}
+.gr-mock .gr-legend i{width:5px;height:5px;border-radius:1px;flex-shrink:0}
+.gr-mock .gr-tbl{background:#fff;border:1px solid var(--gr-line);border-radius:8px;overflow:hidden;flex:1;min-height:0}
+.gr-mock .gr-tbl-hd{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;border-bottom:1px solid var(--gr-line-2)}
+.gr-mock .gr-tbl-hd b{font-size:7px;font-weight:800}
+.gr-mock .gr-tbl th{background:var(--gr-tint);border-bottom:1px solid var(--gr-line-2);padding:3px 8px;font-size:6px;font-weight:700;color:var(--gr-fg-4);letter-spacing:.1em;text-transform:uppercase;text-align:left}
+.gr-mock .gr-tbl td{padding:5px 8px;border-bottom:1px solid var(--gr-tint);font-size:6.5px;color:var(--gr-fg-2);vertical-align:middle}
+.gr-mock .gr-tbl td b{display:block;font-size:6.5px;font-weight:700;color:var(--gr-ink)}
+.gr-mock .gr-tbl td small{display:block;font-size:6px;color:var(--gr-fg-4)}
+.gr-mock .gr-tbl .gr-r{text-align:right;font-weight:700;color:var(--gr-ink);font-variant-numeric:tabular-nums}
+.gr-mock .gr-tbl .gr-c{text-align:center}
+.gr-mock .gr-chip-d{display:inline-flex;align-items:center;gap:3px}
+.gr-mock .gr-chip-d::before{content:"";width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.8}
+.gr-mock .gr-osn{font-size:6px;font-weight:700;color:var(--gr-blue);text-decoration:underline;margin-left:4px}
+
+/* 4 · Admin Hub — AdminHub.tsx: the planning-view notice the team wrote
+   to keep the chart honest, the four-step stepper, and the step banner. */
+.gr-mock .gr-admin{height:100%;padding:8px 10px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.gr-mock .gr-note{border-radius:6px;padding:6px 8px;font-size:6.5px;line-height:1.55}
+.gr-mock .gr-note.gr-amber{background:var(--gr-amber-bg);border:1px solid var(--gr-amber-br);color:#78350f}
+.gr-mock .gr-note.gr-blue{background:var(--gr-blue-bg);border:1px solid var(--gr-blue-br);color:var(--gr-fg-2)}
+.gr-mock .gr-note b{font-weight:700}
+.gr-mock .gr-note.gr-blue b{color:var(--gr-blue-fg)}
+.gr-mock .gr-back{font-size:6px;font-weight:700;color:var(--gr-fg-3)}
+.gr-mock .gr-steps{background:#fff;border:1px solid var(--gr-line);border-radius:8px;padding:10px;display:flex;align-items:flex-start}
+.gr-mock .gr-step{display:flex;align-items:flex-start;flex:1}
+.gr-mock .gr-step:last-child{flex:0 0 auto}
+.gr-mock .gr-step-b{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:55px}
+.gr-mock .gr-step-n{
+  width:16px;height:16px;border-radius:50%;display:grid;place-items:center;
+  font-size:6.5px;font-weight:800;border:1px solid var(--gr-line);background:var(--gr-line-2);color:var(--gr-fg-4);
+}
+/* Source order matters: AdminHub.tsx picks the circle style with
+   `done ? emerald : current ? blue : grey`, so a step that is both done
+   and current renders emerald. .gr-done therefore comes last and wins. */
+.gr-mock .gr-step.gr-cur .gr-step-n{background:var(--gr-blue);border-color:var(--gr-blue);color:#fff;box-shadow:0 0 0 2px rgba(37,99,235,.15)}
+.gr-mock .gr-step.gr-done .gr-step-n{background:#059669;border-color:#059669;color:#fff;box-shadow:none}
+.gr-mock .gr-step-t{font-size:6.5px;font-weight:700;color:var(--gr-ink);margin-top:4px}
+.gr-mock .gr-step.gr-cur .gr-step-t{color:var(--gr-blue)}
+.gr-mock .gr-step-s{font-size:6px;color:var(--gr-fg-3);margin-top:1px;max-width:65px;line-height:1.4}
+.gr-mock .gr-step.gr-lock{opacity:.5}
+.gr-mock .gr-conn{flex:1;height:1px;margin-top:8px;min-width:8px;border-radius:999px;background:var(--gr-line)}
+.gr-mock .gr-conn.gr-done{background:#10b981}
+.gr-mock .gr-orgs{background:#fff;border:1px solid var(--gr-line);border-radius:8px;overflow:hidden}
+.gr-mock .gr-orgs-hd{padding:6px 10px;border-bottom:1px solid var(--gr-line-2)}
+.gr-mock .gr-orgs-hd b{font-size:7px;font-weight:800;color:var(--gr-ink)}
+.gr-mock .gr-orgs-hd small{display:block;font-size:6px;color:var(--gr-fg-3);margin-top:1px}
+.gr-mock .gr-org{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--gr-tint)}
+.gr-mock .gr-org:last-child{border-bottom:0}
+.gr-mock .gr-org b{font-size:6.5px;font-weight:700;color:var(--gr-ink)}
+.gr-mock .gr-org .gr-open{margin-left:auto;font-size:6px;font-weight:700;color:var(--gr-blue)}
+.gr-mock .gr-org svg{color:#cbd5e1;flex-shrink:0}
+.gr-mock .gr-chip.gr-c-grey{background:var(--gr-line-2);color:var(--gr-fg-3);border-color:var(--gr-line)}
+/* OrgSetupPanel's "New organisation" card — CARD + p-5 + max-w-lg,
+   with its own INPUT placeholder and PRIMARY button, halved. */
+.gr-mock .gr-neworg{background:#fff;border:1px solid var(--gr-line);border-radius:8px;padding:10px;max-width:256px;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.gr-mock .gr-neworg b{font-size:7px;font-weight:700;color:var(--gr-ink)}
+.gr-mock .gr-neworg p{font-size:6px;color:var(--gr-fg-3);line-height:1.55}
+.gr-mock .gr-neworg .gr-input{align-self:stretch;font-size:6.5px;color:var(--gr-fg-4);border:1px solid var(--gr-line);background:var(--gr-tint);border-radius:5px;padding:4px 6px}
+.gr-mock .gr-neworg .gr-primary{background:var(--gr-blue);color:#fff;font-weight:700;font-size:6.5px;padding:4px 8px;border-radius:6px}
+
+/* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
+   has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
+   out responsively, so it shrinks uniformly on a phone and keeps
+   showing the app's real desktop layout. */
 </style>
 </head>
 
@@ -699,7 +1010,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
       <h1 class="page-title">Twenty-seven, filterable two ways.</h1>
       <p class="page-lede">
         One axis is scope of ownership, ordered strongest-first. The other is
-        organisation — a poly CCA app and an RSAF system can share a
+        organisation, because a poly CCA app and an RSAF system can share a
         capability while obviously differing in stakes, so both stay visible.
       </p>
     </div>
@@ -820,7 +1131,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               <li>Recommends a refuelling strategy ahead of time from trend and live data, instead of operators working it out from scratch under time pressure</li>
               <li>Surfaces the recommendation alongside current conditions so operators can act on it or override it</li>
             </ul></div>
-          <div><div class="lab">Built with</div><p class="note">Power Platform, with an AI-assisted forecasting model behind the recommendation. Currently a working pilot. <span class="needs-copy">Add: which unit is piloting it, and the exact forecasting stack</span></p><div class="chips"><span>Power Platform</span><span>AI-assisted forecasting model</span></div></div>
+          <div><div class="lab">Built with</div><p class="note">Power Platform, with an AI-assisted forecasting model behind the recommendation. Currently a working pilot.</p><div class="chips"><span>Power Platform</span><span>AI-assisted forecasting model</span></div></div>
           <div class="log-shots-wrap">
             <div class="shots-head">
               <div class="lab">The actual screens</div>
@@ -836,14 +1147,14 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
             <div class="app-shots-wrap">
             <div class="app-shots" role="list" aria-label="FUEL app screens, captured from the running app">
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">FUEL — Operation Centre dashboard</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">FUEL · Operation Centre dashboard</span></div>
                 <div class="app-shot-frame"><img src="fuel/dashboard.jpg" loading="lazy" alt="FUEL dashboard for the Operation Centre: a left navigation rail for taskings, vehicles, storage tanks and landing points; a row of upcoming tasking cards showing landing point, aircraft type, tail number and fuel needed; a storage fuel level pie chart on an auto-refresh timer; and panels for tasking information, per-site fuel information and per-tank fuel levels"></div>
                 <figcaption class="app-shot-cap"><div class="st">Operation Centre</div><div class="sd">Upcoming taskings, per-site fuel demand and live tank levels on one auto-refreshing board</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">FUEL — Ground operator app</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">FUEL · Ground operator app</span></div>
                 <div class="app-shot-frame"><img src="fuel/ground-app.jpg" loading="lazy" alt="FUEL ground operator app on a handheld screen: a bowser callsign header, shortcuts to tanker info, fuel replenishment and the conversion calculator, a fuel status overview for the operator's site, and a list of taskings assigned to that site with tick-off checkboxes and bowser assignment"></div>
-                <figcaption class="app-shot-cap"><div class="st">Ground app</div><div class="sd">The bowser crew's view — only the taskings assigned to their site, tick off as refuelled</div></figcaption>
+                <figcaption class="app-shot-cap"><div class="st">Ground app</div><div class="sd">The bowser crew's view: only the taskings assigned to their site, tick off as refuelled</div></figcaption>
               </figure>
             </div>
             </div>
@@ -864,7 +1175,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               <li>Automated pipeline raises supply and demand requests without manual tracking</li>
               <li>Shifts the operator's job from managing logistics by hand to monitoring pipeline status</li>
             </ul></div>
-          <div><div class="lab">Built with</div><p class="note">Power Platform, with a custom automated request pipeline behind it. Currently a working pilot. <span class="needs-copy">Add: which unit is piloting it, and the exact pipeline stack</span></p><div class="chips"><span>Power Platform</span><span>Automated request pipeline</span></div></div>
+          <div><div class="lab">Built with</div><p class="note">Power Platform, with a custom automated request pipeline behind it. Currently a working pilot.</p><div class="chips"><span>Power Platform</span><span>Automated request pipeline</span></div></div>
           <div class="log-shots-wrap">
             <div class="shots-head">
               <div class="lab">The actual screens</div>
@@ -878,11 +1189,11 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               </div>
             </div>
             <div class="app-shots-wrap">
-            <div class="app-shots" role="list" aria-label="MatFlow app screens, rebuilt from the app's own interface code and design tokens — not photos, not invented">
+            <div class="app-shots" role="list" aria-label="MatFlow app screens, rebuilt from the app's own interface code and design tokens, not photos and not invented">
 
               <!-- 1. OS Cell Spares Overview (RoleB/Dashboard.tsx, tab 0) -->
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — OS Cell Spares Overview</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow · OS Cell Spares Overview</span></div>
                 <div class="app-shot-frame">
                   <div class="mf-mock" data-mock-width="720" aria-hidden="true">
                     <div class="mf-top">
@@ -991,7 +1302,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 
               <!-- 2. Distribution Network (RoleB/Dashboard.tsx, tab 1) -->
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — Distribution Network</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow · Distribution Network</span></div>
                 <div class="app-shot-frame">
                   <div class="mf-mock" data-mock-width="720" aria-hidden="true">
                     <div class="mf-top">
@@ -1058,7 +1369,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 
               <!-- 3. NSR Team Overview (RoleA/Dashboard.tsx) -->
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — Ground Team Overview</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow · Ground Team Overview</span></div>
                 <div class="app-shot-frame">
                   <div class="mf-mock" data-mock-width="720" aria-hidden="true">
                     <div class="mf-top">
@@ -1147,7 +1458,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 
               <!-- 4. Demand Review (RoleB/DemandReview.tsx) -->
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — Demand Review</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow · Demand Review</span></div>
                 <div class="app-shot-frame">
                   <div class="mf-mock" data-mock-width="720" aria-hidden="true">
                     <div class="mf-top">
@@ -1209,7 +1520,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 
               <!-- 5. User Management Panel (RoleB/UserManagement.tsx) -->
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow — User Management</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MatFlow · User Management</span></div>
                 <div class="app-shot-frame">
                   <div class="mf-mock" data-mock-width="720" aria-hidden="true">
                     <div class="mf-top">
@@ -1299,7 +1610,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                     </div>
                   </div>
                 </div>
-                <figcaption class="app-shot-cap"><div class="st">User Management</div><div class="sd">Operator, access level and status — the role gate that decides which of the two sides of the app a person sees</div></figcaption>
+                <figcaption class="app-shot-cap"><div class="st">User Management</div><div class="sd">Operator, access level and status: the role gate that decides which of the two sides of the app a person sees</div></figcaption>
               </figure>
 
             </div>
@@ -1333,7 +1644,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
           <div><div class="lab">What it does</div>
             <ul class="feat" role="list">
               <li>Fill-in-the-blank, checklist-table and multiple-choice questions, graded case-insensitively against the authored answer</li>
-              <li>Submit stays hidden until every question on a quiz is correct — mastery enforced by the domain model, not a UI check</li>
+              <li>Submit stays hidden until every question on a quiz is correct, with mastery enforced by the domain model rather than a UI check</li>
               <li>A cadence and rotation engine that derives Outstanding, Overdue, Upcoming and Completed status for every crew</li>
               <li>A readiness dashboard and status board, scoped by squadron or platform, showing who is current across all eight airframes</li>
             </ul></div>
@@ -1351,9 +1662,9 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               </div>
             </div>
             <div class="app-shots-wrap">
-            <div class="app-shots" role="list" aria-label="BOLDFACE app screens, rebuilt from the app's own interface code and design tokens — not photos, not invented">
+            <div class="app-shots" role="list" aria-label="BOLDFACE app screens, rebuilt from the app's own interface code and design tokens, not photos and not invented">
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE — Dashboard</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE · Dashboard</span></div>
                 <div class="app-shot-frame">
                   <div class="bf-mock" aria-hidden="true">
                     <div class="bf-screen">
@@ -1439,7 +1750,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                 <figcaption class="app-shot-cap"><div class="st">Dashboard</div><div class="sd">Completion ring, outstanding tiles, and a per-vocation status board at a glance</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE — Assessment</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE · Assessment</span></div>
                 <div class="app-shot-frame">
                   <div class="bf-mock" aria-hidden="true">
                     <div class="bf-screen">
@@ -1469,7 +1780,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
                 <figcaption class="app-shot-cap"><div class="st">Assessment</div><div class="sd">Inline fill-in-the-blank BOLDFACE items and a checklist table; submit unlocks only at 100% mastery</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE — Status board</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">BOLDFACE · Status board</span></div>
                 <div class="app-shot-frame">
                   <div class="bf-mock" aria-hidden="true">
                     <div class="bf-screen">
@@ -1496,7 +1807,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               </figure>
             </div>
             </div>
-            <p class="log-note">Rebuilt from the app's own interface code and design tokens — not photos, not invented. Figures shown are illustrative demo data.</p>
+            <p class="log-note">Rebuilt from the app's own interface code and design tokens, not photos and not invented. Figures shown are illustrative demo data.</p>
           </div>
         </div>
       </details>
@@ -1511,6 +1822,408 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <p>Goods receipts and invoices arriving across every unit in MINDEF SAF, not filed because the person who received the goods was already on to the next task. I designed and built the capture and repository app; a partner RPA team built the automation that files the extracted data into the finance forms.</p>
           <div><div class="lab">What it does</div><p class="note">Reads a photographed goods receipt or invoice, in whatever format the issuing company used, extracts the fields the finance form and the downstream RPA flow need, and stores every record in one auditable repository.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>PowerApps</span><span>Vite</span><span>UiPath (RPA)</span></div></div>
+          <div class="log-shots-wrap">
+            <div class="shots-head">
+              <div class="lab">The actual screens</div>
+              <div class="shots-nav-group" hidden>
+                <button type="button" class="shots-nav" data-shots-prev aria-label="Scroll screens left" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="shots-nav" data-shots-next aria-label="Scroll screens right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="app-shots-wrap">
+            <div class="app-shots" role="list" aria-label="GRID app screens, rebuilt from the app's own interface code and design tokens, not photos and not invented">
+
+              <!-- 1. Upload Documents (App.tsx, currentView === 'upload', scanStatus idle) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">GRID · Upload Documents</span></div>
+                <div class="app-shot-frame">
+                  <div class="gr-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="gr-side">
+                      <div class="gr-logo">
+                        <span class="gr-mark" style="--s:14px"><i></i><i></i><i></i><i></i></span>
+                        <span><b>GRID</b><small>Invoice Manager</small></span>
+                      </div>
+                      <nav class="gr-nav">
+                        <span class="gr-ni gr-on"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M16 16l-4-4-4 4"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Upload Invoice</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Invoices to Check<span class="gr-nb">15</span></span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>Run Reports</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>Approvals<span class="gr-nb">6</span></span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><circle cx="18" cy="15" r="3"/><path d="M18 11.5v1M18 17.5v1M21.5 15h-1M15.5 15h-1"/></svg>Admin Hub</span>
+                      </nav>
+                      <div class="gr-spacer"></div>
+                      <div class="gr-who">
+                        <span class="gr-who-av">WT</span>
+                        <span class="gr-who-id"><b>Wei Lin Tan</b><small>w.tan@example.org · Admin</small><u>Edit</u></span>
+                        <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+                      </div>
+                    </div>
+                    <div class="gr-main">
+                      <div class="gr-head">
+                        <span class="gr-head-l">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M16 16l-4-4-4 4"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                          <span><b>Upload Documents</b><small>Upload an invoice and we’ll read the details for you</small></span>
+                        </span>
+                        <span class="gr-pill">w.tan@example.org</span>
+                      </div>
+                      <div class="gr-body">
+                        <div class="gr-up">
+                          <div class="gr-up-in">
+                            <div class="gr-drop">
+                              <span class="gr-drop-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M16 16l-4-4-4 4"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
+                              <h4>Drop an invoice to begin</h4>
+                              <p>Drag and drop a PDF, PNG or JPEG — or click to browse. The AI extracts every field automatically.</p>
+                              <span class="gr-btn-dark">Browse files</span>
+                              <span class="gr-hint">Saved · it appears in your Inbox</span>
+                            </div>
+                            <div class="gr-info">
+                              <div><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><b>AI Extraction</b><small>~15–30s</small></div>
+                              <div><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg><b>Dataverse</b><small>Instant record</small></div>
+                              <div><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><b>Inbox</b><small>Ready to validate</small></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Upload Documents</div><div class="sd">Drop a PDF or a photo of the receipt; extraction runs before anyone types a field</div></figcaption>
+              </figure>
+
+              <!-- 2. Invoices workspace (App.tsx currentView === 'inbox' + InvoiceListPane.tsx) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">GRID · Invoices</span></div>
+                <div class="app-shot-frame">
+                  <div class="gr-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="gr-side">
+                      <div class="gr-logo">
+                        <span class="gr-mark" style="--s:14px"><i></i><i></i><i></i><i></i></span>
+                        <span><b>GRID</b><small>Invoice Manager</small></span>
+                      </div>
+                      <nav class="gr-nav">
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M16 16l-4-4-4 4"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Upload Invoice</span>
+                        <span class="gr-ni gr-on"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Invoices to Check<span class="gr-nb">15</span></span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>Run Reports</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>Approvals<span class="gr-nb">6</span></span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><circle cx="18" cy="15" r="3"/><path d="M18 11.5v1M18 17.5v1M21.5 15h-1M15.5 15h-1"/></svg>Admin Hub</span>
+                      </nav>
+                      <div class="gr-spacer"></div>
+                      <div class="gr-who">
+                        <span class="gr-who-av">WT</span>
+                        <span class="gr-who-id"><b>Wei Lin Tan</b><small>w.tan@example.org · Admin</small><u>Edit</u></span>
+                        <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+                      </div>
+                    </div>
+                    <div class="gr-main">
+                      <div class="gr-head">
+                        <span class="gr-head-l">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5M16 13H8M16 17H8M10 9H8"/></svg>
+                          <span><b>Invoices</b><small>Pick from the list, review &amp; validate on the right</small></span>
+                        </span>
+                        <span class="gr-pill">w.tan@example.org</span>
+                      </div>
+                      <div class="gr-body">
+                        <div class="gr-split">
+                          <div class="gr-list">
+                            <div class="gr-list-top">
+                              <div class="gr-search-row">
+                                <span class="gr-search">
+                                  <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                  <span>Search supplier, PO number, file name…</span>
+                                </span>
+                                <span class="gr-mini">Oldest first</span>
+                                <span class="gr-mini">Compact</span>
+                              </div>
+                              <div class="gr-tabs">
+                                <span class="gr-tab gr-on"><i class="gr-dot" style="background:#f59e0b"></i>Your turn<span class="gr-ct">15</span></span>
+                                <span class="gr-tab"><i class="gr-dot" style="background:#f87171"></i>Sent back<span class="gr-ct">3</span></span>
+                                <span class="gr-tab"><i class="gr-dot" style="background:#60a5fa"></i>Waiting for approver<span class="gr-ct">6</span></span>
+                                <span class="gr-tab"><i class="gr-dot" style="background:#34d399"></i>Approved<span class="gr-ct">38</span></span>
+                                <span class="gr-tab">All<span class="gr-ct">62</span></span>
+                              </div>
+                            </div>
+                            <div class="gr-rows">
+                              <div class="gr-row">
+                                <span class="gr-sup"><b>Vanguard Electrical</b><span class="gr-age gr-late">12d</span></span>
+                                <span class="gr-amt">$3,275</span>
+                                <span class="gr-meta">VE-inv-2261.pdf · PO-4469908 · 2026-07-30</span>
+                                <span class="gr-chip gr-c-back">Sent back</span>
+                              </div>
+                              <div class="gr-row gr-sel">
+                                <span class="gr-sup"><b>Helios Safety Equipment</b><span class="gr-age gr-warn">7d</span></span>
+                                <span class="gr-amt">$22,610</span>
+                                <span class="gr-meta">HSE-2026-0412.pdf · PO-4471192 · 2026-08-04</span>
+                                <span class="gr-chip gr-c-turn">Your turn</span>
+                              </div>
+                              <div class="gr-row">
+                                <span class="gr-sup"><b>Meridian Fasteners</b></span>
+                                <span class="gr-amt">$1,940</span>
+                                <span class="gr-meta">MF-0067.pdf · PO-4470955 · 2026-08-06</span>
+                                <span class="gr-chip gr-c-turn">Your turn</span>
+                              </div>
+                              <div class="gr-row">
+                                <span class="gr-sup"><b>Orion Industrial Pte Ltd</b></span>
+                                <span class="gr-amt">$8,950</span>
+                                <span class="gr-meta">orion-88213.pdf · PO-4470617 · 2026-08-07</span>
+                                <span class="gr-chip gr-c-wait">Waiting</span>
+                              </div>
+                              <div class="gr-row">
+                                <span class="gr-sup"><b>Kestrel Marine Supplies</b></span>
+                                <span class="gr-amt">$12,480</span>
+                                <span class="gr-meta">KMS-INV-8830.pdf · PO-4470884 · 2026-08-08</span>
+                                <span class="gr-chip gr-c-done">Approved</span>
+                              </div>
+                              <div class="gr-row">
+                                <span class="gr-sup"><b>Northbeam Logistics</b></span>
+                                <span class="gr-amt">$5,120</span>
+                                <span class="gr-meta">NBL_Aug_2026.pdf · PO-4470233 · 2026-08-09</span>
+                                <span class="gr-chip gr-c-done">Approved</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="gr-form">
+                            <div class="gr-card">
+                              <div class="gr-form-hd">
+                                <span>
+                                  <h4><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>Validation Form</h4>
+                                  <span class="gr-form-sub">
+                                    <span class="gr-fn">HSE-2026-0412.pdf</span>
+                                    <span class="gr-doc"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/></svg>View Document<svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
+                                  </span>
+                                </span>
+                                <span class="gr-ready"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Ready to Proceed</span>
+                              </div>
+                              <div class="gr-sec">
+                                <h5>1. General Details</h5>
+                                <div class="gr-fields">
+                                  <span class="gr-f gr-w2"><label>Company Name</label><span class="gr-in"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M10 6h4M10 10h4M10 14h4"/></svg><span>Helios Safety Equipment</span></span></span>
+                                  <span class="gr-f"><label>PO Number</label><span class="gr-in"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg><span>PO-4471192</span></span></span>
+                                  <span class="gr-f"><label>Delivery Doc No.</label><span class="gr-in"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/><path d="M14 2v4a2 2 0 0 0 2 2h4M3 15l2 2 4-4"/></svg><span>DO-88214</span></span></span>
+                                  <span class="gr-f"><label>Invoice Date</label><span class="gr-in"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>2026-08-04</span></span></span>
+                                  <span class="gr-f"><label>Receipt Date</label><span class="gr-in"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>2026-08-05</span></span></span>
+                                  <span class="gr-f gr-w2"><label>Receiving Person (Login)</label><span class="gr-in"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.7a8 8 0 0 1 10 0"/></svg><span>w.tan@example.org</span></span></span>
+                                </div>
+                              </div>
+                              <div class="gr-sec">
+                                <h5>2. Line Items</h5>
+                                <div class="gr-fields" style="grid-template-columns:1fr">
+                                  <span class="gr-f"><label>Item Description</label><span class="gr-in"><span>Type II safety harness, full body</span></span></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Invoices</div><div class="sd">Tabs for your turn, sent back, waiting and approved. The queue sits on the left, the extracted fields to check on the right</div></figcaption>
+              </figure>
+
+              <!-- 3. Run Reports (App.tsx, currentView === 'reports') -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">GRID · Run Reports</span></div>
+                <div class="app-shot-frame">
+                  <div class="gr-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="gr-side">
+                      <div class="gr-logo">
+                        <span class="gr-mark" style="--s:14px"><i></i><i></i><i></i><i></i></span>
+                        <span><b>GRID</b><small>Invoice Manager</small></span>
+                      </div>
+                      <nav class="gr-nav">
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M16 16l-4-4-4 4"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Upload Invoice</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Invoices to Check<span class="gr-nb">15</span></span>
+                        <span class="gr-ni gr-on"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>Run Reports</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>Approvals<span class="gr-nb">6</span></span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><circle cx="18" cy="15" r="3"/><path d="M18 11.5v1M18 17.5v1M21.5 15h-1M15.5 15h-1"/></svg>Admin Hub</span>
+                      </nav>
+                      <div class="gr-spacer"></div>
+                      <div class="gr-who">
+                        <span class="gr-who-av">WT</span>
+                        <span class="gr-who-id"><b>Wei Lin Tan</b><small>w.tan@example.org · Admin</small><u>Edit</u></span>
+                        <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+                      </div>
+                    </div>
+                    <div class="gr-main">
+                      <div class="gr-head">
+                        <span class="gr-head-l">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>
+                          <span><b>Run Reports</b><small>Invoice history and spending analytics</small></span>
+                        </span>
+                        <span class="gr-pill">w.tan@example.org</span>
+                      </div>
+                      <div class="gr-body">
+                        <div class="gr-rep">
+                          <div class="gr-kpis">
+                            <div class="gr-kpi"><div class="gr-k">Total Invoices</div><div class="gr-v">62</div><div class="gr-s">All time</div></div>
+                            <div class="gr-kpi"><div class="gr-k">Submitted</div><div class="gr-v gr-good">47</div><div class="gr-s">Processed</div></div>
+                            <div class="gr-kpi"><div class="gr-k">Awaiting</div><div class="gr-v gr-warn">15</div><div class="gr-s">Needs action</div></div>
+                            <div class="gr-kpi"><div class="gr-k">Awaiting OSN</div><div class="gr-v gr-warn">6</div><div class="gr-s">Approved, not yet sent</div></div>
+                            <div class="gr-kpi"><div class="gr-k">Value (SGD)</div><div class="gr-v">$418,270</div><div class="gr-s">Total extracted</div></div>
+                          </div>
+                          <div class="gr-charts">
+                            <div class="gr-chart">
+                              <div class="gr-ct-h">Invoices Received (YTD)</div>
+                              <div class="gr-bars">
+                                <span class="gr-bar"><i style="height:33%"></i><span>Jan</span></span>
+                                <span class="gr-bar"><i style="height:58%"></i><span>Feb</span></span>
+                                <span class="gr-bar"><i style="height:42%"></i><span>Mar</span></span>
+                                <span class="gr-bar"><i style="height:75%"></i><span>Apr</span></span>
+                                <span class="gr-bar"><i style="height:50%"></i><span>May</span></span>
+                                <span class="gr-bar"><i style="height:92%"></i><span>Jun</span></span>
+                                <span class="gr-bar"><i style="height:67%"></i><span>Jul</span></span>
+                                <span class="gr-bar"><i style="height:100%"></i><span>Aug</span></span>
+                                <span class="gr-bar"><i style="height:0"></i><span>Sep</span></span>
+                                <span class="gr-bar"><i style="height:0"></i><span>Oct</span></span>
+                                <span class="gr-bar"><i style="height:0"></i><span>Nov</span></span>
+                                <span class="gr-bar"><i style="height:0"></i><span>Dec</span></span>
+                              </div>
+                            </div>
+                            <div class="gr-chart">
+                              <div class="gr-ct-h">Spend by Top Suppliers</div>
+                              <div class="gr-donut-wrap">
+                                <span class="gr-donut" style="background:conic-gradient(#3b82f6 0 33%,#fff 33% 34.5%,#10b981 34.5% 59.5%,#fff 59.5% 61%,#f59e0b 61% 78%,#fff 78% 79.5%,#6366f1 79.5% 91.5%,#fff 91.5% 93%,#ec4899 93% 99%,#fff 99% 100%)"></span>
+                                <span class="gr-legend">
+                                  <span><i style="background:#3b82f6"></i>Helios Safety Equipment</span>
+                                  <span><i style="background:#10b981"></i>Kestrel Marine Supplies</span>
+                                  <span><i style="background:#f59e0b"></i>Orion Industrial Pte Ltd</span>
+                                  <span><i style="background:#6366f1"></i>Northbeam Logistics</span>
+                                  <span><i style="background:#ec4899"></i>Vanguard Electrical</span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="gr-tbl">
+                            <div class="gr-tbl-hd">
+                              <b>All Invoices</b>
+                              <span class="gr-search" style="max-width:110px">
+                                <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                <span>Search supplier, PO…</span>
+                              </span>
+                            </div>
+                            <table>
+                              <tr><th>Vendor</th><th>PO Number</th><th style="text-align:right">Total</th><th style="text-align:center">Status</th></tr>
+                              <tr><td><b>Helios Safety Equipment</b><small>HSE-2026-0412.pdf · 2026-08-04</small></td><td>PO-4471192</td><td class="gr-r">$22,610</td><td class="gr-c"><span class="gr-chip gr-c-turn gr-chip-d">Pending</span></td></tr>
+                              <tr><td><b>Kestrel Marine Supplies</b><small>KMS-INV-8830.pdf · 2026-08-08</small></td><td>PO-4470884</td><td class="gr-r">$12,480</td><td class="gr-c"><span class="gr-chip gr-c-turn gr-chip-d">Awaiting OSN</span><span class="gr-osn">Send to OSN</span></td></tr>
+                              <tr><td><b>Vanguard Electrical</b><small>VE-inv-2261.pdf · 2026-07-30</small></td><td>PO-4469908</td><td class="gr-r">$3,275</td><td class="gr-c"><span class="gr-chip gr-c-back gr-chip-d">Rejected</span></td></tr>
+                            </table>
+                            <div style="padding:5px 10px;border-top:1px solid var(--gr-line-2);font-size:6px;color:var(--gr-fg-4)">62 invoices · Click any row to view in Inbox</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Run Reports</div><div class="sd">Five counters, invoices received across the year, spend by supplier, and every record in one searchable table</div></figcaption>
+              </figure>
+
+              <!-- 4. Admin Hub (AdminHub.tsx — stepper at step 1, structure already published) -->
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">GRID · Admin Hub</span></div>
+                <div class="app-shot-frame">
+                  <div class="gr-mock" data-mock-width="720" aria-hidden="true">
+                    <div class="gr-side">
+                      <div class="gr-logo">
+                        <span class="gr-mark" style="--s:14px"><i></i><i></i><i></i><i></i></span>
+                        <span><b>GRID</b><small>Invoice Manager</small></span>
+                      </div>
+                      <nav class="gr-nav">
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M16 16l-4-4-4 4"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Upload Invoice</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Invoices to Check<span class="gr-nb">15</span></span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>Run Reports</span>
+                        <span class="gr-ni"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>Approvals<span class="gr-nb">6</span></span>
+                        <span class="gr-ni gr-on"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><circle cx="18" cy="15" r="3"/><path d="M18 11.5v1M18 17.5v1M21.5 15h-1M15.5 15h-1"/></svg>Admin Hub</span>
+                      </nav>
+                      <div class="gr-spacer"></div>
+                      <div class="gr-who">
+                        <span class="gr-who-av">WT</span>
+                        <span class="gr-who-id"><b>Wei Lin Tan</b><small>w.tan@example.org · Admin</small><u>Edit</u></span>
+                        <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+                      </div>
+                    </div>
+                    <div class="gr-main">
+                      <div class="gr-head">
+                        <span class="gr-head-l">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><circle cx="18" cy="15" r="3"/><path d="M18 11.5v1M18 17.5v1M21.5 15h-1M15.5 15h-1"/></svg>
+                          <span><b>Admin Hub</b><small>Build the structure, publish it, add people, appoint admins</small></span>
+                        </span>
+                        <span class="gr-pill">w.tan@example.org</span>
+                      </div>
+                      <div class="gr-body">
+                        <div class="gr-admin">
+                          <div class="gr-note gr-amber"><b>Planning view.</b> The structure, levels and appointments you set up here shape registration and setup — but who can approve or manage users is still driven by each person’s admin switch and home unit, not by this chart. Wiring the chart into live access is a separate, planned step.</div>
+                          <div class="gr-steps">
+                            <span class="gr-step gr-done gr-cur">
+                              <span class="gr-step-b">
+                                <span class="gr-step-n"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                                <span class="gr-step-t">1 · Build structure</span>
+                                <span class="gr-step-s">Levels &amp; units of your organisation</span>
+                              </span>
+                              <span class="gr-conn gr-done"></span>
+                            </span>
+                            <span class="gr-step gr-done">
+                              <span class="gr-step-b">
+                                <span class="gr-step-n"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                                <span class="gr-step-t">2 · Publish</span>
+                                <span class="gr-step-s">Make the structure live</span>
+                              </span>
+                              <span class="gr-conn gr-done"></span>
+                            </span>
+                            <span class="gr-step">
+                              <span class="gr-step-b">
+                                <span class="gr-step-n">3</span>
+                                <span class="gr-step-t">3 · Add people</span>
+                                <span class="gr-step-s">Bring users in, set their home unit</span>
+                              </span>
+                              <span class="gr-conn"></span>
+                            </span>
+                            <span class="gr-step gr-lock">
+                              <span class="gr-step-b">
+                                <span class="gr-step-n">4</span>
+                                <span class="gr-step-t">4 · Appoint admins</span>
+                                <span class="gr-step-s">Give ACOs &amp; admins their scope</span>
+                              </span>
+                            </span>
+                          </div>
+                          <div class="gr-note gr-blue"><b>Step 1 — Build your structure.</b> Define the levels and units of each organisation. Nothing is visible to users until you publish.</div>
+                          <div class="gr-orgs">
+                            <div class="gr-orgs-hd"><b>Organisations</b><small>Every structure in the system. Open one to view or edit it.</small></div>
+                            <div class="gr-org">
+                              <b>Meridian Group</b><span class="gr-chip gr-c-done">Live · v3</span>
+                              <span class="gr-open">Open</span>
+                              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </div>
+                            <div class="gr-org">
+                              <b>Northgate Group</b><span class="gr-chip gr-c-turn">Draft in progress</span>
+                              <span class="gr-open">Open</span>
+                              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </div>
+                            <div class="gr-org">
+                              <b>Southcross Group</b><span class="gr-chip gr-c-grey">Not published</span>
+                              <span class="gr-open">Open</span>
+                              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </div>
+                          </div>
+                          <div class="gr-neworg">
+                            <b>New organisation</b>
+                            <p>The top of a new structure — its levels and units hang underneath it.</p>
+                            <span class="gr-input">e.g. Republic of Singapore Air Force</span>
+                            <span class="gr-primary">Create organisation</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Admin Hub</div><div class="sd">Build → publish → add people → appoint admins, with the app’s own notice about what the chart does and doesn’t yet control</div></figcaption>
+              </figure>
+
+            </div>
+            </div>
+          </div>
           <p><a class="link-inline" href="/work#wp1">Full case study, on the Work page →</a></p>
         </div>
       </details>
@@ -1525,7 +2238,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <p>Fuel receipt claims ran on paper dockets, photographed and re-typed by hand for both aviation and vehicle fuel. I designed and built the app that replaced it: a whitelisted sign-in, a camera-first capture flow for the receipt itself, and an audit trail across every submission.</p>
           <div><div class="lab">What it does</div>
             <ul class="feat" role="list">
-              <li>Whitelist-gated sign-in with a one-time email login code — no passwords to manage</li>
+              <li>Whitelist-gated sign-in with a one-time email login code, so there are no passwords to manage</li>
               <li>Camera capture of the fuel receipt or invoice, with manual entry as the fallback when no OCR key is configured</li>
               <li>Separate aviation and vehicle fuel forms, each with its own searchable, exportable history</li>
               <li>A full audit log of every submit, edit, delete and role change, plus an admin panel for platforms, the email whitelist and users</li>
@@ -1546,32 +2259,32 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             <div class="app-shots-wrap">
             <div class="app-shots" role="list" aria-label="FUEL Up app screens, captured from the running app">
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Sign In</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! · Sign In</span></div>
                 <div class="app-shot-frame"><img src="fuelup/login.png" loading="lazy" alt="FUEL Up sign-in screen: corporate email field and a Get Login Code button, for the one-time-code authentication flow"></div>
-                <figcaption class="app-shot-cap"><div class="st">Sign in</div><div class="sd">Whitelisted corporate email + a one-time login code — no passwords</div></figcaption>
+                <figcaption class="app-shot-cap"><div class="st">Sign in</div><div class="sd">Whitelisted corporate email plus a one-time login code, so no passwords</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Forms</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! · Forms</span></div>
                 <div class="app-shot-frame"><img src="fuelup/dashboard.png" loading="lazy" alt="FUEL Up forms landing screen with Aviation Fuel and Vehicle Fuel submission tiles, and links to past Aviation and Vehicle history"></div>
                 <figcaption class="app-shot-cap"><div class="st">Forms</div><div class="sd">Aviation and vehicle fuel submission, plus history, in one landing view</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — New Aviation Form</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! · New Aviation Form</span></div>
                 <div class="app-shot-frame"><img src="fuelup/upload-ocr.png" loading="lazy" alt="FUEL Up receipt upload screen with a camera capture area, a Scan with AI button, and a Type it myself manual-entry fallback"></div>
                 <figcaption class="app-shot-cap"><div class="st">Capture</div><div class="sd">Photograph the receipt; scan with AI or type it in manually</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Aviation History</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! · Aviation History</span></div>
                 <div class="app-shot-frame"><img src="fuelup/history.png" loading="lazy" alt="FUEL Up aviation history screen with date-range filters, an invoice-number search, and bulk export and send actions"></div>
                 <figcaption class="app-shot-cap"><div class="st">History</div><div class="sd">Filter by date, search by invoice number, export or send in bulk</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Audit Log</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! · Audit Log</span></div>
                 <div class="app-shot-frame"><img src="fuelup/audit-log.png" loading="lazy" alt="FUEL Up audit log screen listing submit, edit, delete and role-change events by user and timestamp"></div>
                 <figcaption class="app-shot-cap"><div class="st">Audit log</div><div class="sd">Every submit, edit, delete and role change, timestamped</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! — Admin Panel</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">Fuel Up! · Admin Panel</span></div>
                 <div class="app-shot-frame"><img src="fuelup/admin-panel.png" loading="lazy" alt="FUEL Up admin panel with platform management, CSV whitelist import, user management and a purge-all danger zone"></div>
                 <figcaption class="app-shot-cap"><div class="st">Admin panel</div><div class="sd">Manage platforms, the email whitelist and user roles</div></figcaption>
               </figure>
@@ -1598,8 +2311,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               <li>Audit logging on reservation records</li>
               <li>Soft-delete patterns and departmental isolation for multi-tenant use</li>
             </ul></div>
-          <div><div class="lab">Outcome</div><p class="note">Designed and implemented end-to-end with specs-driven development (frontend, API integration and data model) in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p>
-            <p><span class="needs-copy">Add: who can confirm the two-day build, or the dates it ran between</span></p></div>
+          <div><div class="lab">Outcome</div><p class="note">Designed and implemented end-to-end with specs-driven development (frontend, API integration and data model) in two days, and demonstrated it to stakeholders in a dedicated session. Gemini 3.1, Claude Opus 4.6 and GitHub Copilot assisted the build; none of them runs in the shipped product.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Dataverse</span><span>React</span><span>PowerApps Code Apps</span></div></div>
           <div class="log-shots-wrap">
             <div class="shots-head">
@@ -1616,22 +2328,22 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             <div class="app-shots-wrap">
             <div class="app-shots" role="list" aria-label="RAiD Facility Booking System app screens, captured from the running app">
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Dashboard</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook · Dashboard</span></div>
                 <div class="app-shot-frame"><img src="facility-booking/dashboard.png" loading="lazy" alt="RAiD Facility Booking dashboard: pending/approved/upcoming stat cards, a today/tomorrow agenda list, and a facilities quick-book panel"></div>
                 <figcaption class="app-shot-cap"><div class="st">Dashboard</div><div class="sd">Pending, approved and upcoming counts, an agenda list, and one-tap rebooking of your own facilities</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Book a Facility</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook · Book a Facility</span></div>
                 <div class="app-shot-frame"><img src="facility-booking/book.png" loading="lazy" alt="RAiD Facility Booking wizard: a four-step stepper for facility, date and time, details and review, with a location-first facility picker"></div>
                 <figcaption class="app-shot-cap"><div class="st">Booking wizard</div><div class="sd">Location-first facility picker, date/time and recurrence, purpose of booking, then a conflict check before submit</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Availability</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook · Availability</span></div>
                 <div class="app-shot-frame"><img src="facility-booking/availability.png" loading="lazy" alt="RAiD Facility Booking availability calendar: a month grid with colour-coded approved, pending, processing clearance and blackout status chips"></div>
                 <figcaption class="app-shot-cap"><div class="st">Availability calendar</div><div class="sd">Month view per facility with a four-status colour legend, filterable by location and unit</div></figcaption>
               </figure>
               <figure class="app-shot" role="listitem" tabindex="0">
-                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook — Management</span></div>
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">RSAF FacilityBook · Management</span></div>
                 <div class="app-shot-frame"><img src="facility-booking/management.png" loading="lazy" alt="RAiD Facility Booking approver console: a pending-requests table with requester, facility, date and time, purpose, and approve or reject row actions"></div>
                 <figcaption class="app-shot-cap"><div class="st">Management console</div><div class="sd">Approver queue with per-row approve/reject, plus facilities, user roles and audit log tabs</div></figcaption>
               </figure>
@@ -1674,7 +2386,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>End-to-end workflow for SSB to track and approve the loaning of their logistic items. <span class="needs-copy">Expand: SSB</span></p>
+          <p>End-to-end workflow for SSB to track and approve the loaning of their logistic items.</p>
           <div><div class="lab">What I learned</div><p class="note">Rapid prototyping using simple no-code tools to create a functional system and deploy within a day.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>FormSG</span></div></div>
         </div>
@@ -1695,8 +2407,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               <li>Noticeboards for centralised announcements</li>
               <li>Hand-over features facilitating smooth transitions</li>
             </ul></div>
-          <div><div class="lab">Outcome</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p>
-            <p><span class="needs-copy">Add: how the efficiency and accuracy change was measured, and who reported it</span></p></div>
+          <div><div class="lab">Outcome</div><p class="note">Significantly improved the efficiency and accuracy of attendance tracking for duty personnel.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Apps</span><span>Microsoft Power Automate</span></div></div>
           <figure class="shot" tabindex="0">
             <img src="workplace-cico.jpg" loading="lazy"
@@ -1738,7 +2449,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation. <span class="needs-copy">Add: where the 500-student figure comes from, and who counted it</span></p>
+          <p>App developed for a nationwide event to efficiently manage attendance of 500 students through geofencing and score tabulation.</p>
           <div><div class="lab">Built with</div><div class="chips"><span>Microsoft Power Platform</span><span>UI Design</span></div></div>
         </div>
       </details>
@@ -1792,8 +2503,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </summary>
         <div class="log-body">
           <p>Explored AI vibe-coding tools to design an end-to-end development workflow for PowerApps Code Apps.</p>
-          <div><div class="lab">Outcome</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p>
-            <p><span class="needs-copy">Add: who measured the months-to-days figure, and against which project</span></p></div>
+          <div><div class="lab">Outcome</div><p class="note">Designed a systematic workflow that reduced development time from months to days for Digital Champions and RAiD developers.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>PowerApps Code Apps</span><span>AI Coding Tools</span></div></div>
         </div>
       </details>
@@ -1805,8 +2515,8 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>A published AI agent skill that takes a GitHub repository and returns the launch material for it. Point it at a repo and it produces a landing page, two infographics, a video composition and a LinkedIn post — using screenshots of the real app, not mock-ups. Released publicly under MIT, installable in Claude Code and Google Antigravity.</p>
-          <div><div class="lab">Human need</div><p class="note">A citizen developer finishes an internal app and then has to convince people to use it. That second job needs screenshots, a page and a post — skills the build didn't require, and time the builder doesn't have.</p></div>
+          <p>A published AI agent skill that takes a GitHub repository and returns the launch material for it. Point it at a repo and it produces a landing page, two infographics, a video composition and a LinkedIn post, using screenshots of the real app rather than mock-ups. Released publicly under MIT, installable in Claude Code and Google Antigravity.</p>
+          <div><div class="lab">Human need</div><p class="note">A citizen developer finishes an internal app and then has to convince people to use it. That second job needs screenshots, a page and a post: skills the build didn't require, and time the builder doesn't have.</p></div>
           <div><div class="lab">What it does</div>
             <ul class="feat" role="list">
               <li>Clones the target repo read-only into a temporary directory and never writes back to it</li>
@@ -1814,7 +2524,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               <li>Captures the app's actual screens, and falls back to static reconstructions when Node or a headless browser isn't available, rather than failing</li>
               <li>Emits a marketing spec, a zero-dependency HTML landing page, 16:9 and 9:16 SVG infographics, a Remotion video composition, and LinkedIn copy</li>
             </ul></div>
-          <div><div class="lab">What I learned</div><p class="note">Writing a skill someone else installs is a different discipline from writing one for yourself: it has to refuse to damage a stranger's repository, and it has to degrade instead of crash when their machine is missing a tool. <span class="needs-copy">Add: who has installed or used it, and one thing a user hit that you hadn't designed for</span></p></div>
+          <div><div class="lab">What I learned</div><p class="note">Writing a skill someone else installs is a different discipline from writing one for yourself: it has to refuse to damage a stranger's repository, and it has to degrade instead of crash when their machine is missing a tool.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Claude Code skills</span><span>Google Antigravity</span><span>Remotion</span><span>Headless browser capture</span><span>SVG</span></div></div>
           <p><a class="link-inline" href="https://github.com/ElfredSeow/App-Marketing-Skill" target="_blank" rel="noopener noreferrer">The repo, on GitHub →</a></p>
         </div>
@@ -1828,7 +2538,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </summary>
         <div class="log-body">
           <p>A system prompt, published for anyone to paste into Google AI Studio's instructions field, that changes how an AI coding assistant behaves before it writes a line: plan first, get approval, stay inside the request.</p>
-          <div><div class="lab">Human need</div><p class="note">Left alone, a coding assistant is agreeable and eager — it starts editing on the first message and adds things nobody asked for. For someone who can read the output but not yet audit it line by line, that is the failure mode that costs the most time.</p></div>
+          <div><div class="lab">Human need</div><p class="note">Left alone, a coding assistant is agreeable and eager: it starts editing on the first message and adds things nobody asked for. For someone who can read the output but not yet audit it line by line, that is the failure mode that costs the most time.</p></div>
           <div><div class="lab">What it does</div>
             <ul class="feat" role="list">
               <li>Holds an approval gate: no change to code, files, data model, dependencies or structure until a complete implementation plan has been shown and accepted</li>
@@ -1836,7 +2546,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
               <li>Bans unrequested features, pages, integrations and redesigns mid-implementation</li>
               <li>Instructs the assistant to stop the moment an assumption turns out to be false, and to be direct rather than agreeable</li>
             </ul></div>
-          <div><div class="lab">What I learned</div><p class="note">The useful part of a system prompt is the refusals, not the encouragement. <span class="needs-copy">Add: the specific incident that made you write it, and roughly how many people you've handed it to</span></p></div>
+          <div><div class="lab">What I learned</div><p class="note">The useful part of a system prompt is the refusals, not the encouragement.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Google AI Studio</span><span>Prompt engineering</span></div></div>
           <p><a class="link-inline" href="https://github.com/ElfredSeow/Google-AI-Studio-System-Prompt" target="_blank" rel="noopener noreferrer">The repo, on GitHub →</a></p>
         </div>
@@ -1849,7 +2559,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps. It came through cleared on both counts: for my own use, and for citizen developers generally. <span class="needs-copy">Expand: Cydef</span></p>
+          <p>Collaboration with Cydef to clear an open-source documentation generation tool for PowerApps. It came through cleared on both counts: for my own use, and for citizen developers generally.</p>
           <div><div class="lab">What I learned</div><p class="note">Learned about cybersecurity scanning architecture, policy constraints, and how to collaborate with departments to clear tools for citizen developers.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>GitHub</span><span>PowerDocu</span></div></div>
         </div>
@@ -1862,11 +2572,10 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Integrating SAGE's ME5 Delta Agent into Copilot for training purposes using open-source models. <span class="needs-copy">Expand: SAGE / ME5 / Delta Agent, and what each is and what this integration does, in plain terms</span></p>
+          <p>Integrating SAGE's ME5 Delta Agent into Copilot for training purposes using open-source models.</p>
           <div><div class="lab">Human need</div><p class="note">RSAF engineers learning to look after the people on their own team: practice at a conversation that is hard to rehearse without a real subordinate in front of you.</p></div>
           <div><div class="lab">What the AI does</div><p class="note">The agent plays the teammate: a shy one, with something on their mind they are afraid to raise with their boss. The engineer role-plays the conversation and finds out what their questions actually surface. It runs on open-source models inside Copilot, for training use.</p></div>
-          <div><div class="lab">What I learned</div><p class="note">Navigated license constraints creatively to replicate GPT-4.1 concepts, managing context engineering to prevent hallucinations.</p>
-            <p><span class="needs-copy">Add: what "replicate GPT-4.1 concepts" means in plain terms, and which parts you built vs. SAGE supplied</span></p></div>
+          <div><div class="lab">What I learned</div><p class="note">Navigated license constraints creatively to replicate GPT-4.1 concepts, managing context engineering to prevent hallucinations.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Copilot</span><span>Prompt Builder</span><span>Dataverse</span><span>PowerApps</span></div></div>
         </div>
       </details>
@@ -1878,7 +2587,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials. Lovable carried the build half: a working full-stack prototype fast enough that attendees could put a real workflow in front of a user the same day. <span class="needs-copy">Expand: 815 SQN</span> <span class="needs-copy">Add: where the 35-attendee figure comes from</span></p>
+          <p>Condensed a 2-day bootcamp into 1 day for 35 users, curating new interactive learning materials. Lovable carried the build half: a working full-stack prototype fast enough that attendees could put a real workflow in front of a user the same day.</p>
           <div><div class="lab">Built with</div><div class="chips"><span>Power Platform</span></div></div>
         </div>
       </details>
@@ -1917,7 +2626,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </summary>
         <div class="log-body">
           <p>Mobile app to improve citizen engagement and civic services, allowing people to report issues and track the progress of their requests.</p>
-          <div><div class="lab">Outcome</div><p class="note">Certificate of Participation from AI Singapore. <span class="needs-copy">Add: whether the entry placed, and what the judges assessed</span></p></div>
+          <div><div class="lab">Outcome</div><p class="note">Certificate of Participation from AI Singapore.</p></div>
           <div><div class="lab">What I learned</div><p class="note">Exposure to ML algorithms, various cloud technologies in Huawei's ecosystem, and MLOps. Introduced to the AI development field.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Full-Stack Dev</span><span>Machine Learning Algorithms</span><span>MLOps</span></div></div>
           <figure class="shot shot--cert" tabindex="0">
@@ -1937,7 +2646,6 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </summary>
         <div class="log-body">
           <p>Cybersecurity CTF competition organised by SMU. Used tools such as Wireshark, John the Ripper, and Z-steg.</p>
-          <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
           <div><div class="lab">What I learned</div><p class="note">Introduced to various cybersecurity practices transitioning from an engineering background.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Cybersecurity</span><span>Digital Forensics</span><span>OSINT</span><span>Cryptography</span><span>Steganography</span></div></div>
         </div>
@@ -1951,7 +2659,6 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </summary>
         <div class="log-body">
           <p>Data visualization contest to develop visualization skills. Conducted data analysis and created compelling visualizations.</p>
-          <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Tableau</span><span>Data Visualization</span><span>Data Analysis</span></div></div>
         </div>
       </details>
@@ -1964,7 +2671,6 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         </summary>
         <div class="log-body">
           <p>Acquired technical skills essential for aircraft maintenance at Lufthansa Technical Training Center, experiencing high-pressure scenarios.</p>
-          <div><div class="lab">Outcome</div><p><span class="needs-copy">Add: placed, not placed, or what was assessed</span></p></div>
           <div><div class="lab">What I learned</div><p class="note">Learned riveting, soldering, and composite materials. Instilled resilience, self-discipline, and the ability to handle stress.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>Aircraft Maintenance</span><span>Aircraft Inspection</span></div></div>
         </div>
@@ -1977,7 +2683,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>A planning tool used across RSAF teams to lay out tasks and assign them to the people doing the work. It is in use now and scaling toward an enterprise deployment. <span class="needs-copy">Add: which parts you built</span></p>
+          <p>A planning tool used across RSAF teams to lay out tasks and assign them to the people doing the work. It is in use now and scaling toward an enterprise deployment.</p>
           <p class="log-note">Named on the Work page's Security &amp; governance section: I acted as Security Reviewer on it.</p>
         </div>
       </details>
@@ -1995,7 +2701,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
         <p class="h2">Ready for what's <span class="on-brand">next.</span></p>
         <p class="lede contact-lede">
           Looking for a role that uses both sides, aerospace and IT, and adds
-          something I do not have yet. Send me a note — I usually reply within a day.
+          something I do not have yet. Send me a note and I usually reply within a day.
         </p>
       </div>
       <div class="card contact-card">
@@ -2192,10 +2898,10 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     return { title: fig ? fig.textContent.trim() : '', desc: '' };
   }
 
-  // Hand-built screen mocks (.bf-mock, .mf-mock) each have a fixed
+  // Hand-built screen mocks (.bf-mock, .mf-mock, .gr-mock) each have a fixed
   // authoring width, declared on the element as data-mock-width and
   // defaulting to 480. A new mock family only has to join this list.
-  var MOCK_SEL = '.bf-mock, .mf-mock';
+  var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock';
   function mockWidth(mock) { return parseFloat(mock.getAttribute('data-mock-width')) || 480; }
   var pendingFit = null;
 
