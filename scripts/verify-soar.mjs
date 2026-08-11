@@ -201,6 +201,50 @@ check('dashboard: stability figures match the capture',
   dash.found && dash.stableVal === '90.0%' && dash.gapsVal === '2',
   `${dash.stable} | ${dash.gaps}`);
 
+// ── Check group 6: Covering Requests ─────────────────────────────────
+const cov = await page.evaluate(() => {
+  const mock = document.querySelector('.soar-mock[data-screen="covering"]');
+  if (!mock) return { found: false };
+  return {
+    found: true,
+    active: (mock.querySelector('.soar-ni.soar-on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.soar-h1') || {}).textContent.trim(),
+    sub: (mock.querySelector('.soar-sub2') || {}).textContent.trim(),
+    tabs: Array.prototype.slice.call(mock.querySelectorAll('.soar-tab')).map((t) => t.textContent.trim()),
+    pending: (mock.querySelector('.soar-tab.soar-on-tab .soar-count') || {}).textContent || '',
+    reqs: Array.prototype.slice.call(mock.querySelectorAll('.soar-req')).map((r) => ({
+      date: (r.querySelector('.soar-req-d') || {}).textContent.trim(),
+      sim: (r.querySelector('.soar-req-s') || {}).textContent.trim(),
+      by: (r.querySelector('.soar-req-by') || {}).textContent.trim(),
+      rep: (r.querySelector('.soar-rep') || {}).textContent.trim(),
+      reason: (r.querySelector('.soar-reason-t') || {}).textContent.trim(),
+      approve: !!r.querySelector('.soar-approve'),
+      reject: !!r.querySelector('.soar-reject'),
+    })),
+  };
+});
+
+check('covering: screen exists', cov.found);
+check('covering: Covering is the active nav item', cov.found && cov.active === 'Covering', cov.active);
+check('covering: heading + subtitle match the capture',
+  cov.found && cov.h1 === 'Covering Requests'
+  && cov.sub === 'Manage mission coverage and assessor replacements');
+check('covering: Pending/History tabs with a count of 3',
+  cov.found && cov.tabs.length === 2 && /^Pending/.test(cov.tabs[0]) && cov.tabs[1] === 'History'
+  && cov.pending.trim() === '3', `${JSON.stringify(cov.tabs)} count=${cov.pending}`);
+check('covering: three request cards matching the capture',
+  cov.found && JSON.stringify(cov.reqs.map((r) => `${r.date}|${r.sim}|${r.by}|${r.rep}`)) === JSON.stringify([
+    'Tuesday, Aug 11th|SIM 1|S Whitfield|SUGGESTED REPLACEMENT: R ALVAREZ',
+    'Thursday, Aug 13th|SIM 5|M Bianchi|SUGGESTED REPLACEMENT: L OKAFOR',
+    'Wednesday, Aug 12th|SIM 1|K Nakamura|SUGGESTED REPLACEMENT: P NGUYEN',
+  ]), JSON.stringify(cov.reqs.map((r) => `${r.date}|${r.sim}|${r.by}|${r.rep}`)));
+check('covering: every card carries its reason and both actions',
+  cov.found && cov.reqs.length === 3 && cov.reqs.every((r) => r.reason.length > 20 && r.approve && r.reject));
+check('covering: reasons are the captured text',
+  cov.found && /Medical appointment scheduled at short notice/.test(cov.reqs[0].reason)
+  && /Recalled to squadron duty/.test(cov.reqs[1].reason)
+  && /Currency renewal course clashes/.test(cov.reqs[2].reason));
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 
