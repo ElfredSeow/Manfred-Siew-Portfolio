@@ -1051,6 +1051,17 @@ const cal = await page.evaluate(() => {
     covering: missions.filter((m) => m.classList.contains('soar-cover-c'))
       .map((m) => m.getAttribute('data-cell')),
     unassigned: Array.prototype.slice.call(mock.querySelectorAll('.soar-unassigned')).length,
+    missions: missions.map((m) => {
+      const prs = Array.prototype.slice.call(m.querySelectorAll('.soar-pr'));
+      const q = prs.find((p) => p.querySelector('.soar-tagq'));
+      const p = prs.find((p) => p.querySelector('.soar-tagp'));
+      return {
+        cell: m.getAttribute('data-cell'),
+        sim: (m.querySelector('.soar-sim') || {}).textContent.trim(),
+        q: q ? q.textContent.replace(/^Q/, '').trim() : null,
+        p: p ? p.textContent.replace(/^P/, '').trim() : null,
+      };
+    }),
   };
 });
 
@@ -1085,6 +1096,23 @@ check('calendar: exactly the two captured covering missions',
   JSON.stringify(cal.covering));
 check('calendar: two Unassigned slots, one per broken pair',
   cal.found && cal.unassigned === 2, String(cal.unassigned));
+check('calendar: all 20 missions match the capture exactly — sim, Q and P per cell',
+  // The checks above assert aggregate counts and which cells are flagged,
+  // but never the actual name/simulator on any cell — a transposed name on
+  // one of the 16 unflagged missions would still pass all of them. Assert
+  // the full grid as one exact array comparison instead.
+  cal.found && JSON.stringify(cal.missions.map((m) => `${m.cell}:${m.sim}|${m.q}|${m.p}`)) === JSON.stringify([
+    'mon-w1:Sim 1|T Rahman|L Okafor', 'mon-w2:Sim 2|S Whitfield|A Delgado',
+    'mon-w3:Sim 1|K Nakamura|M Bianchi', 'mon-w4:Sim 3|R Alvarez|D Kowalski',
+    'tue-w1:Sim 2|T Rahman|M Bianchi', 'tue-w2:Sim 4|P Nguyen|L Okafor',
+    'tue-w3:Sim 1|S Whitfield|Unassigned', 'tue-w4:Sim 3|K Nakamura|A Delgado',
+    'wed-w1:Sim 5|R Alvarez|D Kowalski', 'wed-w2:Sim 2|T Rahman|A Delgado',
+    'wed-w3:Sim 4|P Nguyen|M Bianchi', 'wed-w4:Sim 1|K Nakamura|L Okafor',
+    'thu-w1:Sim 3|S Whitfield|D Kowalski', 'thu-w2:Sim 1|T Rahman|L Okafor',
+    'thu-w3:Sim 5|Unassigned|M Bianchi', 'thu-w4:Sim 2|R Alvarez|A Delgado',
+    'fri-w1:Sim 4|K Nakamura|M Bianchi', 'fri-w2:Sim 2|P Nguyen|D Kowalski',
+    'fri-w3:Sim 1|T Rahman|L Okafor', 'fri-w4:Sim 3|S Whitfield|A Delgado',
+  ]), JSON.stringify(cal.missions.map((m) => `${m.cell}:${m.sim}|${m.q}|${m.p}`)));
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -1469,13 +1497,20 @@ The `nth-child(n+4)` rule drops Thursday and Friday on a phone, in both the day-
 Run: `node scripts/verify-soar.mjs`
 Expected: PASS on every check in every group. `console messages: 0`; `external requests: 4`, all of them the page's pre-existing Google Fonts hosts.
 
-Then run the required regression diff:
+Then run the required regression diff, against `d565e89` — the commit where `public/projects.html` was last clean of any SOAR work — rather than an unstaged working-tree diff:
 
 ```bash
-git diff -U0 public/projects.html | grep -E '^[-+].*(bf-mock|mf-mock|gr-mock)'
+git diff -U0 d565e89 HEAD -- public/projects.html scripts/verify-soar.mjs | grep -E '^-.*(bf-mock|mf-mock|gr-mock)'
 ```
 
-Expected output: **only** the four added lines — the `.shot-lightbox-mockwrap .soar-mock` selector line, the `MOCK_SEL` before/after pair, and the `.app-shot-frame .soar-mock` comment that names them. No `-` line may remove or alter an existing `.bf-mock`, `.mf-mock` or `.gr-mock` rule. If any does, revert it.
+**Correction, found during Task 6:** by the time this task runs, other concurrent work on this branch has legitimately added real new `.bf-mock`/`.gr-mock` content of its own (confirmed to have happened during Tasks 2–5). The earlier expectation — "only the four added lines" — assumed a single session and is stale; a `+`-only grep would now also catch that unrelated legitimate work and read as a false alarm. Filtering to `-` (removal) lines only is the correct fix — except it is not empty either. Run it and you get exactly these two lines, already found and adjudicated in Task 2's own review, not new:
+
+```
+-.shot-lightbox-mockwrap .gr-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
+-  var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock';
+```
+
+Both are the mechanical, unavoidable consequence of appending `.soar-mock` to a comma-joined CSS selector group and to a single-line JS array-string — the line that used to terminate the construct necessarily gets rewritten to add the new entry. Task 2's reviewer confirmed no rule *body* changed and the regression checks (`bfCount===3`, `mfCount===5`, unchanged frame widths) passed; the controller ruled this is not a defect (see the Task 2 entries in the ledger at `.superpowers/sdd/2026-08-11-soar-duty-scheduler-screens/progress.md`). **Expected output at this step: exactly those two lines, nothing else.** If a THIRD `-` line appears, or either of these two differs from what's shown above, stop and report it — that would mean an existing rule was genuinely altered.
 
 Finally, open the page and compare each of the four screens against its source PNG one last time, at thumbnail size and in the lightbox.
 
