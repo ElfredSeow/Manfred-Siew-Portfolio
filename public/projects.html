@@ -1105,8 +1105,8 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
       <div class="cat-gallery-head">
         <div class="cat-gallery-heading">
           <span class="cat-gallery-label">Filter by category</span>
-          <button type="button" class="pill cat-reset" id="logReset" aria-pressed="true" aria-label="All 29 projects, clearing both filters">
-            All <span class="pill-count">29</span>
+          <button type="button" class="pill cat-reset" id="logReset" aria-pressed="true" aria-label="All 30 projects, clearing both filters">
+            All <span class="pill-count">30</span>
           </button>
         </div>
         <div class="cat-nav-group">
@@ -1190,7 +1190,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         <button type="button" class="pill" data-org="Temasek Polytechnic" aria-pressed="false">Temasek Polytechnic</button>
         <button type="button" class="pill" data-org="Freelance" aria-pressed="false">Freelance</button>
         <button type="button" class="pill" data-org="Open source" aria-pressed="false">Open source</button>
-        <span class="num log-count" id="logCount" role="status">Showing all 29</span>
+        <span class="num log-count" id="logCount" role="status">Showing all 30</span>
       </div>
     </div>
   </div>
@@ -1701,16 +1701,47 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         </div>
       </details>
 
-      <details class="log-row" id="miles-mavis" data-org="RAiD" data-cat="platform">
+      <details class="log-row" id="mavis" data-org="RAiD" data-cat="platform">
         <summary>
-          <span class="lt">MILES / MAVIS</span>
+          <span id="miles-mavis" aria-hidden="true"></span>
+          <span class="lt">Fleet Maintenance Management System (MAVIS)</span>
           <span class="tag tag-indigo">Scaling</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Usage and maintenance records for Air Specialist Vehicles (ASVs) were spread across manual steps with no single record of who was qualified for what, or of which vehicle was due for servicing. The platform pulls those workflows into one place: structured automation over centralised data, with role management and qualification tracking as first-class parts of the model.</p>
-          <div><div class="lab">What it does</div><p class="note">A role management model, per-person qualification records, automated workflow steps replacing manual hand-offs, servicing status tracked ahead of the due date, and reporting that reads from the same store the work is recorded in.</p></div>
-          <div><div class="lab">Built with</div><p>The functions were proved in Power Apps first, then rebuilt as a full-stack application with Lovable once per-user licensing stopped being viable. PowerDocu generated the documentation the prompting worked from.</p><div class="chips"><span>PowerApps</span><span>Lovable</span><span>PowerDocu</span></div></div>
+          <p>Tracks vehicle and ground-equipment serviceability across an air-force fleet. Availability is computed, not typed — derived live from three independent sources of unserviceability, mirroring the database rule so the dashboard and the store cannot disagree. Corrective and preventive work each run through their own approval chain, and what any one person sees is the intersection of vehicle category, base, department and sub-department.</p>
+          <p class="note">The maintenance half of the Air Specialist Vehicle platform. MILES, below, is the logbook half.</p>
+          <div><div class="lab">What it does</div>
+            <ul class="feat" role="list">
+              <li>A defect walks Waiting for assessment → Pending CEN Endorsement → Pending for Approval → Approved → Repair in progress → Ready for collection → Collected, with ADDL (Acceptable Defect Deferred Log), ADDL Expired and Rejected as branch states, and every transition gated by role</li>
+              <li>Moving a scheduled Preventive Maintenance date is not a free edit but an LOS — Latitude of Servicing — request that clears approval bands before the dashboard reflects it</li>
+              <li>A defect formally deferred as an ADDL keeps the asset serviceable only until its expiry date, after which the asset flips itself to ADDL Expired</li>
+              <li>Eleven built-in roles plus custom roles, resolved by a security-definer function server-side rather than trusted from the client</li>
+              <li>Five Postgres realtime channels push changes to the dashboard, coalesced through a 150ms per-table debounce so a burst write does not thrash the UI</li>
+            </ul></div>
+          <div><div class="lab">Built with</div><p>The functions were proved in Power Apps first, then rebuilt as a full-stack application once per-user licensing stopped being viable for a user base that reached beyond the RSAF.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Supabase</span><span>Lovable</span></div></div>
+          <p><a class="link-inline" href="/work#wp2">Full case study, on the Work page →</a></p>
+        </div>
+      </details>
+
+      <details class="log-row" id="miles" data-org="RAiD" data-cat="platform">
+        <summary>
+          <span class="lt">Air Specialist Vehicle Logbook (MILES)</span>
+          <span class="tag tag-indigo">Scaling</span><span class="lorg">RAiD</span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="log-body">
+          <p>The logbook side of the same fleet: a mobile-first record of vehicle movement and use, built for people standing on a flight line rather than sitting at a desk. A trip runs a full lifecycle behind an approval gate, and pre-use inspections feed the same serviceability picture the maintenance system works from.</p>
+          <p class="note">The logbook half of the Air Specialist Vehicle platform. MAVIS, above, is the maintenance half.</p>
+          <div><div class="lab">What it does</div>
+            <ul class="feat" role="list">
+              <li>A trip walks pending_approval → approved → ongoing → completed, with rejected as a branch, and approvers can clear many at once rather than one at a time</li>
+              <li>Four roles — admin, facilitator, approver, driver — with more than one assignable to a person, enforced at three layers: route guards, 136 row-level-security policies over 31 tables, and per-request auth inside every edge function</li>
+              <li>Digital pre-use inspections, configurable per vehicle type and per model, whose outcome drives whether the vehicle reads as serviceable</li>
+              <li>Fuel accounted end to end — bulk tanks to refueller payload holdings to POL top-ups to a summary report — with forklifts tracked by hour-meter and vehicles by odometer</li>
+              <li>Ground support equipment booked in and out of the same register as the vehicles, and every action written to an audit trail with actor, entity and timestamp</li>
+            </ul></div>
+          <div><div class="lab">Built with</div><p>The functions were proved in Power Apps first, then rebuilt as a full-stack application once per-user licensing stopped being viable for a user base that reached beyond the RSAF.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Supabase</span><span>Lovable</span></div></div>
           <p><a class="link-inline" href="/work#wp2">Full case study, on the Work page →</a></p>
         </div>
       </details>
