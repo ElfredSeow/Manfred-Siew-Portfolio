@@ -251,6 +251,55 @@ check('covering: reasons are the captured text, exactly',
     '"Currency renewal course clashes with the Wednesday PM slot."',
   ]), JSON.stringify(cov.reqs.map((r) => r.reason)));
 
+// ── Check group 7: System Administration ─────────────────────────────
+const adm = await page.evaluate(() => {
+  const mock = document.querySelector('.soar-mock[data-screen="admin"]');
+  if (!mock) return { found: false };
+  return {
+    found: true,
+    active: (mock.querySelector('.soar-ni.soar-on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.soar-h1') || {}).textContent.trim(),
+    sub: (mock.querySelector('.soar-sub2') || {}).textContent.trim(),
+    tabs: Array.prototype.slice.call(mock.querySelectorAll('.soar-atab')).map((t) => t.textContent.trim()),
+    activeTab: (mock.querySelector('.soar-atab.soar-on-tab') || {}).textContent.trim(),
+    people: Array.prototype.slice.call(mock.querySelectorAll('.soar-person')).map((p) => ({
+      name: (p.querySelector('.soar-pn') || {}).textContent.trim(),
+      roles: Array.prototype.slice.call(p.querySelectorAll('.soar-role')).map((r) => r.textContent.trim()),
+      duties: (p.querySelector('.soar-duties') || {}).textContent.trim(),
+      sup: !!p.querySelector('.soar-tg-sup.soar-tg-on'),
+      off: !!p.querySelector('.soar-tg-pwr.soar-tg-off'),
+    })),
+  };
+});
+
+check('admin: screen exists', adm.found);
+check('admin: Admin is the active nav item', adm.found && adm.active === 'Admin', adm.active);
+check('admin: heading + subtitle match the capture',
+  adm.found && adm.h1 === 'System Administration'
+  && adm.sub === 'Manage assessors, wave configurations, and system parameters');
+check('admin: five tabs, Assessors active',
+  adm.found && JSON.stringify(adm.tabs) === JSON.stringify(
+    ['ASSESSORS', 'ROLE TYPES', 'WAVE SLOTS', 'USER ACCOUNTS', 'SIMULATORS'])
+  && adm.activeTab === 'ASSESSORS', JSON.stringify(adm.tabs));
+check('admin: ten assessors with the captured duty counts',
+  adm.found && JSON.stringify(adm.people.map((p) => `${p.name}:${p.duties}`)) === JSON.stringify([
+    'T Rahman:14', 'L Okafor:13', 'S Whitfield:12', 'A Delgado:11', 'K Nakamura:10',
+    'M Bianchi:9', 'R Alvarez:8', 'D Kowalski:7', 'P Nguyen:6', 'J Farrow:5',
+  ]), JSON.stringify(adm.people.map((p) => `${p.name}:${p.duties}`)));
+check('admin: role tags match the capture',
+  adm.found && JSON.stringify(adm.people.map((p) => p.roles.join('+'))) === JSON.stringify([
+    'QFI+SENIOR PSYCH', 'REGULAR PSYCH', 'QFI', 'REGULAR PSYCH', 'QFI',
+    'SENIOR PSYCH', 'QFI', 'REGULAR PSYCH', 'QFI', 'TRAINEE ASSESSOR',
+  ]), JSON.stringify(adm.people.map((p) => p.roles.join('+'))));
+check('admin: supervisors are exactly T Rahman and S Whitfield',
+  adm.found && JSON.stringify(adm.people.filter((p) => p.sup).map((p) => p.name))
+    === JSON.stringify(['T Rahman', 'S Whitfield']),
+  JSON.stringify(adm.found ? adm.people.filter((p) => p.sup).map((p) => p.name) : []));
+check('admin: J Farrow is the only inactive assessor',
+  adm.found && JSON.stringify(adm.people.filter((p) => p.off).map((p) => p.name))
+    === JSON.stringify(['J Farrow']),
+  JSON.stringify(adm.found ? adm.people.filter((p) => p.off).map((p) => p.name) : []));
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 

@@ -1080,6 +1080,28 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .soar-mock .soar-approve{background:var(--soar-good);color:#04231b}
 .soar-mock .soar-reject{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.35);color:var(--soar-break)}
 
+/* System Administration */
+.soar-mock .soar-atabs{display:flex;gap:14px;border-bottom:1px solid var(--soar-border);margin-top:11px}
+.soar-mock .soar-atab{display:flex;align-items:center;gap:5px;padding:0 0 7px;font-family:var(--soar-mono);font-size:7.5px;letter-spacing:.13em;color:var(--soar-fg-4)}
+.soar-mock .soar-atab.soar-on-tab{color:var(--soar-primary-2);border-bottom:2px solid var(--soar-primary-2);margin-bottom:-1px}
+.soar-mock .soar-roster{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.soar-mock .soar-roster-h{font-size:11px;font-weight:700}
+.soar-mock .soar-add{display:flex;align-items:center;gap:5px;background:var(--soar-primary);color:#fff;border-radius:7px;padding:6px 10px;font-size:8.5px;font-weight:600}
+.soar-mock .soar-people{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px}
+.soar-mock .soar-person{padding:9px 10px}
+.soar-mock .soar-p-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.soar-mock .soar-pn{font-size:10px;font-weight:700;color:var(--soar-fg)}
+.soar-mock .soar-roles{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.soar-mock .soar-role{background:rgba(59,130,246,.14);color:#93c5fd;border-radius:999px;padding:1px 6px;font-family:var(--soar-mono);font-size:6.5px;letter-spacing:.1em}
+.soar-mock .soar-p-ft{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid var(--soar-border);margin-top:8px;padding-top:7px}
+.soar-mock .soar-duties{font-size:10px;font-weight:600;color:var(--soar-primary-2);font-variant-numeric:tabular-nums;line-height:1.1}
+.soar-mock .soar-duties-l{font-family:var(--soar-mono);font-size:6.5px;letter-spacing:.13em;color:var(--soar-fg-4)}
+.soar-mock .soar-tgs{display:flex;gap:5px}
+.soar-mock .soar-tg{width:19px;height:19px;border-radius:6px;display:grid;place-items:center;background:rgba(148,163,184,.1);color:var(--soar-fg-4)}
+.soar-mock .soar-tg-sup.soar-tg-on{background:rgba(245,158,11,.16);color:var(--soar-covering)}
+.soar-mock .soar-tg-pwr{background:rgba(16,185,129,.14);color:var(--soar-good)}
+.soar-mock .soar-tg-pwr.soar-tg-off{background:rgba(239,68,68,.16);color:var(--soar-break)}
+
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
    out responsively, so it shrinks uniformly on a phone and keeps
@@ -2661,6 +2683,159 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
                   </div>
                 </div>
                 <figcaption class="app-shot-cap"><div class="st">Covering Requests</div><div class="sd">An assessor raises a request with a reason and a suggested stand-in; a supervisor approves or rejects, and the decision lands in History</div></figcaption>
+              </figure>
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">SOAR — System Administration</span></div>
+                <div class="app-shot-frame">
+                  <div class="soar-mock" data-mock-width="720" data-screen="admin" aria-hidden="true">
+                    <div class="soar-screen">
+                      <div class="soar-rail">
+                        <div class="soar-brand"><span class="soar-wordmark">SOAR</span><span class="soar-sub">Duty Scheduler</span></div>
+                        <div class="soar-nav">
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>Calendar</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>My Schedule</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg><span>Covering</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="soar-ni soar-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg><span>Admin</span></span>
+                        </div>
+                        <div class="soar-rail-ft">
+                          <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><span>Light Mode</span></span>
+                          <span class="soar-user"><span class="soar-av">T</span><span class="soar-uinfo"><span class="soar-un">t.rahman@soar.demo</span><span class="soar-ur">Admin</span></span></span>
+                          <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span>Logout</span></span>
+                          <span class="soar-ver">v1.0.11</span>
+                        </div>
+                      </div>
+                      <div class="soar-pane">
+                        <div class="soar-h1">System Administration</div>
+                        <div class="soar-sub2">Manage assessors, wave configurations, and system parameters</div>
+                        <div class="soar-atabs">
+                          <span class="soar-atab soar-on-tab"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>ASSESSORS</span>
+                          <span class="soar-atab"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>ROLE TYPES</span>
+                          <span class="soar-atab"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>WAVE SLOTS</span>
+                          <span class="soar-atab"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>USER ACCOUNTS</span>
+                          <span class="soar-atab"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>SIMULATORS</span>
+                        </div>
+                        <div class="soar-roster">
+                          <span class="soar-roster-h">Personnel Roster</span>
+                          <span class="soar-add"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Add Assessor</span>
+                        </div>
+                        <div class="soar-people">
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">T Rahman</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">QFI</span><span class="soar-role">SENIOR PSYCH</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">14</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup soar-tg-on"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">L Okafor</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">REGULAR PSYCH</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">13</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">S Whitfield</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">QFI</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">12</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup soar-tg-on"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">A Delgado</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">REGULAR PSYCH</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">11</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">K Nakamura</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">QFI</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">10</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">M Bianchi</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">SENIOR PSYCH</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">9</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">R Alvarez</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">QFI</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">8</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">D Kowalski</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">REGULAR PSYCH</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">7</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">P Nguyen</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">QFI</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">6</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-person">
+                            <div class="soar-p-top"><span class="soar-pn">J Farrow</span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg></div>
+                            <div class="soar-roles"><span class="soar-role">TRAINEE ASSESSOR</span></div>
+                            <div class="soar-p-ft">
+                              <span><span class="soar-duties" style="display:block">5</span><span class="soar-duties-l">DUTIES</span></span>
+                              <span class="soar-tgs">
+                                <span class="soar-tg soar-tg-sup"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+                                <span class="soar-tg soar-tg-pwr soar-tg-off"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg></span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">System Administration</div><div class="sd">Assessors, role types, wave slots, user accounts and simulators are all managed in-app. Demonstration dataset — all personnel and reasons shown across these screens are fabricated.</div></figcaption>
               </figure>
             </div>
             </div>
