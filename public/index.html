@@ -339,10 +339,12 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .dash-band{ padding:1.5rem 0 5rem; }
 .dash-grid{ display:grid; gap:1.25rem; }
 @media (min-width:900px){
-  .dash-grid{ grid-template-columns:1.15fr .95fr .9fr; align-items:start; }
+  /* No align-items:start — the three columns share one height and rule off
+     together at the bottom. Each column below decides where its own slack goes. */
+  .dash-grid{ grid-template-columns:1.15fr .95fr .9fr; }
 }
 
-.dash-col{ padding:1.5rem; }
+.dash-col{ padding:1.5rem; display:flex; flex-direction:column; }
 @media (min-width:640px){ .dash-col{ padding:1.75rem; } }
 .dash-h{ font-size:1.125rem; font-weight:600; color:var(--ink); letter-spacing:-.01em; }
 .dash-h-sub{ margin-top:1.75rem; }
@@ -366,6 +368,13 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .chip-list{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
 
 .org-stack{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+/* Full-width strip under the three columns. In a column these four chips wrapped
+   to four lines and made that column 200px taller than its neighbours; across the
+   full width they sit on one line, which is what lets the columns balance. */
+.orgs-band{ padding:1.5rem; display:flex; flex-wrap:wrap; align-items:center; gap:.75rem 1.5rem; }
+@media (min-width:640px){ .orgs-band{ padding:1.5rem 1.75rem; } }
+@media (min-width:900px){ .orgs-band{ grid-column:1 / -1; } }
+.orgs-band .org-stack{ margin-top:0; }
 .org-chip{
   padding:.5rem 1rem; border:1px solid var(--line); border-radius:var(--r-pill);
   background:var(--surface); font-size:.875rem; color:var(--body);
@@ -383,8 +392,17 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .tool-name{ display:block; font-size:.9375rem; font-weight:600; color:var(--ink); }
 .tool-cap{ display:block; margin-top:.125rem; font-size:.8125rem; line-height:1.45; color:var(--muted); }
 
-.fact-col{ display:grid; gap:1rem; }
-.fact-card{ padding:1.25rem 1.5rem; display:flex; gap:1rem; align-items:flex-start; }
+/* The three columns share one height. Rather than inflate the cards to fill it,
+   each column anchors its closing element to the bottom edge, so the surplus
+   reads as one deliberate gap instead of a pool of white under the last card. */
+@media (min-width:900px){
+  .dash-col > .btn-block{ margin-top:auto; }
+}
+
+/* Equal rows, so the three facts are the same height as each other and together
+   fill the column — their natural heights differed by ~30px, which read as slop. */
+.fact-col{ display:grid; gap:1rem; grid-auto-rows:1fr; }
+.fact-card{ padding:1.25rem 1.5rem; display:flex; gap:1rem; align-items:center; }
 .fact-icon{
   flex:none; width:2.5rem; height:2.5rem; border-radius:var(--r-sm);
   display:grid; place-items:center;
@@ -573,13 +591,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         </a>
       </div>
 
-      <h2 class="dash-h dash-h-sub">Where I've worked</h2>
-      <div class="org-stack">
-        <span class="org-chip"><b>RSAF</b> Republic of Singapore Air Force</span>
-        <span class="org-chip"><b>RAiD</b> Agile innovation Digital</span>
-        <span class="org-chip"><b>TP</b> Temasek Polytechnic</span>
-        <span class="org-chip"><b>Freelance</b> Independent contract work</span>
-      </div>
     </div>
 
     <div class="fact-col">
@@ -613,8 +624,18 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
         </span>
         <span>
           <span class="fact-title">RAiD — Forward Deployed</span>
-          <p class="fact-line">Embedded in the unit that owns the problem, rather than a queue that receives tickets.</p>
+          <p class="fact-line">Working inside the unit that owns the problem, not waiting on a ticket queue outside it.</p>
         </span>
+      </div>
+    </div>
+
+    <div class="card orgs-band">
+      <h2 class="dash-h">Where I've worked</h2>
+      <div class="org-stack">
+        <span class="org-chip"><b>RSAF</b> Republic of Singapore Air Force</span>
+        <span class="org-chip"><b>RAiD</b> RSAF Agile innovation Digital</span>
+        <span class="org-chip"><b>TP</b> Temasek Polytechnic</span>
+        <span class="org-chip"><b>Freelance</b> Independent contract work</span>
       </div>
     </div>
 
