@@ -240,10 +240,16 @@ check('covering: three request cards matching the capture',
   ]), JSON.stringify(cov.reqs.map((r) => `${r.date}|${r.sim}|${r.by}|${r.rep}`)));
 check('covering: every card carries its reason and both actions',
   cov.found && cov.reqs.length === 3 && cov.reqs.every((r) => r.reason.length > 20 && r.approve && r.reject));
-check('covering: reasons are the captured text',
-  cov.found && /Medical appointment scheduled at short notice/.test(cov.reqs[0].reason)
-  && /Recalled to squadron duty/.test(cov.reqs[1].reason)
-  && /Currency renewal course clashes/.test(cov.reqs[2].reason));
+check('covering: reasons are the captured text, exactly',
+  // Anchor-phrase substring checks let a corrupted reason (dropped clause,
+  // swapped punctuation, wrong dash character) still pass as long as one
+  // phrase survives. Compare the full string instead, byte-identical to
+  // the capture, quote marks and em dash included.
+  cov.found && JSON.stringify(cov.reqs.map((r) => r.reason)) === JSON.stringify([
+    '"Medical appointment scheduled at short notice — unable to attend the afternoon wave."',
+    '"Recalled to squadron duty for the Thursday PM wave. Handover notes prepared."',
+    '"Currency renewal course clashes with the Wednesday PM slot."',
+  ]), JSON.stringify(cov.reqs.map((r) => r.reason)));
 
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
