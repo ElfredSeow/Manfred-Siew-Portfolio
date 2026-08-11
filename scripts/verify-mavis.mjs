@@ -106,13 +106,24 @@ check('mavis row: order precedes miles row',
   JSON.stringify(rowOrder));
 
 // ── Check group 2: forbidden claims ──────────────────────────────────
-const bothText = (mavis.text || '') + (miles.text || '');
+// Built only from the row's own prose (lead paragraph, note, "What it
+// does" bullets, chips) — NOT from mavis.text/miles.text, which is the
+// row's full textContent and therefore also includes the .mavis-mock
+// screens. The mocks are allowed to show fabricated, disclosed demo data
+// (e.g. "Base Bravo" appears in the Preventive Maintenance screen's
+// Call-In/Handed Over cards, and the Reports screen's own caption
+// discloses the dataset as fabricated) — that is not a claim about a
+// real unit/base/squadron, so it must not trip this check.
+function proseOf(row) {
+  return [row.lead, row.note, ...row.feats, ...row.chips].join(' ');
+}
+const proseText = (mavis.found ? proseOf(mavis) : '') + (miles.found ? proseOf(miles) : '');
 check('no adoption/fleet-size/ROI/time-saved figure',
-  !/\b(ROI|adoption|time[- ]saved|hours saved|man[- ]hours|uptime)\b/i.test(bothText));
+  !/\b(ROI|adoption|time[- ]saved|hours saved|man[- ]hours|uptime)\b/i.test(proseText));
 check('no qualification-tracking claim',
-  !/qualification/i.test(bothText));
-check('no unit/base/squadron named',
-  !/\b(squadron|Base Alpha|Base Bravo|AMS|GSS|AMTS)\b/.test(bothText));
+  !/qualification/i.test(proseText));
+check('no unit/base/squadron named in the row copy (mock screens may show fabricated, disclosed demo data)',
+  !/\b(squadron|Base Alpha|Base Bravo|AMS|GSS|AMTS)\b/.test(proseText));
 
 // ── Check group 3: the legacy anchor and the old merged copy ─────────
 const legacy = await page.evaluate(() => {
@@ -121,13 +132,22 @@ const legacy = await page.evaluate(() => {
 });
 check('legacy #miles-mavis id still resolves', legacy.found, JSON.stringify(legacy));
 
-// Hash navigation: verify that visiting #miles-mavis opens the #mavis row
-await page.goto(PAGE_URL + '#miles-mavis', { waitUntil: 'load' });
-const hashNavResult = await page.evaluate(() => {
-  const mavisRow = document.getElementById('mavis');
-  return { mavisOpen: mavisRow ? mavisRow.open : null };
+// Hash navigation: verify that visiting #miles-mavis opens the #mavis row.
+// This MUST use a fresh page, never the shared `page` (which already has
+// every <details> force-opened above) — navigating the shared page to a
+// same-document fragment (file:...html -> file:...html#miles-mavis) does
+// not reload the document, so its DOM state (all rows already open)
+// would make this check pass even if openFromHash()'s legacy-hash
+// normalization were deleted entirely.
+const hashPage = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await hashPage.goto(`${PAGE_URL}#miles-mavis`, { waitUntil: 'load' });
+await hashPage.waitForTimeout(300);
+const mavisOpenViaLegacyHash = await hashPage.evaluate(() => {
+  const el = document.getElementById('mavis');
+  return el ? el.open : null;
 });
-check('legacy hash #miles-mavis navigates to and opens #mavis', hashNavResult.mavisOpen === true, `mavis.open=${hashNavResult.mavisOpen}`);
+await hashPage.close();
+check('legacy hash #miles-mavis navigates to and opens #mavis', mavisOpenViaLegacyHash === true, String(mavisOpenViaLegacyHash));
 
 const bodyText = await page.evaluate(() => document.body.textContent);
 check('page: old merged title removed', !/>MILES \/ MAVIS</.test(await page.content()));
@@ -185,10 +205,10 @@ const nav = await page.evaluate(() => {
     found: true,
     wordmark: wm ? wm.textContent.trim() : '',
     pills: Array.prototype.slice.call(mock.querySelectorAll('.mavis-pill')).map((p) => p.textContent.trim()),
-    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim() || '',
-    bellBadge: (mock.querySelector('.mavis-bell-badge') || {}).textContent.trim() || '',
-    userName: (mock.querySelector('.mavis-user-name') || {}).textContent.trim() || '',
-    userRole: (mock.querySelector('.mavis-user-role') || {}).textContent.trim() || '',
+    active: (mock.querySelector('.mavis-pill.on') || { textContent: '' }).textContent.trim() || '',
+    bellBadge: (mock.querySelector('.mavis-bell-badge') || { textContent: '' }).textContent.trim() || '',
+    userName: (mock.querySelector('.mavis-user-name') || { textContent: '' }).textContent.trim() || '',
+    userRole: (mock.querySelector('.mavis-user-role') || { textContent: '' }).textContent.trim() || '',
   };
 });
 
@@ -207,30 +227,30 @@ const dash = await page.evaluate(() => {
   if (!mock) return { found: false };
   return {
     found: true,
-    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
-    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
-    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
+    active: (mock.querySelector('.mavis-pill.on') || { textContent: '' }).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || { textContent: '' }).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || { textContent: '' }).textContent.trim(),
     tabs: Array.prototype.slice.call(mock.querySelectorAll('.mavis-tab')).map((t) => t.textContent.trim()),
-    activeTab: (mock.querySelector('.mavis-tab.on') || {}).textContent.trim(),
+    activeTab: (mock.querySelector('.mavis-tab.on') || { textContent: '' }).textContent.trim(),
     stats: Array.prototype.slice.call(mock.querySelectorAll('.mavis-stat')).map((s) => ({
-      label: (s.querySelector('.mavis-stat-label') || {}).textContent.trim(),
-      value: (s.querySelector('.mavis-stat-value') || {}).textContent.trim(),
+      label: (s.querySelector('.mavis-stat-label') || { textContent: '' }).textContent.trim(),
+      value: (s.querySelector('.mavis-stat-value') || { textContent: '' }).textContent.trim(),
       note: s.querySelector('.mavis-stat-note') ? s.querySelector('.mavis-stat-note').textContent.trim() : null,
     })),
     defects: Array.prototype.slice.call(mock.querySelectorAll('.mavis-defect')).map((d) => ({
-      title: (d.querySelector('.mavis-defect-title') || {}).textContent.trim(),
-      asset: (d.querySelector('.mavis-defect-asset') || {}).textContent.trim(),
-      badge: (d.querySelector('.mavis-badge') || {}).textContent.trim(),
+      title: (d.querySelector('.mavis-defect-title') || { textContent: '' }).textContent.trim(),
+      asset: (d.querySelector('.mavis-defect-asset') || { textContent: '' }).textContent.trim(),
+      badge: (d.querySelector('.mavis-badge') || { textContent: '' }).textContent.trim(),
       viewOnly: !!d.querySelector('.mavis-view-only'),
     })),
     assets: Array.prototype.slice.call(mock.querySelectorAll('.mavis-asset')).map((a) => ({
-      id: (a.querySelector('.mavis-asset-id') || {}).textContent.trim(),
-      type: (a.querySelector('.mavis-asset-type') || {}).textContent.trim(),
-      badge: (a.querySelector('.mavis-badge') || {}).textContent.trim(),
+      id: (a.querySelector('.mavis-asset-id') || { textContent: '' }).textContent.trim(),
+      type: (a.querySelector('.mavis-asset-type') || { textContent: '' }).textContent.trim(),
+      badge: (a.querySelector('.mavis-badge') || { textContent: '' }).textContent.trim(),
     })),
     cmTiles: Array.prototype.slice.call(mock.querySelectorAll('.mavis-cmtile')).map((t) => ({
-      value: (t.querySelector('.mavis-cmtile-value') || {}).textContent.trim(),
-      label: (t.querySelector('.mavis-cmtile-label') || {}).textContent.trim(),
+      value: (t.querySelector('.mavis-cmtile-value') || { textContent: '' }).textContent.trim(),
+      label: (t.querySelector('.mavis-cmtile-label') || { textContent: '' }).textContent.trim(),
     })),
     hasPmSummary: !!mock.querySelector('.mavis-pmtiles'),
     hasPendingApproval: !!mock.querySelector('.mavis-pending'),
@@ -272,7 +292,7 @@ check('dashboard: three CM summary tiles matching the capture',
     { value: '2', label: 'Ready for Collection' },
     { value: '2', label: 'Active ADDL' },
   ]), JSON.stringify(dash.cmTiles));
-check('dashboard: stops before PM Summary / Pending Approval / footer (spec §5.1)',
+check('dashboard: stops before PM Summary / Pending Approval / footer (plan’s Global Constraints, ~700px content budget)',
   dash.found && !dash.hasPmSummary && !dash.hasPendingApproval && !dash.hasFooter,
   `pm=${dash.hasPmSummary} pending=${dash.hasPendingApproval} footer=${dash.hasFooter}`);
 
@@ -282,21 +302,21 @@ const cm = await page.evaluate(() => {
   if (!mock) return { found: false };
   return {
     found: true,
-    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
-    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
-    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
-    btn: (mock.querySelector('.mavis-cm-btn') || {}).textContent.trim(),
-    section: (mock.querySelector('.mavis-cm-h2') || {}).textContent.trim(),
+    active: (mock.querySelector('.mavis-pill.on') || { textContent: '' }).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || { textContent: '' }).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || { textContent: '' }).textContent.trim(),
+    btn: (mock.querySelector('.mavis-cm-btn') || { textContent: '' }).textContent.trim(),
+    section: (mock.querySelector('.mavis-cm-h2') || { textContent: '' }).textContent.trim(),
     reqs: Array.prototype.slice.call(mock.querySelectorAll('.mavis-req')).map((r) => ({
-      id: (r.querySelector('.mavis-req-id') || {}).textContent.trim(),
-      badge: (r.querySelector('.mavis-badge-ic') || {}).textContent.trim(),
+      id: (r.querySelector('.mavis-req-id') || { textContent: '' }).textContent.trim(),
+      badge: (r.querySelector('.mavis-badge-ic') || { textContent: '' }).textContent.trim(),
       badgeClass: (r.querySelector('.mavis-badge-ic') || { className: '' }).className,
       badgeBg: (() => {
         const el = r.querySelector('.mavis-badge-ic');
         return el ? getComputedStyle(el).backgroundColor : '';
       })(),
-      refid: (r.querySelector('.mavis-req-refid') || {}).textContent.trim(),
-      descLabel: (r.querySelector('.mavis-req-desc-label') || {}).textContent.trim(),
+      refid: (r.querySelector('.mavis-req-refid') || { textContent: '' }).textContent.trim(),
+      descLabel: (r.querySelector('.mavis-req-desc-label') || { textContent: '' }).textContent.trim(),
       descText: (r.querySelector('.mavis-req-desc-text') || { textContent: '' }).textContent.trim(),
       loc: (r.querySelector('.mavis-req-loc') || { textContent: '' }).textContent.trim(),
       addlBtn: !!r.querySelector('.mavis-req-addl-btn'),
@@ -353,32 +373,32 @@ const pm = await page.evaluate(() => {
   const mock = document.querySelector('.mavis-mock[data-screen="preventive"]');
   if (!mock) return { found: false };
   const sectionHeads = Array.prototype.slice.call(mock.querySelectorAll('.mavis-section-head')).map((s) => ({
-    label: (s.querySelector('.mavis-section-label') || {}).textContent.trim(),
-    count: (s.querySelector('.mavis-section-count') || {}).textContent.trim(),
+    label: (s.querySelector('.mavis-section-label') || { textContent: '' }).textContent.trim(),
+    count: (s.querySelector('.mavis-section-count') || { textContent: '' }).textContent.trim(),
   }));
   return {
     found: true,
-    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
-    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
-    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
-    btn: (mock.querySelector('.mavis-pm-btn') || {}).textContent.trim(),
+    active: (mock.querySelector('.mavis-pill.on') || { textContent: '' }).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || { textContent: '' }).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || { textContent: '' }).textContent.trim(),
+    btn: (mock.querySelector('.mavis-pm-btn') || { textContent: '' }).textContent.trim(),
     sectionHeads,
     callins: Array.prototype.slice.call(mock.querySelectorAll('.mavis-callin-card')).map((c) => ({
-      id: (c.querySelector('.mavis-callin-id') || {}).textContent.trim(),
-      meta: (c.querySelector('.mavis-callin-meta') || {}).textContent.trim(),
+      id: (c.querySelector('.mavis-callin-id') || { textContent: '' }).textContent.trim(),
+      meta: (c.querySelector('.mavis-callin-meta') || { textContent: '' }).textContent.trim(),
       pills: Array.prototype.slice.call(c.querySelectorAll('.mavis-chip-outline')).map((p) => p.textContent.trim()),
-      calledIn: (c.querySelector('.mavis-callin-calledin') || {}).textContent.trim(),
+      calledIn: (c.querySelector('.mavis-callin-calledin') || { textContent: '' }).textContent.trim(),
       pmDue: [c.querySelector('.mavis-callin-pmdue'), c.querySelector('.mavis-callin-duechip')]
         .map((el) => (el ? el.textContent.trim() : '')).join(' ').trim(),
       dueChipClass: (c.querySelector('.mavis-callin-duechip') || { className: '' }).className,
     })),
     handed: Array.prototype.slice.call(mock.querySelectorAll('.mavis-handed-card')).map((c) => ({
-      id: (c.querySelector('.mavis-handed-id') || {}).textContent.trim(),
-      dept: (c.querySelector('.mavis-handed-dept') || {}).textContent.trim(),
-      subdept: (c.querySelector('.mavis-handed-subdept') || {}).textContent.trim(),
-      pill: (c.querySelector('.mavis-chip-outline') || {}).textContent.trim(),
-      row: (c.querySelector('.mavis-handed-row') || {}).textContent.trim(),
-      btn: (c.querySelector('.mavis-handed-btn') || {}).textContent.trim(),
+      id: (c.querySelector('.mavis-handed-id') || { textContent: '' }).textContent.trim(),
+      dept: (c.querySelector('.mavis-handed-dept') || { textContent: '' }).textContent.trim(),
+      subdept: (c.querySelector('.mavis-handed-subdept') || { textContent: '' }).textContent.trim(),
+      pill: (c.querySelector('.mavis-chip-outline') || { textContent: '' }).textContent.trim(),
+      row: (c.querySelector('.mavis-handed-row') || { textContent: '' }).textContent.trim(),
+      btn: (c.querySelector('.mavis-handed-btn') || { textContent: '' }).textContent.trim(),
     })),
   };
 });
@@ -430,21 +450,21 @@ const rp = await page.evaluate(() => {
   }));
   return {
     found: true,
-    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
-    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
-    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
+    active: (mock.querySelector('.mavis-pill.on') || { textContent: '' }).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || { textContent: '' }).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || { textContent: '' }).textContent.trim(),
     tabs: Array.prototype.slice.call(mock.querySelectorAll('.mavis-rp-tab')).map((t) => t.textContent.trim()),
-    activeTab: (mock.querySelector('.mavis-rp-tab.on') || {}).textContent.trim(),
+    activeTab: (mock.querySelector('.mavis-rp-tab.on') || { textContent: '' }).textContent.trim(),
     filters: Array.prototype.slice.call(mock.querySelectorAll('.mavis-filter-field')).map((f) => ({
-      label: (f.querySelector('.mavis-filter-label') || {}).textContent.trim(),
-      value: (f.querySelector('.mavis-filter-box') || {}).textContent.trim(),
+      label: (f.querySelector('.mavis-filter-label') || { textContent: '' }).textContent.trim(),
+      value: (f.querySelector('.mavis-filter-box') || { textContent: '' }).textContent.trim(),
     })),
     stats: Array.prototype.slice.call(mock.querySelectorAll('.mavis-rp-stat')).map((s) => ({
-      label: (s.querySelector('.mavis-rp-stat-label') || {}).textContent.trim(),
-      value: (s.querySelector('.mavis-rp-stat-value') || {}).textContent.trim(),
+      label: (s.querySelector('.mavis-rp-stat-label') || { textContent: '' }).textContent.trim(),
+      value: (s.querySelector('.mavis-rp-stat-value') || { textContent: '' }).textContent.trim(),
     })),
-    chartTitle: (mock.querySelector('.mavis-chart-title') || {}).textContent.trim(),
-    chartSub: (mock.querySelector('.mavis-chart-sub') || {}).textContent.trim(),
+    chartTitle: (mock.querySelector('.mavis-chart-title') || { textContent: '' }).textContent.trim(),
+    chartSub: (mock.querySelector('.mavis-chart-sub') || { textContent: '' }).textContent.trim(),
     cols,
     legend: Array.prototype.slice.call(mock.querySelectorAll('.mavis-chart-legend-item')).map((l) => l.textContent.trim()),
     hasSubsystemsCard: !!mock.querySelector('.mavis-subsystems-card'),
@@ -500,7 +520,7 @@ check('reports: six-entry legend matching the capture',
   rp.found && JSON.stringify(rp.legend) === JSON.stringify([
     'Air Start Unit', 'Aircraft Tug', 'Ground Power Unit', 'Prime Mover', 'Recovery Vehicle', 'Refueller',
   ]), JSON.stringify(rp.legend));
-check('reports: stops before Top subsystems / By type (spec §5.4)',
+check('reports: stops before Top subsystems / By type (plan’s Global Constraints, ~700px content budget)',
   rp.found && !rp.hasSubsystemsCard && !rp.hasByTypeCard,
   `subsystems=${rp.hasSubsystemsCard} bytype=${rp.hasByTypeCard}`);
 check('reports: closing caption carries the demo-data disclosure',
@@ -511,8 +531,14 @@ check('reports: closing caption carries the demo-data disclosure',
 // `page`) so each gets its own viewport; every <details> is opened first,
 // the same reason Task 1's setup opens them on `page` — a closed <details>
 // has no layout box, so a mock inside one would under-report its width.
+// These pages are monitored for external requests too (folded into the
+// same `external` array checked below), so a regression at either
+// viewport is caught the same way as one on the main `page`.
 for (const [w, h] of [[1440, 900], [390, 844]]) {
   const vp = await browser.newPage({ viewport: { width: w, height: h } });
+  vp.on('request', (r) => {
+    if (!r.url().startsWith('file://') && !r.url().startsWith('data:')) external.push(r.url());
+  });
   await vp.goto(PAGE_URL, { waitUntil: 'load' });
   await vp.evaluate(() => { document.querySelectorAll('details').forEach((d) => { d.open = true; }); });
   const dims = await vp.evaluate(() => ({
@@ -524,7 +550,55 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
   await vp.close();
 }
 
+// ── Check group 12: lightbox coverage for the four MAVIS screens ──────
+// None of groups 1-11 ever open the lightbox — the shared MOCK_SEL /
+// .shot-lightbox-mockwrap / .app-shot-frame sizing registrations are the
+// whole architectural point of this feature and were previously
+// untested. Reuses the real interaction pattern from the page's own JS
+// (click a .app-shot to open, Escape to close — see the `shot-lightbox`
+// script near the end of public/projects.html).
+const mavisFigures = page.locator('.app-shot:has(.mavis-mock)');
+const mavisFigureCount = await mavisFigures.count();
+check('lightbox: four MAVIS .app-shot figures found to test', mavisFigureCount === 4, String(mavisFigureCount));
+for (let i = 0; i < mavisFigureCount; i++) {
+  const fig = mavisFigures.nth(i);
+  const screen = await fig.evaluate((el) => (el.querySelector('.mavis-mock') || {}).getAttribute
+    ? el.querySelector('.mavis-mock').getAttribute('data-screen') : 'unknown');
+  await fig.click();
+  await page.waitForTimeout(150); // let render()/fitMockScale settle
+  const state = await page.evaluate(() => {
+    const lightbox = document.getElementById('shotLightbox');
+    const body = document.getElementById('shotLightboxBody');
+    const clone = body ? body.querySelector('.mavis-mock') : null;
+    return {
+      visible: lightbox ? !lightbox.hidden : false,
+      hasClone: !!clone,
+      fits: body ? body.scrollHeight <= body.clientHeight : null,
+    };
+  });
+  check(`lightbox: ${screen} opens with a cloned .mavis-mock, no dialog scroll`,
+    state.visible && state.hasClone && state.fits, JSON.stringify(state));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(100);
+  const closedAndFocusReturned = await page.evaluate(() => {
+    const lightbox = document.getElementById('shotLightbox');
+    return lightbox ? lightbox.hidden : null;
+  });
+  const focusReturned = await fig.evaluate((el) => el === document.activeElement);
+  check(`lightbox: ${screen} Escape closes and returns focus to the trigger`,
+    closedAndFocusReturned === true && focusReturned === true,
+    `closed=${closedAndFocusReturned} focusReturned=${focusReturned}`);
+}
+
 // ── Report ───────────────────────────────────────────────────────────
+check('no console messages', consoleMsgs.length === 0, JSON.stringify(consoleMsgs));
+// Observed on a clean run: Google Fonts preconnect/stylesheet/woff2 only
+// (fonts.googleapis.com, fonts.gstatic.com). Anything else is new and
+// should be looked at before being added to this list.
+const ALLOWED_EXTERNAL_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+check('external requests are only the known Google Fonts hosts',
+  external.every((u) => ALLOWED_EXTERNAL_HOSTS.some((h) => u.includes(h))), JSON.stringify(external));
+
 await browser.close();
 
 let failed = 0;
