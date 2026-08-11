@@ -15,22 +15,27 @@ Every number, name, tag and flag reproduced in the mocks below is read off those
 
 ## Problem
 
-Two independent defects in the same entry at `public/projects.html:999-1010`.
+Two independent defects in the same entry at `public/projects.html:1945-1956`.
 
 **The copy describes a different system.** The entry is titled "Flight Simulator Scheduling System" and says it is a "Scheduling system for reserving simulator resources for training and assessment: online slot booking, centralised schedule management and availability visibility." The app does not book simulator resources. It schedules *the assessors* — pairing a QFI with a Psych assessor on each simulator assessment mission across a two-wave day, tracking when that pairing is incomplete, and running an approve/reject workflow when someone needs their duty covered. The `Built with` chip list is a single `PowerApps`, which hides a React 19 / TypeScript / Vite / Tailwind 4 / TanStack Query / Recharts code app on Dataverse.
 
-**The entry has no screens.** BOLDFACE, FUEL Up and the Facility Booking System all carry an `.app-shots` gallery; this entry carries none, despite four real captures existing.
+**The entry has no screens.** Five entries on the page already carry an `.app-shots` gallery — FUEL, MatFlow, BOLDFACE, FUEL Up and the Facility Booking System — two of them (MatFlow, BOLDFACE) built as hand-written CSS rather than photographs. This entry carries none, despite four real captures existing.
+
+## Working-tree note
+
+`public/projects.html` and `public/index.html` are both modified and uncommitted as of writing (2652 lines in `projects.html`). Every line number in this spec refers to that **working-tree** state, not to `HEAD`. Re-confirm the anchors before editing if the tree has moved on.
 
 ## Decisions taken
 
 | Decision | Choice | Why |
 |---|---|---|
-| Screen medium | Hand-built CSS, following the `.bf-mock` precedent | Crisp at any zoom, no image weight, matches a pattern already on the page, and publishes no literal defence-app pixels |
+| Screen medium | Hand-built CSS — a fourth mock family beside `.bf-mock`, `.mf-mock` and `.gr-mock` | Crisp at any zoom, no image weight, matches a pattern already used three times on the page, and publishes no literal defence-app pixels |
+| Existing mocks | untouched | `.soar-mock` registers itself by **adding** to three lists (see §5). No BOLDFACE, MatFlow or GRID rule, class or element changes |
 | Entry title | `Simulator Assessment Duty Scheduler (SOAR)` | Matches the file's own naming style (cf. `Aircraft Refuelling Strategy Planner (FUEL)`); keeps the codename while dropping the inaccurate description |
 | Category | unchanged — `data-cat="automation"`, `data-org="RAiD"` | The reclassification is a separate judgement, out of scope here |
 | "What I learned" copy | unchanged, verbatim | It is the author's own first-hand account, not a claim about the app |
 
-## 1. Copy rewrite (`public/projects.html:999-1010`)
+## 1. Copy rewrite (`public/projects.html:1945-1956`)
 
 The `<details class="log-row" data-org="RAiD" data-cat="automation">` wrapper, the `Automation` tag, the `RAiD` org label and the chevron SVG are all unchanged.
 
@@ -40,7 +45,7 @@ The `<details class="log-row" data-org="RAiD" data-cat="automation">` wrapper, t
 
 > Plans simulator assessment missions across AM and PM waves, pairing a QFI with a Psych assessor on every mission. A missing half is a first-class state — flagged as a broken pair in the grid, on the assessor's own schedule, and in the dashboard's stability metric. Assessors raise covering requests with a reason and a suggested replacement; supervisors and admins approve or reject. Built as Lead Developer.
 
-**New `What it does` block**, an `<ul class="feat" role="list">` placed between the lead paragraph and `What I learned`, matching BOLDFACE's structure:
+**New `What it does` block**, an `<ul class="feat" role="list">` placed between the lead paragraph and `What I learned`, matching the structure the page's fuller entries already use:
 
 - Every weekday splits into an AM and a PM wave, with slot times and labels editable per day by an admin and copyable across days
 - Each mission wants a QFI and a Psych assessor; an unfilled half is tracked as a broken pair rather than left silent
@@ -60,7 +65,7 @@ Both are explicit prohibitions carried over from `MARKETING_SPEC.md §4`:
 
 ## 2. The `.soar-mock` CSS system
 
-A new scoped style block, placed immediately after the existing BOLDFACE block in the `<style>` element, modelled on `.bf-mock` and carrying the same kind of provenance comment.
+A new scoped style block, placed after the existing `.gr-mock` block in the `<style>` element, following the same recipe those blocks use: `soar-` prefixed tokens, and **every rule qualified with the `.soar-mock` ancestor** so its specificity beats this page's own descendant rules (`.log-body p` and friends) without any `!important`. No existing block is edited.
 
 ### Tokens
 
@@ -107,19 +112,21 @@ Four further glyphs are plainly visible in the captures but fall outside that ex
 
 ### Sizing
 
-Authored at a fixed **600px** natural width and scaled to the existing 288px (18rem) `.app-shot-frame`:
+Authored at a fixed **720px** natural width and scaled to the existing 288px (18rem) `.app-shot-frame`:
 
 ```css
-.app-shot-frame .soar-mock{width:600px;transform:scale(.48);transform-origin:top left}
+.app-shot-frame .soar-mock{width:720px;transform:scale(.4);transform-origin:top left}
 ```
 
-600 × .48 = 288, so nothing overflows sideways — the same arithmetic BOLDFACE uses at 480 × .6. SOAR needs the extra 120px because the Weekly Schedule renders five day columns beside the rail.
+720 × .4 = 288, so nothing overflows sideways. This follows the newer `.mf-mock` / `.gr-mock` convention (both 720 × .4) rather than BOLDFACE's older 480 × .6, and the extra room matters here: the Weekly Schedule renders five day columns beside the rail.
 
-A `@media (max-width:520px)` rule collapses the rail to an icon strip and drops the calendar to three day columns, mirroring the existing BOLDFACE narrow-viewport rule.
+720px is half the app's 1600px×1000 capture viewport at 0.45 — near enough to half-scale that proportions carry over directly from the source PNGs. As the `.mf-mock` and `.gr-mock` comments already record for their own screens, the one liberty taken is legibility: text below roughly 7px stops rendering as text, so the smallest micro-labels sit slightly above a strict proportional reduction.
+
+A `@media (max-width:520px)` rule collapses the rail to an icon strip and drops the calendar to three day columns, mirroring the narrow-viewport rules the existing mock families already carry.
 
 ## 3. The four screens
 
-Four `<figure class="app-shot" role="listitem" tabindex="0">` entries, each with an `.app-shot-chrome` title bar, the `.soar-mock` in an `.app-shot-frame`, and an `.app-shot-cap` figcaption. The mock itself is `aria-hidden="true"`; the accessible description lives in the figcaption and the gallery label, exactly as BOLDFACE does it.
+Four `<figure class="app-shot" role="listitem" tabindex="0">` entries, each with an `.app-shot-chrome` title bar, the `.soar-mock` in an `.app-shot-frame`, and an `.app-shot-cap` figcaption. Each mock element is `<div class="soar-mock" data-mock-width="720" aria-hidden="true">`, matching how the five `.mf-mock` elements are declared. The accessible description lives in the figcaption and the gallery label.
 
 ### 3.1 Weekly Schedule — `screens/calendar.png`
 
@@ -207,38 +214,36 @@ That closing sentence is the page's single disclosure that the data is not opera
 
 ## 4. Gallery wrapper
 
-Copied verbatim from BOLDFACE's block at `public/projects.html:686-698`: `.log-shots-wrap` → `.shots-head` (holding the `The actual screens` label and the hidden-until-needed prev/next `.shots-nav-group`) → `.app-shots-wrap` → `.app-shots`.
+Copied verbatim from the MatFlow gallery at `public/projects.html:1156-1169` — the nearest precedent, being the other 720px mock family: `.log-shots-wrap` → `.shots-head` (holding the `The actual screens` label and the hidden-until-needed prev/next `.shots-nav-group`) → `.app-shots-wrap` → `.app-shots`.
 
 Because the existing JS binds by `.log-shots-wrap` / `.app-shots` via `closest()`, the overflow arrows, edge fade, horizontal scrolling and click/Enter/Space activation all work with no new wiring.
 
 Gallery `aria-label`: *"SOAR Duty Scheduler app screens, rebuilt in HTML and CSS from the app's own interface code, design tokens and captured screens — not photos, not invented."*
 
-## 5. Generalising the shot lightbox
+## 5. Registering `.soar-mock` with the existing lightbox
 
-`docs/superpowers/specs/2026-08-10-screen-showcase-lightbox-design.md` states the lightbox handles "a `.bf-mock` (or any future `*-mock` CSS screen)". It does not. The shipped JS hardcodes both the selector and the natural width in three places:
+**No BOLDFACE code, markup, class or rule is modified by this work.** `.soar-mock` is the fourth mock family on the page and joins by the route the page already provides.
 
-- `public/projects.html:1541` — `var natural = 480;`
-- `public/projects.html:1559` — `var mock = el.querySelector('.bf-mock');`
-- `public/projects.html:1646` — `var mock = body.querySelector('.bf-mock');`
+The lightbox was generalised when `.mf-mock` (MatFlow) and `.gr-mock` (GRID) were added. As shipped today:
 
-Adding a second CSS screen system makes the promise real rather than working around it.
+- `public/projects.html:2486` — `var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock';`, above the comment *"A new mock family only has to join this list."*
+- `public/projects.html:2487` — `function mockWidth(mock) { return parseFloat(mock.getAttribute('data-mock-width')) || 480; }`
 
-**Change:** mocks are identified by a `data-mock` attribute and carry their own authored width in `data-mock-w`.
+So the per-mock authoring width is already an element attribute, and the selector is already a list. Three additive edits register SOAR:
 
-- `fitMockScale` reads `parseFloat(mock.getAttribute('data-mock-w')) || 480` instead of the literal `480`.
-- Both `querySelector('.bf-mock')` calls become `querySelector('[data-mock]')`.
-- The clone's `style.width` is set from the same attribute value rather than the literal `'480px'`.
-- Every existing `.bf-mock` element gains `data-mock data-mock-w="480"`; every `.soar-mock` ships with `data-mock data-mock-w="600"`.
+1. `public/projects.html:2486` — `MOCK_SEL` becomes `'.bf-mock, .mf-mock, .gr-mock, .soar-mock'`. Appended; the three existing entries are untouched.
+2. `public/projects.html:345-347` — the `.shot-lightbox-mockwrap` positioning rule gains a fourth selector line, `.shot-lightbox-mockwrap .soar-mock`, alongside the existing three.
+3. A new `.app-shot-frame .soar-mock{width:720px;transform:scale(.4);transform-origin:top left}` rule is added beside the existing `.bf-mock`, `.mf-mock` and `.gr-mock` frame rules at `public/projects.html:487-493`.
 
-The `.bf-mock` CSS class and all its rules stay exactly as they are — the attribute is additive, so BOLDFACE's rendering and lightbox behaviour are unchanged. The `.shot-lightbox-mockwrap .bf-mock` positioning rule at `public/projects.html:335` gains a `[data-mock]` sibling selector so the clone is positioned regardless of which mock system it came from.
+Every `.soar-mock` element carries `data-mock-width="720"`, exactly as the five `.mf-mock` elements carry `data-mock-width="720"` today.
 
-After this change a future CSS screen needs no JS edit, which is what the earlier spec assumed.
+`.bf-mock` keeps its own 480px / `scale(.6)` sizing and every one of its rules byte-for-byte. Because all three edits above are additions to lists, BOLDFACE's thumbnail rendering and lightbox behaviour cannot change — but verification step 3 re-tests it anyway.
 
 ## Verification
 
 1. The page loads with zero console messages, and no horizontal overflow at 1440×900 and 390×844 (`documentElement.scrollWidth <= innerWidth`).
 2. All four SOAR figures render inside the 288px frame with no sideways overflow, and the gallery's prev/next arrows appear and function.
-3. Clicking each of the four SOAR screens, and each of the three BOLDFACE screens, opens the lightbox scaled to fit — confirming the `data-mock` change did not regress BOLDFACE.
+3. **Regression check on the existing mock families.** Clicking each of the four SOAR screens opens the lightbox scaled to fit; so does each of the three BOLDFACE screens and each of the five MatFlow screens, at their own unchanged scales. A `git diff` on `public/projects.html` shows no `.bf-mock`, `.mf-mock` or `.gr-mock` line altered — only the three list additions in §5.
 4. Keyboard: Tab reaches each figure, Enter and Space open it, Esc closes it, and focus returns to the trigger.
 5. Each of the four mocks is compared side by side against its source PNG: every name, number, simulator, time, wave label, role tag, flag and button label matches.
 6. The entry contains no adoption/ROI/time-saved figure and no claim that role enforcement is a security boundary.
@@ -249,6 +254,8 @@ After this change a future CSS screen needs no JS edit, which is what the earlie
 - The four PNG captures are not copied into `public/`. Nothing under `public/soar/` is created.
 - `public/index.html`, `public/work.html` and `public/experience.html` are untouched.
 - No other `.log-row` entry's copy, title, category or chips change.
+- The `.bf-mock`, `.mf-mock` and `.gr-mock` style blocks, their elements and their sizing rules are not edited. `.soar-mock` is additive throughout.
+- The uncommitted changes already sitting in `public/projects.html` and `public/index.html` are not reviewed, reverted or committed as part of this work.
 - The entry's category (`automation`) and org (`RAiD`) are not revisited.
 - The light palette defined in the app's CSS is not built. The captures are dark, and rendering a light mock beside dark source screens would misrepresent the product.
 - `MySchedulePage` and `unauthorized` — two further real screens in the app — are not built. The four selected cover the value story without repetition.
