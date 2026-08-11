@@ -51,7 +51,7 @@ ships stating two different totals.
 | `:1116` | `Showing all 29` | filter pill | MAVIS spec §7 |
 | `:7` | `Twenty-seven projects, ...` (meta description) | prose | this spec |
 | `:12` | `Twenty-seven projects, ...` (og:description) | prose | this spec |
-| `:1015` | `Twenty-seven, filterable two ways.` (`h1.page-title`) | prose | this spec |
+| `:1015` | `Work across systems, software, and aerospace.` (`h1.page-title`) | prose | this spec |
 
 The prose family is already wrong before either change: the log holds 29 rows today. After the
 split it is 30. The three `29` strings become `30`; the three `Twenty-seven` strings become
