@@ -1252,8 +1252,26 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .mavis-mock .mavis-chart-sub{font-size:7px;color:var(--mavis-fg-3);margin-top:1px}
 .mavis-mock .mavis-chart-plot{display:flex;gap:8px;margin-top:10px;height:110px}
 .mavis-mock .mavis-chart-axis{display:flex;flex-direction:column;justify-content:space-between;font-size:6.5px;color:var(--mavis-fg-3);text-align:right;padding-bottom:12px}
-.mavis-mock .mavis-chart-bars{flex:1;display:flex;align-items:flex-end;gap:5px}
-.mavis-mock .mavis-chart-col{flex:1;display:flex;flex-direction:column;height:100%}
+.mavis-mock .mavis-chart-bars{position:relative;flex:1;display:flex;align-items:flex-end;gap:5px}
+/* Same technique as .gr-mock's Recharts CartesianGrid dashed rules, one
+   chart over: four dashed horizontal rules across the MAVIS Reports
+   plot, aligned to the 8/6/4/2 axis labels (the "0" tick is implied by
+   the columns' own baseline, so only four lines are drawn, matching
+   .gr-mock's .gr-bars::before precedent). The plot is 110px
+   (.mavis-chart-plot) minus the axis's 12px bottom padding reserved for
+   the month-label row = 98px of usable height, divided into four equal
+   24.5px bands. */
+.mavis-mock .mavis-chart-bars::before{
+  content:"";position:absolute;left:0;right:0;top:0;bottom:12px;
+  background-image:
+    repeating-linear-gradient(to right,var(--mavis-border) 0 1.5px,transparent 1.5px 3px),
+    repeating-linear-gradient(to right,var(--mavis-border) 0 1.5px,transparent 1.5px 3px),
+    repeating-linear-gradient(to right,var(--mavis-border) 0 1.5px,transparent 1.5px 3px),
+    repeating-linear-gradient(to right,var(--mavis-border) 0 1.5px,transparent 1.5px 3px);
+  background-size:100% 1px;background-repeat:no-repeat;
+  background-position:0 0,0 24.5px,0 49px,0 73.5px;
+}
+.mavis-mock .mavis-chart-col{position:relative;flex:1;display:flex;flex-direction:column;height:100%}
 .mavis-mock .mavis-chart-colbar-wrap{flex:1;display:flex;align-items:flex-end}
 .mavis-mock .mavis-chart-colbar{width:100%;display:flex;flex-direction:column-reverse;border-radius:2px 2px 0 0;overflow:hidden}
 .mavis-mock .mavis-chart-collabel{font-size:5.5px;color:var(--mavis-fg-3);text-align:center;margin-top:3px;white-space:nowrap;flex-shrink:0}
