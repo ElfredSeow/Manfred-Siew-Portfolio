@@ -389,6 +389,130 @@ check('calendar: Weekly Schedule leads the gallery, before the Dashboard screen'
   JSON.stringify(galleryOrder) === JSON.stringify(['calendar', 'dashboard', 'covering', 'admin']),
   JSON.stringify(galleryOrder));
 
+// ── Check group 9: thumbnails, lightbox interaction, disclosure ──────
+const gallery = await page.evaluate(() => {
+  const shots = Array.prototype.slice.call(
+    document.querySelectorAll('.app-shots[aria-label^="SOAR Duty Scheduler"] .app-shot'));
+  return {
+    count: shots.length,
+    titles: shots.map((s) => (s.querySelector('.app-shot-title') || {}).textContent.trim()),
+    caps: shots.map((s) => (s.querySelector('.app-shot-cap .st') || {}).textContent.trim()),
+    overflow: shots.map((s) => {
+      const frame = s.querySelector('.app-shot-frame');
+      const mock = s.querySelector('.soar-mock');
+      if (!frame || !mock) return null;
+      return Math.round(mock.getBoundingClientRect().width) - Math.round(frame.getBoundingClientRect().width);
+    }),
+    tabbable: shots.every((s) => s.getAttribute('tabindex') === '0'),
+    disclosure: shots.some((s) => /Demonstration dataset/.test(s.textContent)),
+    lastCap: shots.length ? shots[shots.length - 1].textContent : '',
+  };
+});
+
+check('gallery: four SOAR screens', gallery.count === 4, String(gallery.count));
+check('gallery: four screens in the spec order, Weekly Schedule first',
+  JSON.stringify(gallery.titles) === JSON.stringify([
+    'SOAR — Weekly Schedule', 'SOAR — Operations Dashboard',
+    'SOAR — Covering Requests', 'SOAR — System Administration',
+  ]), JSON.stringify(gallery.titles));
+check('gallery: the disclosure sits on the last caption',
+  /Demonstration dataset/.test(gallery.lastCap), gallery.lastCap);
+check('gallery: no mock overflows its 288px frame',
+  gallery.overflow.every((d) => d !== null && d <= 0), JSON.stringify(gallery.overflow));
+check('gallery: every figure is keyboard-reachable', gallery.tabbable);
+check('gallery: the demonstration-dataset disclosure is present', gallery.disclosure);
+
+// Lightbox: open the first SOAR screen by keyboard, confirm it scales, close it.
+await page.evaluate(() => {
+  const s = document.querySelector('.app-shots[aria-label^="SOAR Duty Scheduler"] .app-shot');
+  s.focus();
+});
+await page.keyboard.press('Enter');
+await page.waitForTimeout(250);
+const lb = await page.evaluate(() => {
+  const clone = document.querySelector('#shotLightboxBody .shot-lightbox-mockwrap .soar-mock');
+  if (!clone) return { open: false };
+  const m = /scale\(([\d.]+)\)/.exec(clone.style.transform || '');
+  return { open: true, width: clone.style.width, scale: m ? Number(m[1]) : 0 };
+});
+check('lightbox: Enter opens the SOAR mock clone', lb.open);
+check('lightbox: clone is restored to its 720px authoring width', lb.width === '720px', lb.width);
+check('lightbox: clone is scaled up, not down', lb.scale >= 1, String(lb.scale));
+
+await page.keyboard.press('Escape');
+await page.waitForTimeout(200);
+// Assert on visibility and on focus return, not on a guessed class name —
+// a `!classList.contains(...)` test passes trivially if the page uses a
+// different class, which would make this check worthless.
+const closed = await page.evaluate(() => {
+  const el = document.getElementById('shotLightbox');
+  const r = el.getBoundingClientRect();
+  return {
+    invisible: el.hidden || getComputedStyle(el).display === 'none'
+      || getComputedStyle(el).visibility === 'hidden' || r.width === 0,
+    focusReturned: document.activeElement
+      && document.activeElement.classList.contains('app-shot'),
+  };
+});
+check('lightbox: Escape closes it', closed.invisible);
+check('lightbox: focus returns to the trigger figure', closed.focusReturned);
+
+// Regression: a BOLDFACE screen still opens as a .bf-mock clone.
+await page.evaluate(() => {
+  document.querySelector('.app-shots[aria-label^="BOLDFACE"] .app-shot').focus();
+});
+await page.keyboard.press('Enter');
+await page.waitForTimeout(250);
+const bfLb = await page.evaluate(() => {
+  const c = document.querySelector('#shotLightboxBody .shot-lightbox-mockwrap .bf-mock');
+  return { open: !!c, width: c ? c.style.width : null };
+});
+check('regression: BOLDFACE still opens at its own 480px width',
+  bfLb.open && bfLb.width === '480px', String(bfLb.width));
+await page.keyboard.press('Escape');
+
+// ── Check group 9b: the gallery's own overflow affordance ────────────
+// Spec verification step 2: four screens overflow the 288px-per-item
+// track, so the prev/next arrows must un-hide and actually scroll.
+const arrows = await page.evaluate(async () => {
+  const wrap = document.querySelector('.app-shots[aria-label^="SOAR Duty Scheduler"]')
+    .closest('.log-shots-wrap');
+  const group = wrap.querySelector('.shots-nav-group');
+  const scroller = wrap.querySelector('.app-shots-wrap');
+  const before = scroller.scrollLeft;
+  wrap.querySelector('[data-shots-next]').click();
+  await new Promise((r) => setTimeout(r, 400));
+  return {
+    revealed: !group.hidden,
+    scrollable: scroller.scrollWidth > scroller.clientWidth,
+    moved: scroller.scrollLeft > before,
+  };
+});
+check('gallery: prev/next arrows are revealed on overflow', arrows.revealed);
+check('gallery: the track actually overflows', arrows.scrollable);
+check('gallery: next arrow scrolls the track', arrows.moved);
+
+// ── Check group 10: no overflow at either viewport ───────────────────
+for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  await page.setViewportSize(vp);
+  await page.waitForTimeout(200);
+  const wide = await page.evaluate(() =>
+    document.documentElement.scrollWidth - window.innerWidth);
+  check(`layout: no horizontal overflow at ${vp.width}x${vp.height}`, wide <= 0, `${wide}px`);
+}
+
+check('page: zero console messages', consoleMsgs.length === 0, String(consoleMsgs.length));
+
+// The page loads Google Fonts from its <head> — pre-existing and out of
+// scope for this work. The requirement is that .soar-mock adds NO external
+// request of its own, so assert against the known baseline rather than
+// against zero, and name any host that is not the font CDN.
+const EXTERNAL_BASELINE = 4; // fonts.googleapis.com preconnect + css2, fonts.gstatic.com preconnect
+const nonFont = external.filter((u) => !/^https:\/\/fonts\.(googleapis|gstatic)\.com/.test(u));
+check('page: this work adds no external request',
+  external.length <= EXTERNAL_BASELINE, `${external.length} vs baseline ${EXTERNAL_BASELINE}`);
+check('page: no non-font external host', nonFont.length === 0, JSON.stringify(nonFont));
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 

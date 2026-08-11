@@ -1163,6 +1163,18 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .soar-mock .soar-unassigned{color:var(--soar-break)}
 .soar-mock .soar-obs{display:flex;align-items:center;gap:5px;font-size:7.5px;color:var(--soar-fg-4);padding:2px 0;border-top:1px solid var(--soar-border);margin-top:4px;padding-top:4px}
 .soar-mock .soar-reqcov{display:block;text-align:center;border:1px solid rgba(245,158,11,.4);color:var(--soar-covering);border-radius:6px;padding:3px 0;margin-top:5px;font-family:var(--soar-mono);font-size:6.5px;letter-spacing:.11em;font-weight:700}
+@media (max-width:520px){
+  .soar-mock .soar-rail{width:34px}
+  .soar-mock .soar-brand,.soar-mock .soar-ni span,.soar-mock .soar-rf span,
+  .soar-mock .soar-user > span:last-child,.soar-mock .soar-ver{display:none}
+  .soar-mock .soar-ni,.soar-mock .soar-rf,.soar-mock .soar-user{justify-content:center}
+  .soar-mock .soar-stats{grid-template-columns:repeat(2,1fr)}
+  .soar-mock .soar-charts,.soar-mock .soar-people{grid-template-columns:1fr}
+  .soar-mock .soar-grid{grid-template-columns:repeat(3,1fr)}
+  .soar-mock .soar-grid > *:nth-child(n+4){display:none}
+  .soar-mock .soar-req{flex-direction:column}
+  .soar-mock .soar-req-act{width:auto;border-left:0;border-top:1px solid var(--soar-border);flex-direction:row}
+}
 
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
