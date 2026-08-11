@@ -348,6 +348,75 @@ check('cm: badges actually render tinted (non-transparent background), not just 
   && cm.reqs.every((r) => r.badgeBg && r.badgeBg !== 'rgba(0, 0, 0, 0)' && r.badgeBg !== 'transparent'),
   cm.found ? JSON.stringify(cm.reqs.map((r) => r.badgeBg)) : 'n/a');
 
+// ── Check group 9: Preventive Maintenance ────────────────────────────
+const pm = await page.evaluate(() => {
+  const mock = document.querySelector('.mavis-mock[data-screen="preventive"]');
+  if (!mock) return { found: false };
+  const sectionHeads = Array.prototype.slice.call(mock.querySelectorAll('.mavis-section-head')).map((s) => ({
+    label: (s.querySelector('.mavis-section-label') || {}).textContent.trim(),
+    count: (s.querySelector('.mavis-section-count') || {}).textContent.trim(),
+  }));
+  return {
+    found: true,
+    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
+    btn: (mock.querySelector('.mavis-pm-btn') || {}).textContent.trim(),
+    sectionHeads,
+    callins: Array.prototype.slice.call(mock.querySelectorAll('.mavis-callin-card')).map((c) => ({
+      id: (c.querySelector('.mavis-callin-id') || {}).textContent.trim(),
+      meta: (c.querySelector('.mavis-callin-meta') || {}).textContent.trim(),
+      pills: Array.prototype.slice.call(c.querySelectorAll('.mavis-chip-outline')).map((p) => p.textContent.trim()),
+      calledIn: (c.querySelector('.mavis-callin-calledin') || {}).textContent.trim(),
+      pmDue: [c.querySelector('.mavis-callin-pmdue'), c.querySelector('.mavis-callin-duechip')]
+        .map((el) => (el ? el.textContent.trim() : '')).join(' ').trim(),
+      dueChipClass: (c.querySelector('.mavis-callin-duechip') || { className: '' }).className,
+    })),
+    handed: Array.prototype.slice.call(mock.querySelectorAll('.mavis-handed-card')).map((c) => ({
+      id: (c.querySelector('.mavis-handed-id') || {}).textContent.trim(),
+      dept: (c.querySelector('.mavis-handed-dept') || {}).textContent.trim(),
+      subdept: (c.querySelector('.mavis-handed-subdept') || {}).textContent.trim(),
+      pill: (c.querySelector('.mavis-chip-outline') || {}).textContent.trim(),
+      row: (c.querySelector('.mavis-handed-row') || {}).textContent.trim(),
+      btn: (c.querySelector('.mavis-handed-btn') || {}).textContent.trim(),
+    })),
+  };
+});
+
+check('pm: screen exists', pm.found);
+check('pm: Preventive Maintenance is the active nav pill', pm.found && pm.active === 'Preventive Maintenance', pm.active);
+check('pm: heading + subtitle match the capture',
+  pm.found && pm.h1 === 'Preventive Maintenance' && pm.sub === 'Track vehicle handovers and scheduled maintenance');
+check('pm: Handover Vehicle button present', pm.found && pm.btn === 'Handover Vehicle', pm.btn);
+check('pm: three section headers with the captured counts',
+  pm.found && JSON.stringify(pm.sectionHeads) === JSON.stringify([
+    { label: 'Call-In', count: '3' },
+    { label: 'Handed Over', count: '2' },
+    { label: 'Pending Quotation Endorsement', count: '1' },
+  ]), JSON.stringify(pm.sectionHeads));
+check('pm: three Call-In cards matching the capture',
+  pm.found && JSON.stringify(pm.callins.map((c) => ({
+    id: c.id, meta: c.meta, pills: c.pills, calledIn: c.calledIn, pmDue: c.pmDue,
+  }))) === JSON.stringify([
+    { id: 'MID 4460', meta: 'Ground Logistics · Utility Truck', pills: ['Vehicle', 'Base Bravo', 'C1'],
+      calledIn: 'Called in: 14 Aug 2026 (in 3 days)', pmDue: 'PM Due: 03 Sep 2026 (in 24d)' },
+    { id: 'AGE 1151', meta: 'Ground Logistics · Ground Power Unit', pills: ['Aviation Ground Equipment', 'Base Bravo', 'Monthly Inspection'],
+      calledIn: 'Called in: 16 Aug 2026 (in 5 days)', pmDue: 'PM Due: 16 Aug 2026 (in 6d)' },
+    { id: 'MID 4514', meta: 'Ground Logistics · Utility Truck', pills: ['Vehicle', 'Base Bravo', 'B'],
+      calledIn: 'Called in: 18 Aug 2026 (in 7 days)', pmDue: 'PM Due: 07 Sep 2026 (in 28d)' },
+  ]), JSON.stringify(pm.callins));
+check('pm: PM Due urgency chip colours — green, amber, green',
+  pm.found && pm.callins.length === 3
+  && pm.callins[0].dueChipClass.includes('due-green')
+  && pm.callins[1].dueChipClass.includes('due-amber')
+  && pm.callins[2].dueChipClass.includes('due-green'),
+  pm.found ? JSON.stringify(pm.callins.map((c) => c.dueChipClass)) : 'n/a');
+check('pm: two Handed Over cards matching the capture',
+  pm.found && JSON.stringify(pm.handed) === JSON.stringify([
+    { id: 'AGE 1170', dept: 'Engineering Support', subdept: 'Sub-Dept: Workshop Engineering', pill: 'C1/TCP', row: 'Handed over 2 days ago', btn: 'Start PM' },
+    { id: 'MID 4483', dept: 'Engineering Support', subdept: 'Sub-Dept: Workshop Engineering', pill: 'C2/TA1', row: 'Handed over 3 days ago', btn: 'Start PM' },
+  ]), JSON.stringify(pm.handed));
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 

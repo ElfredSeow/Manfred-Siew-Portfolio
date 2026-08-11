@@ -1206,6 +1206,33 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .mavis-mock .mavis-req-reported span{display:inline-flex;align-items:center;gap:3px}
 .mavis-mock .mavis-req-recovery{display:inline-flex;align-items:center;border:1px solid var(--mavis-ring);color:var(--mavis-blue-fg);border-radius:999px;padding:2px 8px;font-size:6.5px;font-weight:600}
 
+/* Preventive Maintenance */
+.mavis-mock .mavis-pm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mavis-mock .mavis-pm-btn{display:inline-flex;align-items:center;gap:5px;background:var(--mavis-primary);color:#fff;border-radius:8px;padding:8px 14px;font-size:8px;font-weight:700;white-space:nowrap}
+.mavis-mock .mavis-section-head{display:flex;align-items:center;gap:6px;margin-top:14px}
+.mavis-mock .mavis-section-label{font-size:10px;font-weight:700;color:var(--mavis-ink)}
+.mavis-mock .mavis-section-count{background:var(--mavis-muted);color:var(--mavis-fg-2);border-radius:999px;padding:1px 7px;font-size:7px;font-weight:700}
+.mavis-mock .mavis-chip-outline{display:inline-flex;align-items:center;border:1px solid var(--mavis-border);border-radius:999px;padding:2px 7px;font-size:6.5px;color:var(--mavis-ink);font-weight:500}
+.mavis-mock .mavis-callin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.mavis-mock .mavis-callin-card{border-top:3px solid var(--mavis-ring);padding:9px 10px}
+.mavis-mock .mavis-callin-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.mavis-mock .mavis-callin-label{font-size:6px;letter-spacing:.06em;font-weight:700;color:var(--mavis-fg-3)}
+.mavis-mock .mavis-callin-id{font-size:10px;font-weight:800;color:var(--mavis-ink);margin-top:2px}
+.mavis-mock .mavis-callin-meta{font-size:6.5px;color:var(--mavis-fg-2);margin-top:2px}
+.mavis-mock .mavis-callin-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.mavis-mock .mavis-callin-row{display:flex;align-items:center;gap:4px;font-size:6.5px;color:var(--mavis-fg-2);margin-top:6px}
+.mavis-mock .mavis-callin-duechip{display:inline-block;border-radius:5px;padding:1px 6px;font-size:6.5px;font-weight:600;margin-left:auto}
+.mavis-mock .mavis-callin-duechip.due-green{background:var(--mavis-green-bg);color:var(--mavis-green-fg)}
+.mavis-mock .mavis-callin-duechip.due-amber{background:var(--mavis-amber-bg);color:var(--mavis-amber-fg)}
+.mavis-mock .mavis-handed-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.mavis-mock .mavis-handed-card{border-top:3px solid var(--mavis-warning);padding:9px 10px}
+.mavis-mock .mavis-handed-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.mavis-mock .mavis-handed-id{font-size:10px;font-weight:800;color:var(--mavis-ink);margin-top:2px}
+.mavis-mock .mavis-handed-dept{font-size:6.5px;color:var(--mavis-fg-2);margin-top:2px}
+.mavis-mock .mavis-handed-subdept{font-size:6.5px;color:var(--mavis-fg-3);margin-top:1px}
+.mavis-mock .mavis-handed-row{display:flex;align-items:center;gap:4px;font-size:6.5px;color:var(--mavis-fg-2);margin-top:7px}
+.mavis-mock .mavis-handed-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;background:var(--mavis-primary);color:#fff;border-radius:7px;padding:6px 0;font-size:7.5px;font-weight:700;margin-top:8px}
+
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
    out responsively, so it shrinks uniformly on a phone and keeps
@@ -2142,6 +2169,111 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                   </div>
                 </div>
                 <figcaption class="app-shot-cap"><div class="st">Corrective Maintenance</div><div class="sd">Every defect is a seven-state approval chain, not a status dropdown — and a deferred one (ADDL) carries its own expected-recovery date</div></figcaption>
+              </figure>
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MAVIS — Preventive Maintenance</span></div>
+                <div class="app-shot-frame">
+                  <div class="mavis-mock" data-mock-width="720" data-screen="preventive" aria-hidden="true">
+                    <div class="mavis-nav">
+                      <div class="mavis-nav-left">
+                        <span class="mavis-wordmark">MAVIS</span>
+                        <div class="mavis-pills">
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span>Corrective Maintenance</span></span>
+                          <span class="mavis-pill on"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg><span>Preventive Maintenance</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>Workshop Status</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span>Reports</span></span>
+                        </div>
+                      </div>
+                      <div class="mavis-nav-right">
+                        <span class="mavis-nav-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                        <span class="mavis-nav-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="mavis-bell-badge">2</span></span>
+                        <span class="mavis-user">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          <span class="mavis-user-text"><span class="mavis-user-name">Ops Duty Officer</span><br><span class="mavis-user-role">Admin</span></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="mavis-body">
+                      <div class="mavis-pm-head">
+                        <div>
+                          <div class="mavis-h1">Preventive Maintenance</div>
+                          <div class="mavis-sub">Track vehicle handovers and scheduled maintenance</div>
+                        </div>
+                        <span class="mavis-pm-btn"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Handover Vehicle</span>
+                      </div>
+
+                      <div class="mavis-section-head"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M10.268 21.487a.5.5 0 0 0 .686-.172l1.545-2.058a1 1 0 0 1 1.099-.398l4.435 1.108a1 1 0 0 1 .767.972V19.9a2 2 0 0 1-2.083 2A17.607 17.607 0 0 1 2.1 6.083 2 2 0 0 1 4.1 4h1.83a1 1 0 0 1 .972.777l1.108 4.435a1 1 0 0 1-.397 1.1l-2.06 1.544a.5.5 0 0 0-.172.686 12.06 12.06 0 0 0 5.887 5.905"/></svg><span class="mavis-section-label">Call-In</span><span class="mavis-section-count">3</span></div>
+                      <div class="mavis-callin-grid">
+                        <div class="mavis-card mavis-callin-card">
+                          <div class="mavis-callin-top">
+                            <div><div class="mavis-callin-label">VEHICLE</div><div class="mavis-callin-id">MID 4460</div></div>
+                            <span class="mavis-badge b-blue">Awaiting Handover</span>
+                          </div>
+                          <div class="mavis-callin-meta">Ground Logistics · Utility Truck</div>
+                          <div class="mavis-callin-pills"><span class="mavis-chip-outline">Vehicle</span><span class="mavis-chip-outline">Base Bravo</span><span class="mavis-chip-outline">C1</span></div>
+                          <div class="mavis-callin-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M10.268 21.487a.5.5 0 0 0 .686-.172l1.545-2.058a1 1 0 0 1 1.099-.398l4.435 1.108a1 1 0 0 1 .767.972V19.9a2 2 0 0 1-2.083 2A17.607 17.607 0 0 1 2.1 6.083 2 2 0 0 1 4.1 4h1.83a1 1 0 0 1 .972.777l1.108 4.435a1 1 0 0 1-.397 1.1l-2.06 1.544a.5.5 0 0 0-.172.686 12.06 12.06 0 0 0 5.887 5.905"/></svg><span class="mavis-callin-calledin">Called in: 14 Aug 2026 (in 3 days)</span></div>
+                          <div class="mavis-callin-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span class="mavis-callin-pmdue">PM Due:</span><span class="mavis-callin-duechip due-green">03 Sep 2026 (in 24d)</span></div>
+                        </div>
+                        <div class="mavis-card mavis-callin-card">
+                          <div class="mavis-callin-top">
+                            <div><div class="mavis-callin-label">VEHICLE</div><div class="mavis-callin-id">AGE 1151</div></div>
+                            <span class="mavis-badge b-blue">Awaiting Handover</span>
+                          </div>
+                          <div class="mavis-callin-meta">Ground Logistics · Ground Power Unit</div>
+                          <div class="mavis-callin-pills"><span class="mavis-chip-outline">Aviation Ground Equipment</span><span class="mavis-chip-outline">Base Bravo</span><span class="mavis-chip-outline">Monthly Inspection</span></div>
+                          <div class="mavis-callin-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M10.268 21.487a.5.5 0 0 0 .686-.172l1.545-2.058a1 1 0 0 1 1.099-.398l4.435 1.108a1 1 0 0 1 .767.972V19.9a2 2 0 0 1-2.083 2A17.607 17.607 0 0 1 2.1 6.083 2 2 0 0 1 4.1 4h1.83a1 1 0 0 1 .972.777l1.108 4.435a1 1 0 0 1-.397 1.1l-2.06 1.544a.5.5 0 0 0-.172.686 12.06 12.06 0 0 0 5.887 5.905"/></svg><span class="mavis-callin-calledin">Called in: 16 Aug 2026 (in 5 days)</span></div>
+                          <div class="mavis-callin-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span class="mavis-callin-pmdue">PM Due:</span><span class="mavis-callin-duechip due-amber">16 Aug 2026 (in 6d)</span></div>
+                        </div>
+                        <div class="mavis-card mavis-callin-card">
+                          <div class="mavis-callin-top">
+                            <div><div class="mavis-callin-label">VEHICLE</div><div class="mavis-callin-id">MID 4514</div></div>
+                            <span class="mavis-badge b-blue">Awaiting Handover</span>
+                          </div>
+                          <div class="mavis-callin-meta">Ground Logistics · Utility Truck</div>
+                          <div class="mavis-callin-pills"><span class="mavis-chip-outline">Vehicle</span><span class="mavis-chip-outline">Base Bravo</span><span class="mavis-chip-outline">B</span></div>
+                          <div class="mavis-callin-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M10.268 21.487a.5.5 0 0 0 .686-.172l1.545-2.058a1 1 0 0 1 1.099-.398l4.435 1.108a1 1 0 0 1 .767.972V19.9a2 2 0 0 1-2.083 2A17.607 17.607 0 0 1 2.1 6.083 2 2 0 0 1 4.1 4h1.83a1 1 0 0 1 .972.777l1.108 4.435a1 1 0 0 1-.397 1.1l-2.06 1.544a.5.5 0 0 0-.172.686 12.06 12.06 0 0 0 5.887 5.905"/></svg><span class="mavis-callin-calledin">Called in: 18 Aug 2026 (in 7 days)</span></div>
+                          <div class="mavis-callin-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span class="mavis-callin-pmdue">PM Due:</span><span class="mavis-callin-duechip due-green">07 Sep 2026 (in 28d)</span></div>
+                        </div>
+                      </div>
+
+                      <div class="mavis-section-head"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span class="mavis-section-label">Handed Over</span><span class="mavis-section-count">2</span></div>
+                      <div class="mavis-handed-grid">
+                        <div class="mavis-card mavis-handed-card">
+                          <div class="mavis-handed-top">
+                            <div><div class="mavis-callin-label">ASSET</div><div class="mavis-handed-id">AGE 1170</div></div>
+                            <span class="mavis-badge b-amber">Awaiting Start</span>
+                          </div>
+                          <div class="mavis-handed-dept">Engineering Support</div>
+                          <div class="mavis-handed-subdept">Sub-Dept: Workshop Engineering</div>
+                          <div class="mavis-callin-pills"><span class="mavis-chip-outline">C1/TCP</span></div>
+                          <div class="mavis-handed-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Handed over 2 days ago</div>
+                          <span class="mavis-handed-btn"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Start PM</span>
+                        </div>
+                        <div class="mavis-card mavis-handed-card">
+                          <div class="mavis-handed-top">
+                            <div><div class="mavis-callin-label">ASSET</div><div class="mavis-handed-id">MID 4483</div></div>
+                            <span class="mavis-badge b-amber">Awaiting Start</span>
+                          </div>
+                          <div class="mavis-handed-dept">Engineering Support</div>
+                          <div class="mavis-handed-subdept">Sub-Dept: Workshop Engineering</div>
+                          <div class="mavis-callin-pills"><span class="mavis-chip-outline">C2/TA1</span></div>
+                          <div class="mavis-handed-row"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Handed over 3 days ago</div>
+                          <span class="mavis-handed-btn"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Start PM</span>
+                        </div>
+                      </div>
+
+                      <!-- The top edge of the next section, exactly as the capture
+                           shows it before the crop — header only, no cards. Per
+                           design spec §5.3, MID 4514 appears here but not in
+                           MARKETING_SPEC.md §7's named-asset list; it is one of
+                           the fleet's quiet filler assets and is reproduced as
+                           captured, not "corrected" against that list. -->
+                      <div class="mavis-section-head" style="margin-top:14px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="m9 15 3-3 3 3"/></svg><span class="mavis-section-label">Pending Quotation Endorsement</span><span class="mavis-section-count">1</span></div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Preventive Maintenance</div><div class="sd">A call-in summons a vehicle ahead of its service. Moving the scheduled date is not a free edit — it is an LOS request that has to clear approval bands</div></figcaption>
               </figure>
             </div>
             </div>
