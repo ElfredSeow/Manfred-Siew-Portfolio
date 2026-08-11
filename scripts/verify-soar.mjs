@@ -163,6 +163,8 @@ const dash = await page.evaluate(() => {
     axis: Array.prototype.slice.call(mock.querySelectorAll('.soar-ax')).map((a) => a.textContent.trim()),
     stable: (mock.querySelector('.soar-stable') || {}).textContent || '',
     gaps: (mock.querySelector('.soar-gaps') || {}).textContent || '',
+    stableVal: (mock.querySelector('.soar-stable b') || {}).textContent || '',
+    gapsVal: (mock.querySelector('.soar-gaps b') || {}).textContent || '',
   };
 });
 
@@ -190,7 +192,13 @@ check('dashboard: y-axis is 0/4/8/12/16',
   dash.found && JSON.stringify(dash.axis) === JSON.stringify(['16', '12', '8', '4', '0']),
   JSON.stringify(dash.axis));
 check('dashboard: stability figures match the capture',
-  dash.found && /90\.0%/.test(dash.stable) && /\b2\b/.test(dash.gaps),
+  // .soar-stable/.soar-gaps concatenate two adjacent inline elements with
+  // no whitespace between them ("Stable Pairs90.0%" / "Critical Gaps2"),
+  // so a \b-anchored regex on the trailing number has no word boundary
+  // against the preceding letter and always fails. Read each <b> value
+  // directly (captured as stableVal/gapsVal above) instead of pattern-
+  // matching inside the concatenated blob.
+  dash.found && dash.stableVal === '90.0%' && dash.gapsVal === '2',
   `${dash.stable} | ${dash.gaps}`);
 
 // ── Report ───────────────────────────────────────────────────────────
