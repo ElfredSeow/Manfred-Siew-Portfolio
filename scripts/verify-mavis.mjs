@@ -146,6 +146,136 @@ check('count: pill-count reads 30', counts.pillCount && counts.pillCount.trim() 
 check('count: logCount reads "Showing all 30"', counts.logCount && counts.logCount.trim() === 'Showing all 30', counts.logCount);
 check('count: 30 actual .log-row elements', counts.rowCount === 30, String(counts.rowCount));
 
+// ── Check group 5: mock registration + regression on existing families ──
+const reg = await page.evaluate(() => {
+  const frameW = (sel) => {
+    const el = document.querySelector(sel);
+    return el ? getComputedStyle(el).width : null;
+  };
+  return {
+    mavisCount: document.querySelectorAll('.mavis-mock').length,
+    mavisWidths: Array.prototype.slice.call(document.querySelectorAll('.mavis-mock'))
+      .map((m) => m.getAttribute('data-mock-width')),
+    bfCount: document.querySelectorAll('.bf-mock').length,
+    mfCount: document.querySelectorAll('.mf-mock').length,
+    grCount: document.querySelectorAll('.gr-mock').length,
+    bfFrameW: frameW('.app-shot-frame .bf-mock'),
+    mfFrameW: frameW('.app-shot-frame .mf-mock'),
+    grFrameW: frameW('.app-shot-frame .gr-mock'),
+    mavisFrameW: frameW('.app-shot-frame .mavis-mock'),
+  };
+});
+
+check('regression: BOLDFACE still has 3 mocks', reg.bfCount === 3, String(reg.bfCount));
+check('regression: MatFlow still has 5 mocks', reg.mfCount === 5, String(reg.mfCount));
+check('regression: GRID still has 4 mocks', reg.grCount === 4, String(reg.grCount));
+check('regression: .bf-mock still authored at 480px', reg.bfFrameW === '480px', reg.bfFrameW);
+check('regression: .mf-mock still authored at 720px', reg.mfFrameW === '720px', reg.mfFrameW);
+check('regression: .gr-mock still authored at 720px', reg.grFrameW === '720px', reg.grFrameW);
+check('mavis: authored at 720px', reg.mavisFrameW === '720px', reg.mavisFrameW);
+check('mavis: every mock declares data-mock-width="720"',
+  reg.mavisCount > 0 && reg.mavisWidths.every((w) => w === '720'), JSON.stringify(reg.mavisWidths));
+
+// ── Check group 6: the shared navbar ─────────────────────────────────
+const nav = await page.evaluate(() => {
+  const mock = document.querySelector('.mavis-mock');
+  if (!mock) return { found: false };
+  const wm = mock.querySelector('.mavis-wordmark');
+  return {
+    found: true,
+    wordmark: wm ? wm.textContent.trim() : '',
+    pills: Array.prototype.slice.call(mock.querySelectorAll('.mavis-pill')).map((p) => p.textContent.trim()),
+    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim() || '',
+    bellBadge: (mock.querySelector('.mavis-bell-badge') || {}).textContent.trim() || '',
+    userName: (mock.querySelector('.mavis-user-name') || {}).textContent.trim() || '',
+    userRole: (mock.querySelector('.mavis-user-role') || {}).textContent.trim() || '',
+  };
+});
+
+check('nav: wordmark reads MAVIS', nav.found && nav.wordmark === 'MAVIS', nav.wordmark);
+check('nav: five pills in app order', nav.found && JSON.stringify(nav.pills) === JSON.stringify(
+  ['Dashboard', 'Corrective Maintenance', 'Preventive Maintenance', 'Workshop Status', 'Reports']),
+  JSON.stringify(nav.pills));
+check('nav: bell carries the captured badge count', nav.found && nav.bellBadge === '2', nav.bellBadge);
+check('nav: signed-in persona matches the capture',
+  nav.found && nav.userName === 'Ops Duty Officer' && nav.userRole === 'Admin',
+  `${nav.userName} / ${nav.userRole}`);
+
+// ── Check group 7: Fleet Overview ────────────────────────────────────
+const dash = await page.evaluate(() => {
+  const mock = document.querySelector('.mavis-mock[data-screen="dashboard"]');
+  if (!mock) return { found: false };
+  return {
+    found: true,
+    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
+    tabs: Array.prototype.slice.call(mock.querySelectorAll('.mavis-tab')).map((t) => t.textContent.trim()),
+    activeTab: (mock.querySelector('.mavis-tab.on') || {}).textContent.trim(),
+    stats: Array.prototype.slice.call(mock.querySelectorAll('.mavis-stat')).map((s) => ({
+      label: (s.querySelector('.mavis-stat-label') || {}).textContent.trim(),
+      value: (s.querySelector('.mavis-stat-value') || {}).textContent.trim(),
+      note: s.querySelector('.mavis-stat-note') ? s.querySelector('.mavis-stat-note').textContent.trim() : null,
+    })),
+    defects: Array.prototype.slice.call(mock.querySelectorAll('.mavis-defect')).map((d) => ({
+      title: (d.querySelector('.mavis-defect-title') || {}).textContent.trim(),
+      asset: (d.querySelector('.mavis-defect-asset') || {}).textContent.trim(),
+      badge: (d.querySelector('.mavis-badge') || {}).textContent.trim(),
+      viewOnly: !!d.querySelector('.mavis-view-only'),
+    })),
+    assets: Array.prototype.slice.call(mock.querySelectorAll('.mavis-asset')).map((a) => ({
+      id: (a.querySelector('.mavis-asset-id') || {}).textContent.trim(),
+      type: (a.querySelector('.mavis-asset-type') || {}).textContent.trim(),
+      badge: (a.querySelector('.mavis-badge') || {}).textContent.trim(),
+    })),
+    cmTiles: Array.prototype.slice.call(mock.querySelectorAll('.mavis-cmtile')).map((t) => ({
+      value: (t.querySelector('.mavis-cmtile-value') || {}).textContent.trim(),
+      label: (t.querySelector('.mavis-cmtile-label') || {}).textContent.trim(),
+    })),
+    hasPmSummary: !!mock.querySelector('.mavis-pmtiles'),
+    hasPendingApproval: !!mock.querySelector('.mavis-pending'),
+    hasFooter: !!mock.querySelector('.mavis-footer'),
+  };
+});
+
+check('dashboard: screen exists', dash.found);
+check('dashboard: Dashboard is the active nav pill', dash.found && dash.active === 'Dashboard', dash.active);
+check('dashboard: heading + subtitle match the capture',
+  dash.found && dash.h1 === 'Fleet Overview'
+  && dash.sub === 'Monitor vehicle/equipment status, serviceability trends, and maintenance requirements.');
+check('dashboard: four tabs, Overview active',
+  dash.found && JSON.stringify(dash.tabs) === JSON.stringify(
+    ['Overview', 'Scheduled Maintenance', 'Maintenance History', 'ADDL'])
+  && dash.activeTab === 'Overview', JSON.stringify(dash.tabs));
+check('dashboard: four stat tiles with the captured values',
+  dash.found && JSON.stringify(dash.stats) === JSON.stringify([
+    { label: 'Total Assets', value: '48', note: null },
+    { label: 'Serviceable', value: '36', note: '75.0% Availability' },
+    { label: 'Unserviceable', value: '12', note: null },
+    { label: 'Reported Today', value: '3', note: null },
+  ]), JSON.stringify(dash.stats));
+check('dashboard: three defect rows matching the capture',
+  dash.found && JSON.stringify(dash.defects) === JSON.stringify([
+    { title: 'Air brake pressure drops below threshold on hold', asset: 'Asset ID: MID 4423', badge: 'Waiting for assessment', viewOnly: false },
+    { title: 'Hydraulic seep at tow-arm cylinder', asset: 'Asset ID: AGE 1119', badge: 'Pending CEN Endorsement', viewOnly: false },
+    { title: 'Coolant temperature sensor intermittent', asset: 'Asset ID: MID 4490', badge: 'Ready for collection', viewOnly: true },
+  ]), JSON.stringify(dash.defects));
+check('dashboard: three asset-status rows matching the capture',
+  dash.found && JSON.stringify(dash.assets) === JSON.stringify([
+    { id: 'AGE 1107', type: 'Ground Power Unit', badge: 'Serviceable' },
+    { id: 'AGE 1112', type: 'Aircraft Tug', badge: 'Serviceable' },
+    { id: 'AGE 1119', type: 'Air Start Unit', badge: 'Defect' },
+  ]), JSON.stringify(dash.assets));
+check('dashboard: three CM summary tiles matching the capture',
+  dash.found && JSON.stringify(dash.cmTiles) === JSON.stringify([
+    { value: '3', label: 'In Maintenance' },
+    { value: '2', label: 'Ready for Collection' },
+    { value: '2', label: 'Active ADDL' },
+  ]), JSON.stringify(dash.cmTiles));
+check('dashboard: stops before PM Summary / Pending Approval / footer (spec §5.1)',
+  dash.found && !dash.hasPmSummary && !dash.hasPendingApproval && !dash.hasFooter,
+  `pm=${dash.hasPmSummary} pending=${dash.hasPendingApproval} footer=${dash.hasFooter}`);
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 
