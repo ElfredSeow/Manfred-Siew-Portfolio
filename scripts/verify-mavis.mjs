@@ -417,6 +417,113 @@ check('pm: two Handed Over cards matching the capture',
     { id: 'MID 4483', dept: 'Engineering Support', subdept: 'Sub-Dept: Workshop Engineering', pill: 'C2/TA1', row: 'Handed over 3 days ago', btn: 'Start PM' },
   ]), JSON.stringify(pm.handed));
 
+// ── Check group 10: Reports ──────────────────────────────────────────
+const rp = await page.evaluate(() => {
+  const mock = document.querySelector('.mavis-mock[data-screen="reports"]');
+  if (!mock) return { found: false };
+  const cols = Array.prototype.slice.call(mock.querySelectorAll('.mavis-chart-col')).map((c) => ({
+    month: c.getAttribute('data-month'),
+    total: c.getAttribute('data-total'),
+    segs: Array.prototype.slice.call(c.querySelectorAll('.mavis-chart-seg')).map((s) => ({
+      series: s.getAttribute('data-series'), count: s.getAttribute('data-count'),
+    })),
+  }));
+  return {
+    found: true,
+    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
+    tabs: Array.prototype.slice.call(mock.querySelectorAll('.mavis-rp-tab')).map((t) => t.textContent.trim()),
+    activeTab: (mock.querySelector('.mavis-rp-tab.on') || {}).textContent.trim(),
+    filters: Array.prototype.slice.call(mock.querySelectorAll('.mavis-filter-field')).map((f) => ({
+      label: (f.querySelector('.mavis-filter-label') || {}).textContent.trim(),
+      value: (f.querySelector('.mavis-filter-box') || {}).textContent.trim(),
+    })),
+    stats: Array.prototype.slice.call(mock.querySelectorAll('.mavis-rp-stat')).map((s) => ({
+      label: (s.querySelector('.mavis-rp-stat-label') || {}).textContent.trim(),
+      value: (s.querySelector('.mavis-rp-stat-value') || {}).textContent.trim(),
+    })),
+    chartTitle: (mock.querySelector('.mavis-chart-title') || {}).textContent.trim(),
+    chartSub: (mock.querySelector('.mavis-chart-sub') || {}).textContent.trim(),
+    cols,
+    legend: Array.prototype.slice.call(mock.querySelectorAll('.mavis-chart-legend-item')).map((l) => l.textContent.trim()),
+    hasSubsystemsCard: !!mock.querySelector('.mavis-subsystems-card'),
+    hasByTypeCard: !!mock.querySelector('.mavis-bytype-card'),
+    captionSd: (() => {
+      const fig = mock.closest('figure');
+      const sd = fig ? fig.querySelector('.app-shot-cap .sd') : null;
+      return sd ? sd.textContent : '';
+    })(),
+  };
+});
+
+check('reports: screen exists', rp.found);
+check('reports: Reports is the active nav pill', rp.found && rp.active === 'Reports', rp.active);
+check('reports: heading + subtitle match the capture',
+  rp.found && rp.h1 === 'Reports' && rp.sub === 'Defect trending and monthly fleet availability analytics.');
+check('reports: five tabs, Defect Trending active',
+  rp.found && JSON.stringify(rp.tabs) === JSON.stringify(
+    ['Defect Trending', 'Rejection Rate', 'Fleet Availability', 'Projection', 'Deployment'])
+  && rp.activeTab === 'Defect Trending', JSON.stringify(rp.tabs));
+check('reports: five filters matching the capture',
+  rp.found && JSON.stringify(rp.filters) === JSON.stringify([
+    { label: 'From', value: '01 Jan 2026' },
+    { label: 'To', value: '31 Aug 2026' },
+    { label: 'Category', value: 'All categories' },
+    { label: 'Type', value: 'All types' },
+    { label: 'Base / Camp', value: 'All bases' },
+  ]), JSON.stringify(rp.filters));
+check('reports: three stat cards matching the capture',
+  rp.found && JSON.stringify(rp.stats) === JSON.stringify([
+    { label: 'Total defects in range', value: '12' },
+    { label: 'Distinct subsystems', value: '7' },
+    { label: 'Types affected', value: '6' },
+  ]), JSON.stringify(rp.stats));
+check('reports: chart card title + subtitle match the capture',
+  rp.found && rp.chartTitle === 'Defects per month, by type'
+  && rp.chartSub === 'Stacked count of defects created each month, grouped by type.');
+check('reports: eight month columns, six empty, two with the captured totals',
+  rp.found && JSON.stringify(rp.cols.map((c) => `${c.month}:${c.total}`)) === JSON.stringify([
+    'Jan 2026:0', 'Feb 2026:0', 'Mar 2026:0', 'Apr 2026:0', 'May 2026:0', 'Jun 2026:0',
+    'Jul 2026:4', 'Aug 2026:8',
+  ]), JSON.stringify(rp.cols.map((c) => `${c.month}:${c.total}`)));
+check('reports: July stack — Aircraft Tug 1, Ground Power Unit 1, Prime Mover 2, bottom to top',
+  rp.found && JSON.stringify((rp.cols.find((c) => c.month === 'Jul 2026') || {}).segs) === JSON.stringify([
+    { series: 'Aircraft Tug', count: '1' }, { series: 'Ground Power Unit', count: '1' }, { series: 'Prime Mover', count: '2' },
+  ]));
+check('reports: August stack — Air Start Unit 2, Aircraft Tug 1, Prime Mover 3, Recovery Vehicle 1, Refueller 1, bottom to top',
+  rp.found && JSON.stringify((rp.cols.find((c) => c.month === 'Aug 2026') || {}).segs) === JSON.stringify([
+    { series: 'Air Start Unit', count: '2' }, { series: 'Aircraft Tug', count: '1' }, { series: 'Prime Mover', count: '3' },
+    { series: 'Recovery Vehicle', count: '1' }, { series: 'Refueller', count: '1' },
+  ]));
+check('reports: six-entry legend matching the capture',
+  rp.found && JSON.stringify(rp.legend) === JSON.stringify([
+    'Air Start Unit', 'Aircraft Tug', 'Ground Power Unit', 'Prime Mover', 'Recovery Vehicle', 'Refueller',
+  ]), JSON.stringify(rp.legend));
+check('reports: stops before Top subsystems / By type (spec §5.4)',
+  rp.found && !rp.hasSubsystemsCard && !rp.hasByTypeCard,
+  `subsystems=${rp.hasSubsystemsCard} bytype=${rp.hasByTypeCard}`);
+check('reports: closing caption carries the demo-data disclosure',
+  rp.found && /Demonstration dataset.*fabricated/.test(rp.captionSd));
+
+// ── Check group 11: no horizontal overflow at two viewports ───────────
+// Design spec verification item 1. Opened in fresh pages (not the shared
+// `page`) so each gets its own viewport; every <details> is opened first,
+// the same reason Task 1's setup opens them on `page` — a closed <details>
+// has no layout box, so a mock inside one would under-report its width.
+for (const [w, h] of [[1440, 900], [390, 844]]) {
+  const vp = await browser.newPage({ viewport: { width: w, height: h } });
+  await vp.goto(PAGE_URL, { waitUntil: 'load' });
+  await vp.evaluate(() => { document.querySelectorAll('details').forEach((d) => { d.open = true; }); });
+  const dims = await vp.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  check(`overflow: no horizontal scroll at ${w}x${h}`, dims.scrollWidth <= dims.clientWidth,
+    `scrollWidth=${dims.scrollWidth} clientWidth=${dims.clientWidth}`);
+  await vp.close();
+}
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 

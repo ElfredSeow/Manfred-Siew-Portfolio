@@ -1233,6 +1233,34 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .mavis-mock .mavis-handed-row{display:flex;align-items:center;gap:4px;font-size:6.5px;color:var(--mavis-fg-2);margin-top:7px}
 .mavis-mock .mavis-handed-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;background:var(--mavis-primary);color:#fff;border-radius:7px;padding:6px 0;font-size:7.5px;font-weight:700;margin-top:8px}
 
+/* Reports */
+.mavis-mock .mavis-rp-tabs{display:inline-flex;background:var(--mavis-muted);border-radius:8px;padding:3px;gap:2px;margin-top:10px;flex-wrap:wrap}
+.mavis-mock .mavis-rp-tab{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:6px;font-size:7px;color:var(--mavis-fg-2);white-space:nowrap}
+.mavis-mock .mavis-rp-tab.on{background:#fff;color:var(--mavis-ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.mavis-mock .mavis-filters-card{padding:10px 12px;margin-top:10px}
+.mavis-mock .mavis-filters-head{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:700;color:var(--mavis-ink)}
+.mavis-mock .mavis-filters-row{display:flex;gap:12px;margin-top:9px;flex-wrap:wrap}
+.mavis-mock .mavis-filter-field{display:flex;flex-direction:column;gap:3px}
+.mavis-mock .mavis-filter-label{font-size:6.5px;color:var(--mavis-fg-2);font-weight:600}
+.mavis-mock .mavis-filter-box{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--mavis-border);border-radius:6px;padding:4px 8px;font-size:7px;color:var(--mavis-ink);background:#fff}
+.mavis-mock .mavis-rp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.mavis-mock .mavis-rp-stat{padding:10px;text-align:center}
+.mavis-mock .mavis-rp-stat-label{font-size:7.5px;color:var(--mavis-fg-2)}
+.mavis-mock .mavis-rp-stat-value{font-size:17px;font-weight:700;margin-top:3px}
+.mavis-mock .mavis-chart-card{padding:11px 12px;margin-top:8px}
+.mavis-mock .mavis-chart-title{font-size:10px;font-weight:700;color:var(--mavis-ink)}
+.mavis-mock .mavis-chart-sub{font-size:7px;color:var(--mavis-fg-3);margin-top:1px}
+.mavis-mock .mavis-chart-plot{display:flex;gap:8px;margin-top:10px;height:110px}
+.mavis-mock .mavis-chart-axis{display:flex;flex-direction:column;justify-content:space-between;font-size:6.5px;color:var(--mavis-fg-3);text-align:right;padding-bottom:12px}
+.mavis-mock .mavis-chart-bars{flex:1;display:flex;align-items:flex-end;gap:5px}
+.mavis-mock .mavis-chart-col{flex:1;display:flex;flex-direction:column;height:100%}
+.mavis-mock .mavis-chart-colbar-wrap{flex:1;display:flex;align-items:flex-end}
+.mavis-mock .mavis-chart-colbar{width:100%;display:flex;flex-direction:column-reverse;border-radius:2px 2px 0 0;overflow:hidden}
+.mavis-mock .mavis-chart-collabel{font-size:5.5px;color:var(--mavis-fg-3);text-align:center;margin-top:3px;white-space:nowrap;flex-shrink:0}
+.mavis-mock .mavis-chart-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+.mavis-mock .mavis-chart-legend-item{display:flex;align-items:center;gap:4px;font-size:6.5px;color:var(--mavis-fg-2)}
+.mavis-mock .mavis-chart-swatch{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
    out responsively, so it shrinks uniformly on a phone and keeps
@@ -2274,6 +2302,117 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                   </div>
                 </div>
                 <figcaption class="app-shot-cap"><div class="st">Preventive Maintenance</div><div class="sd">A call-in summons a vehicle ahead of its service. Moving the scheduled date is not a free edit — it is an LOS request that has to clear approval bands</div></figcaption>
+              </figure>
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MAVIS — Reports</span></div>
+                <div class="app-shot-frame">
+                  <div class="mavis-mock" data-mock-width="720" data-screen="reports" aria-hidden="true">
+                    <div class="mavis-nav">
+                      <div class="mavis-nav-left">
+                        <span class="mavis-wordmark">MAVIS</span>
+                        <div class="mavis-pills">
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span>Corrective Maintenance</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg><span>Preventive Maintenance</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>Workshop Status</span></span>
+                          <span class="mavis-pill on"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span>Reports</span></span>
+                        </div>
+                      </div>
+                      <div class="mavis-nav-right">
+                        <span class="mavis-nav-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                        <span class="mavis-nav-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="mavis-bell-badge">2</span></span>
+                        <span class="mavis-user">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          <span class="mavis-user-text"><span class="mavis-user-name">Ops Duty Officer</span><br><span class="mavis-user-role">Admin</span></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="mavis-body">
+                      <div class="mavis-h1">Reports</div>
+                      <div class="mavis-sub">Defect trending and monthly fleet availability analytics.</div>
+
+                      <div class="mavis-rp-tabs">
+                        <span class="mavis-rp-tab on"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg>Defect Trending</span>
+                        <span class="mavis-rp-tab"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.4V2"/><path d="M1 10.4V2"/><path d="M1 14a5 5 0 0 0 5 5h11.7l-3.9 4"/><path d="M18.2 22.4A7.9 7.9 0 0 0 22 15.5"/></svg>Rejection Rate</span>
+                        <span class="mavis-rp-tab"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Fleet Availability</span>
+                        <span class="mavis-rp-tab"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Projection</span>
+                        <span class="mavis-rp-tab"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>Deployment</span>
+                      </div>
+
+                      <div class="mavis-card mavis-filters-card">
+                        <div class="mavis-filters-head"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filters</div>
+                        <div class="mavis-filters-row">
+                          <div class="mavis-filter-field"><span class="mavis-filter-label">From</span><span class="mavis-filter-box"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>01 Jan 2026</span></div>
+                          <div class="mavis-filter-field"><span class="mavis-filter-label">To</span><span class="mavis-filter-box"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>31 Aug 2026</span></div>
+                          <div class="mavis-filter-field"><span class="mavis-filter-label">Category</span><span class="mavis-filter-box">All categories<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+                          <div class="mavis-filter-field"><span class="mavis-filter-label">Type</span><span class="mavis-filter-box">All types<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+                          <div class="mavis-filter-field"><span class="mavis-filter-label">Base / Camp</span><span class="mavis-filter-box">All bases<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+                        </div>
+                      </div>
+
+                      <div class="mavis-rp-stats">
+                        <div class="mavis-card mavis-rp-stat"><div class="mavis-rp-stat-label">Total defects in range</div><div class="mavis-rp-stat-value">12</div></div>
+                        <div class="mavis-card mavis-rp-stat"><div class="mavis-rp-stat-label">Distinct subsystems</div><div class="mavis-rp-stat-value">7</div></div>
+                        <div class="mavis-card mavis-rp-stat"><div class="mavis-rp-stat-label">Types affected</div><div class="mavis-rp-stat-value">6</div></div>
+                      </div>
+
+                      <div class="mavis-card mavis-chart-card">
+                        <div class="mavis-chart-title">Defects per month, by type</div>
+                        <div class="mavis-chart-sub">Stacked count of defects created each month, grouped by type.</div>
+                        <div class="mavis-chart-plot">
+                          <div class="mavis-chart-axis"><span>8</span><span>6</span><span>4</span><span>2</span><span>0</span></div>
+                          <div class="mavis-chart-bars">
+                            <div class="mavis-chart-col" data-month="Jan 2026" data-total="0"><div class="mavis-chart-colbar-wrap"></div><div class="mavis-chart-collabel">Jan 2026</div></div>
+                            <div class="mavis-chart-col" data-month="Feb 2026" data-total="0"><div class="mavis-chart-colbar-wrap"></div><div class="mavis-chart-collabel">Feb 2026</div></div>
+                            <div class="mavis-chart-col" data-month="Mar 2026" data-total="0"><div class="mavis-chart-colbar-wrap"></div><div class="mavis-chart-collabel">Mar 2026</div></div>
+                            <div class="mavis-chart-col" data-month="Apr 2026" data-total="0"><div class="mavis-chart-colbar-wrap"></div><div class="mavis-chart-collabel">Apr 2026</div></div>
+                            <div class="mavis-chart-col" data-month="May 2026" data-total="0"><div class="mavis-chart-colbar-wrap"></div><div class="mavis-chart-collabel">May 2026</div></div>
+                            <div class="mavis-chart-col" data-month="Jun 2026" data-total="0"><div class="mavis-chart-colbar-wrap"></div><div class="mavis-chart-collabel">Jun 2026</div></div>
+                            <div class="mavis-chart-col" data-month="Jul 2026" data-total="4">
+                              <div class="mavis-chart-colbar-wrap">
+                                <div class="mavis-chart-colbar" style="height:50%">
+                                  <span class="mavis-chart-seg" data-series="Aircraft Tug" data-count="1" style="flex:1;background:#0ea5e9"></span>
+                                  <span class="mavis-chart-seg" data-series="Ground Power Unit" data-count="1" style="flex:1;background:#22c55e"></span>
+                                  <span class="mavis-chart-seg" data-series="Prime Mover" data-count="2" style="flex:2;background:#f59e0b"></span>
+                                </div>
+                              </div>
+                              <div class="mavis-chart-collabel">Jul 2026</div>
+                            </div>
+                            <div class="mavis-chart-col" data-month="Aug 2026" data-total="8">
+                              <div class="mavis-chart-colbar-wrap">
+                                <div class="mavis-chart-colbar" style="height:100%">
+                                  <span class="mavis-chart-seg" data-series="Air Start Unit" data-count="2" style="flex:2;background:#1e3a8a"></span>
+                                  <span class="mavis-chart-seg" data-series="Aircraft Tug" data-count="1" style="flex:1;background:#0ea5e9"></span>
+                                  <span class="mavis-chart-seg" data-series="Prime Mover" data-count="3" style="flex:3;background:#f59e0b"></span>
+                                  <span class="mavis-chart-seg" data-series="Recovery Vehicle" data-count="1" style="flex:1;background:#8b5cf6"></span>
+                                  <span class="mavis-chart-seg" data-series="Refueller" data-count="1" style="flex:1;background:#ef4444"></span>
+                                </div>
+                              </div>
+                              <div class="mavis-chart-collabel">Aug 2026</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mavis-chart-legend">
+                          <span class="mavis-chart-legend-item"><span class="mavis-chart-swatch" style="background:#1e3a8a"></span>Air Start Unit</span>
+                          <span class="mavis-chart-legend-item"><span class="mavis-chart-swatch" style="background:#0ea5e9"></span>Aircraft Tug</span>
+                          <span class="mavis-chart-legend-item"><span class="mavis-chart-swatch" style="background:#22c55e"></span>Ground Power Unit</span>
+                          <span class="mavis-chart-legend-item"><span class="mavis-chart-swatch" style="background:#f59e0b"></span>Prime Mover</span>
+                          <span class="mavis-chart-legend-item"><span class="mavis-chart-swatch" style="background:#8b5cf6"></span>Recovery Vehicle</span>
+                          <span class="mavis-chart-legend-item"><span class="mavis-chart-swatch" style="background:#ef4444"></span>Refueller</span>
+                        </div>
+                      </div>
+
+                      <!-- Screen stops here per design spec §5.4. "Top subsystems"
+                           and "By type" — two further half-width chart cards
+                           visible in screens/04-reports.png below this point —
+                           are NOT built: the stacked chart above already carries
+                           the analytics claim, and building them would push this
+                           mock's natural height past the ~700px budget in the
+                           Global Constraints, forcing the lightbox to scroll. -->
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Reports</div><div class="sd">Defect trending, rejection rate, fleet availability and projection, read from the same store the work is recorded in. Demonstration dataset — every asset number, defect, date and person shown across these screens is fabricated.</div></figcaption>
               </figure>
             </div>
             </div>
