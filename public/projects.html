@@ -1003,6 +1003,11 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .gr-mock .gr-neworg .gr-input{align-self:stretch;font-size:6.5px;color:var(--gr-fg-4);border:1px solid var(--gr-line);background:var(--gr-tint);border-radius:5px;padding:4px 6px}
 .gr-mock .gr-neworg .gr-primary{background:var(--gr-blue);color:#fff;font-weight:700;font-size:6.5px;padding:4px 8px;border-radius:6px}
 
+/* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
+   has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
+   out responsively, so it shrinks uniformly on a phone and keeps
+   showing the app's real desktop layout. */
+
 /* ── SOAR Duty Scheduler screen mockup ────────────────────────────────
    Rebuilt in HTML/CSS from the app's own design tokens and its four
    captured screens, the same recipe .mf-mock and .gr-mock use. Source:
@@ -1166,7 +1171,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 @media (max-width:520px){
   .soar-mock .soar-rail{width:34px}
   .soar-mock .soar-brand,.soar-mock .soar-ni span,.soar-mock .soar-rf span,
-  .soar-mock .soar-user > span:last-child,.soar-mock .soar-ver{display:none}
+  .soar-mock .soar-uinfo,.soar-mock .soar-ver{display:none}
   .soar-mock .soar-ni,.soar-mock .soar-rf,.soar-mock .soar-user{justify-content:center}
   .soar-mock .soar-stats{grid-template-columns:repeat(2,1fr)}
   .soar-mock .soar-charts,.soar-mock .soar-people{grid-template-columns:1fr}
@@ -1175,11 +1180,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
   .soar-mock .soar-req{flex-direction:column}
   .soar-mock .soar-req-act{width:auto;border-left:0;border-top:1px solid var(--soar-border);flex-direction:row}
 }
-
-/* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
-   has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
-   out responsively, so it shrinks uniformly on a phone and keeps
-   showing the app's real desktop layout. */
 </style>
 </head>
 

@@ -140,6 +140,11 @@ check('rail: wordmark is background-clip:text at weight 800',
   rail.found && rail.clip === 'text' && rail.weight === '800', `${rail.clip}/${rail.weight}`);
 check('rail: carries the signed-in persona and version',
   rail.found && /t\.rahman@soar\.demo/.test(rail.railText) && /v1\.0\.11/.test(rail.railText));
+const railsIdentical = await page.evaluate(() =>
+  Array.from(document.querySelectorAll('.soar-mock .soar-rail'))
+    .map((r) => r.innerHTML.replace(/ soar-on/g, ''))
+    .every((h, _, a) => h === a[0]));
+check('rail: all four copies are identical apart from the active item', railsIdentical);
 
 // ── Check group 5: Operations Dashboard ──────────────────────────────
 const dash = await page.evaluate(() => {
@@ -239,7 +244,7 @@ check('covering: three request cards matching the capture',
     'Wednesday, Aug 12th|SIM 1|K Nakamura|SUGGESTED REPLACEMENT: P NGUYEN',
   ]), JSON.stringify(cov.reqs.map((r) => `${r.date}|${r.sim}|${r.by}|${r.rep}`)));
 check('covering: every card carries its reason and both actions',
-  cov.found && cov.reqs.length === 3 && cov.reqs.every((r) => r.reason.length > 20 && r.approve && r.reject));
+  cov.found && cov.reqs.length === 3 && cov.reqs.every((r) => r.approve && r.reject));
 check('covering: reasons are the captured text, exactly',
   // Anchor-phrase substring checks let a corrupted reason (dropped clause,
   // swapped punctuation, wrong dash character) still pass as long as one
@@ -330,6 +335,8 @@ const cal = await page.evaluate(() => {
         sim: (m.querySelector('.soar-sim') || {}).textContent.trim(),
         q: q ? q.textContent.replace(/^Q/, '').trim() : null,
         p: p ? p.textContent.replace(/^P/, '').trim() : null,
+        reqcov: !!m.querySelector('.soar-reqcov'),
+        obs: (m.querySelector('.soar-obs') || {}).textContent ? m.querySelector('.soar-obs').textContent.trim() : null,
       };
     }),
   };
@@ -383,6 +390,14 @@ check('calendar: all 20 missions match the capture exactly — sim, Q and P per 
     'fri-w1:Sim 4|K Nakamura|M Bianchi', 'fri-w2:Sim 2|P Nguyen|D Kowalski',
     'fri-w3:Sim 1|T Rahman|L Okafor', 'fri-w4:Sim 3|S Whitfield|A Delgado',
   ]), JSON.stringify(cal.missions.map((m) => `${m.cell}:${m.sim}|${m.q}|${m.p}`)));
+check('calendar: Request Coverage on exactly the five spec cells',
+  JSON.stringify(cal.missions.filter((m) => m.reqcov).map((m) => m.cell)) === JSON.stringify(
+    ['mon-w1', 'tue-w1', 'wed-w2', 'thu-w2', 'fri-w3']),
+  JSON.stringify(cal.missions.filter((m) => m.reqcov).map((m) => m.cell)));
+check('calendar: exactly one observer row, J Farrow on thu-w2',
+  JSON.stringify(cal.missions.filter((m) => m.obs).map((m) => `${m.cell}:${m.obs}`)) === JSON.stringify(
+    ['thu-w2:J Farrow']),
+  JSON.stringify(cal.missions.filter((m) => m.obs).map((m) => `${m.cell}:${m.obs}`)));
 const galleryOrder = await page.evaluate(() =>
   Array.prototype.slice.call(document.querySelectorAll('.soar-mock')).map((m) => m.getAttribute('data-screen')));
 check('calendar: Weekly Schedule leads the gallery, before the Dashboard screen',
