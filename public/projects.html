@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projects · Manfred Siew</title>
-<meta name="description" content="Twenty-seven projects, filterable by category and organisation: Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
+<meta name="description" content="Thirty projects, filterable by category and organisation: Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Manfred Siew">
 <meta property="og:title" content="Projects · Manfred Siew">
-<meta property="og:description" content="Twenty-seven projects, filterable by category and organisation: Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
+<meta property="og:description" content="Thirty projects, filterable by category and organisation: Aerospace, Power Platform, LLM tuning, UI/UX and process automation work across RSAF, Temasek Polytechnic and freelance.">
 <meta property="og:url" content="https://manfred-siew.web.app/projects">
 <meta property="og:image" content="https://manfred-siew.web.app/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -351,7 +351,8 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .shot-lightbox-mockwrap .mf-mock,
 .shot-lightbox-mockwrap .gr-mock,
 .shot-lightbox-mockwrap .soar-mock,
-.shot-lightbox-mockwrap .mavis-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
+.shot-lightbox-mockwrap .mavis-mock,
+.shot-lightbox-mockwrap .miles-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
 .shot-lightbox-cap{ padding:.9rem 1.5rem 1.25rem; }
 .shot-lightbox-cap .st{ font-size:.9375rem; font-weight:600; color:var(--ink); }
 .shot-lightbox-cap .sd{ font-size:.8125rem; line-height:1.4; color:var(--muted); margin-top:.15rem; }
@@ -535,6 +536,21 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
    overflow:hidden crop the thumbnail, because each screen's natural
    content height varies. */
 .app-shot-frame .mavis-mock{width:720px;transform:scale(.4);transform-origin:top left}
+.app-shot-frame .miles-mock{width:430px;transform:scale(.5);transform-origin:top left}
+
+/* Portrait shot frames — MILES is the first mobile app in the log, and the
+   shared .app-shot-frame is aspect-ratio:8/5 landscape, which would
+   letterbox a phone to about a third of the frame's width. Every rule here
+   is scoped to .is-phone, so no existing row moves by a pixel.
+   430 x .5 = 215 and 932 x .5 = 466, so the scaled mock fills the frame
+   exactly, top-left anchored: no letterboxing, no centring maths, nothing
+   overflowing sideways. The dark frame background is inherited unchanged and
+   reads as the surround of a device. The chrome bar stays because it carries
+   the screen title, but its traffic lights are hidden — browser dots on a
+   mobile screen are a lie. */
+.app-shot.is-phone{ width:215px; }
+.app-shot.is-phone .app-shot-frame{ aspect-ratio:auto; height:466px; }
+.app-shot.is-phone .app-shot-dots{ display:none; }
 @media (max-width:520px){
   .bf-mock .bf-metrics,.bf-mock .bf-vgrid{grid-template-columns:1fr}
   .bf-mock .bf-rail{width:48px}
@@ -1416,6 +1432,170 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
    out at a real narrow viewport, so it shrinks/grows uniformly instead
    of needing its own breakpoint. The 390×844 overflow check (verify
    group 11) already confirms this holds. */
+
+/* ── MILES phone screen mockups ───────────────────────────────────────
+   The sixth hand-built family on this page and the first PHONE one, so
+   it is also the only one that uses the .app-shot.is-phone frame above.
+   Same recipe as .mavis-mock: rebuilt in HTML/CSS from the app's own
+   design tokens and four of its captured screens, never a photo and
+   never invented. Source: raid-ppcoe/MILES-Marketing-Content,
+   marketing-pr/rsaf-vehicle-logbook/MARKETING_SPEC.md (§2 theme tokens,
+   §3b lucide icon set) plus screens/{home,vehicles,approvals,admin}.png.
+
+   Authored at 430 x 932, which is the app's REAL device viewport: every
+   capture is 860 device px wide at deviceScaleFactor 2, so device px / 2
+   is CSS px. Each screen is therefore a fixed 932px box with the header
+   at the top, the content clipped where the real fold clips it, and the
+   bottom navigation pinned to the bottom edge because the app's own nav
+   is position:fixed. Content is visible to CSS y=864 (device 1728); the
+   nav owns the last 68px. Where a card is cut by that line it is drawn
+   cut, because that is what the app shows.
+
+   The brand mark is omitted deliberately: MARKETING_SPEC.md §3a records
+   that miles-logo.png is a Lovable asset pointer that 404s off their CDN
+   and favicon.ico is the stock Lovable heart, so the captures were taken
+   with the broken <img> hidden. These mocks carry the MILES APP wordmark
+   only, which is what the app renders minus one decorative icon.
+
+   Every rule is qualified with the .miles-mock ancestor so it outranks
+   this page's own descendant rules (.log-body p and friends). Unlike the
+   landscape families this one declares a height, because a phone
+   viewport IS a fixed height and the fold position is part of what the
+   screen shows. It also carries data-mock-minscale in the markup, so the
+   lightbox may scale it DOWN to fit the dialog rather than cut a 932px
+   phone in half. */
+.miles-mock{
+  --miles-navy:#1b2a4b; --miles-navy-2:#263a63; --miles-teal:#22c3c3;
+  --miles-bg:#f8fafb; --miles-card:#ffffff; --miles-fg:#0f172a;
+  --miles-muted:#64748b; --miles-line:#e2e8f0; --miles-sunken:#f1f5f9;
+  --miles-green:#16a34a; --miles-amber:#f59e0b; --miles-red:#ef4444;
+  --miles-r:12px;
+  position:relative; width:430px; height:932px; overflow:hidden;
+  background:var(--miles-bg); color:var(--miles-fg);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:13px; line-height:1.35;
+}
+.miles-mock p,.miles-mock b,.miles-mock span,.miles-mock div,.miles-mock h1,.miles-mock h2{margin:0;font-size:inherit;line-height:inherit;color:inherit;font-weight:inherit}
+.miles-mock svg{display:block;flex-shrink:0}
+
+/* Header — navy gradient, no bottom radius. The rounded-b-[2rem] in
+   Login.tsx is on the sign-in screen only and appears on none of these
+   four. MARKETING_SPEC.md:77-78 calls this gradient the app's single
+   most recognisable visual element. */
+.miles-mock .miles-head{background:linear-gradient(135deg,var(--miles-navy) 0%,var(--miles-navy-2) 100%);padding:22px 16px 18px;color:#fff}
+.miles-mock .miles-head-top{display:flex;align-items:center;gap:14px}
+.miles-mock .miles-wordmark{font-size:24px;font-weight:800;letter-spacing:.01em;margin-right:auto}
+.miles-mock .miles-back{margin-right:auto}
+.miles-mock .miles-avatar{width:36px;height:36px;border-radius:50%;background:var(--miles-teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:.02em}
+.miles-mock .miles-eyebrow{margin-top:16px;font-size:15px;color:rgba(255,255,255,.8)}
+.miles-mock .miles-title{font-size:22px;font-weight:700;margin-top:2px}
+.miles-mock .miles-head-top + .miles-title{margin-top:18px}
+
+/* Scrolling body. Clipped by the family's own overflow:hidden at the
+   real fold; the nav below floats over its last 68px. */
+.miles-mock .miles-body{padding:16px}
+
+/* Bottom navigation — white, hairline top border, pinned. The centre FAB
+   is raised above the bar and its End Detail label is CLIPPED by the
+   bar's bottom edge. Reproduce the clipping: it is what all four
+   captures show. */
+.miles-mock .miles-nav{position:absolute;left:0;right:0;bottom:0;height:68px;background:var(--miles-card);border-top:1px solid var(--miles-line);display:flex;align-items:center;justify-content:space-between;padding:0 34px}
+.miles-mock .miles-nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;font-weight:600;color:var(--miles-navy)}
+.miles-mock .miles-nav-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.miles-mock .miles-nav-item.miles-on .miles-nav-ico{background:var(--miles-sunken)}
+.miles-mock .miles-fab-wrap{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;overflow:hidden;height:78px}
+.miles-mock .miles-fab{width:61px;height:61px;border-radius:50%;background:var(--miles-red);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.miles-mock .miles-fab-l{font-size:14px;font-weight:700;color:var(--miles-navy);white-space:nowrap}
+
+/* Screen 1 — driver home */
+.miles-mock .miles-sec{font-size:16px;font-weight:600;color:var(--miles-muted);margin-bottom:12px}
+.miles-mock .miles-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.miles-mock .miles-tool{background:var(--miles-card);border-radius:var(--miles-r);padding:11px 6px 9px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+.miles-mock .miles-tool-ico{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.miles-mock .miles-tool-l{font-size:13px;font-weight:600;text-align:center;line-height:1.25}
+.miles-mock .miles-card{background:var(--miles-card);border-radius:16px;padding:14px;margin-top:14px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+.miles-mock .miles-sub{background:var(--miles-sunken);border-radius:var(--miles-r);padding:12px;margin-top:10px}
+.miles-mock .miles-row{display:flex;align-items:flex-start;gap:12px}
+.miles-mock .miles-tile{width:29px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.miles-mock .miles-mid{font-size:17px;font-weight:700}
+.miles-mock .miles-model{font-size:15px;color:var(--miles-muted)}
+.miles-mock .miles-pill{margin-left:auto;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}
+.miles-mock .miles-pill-green{background:var(--miles-green)}
+.miles-mock .miles-pill-amber{background:var(--miles-amber)}
+.miles-mock .miles-pill-teal{background:var(--miles-teal)}
+.miles-mock .miles-locked{font-size:14px;font-style:italic;color:var(--miles-muted);margin-top:10px}
+.miles-mock .miles-meta{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--miles-muted);margin-top:10px}
+.miles-mock .miles-meta-2{display:flex;align-items:center;gap:14px;margin-top:9px}
+.miles-mock .miles-meta-2 .miles-meta{margin-top:0}
+.miles-mock .miles-ref{font-size:14px;color:var(--miles-muted);margin-top:7px}
+.miles-mock .miles-chevrow{display:flex;align-items:center;justify-content:space-between;color:var(--miles-muted);font-size:14px;margin-top:10px}
+.miles-mock .miles-btn{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:var(--miles-r);font-size:15px;font-weight:600;padding:11px 0;margin-top:10px}
+.miles-mock .miles-btn-cancel{border:1px solid var(--miles-red);color:var(--miles-red)}
+
+/* Screen 2 — fleet register */
+.miles-mock .miles-search{display:flex;align-items:center;gap:12px;background:var(--miles-card);border:1px solid var(--miles-line);border-radius:var(--miles-r);padding:11px 16px;font-size:15px;color:var(--miles-muted)}
+.miles-mock .miles-frow{display:flex;align-items:center;gap:10px;margin-top:8px}
+.miles-mock .miles-select{flex:1;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--miles-card);border:1px solid var(--miles-line);border-radius:var(--miles-r);padding:10px 14px;font-size:15px;color:var(--miles-fg)}
+.miles-mock .miles-select.miles-ph{color:var(--miles-muted)}
+.miles-mock .miles-select-l{display:flex;align-items:center;gap:10px;min-width:0}
+.miles-mock .miles-vcard{background:var(--miles-card);border-radius:16px;padding:13px;margin-top:12px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+.miles-mock .miles-vtile{width:66px;height:66px;border-radius:14px;background:var(--miles-sunken);color:var(--miles-navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.miles-mock .miles-chip{background:var(--miles-sunken);border-radius:8px;padding:4px 10px;font-size:14px;color:var(--miles-muted)}
+.miles-mock .miles-chiprow{display:flex;align-items:center;gap:14px;margin-top:8px;font-size:14px;color:var(--miles-muted)}
+.miles-mock .miles-div{height:1px;background:var(--miles-line);margin:10px 0 9px}
+.miles-mock .miles-fuelrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;color:var(--miles-muted)}
+.miles-mock .miles-fuel{border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;color:#fff}
+.miles-mock .miles-fuel-green{background:var(--miles-green)}
+.miles-mock .miles-fuel-amber{background:var(--miles-amber)}
+
+/* Screen 3 — approval queue */
+.miles-mock .miles-lab{font-size:15px;font-weight:700;letter-spacing:.01em;color:var(--miles-fg);margin-bottom:10px}
+.miles-mock .miles-lab-2{margin-top:16px}
+.miles-mock .miles-empty{border:1px solid var(--miles-line);border-radius:16px;padding:21px 0;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--miles-muted);font-size:15px}
+.miles-mock .miles-bulk{border:1px solid var(--miles-line);border-radius:16px;padding:12px}
+.miles-mock .miles-bulkrow{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600}
+.miles-mock .miles-bulkrow small{font-size:14px;font-weight:400;color:var(--miles-muted)}
+.miles-mock .miles-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--miles-muted);flex-shrink:0}
+.miles-mock .miles-bulkbtns{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+.miles-mock .miles-bulkbtn{display:flex;align-items:center;gap:9px;border-radius:var(--miles-r);padding:9px 16px;font-size:15px;font-weight:600;color:#fff}
+.miles-mock .miles-bulkbtn.miles-dim{background:#6b7688}
+.miles-mock .miles-bulkbtn.miles-dimred{background:#f2a1a1}
+.miles-mock .miles-tcard{background:var(--miles-card);border:1px solid var(--miles-line);border-left:4px solid var(--miles-amber);border-radius:16px;padding:12px;margin-top:12px}
+.miles-mock .miles-tsel{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--miles-muted)}
+.miles-mock .miles-thead{display:flex;align-items:flex-start;gap:12px;margin-top:12px}
+.miles-mock .miles-tref{font-size:18px;font-weight:700}
+.miles-mock .miles-tright{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.miles-mock .miles-tright .miles-pill{margin-left:0}
+.miles-mock .miles-tactions{display:flex;gap:10px;margin-top:12px}
+.miles-mock .miles-btn-approve{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--miles-navy);color:#fff;border-radius:var(--miles-r);font-size:16px;font-weight:700;padding:12px 0}
+.miles-mock .miles-btn-x{width:48px;border-radius:var(--miles-r);background:var(--miles-red);color:#fff;display:flex;align-items:center;justify-content:center}
+
+/* Screen 4 — admin dashboard */
+.miles-mock .miles-tabs{display:flex;align-items:center;gap:2px;background:var(--miles-sunken);border-radius:var(--miles-r);padding:5px}
+.miles-mock .miles-tab{flex:1;display:flex;align-items:center;justify-content:center;padding:7px 0;border-radius:9px;color:var(--miles-navy)}
+.miles-mock .miles-tab.miles-on{background:var(--miles-card);border:1px solid var(--miles-line);box-shadow:0 1px 2px rgba(15,23,42,.06)}
+.miles-mock .miles-tpl{border:1px solid var(--miles-line);border-radius:16px;padding:14px;margin-top:12px}
+.miles-mock .miles-tpl-hd{display:flex;align-items:flex-start;gap:12px}
+.miles-mock .miles-tpl-h{font-size:18px;font-weight:700}
+.miles-mock .miles-tpl-btn{margin-left:auto;display:flex;align-items:center;gap:9px;border:1px solid var(--miles-line);border-radius:var(--miles-r);padding:9px 14px;font-size:15px;font-weight:600}
+.miles-mock .miles-tpl-d{font-size:15px;color:var(--miles-muted);margin-top:8px}
+.miles-mock .miles-tpl-n{font-size:12px;line-height:1.35;color:var(--miles-muted);margin-top:9px}
+.miles-mock .miles-btn-add{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--miles-navy);color:#fff;border-radius:var(--miles-r);font-size:16px;font-weight:700;padding:11px 0;margin-top:13px}
+.miles-mock .miles-btn-import{display:flex;align-items:center;justify-content:center;gap:12px;border:1px solid var(--miles-line);background:var(--miles-card);border-radius:var(--miles-r);font-size:16px;font-weight:600;padding:10px 0;margin-top:10px}
+.miles-mock .miles-sort{display:flex;align-items:center;gap:12px;margin-top:13px;font-size:15px;color:var(--miles-muted)}
+.miles-mock .miles-sort .miles-select{color:var(--miles-fg);padding:7px 12px}
+.miles-mock .miles-ucard{background:var(--miles-card);border:1px solid var(--miles-line);border-radius:16px;padding:12px;margin-top:12px;display:flex;align-items:center;gap:12px}
+.miles-mock .miles-uname{font-size:17px;font-weight:700}
+.miles-mock .miles-usq{font-size:15px;color:var(--miles-muted);max-width:120px}
+.miles-mock .miles-roles{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.miles-mock .miles-role{border-radius:999px;padding:5px 12px;font-size:14px;font-weight:700;color:#fff;white-space:nowrap}
+.miles-mock .miles-role-admin{background:var(--miles-red)}
+.miles-mock .miles-role-driver{background:var(--miles-navy)}
+.miles-mock .miles-role-fac{background:var(--miles-teal)}
+.miles-mock .miles-role-app{background:var(--miles-amber)}
+.miles-mock .miles-role-out{border:1px solid var(--miles-line);color:var(--miles-fg);background:transparent;font-weight:600}
+.miles-mock .miles-uacts{margin-left:auto;display:flex;align-items:center;gap:16px;color:var(--miles-navy)}
+.miles-mock .miles-uacts .miles-trash{color:var(--miles-red)}
 </style>
 </head>
 
@@ -2589,6 +2769,315 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
               <li>Ground support equipment booked in and out of the same register as the vehicles, and every action written to an audit trail with actor, entity and timestamp</li>
             </ul></div>
           <div><div class="lab">Built with</div><p>The functions were proved in Power Apps first, then rebuilt as a full-stack application once per-user licensing stopped being viable for a user base that reached beyond the RSAF.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Supabase</span><span>Lovable</span></div></div>
+          <div class="log-shots-wrap">
+            <div class="shots-head">
+              <div class="lab">The actual screens</div>
+              <div class="shots-nav-group" hidden>
+                <button type="button" class="shots-nav" data-shots-prev aria-label="Scroll screens left" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="shots-nav" data-shots-next aria-label="Scroll screens right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="app-shots-wrap">
+            <div class="app-shots" role="list" aria-label="MILES app screens, rebuilt from the app's own interface code and design tokens, not photos and not invented">
+
+              <figure class="app-shot is-phone" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MILES · Driver home</span></div>
+                <div class="app-shot-frame">
+                  <div class="miles-mock" data-mock-width="430" data-mock-minscale=".6" aria-hidden="true">
+                    <div class="miles-head">
+                      <div class="miles-head-top">
+                        <span class="miles-wordmark">MILES APP</span>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="miles-avatar">DT</span>
+                      </div>
+                      <p class="miles-eyebrow">Welcome back,</p>
+                      <p class="miles-title">Hello!, Daryl</p>
+                    </div>
+                    <div class="miles-body">
+                      <p class="miles-sec">Quick Tools</p>
+                      <div class="miles-tools">
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#16294a"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><span class="miles-tool-l">Vehicle Info</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#22c3c3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></span><span class="miles-tool-l">Vehicle Inspection</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#16a34a"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.8 10A10 10 0 1 1 17 3.3"/><path d="m9 11 3 3L22 4"/></svg></span><span class="miles-tool-l">Insp / Detail Approval</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#16a34a"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span><span class="miles-tool-l">Summary Report</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#f97316"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="15" y1="22" y2="22"/><line x1="4" x2="14" y1="9" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.8a2 2 0 0 0-.6-1.4L18 5"/></svg></span><span class="miles-tool-l">Ground Fuel Top-Up</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#0ea5e9"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.3c2.2 0 4-1.8 4-4 0-1.2-.6-2.3-1.7-3.2S7.3 6.8 7 5.3C6.7 6.8 5.9 8.1 4.7 9.1S3 11.1 3 12.3c0 2.2 1.8 4 4 4z"/><path d="M12.6 6.6A11 11 0 0 0 14 3c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a7 7 0 0 1-11.9 5"/></svg></span><span class="miles-tool-l">Refueller Fuel Stock Update</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#6366f1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg></span><span class="miles-tool-l">Refueller Fuel Stock Log</span></div>
+                        <div class="miles-tool"><span class="miles-tool-ico" style="background:#f59e0b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 2 2 4-4"/><path d="M21 10V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l2-1.1"/><path d="m7.5 4.3 9 5.1"/><polyline points="3.3 7 12 12 20.7 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg></span><span class="miles-tool-l">GSE Booking In/Out</span></div>
+                      </div>
+                      <div class="miles-card">
+                        <p class="miles-sec" style="margin-bottom:0;font-weight:700">My Trip Requests</p>
+                        <div class="miles-sub">
+                          <div class="miles-row">
+                            <span class="miles-tile" style="background:#dcfce7;color:#16a34a"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                            <span><span class="miles-mid">MID 10233</span><span class="miles-model" style="display:block">Toyota Hilux 4x4</span></span>
+                            <span class="miles-pill miles-pill-green">Approved</span>
+                          </div>
+                          <p class="miles-locked">Locked — finish your ongoing trip first.</p>
+                          <div class="miles-chevrow"><span>2 destinations</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+                          <p class="miles-ref">TRP-2411-0091</p>
+                        </div>
+                        <div class="miles-sub">
+                          <div class="miles-row">
+                            <span class="miles-tile" style="background:#fef3c7;color:#f59e0b"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                            <span><span class="miles-mid">MID 55901</span><span class="miles-model" style="display:block">Mercedes-Benz OC500</span></span>
+                            <span class="miles-pill miles-pill-amber">Pending Approval</span>
+                          </div>
+                          <div class="miles-meta-2">
+                            <span class="miles-meta"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Transit Camp — Personnel Move</span>
+                            <span class="miles-meta"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>12 Aug, 08:30 am</span>
+                          </div>
+                          <div class="miles-btn miles-btn-cancel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Cancel Request</span></div>
+                          <p class="miles-ref">TRP-2411-0093</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="miles-nav">
+                      <span class="miles-nav-item miles-on"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>Home</span></span>
+                      <span class="miles-fab-wrap"><span class="miles-fab"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><span class="miles-fab-l">End Detail</span></span>
+                      <span class="miles-nav-item"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span>Detail Logs</span></span>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap">
+                  <div class="st">Driver home</div>
+                  <div class="sd">Quick Tools, and the driver's own trip requests, all reachable with one thumb.</div>
+                </figcaption>
+              </figure>
+
+              <figure class="app-shot is-phone" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MILES · Fleet register</span></div>
+                <div class="app-shot-frame">
+                  <div class="miles-mock" data-mock-width="430" data-mock-minscale=".6" aria-hidden="true">
+                    <div class="miles-head">
+                      <div class="miles-head-top">
+                        <span class="miles-wordmark">MILES APP</span>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="miles-avatar">DT</span>
+                      </div>
+                      <p class="miles-title">Vehicle Info</p>
+                    </div>
+                    <div class="miles-body">
+                      <div class="miles-search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Search vehicle number...</span></div>
+                      <div class="miles-frow">
+                        <span class="miles-select"><span class="miles-select-l">All status</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        <span class="miles-select"><span class="miles-select-l">All fuel</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                      </div>
+                      <div class="miles-frow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--miles-muted)"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        <span class="miles-select"><span class="miles-select-l">All Types</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        <span class="miles-select miles-ph"><span class="miles-select-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>DI date</span></span>
+                      </div>
+                      <div class="miles-vcard">
+                        <div class="miles-row">
+                          <span class="miles-vtile"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                          <span style="min-width:0"><span class="miles-mid">MID 10233</span><span class="miles-model" style="display:block">Toyota Hilux 4x4</span><span class="miles-chiprow"><span class="miles-chip">Utility Vehicle</span><span>AMS</span></span></span>
+                          <span class="miles-pill miles-pill-green">Serviceable</span>
+                        </div>
+                        <div class="miles-div"></div>
+                        <div class="miles-fuelrow">
+                          <span class="miles-meta" style="margin-top:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="15" y1="22" y2="22"/><line x1="4" x2="14" y1="9" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.8a2 2 0 0 0-.6-1.4L18 5"/></svg><span class="miles-fuel miles-fuel-green">Full</span></span>
+                          <span>87610.4 km</span>
+                          <span class="miles-meta" style="margin-top:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>DI: Never</span>
+                        </div>
+                      </div>
+                      <div class="miles-vcard">
+                        <div class="miles-row">
+                          <span class="miles-vtile"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                          <span style="min-width:0"><span class="miles-mid">MID 21877</span><span class="miles-model" style="display:block">MAN TGS 26.440</span><span class="miles-chiprow"><span class="miles-chip">Prime Mover</span><span>AMS</span></span></span>
+                          <span class="miles-pill miles-pill-green">Serviceable</span>
+                        </div>
+                        <div class="miles-div"></div>
+                        <div class="miles-fuelrow">
+                          <span class="miles-meta" style="margin-top:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="15" y1="22" y2="22"/><line x1="4" x2="14" y1="9" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.8a2 2 0 0 0-.6-1.4L18 5"/></svg><span class="miles-fuel miles-fuel-amber">1/2</span></span>
+                          <span>132455 km</span>
+                          <span class="miles-meta" style="margin-top:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>Inspection: 10 Aug 2026</span>
+                        </div>
+                      </div>
+                      <div class="miles-vcard">
+                        <div class="miles-row">
+                          <span class="miles-vtile"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                          <span style="min-width:0"><span class="miles-mid">MID 30412</span><span class="miles-model" style="display:block">HTF-20 Refueller</span><span class="miles-chiprow"><span class="miles-chip">Refueller</span><span>GSS</span></span></span>
+                          <span class="miles-pill miles-pill-green">Serviceable</span>
+                        </div>
+                        <div class="miles-div"></div>
+                        <div class="miles-fuelrow">
+                          <span class="miles-meta" style="margin-top:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="15" y1="22" y2="22"/><line x1="4" x2="14" y1="9" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.8a2 2 0 0 0-.6-1.4L18 5"/></svg><span class="miles-fuel miles-fuel-green">3/4</span></span>
+                          <span>48213.6 km</span>
+                          <span class="miles-meta" style="margin-top:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>Inspection: 11 Aug 2026</span>
+                        </div>
+                      </div>
+                      <div class="miles-vcard">
+                        <div class="miles-row">
+                          <span class="miles-vtile"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                          <span style="min-width:0"><span class="miles-mid">MID 30418</span><span class="miles-model" style="display:block">HTF-20 Refueller</span><span class="miles-chiprow"><span class="miles-chip">Refueller</span><span>GSS</span></span></span>
+                          <span class="miles-pill miles-pill-green">Serviceable</span>
+                        </div>
+                        <div class="miles-div"></div>
+                      </div>
+                    </div>
+                    <div class="miles-nav">
+                      <span class="miles-nav-item miles-on"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>Home</span></span>
+                      <span class="miles-fab-wrap"><span class="miles-fab"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><span class="miles-fab-l">End Detail</span></span>
+                      <span class="miles-nav-item"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span>Detail Logs</span></span>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap">
+                  <div class="st">Fleet register</div>
+                  <div class="sd">Serviceability, fuel level, reading and inspection date for every vehicle, with ground support equipment in the same register.</div>
+                </figcaption>
+              </figure>
+
+              <figure class="app-shot is-phone" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MILES · Approval queue</span></div>
+                <div class="app-shot-frame">
+                  <div class="miles-mock" data-mock-width="430" data-mock-minscale=".6" aria-hidden="true">
+                    <div class="miles-head">
+                      <div class="miles-head-top">
+                        <svg class="miles-back" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="miles-avatar">DT</span>
+                      </div>
+                      <p class="miles-title">Insp / Detail Approval</p>
+                    </div>
+                    <div class="miles-body">
+                      <p class="miles-lab">INSPECTION APPROVALS</p>
+                      <div class="miles-empty">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+                        <span>No pending inspection approvals</span>
+                      </div>
+                      <p class="miles-lab miles-lab-2">TRIP APPROVALS</p>
+                      <div class="miles-bulk">
+                        <div class="miles-bulkrow"><span class="miles-check"></span><span>Select all</span><small>0 of 3 selected</small></div>
+                        <div class="miles-bulkbtns">
+                          <span class="miles-bulkbtn miles-dim"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.8 10A10 10 0 1 1 17 3.3"/><path d="m9 11 3 3L22 4"/></svg>Approve selected</span>
+                          <span class="miles-bulkbtn miles-dimred"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>Reject</span>
+                        </div>
+                      </div>
+                      <div class="miles-tcard">
+                        <div class="miles-tsel"><span class="miles-check"></span><span>Select for bulk action</span></div>
+                        <div class="miles-thead">
+                          <span><span class="miles-tref">TRP-2411-0095</span><span class="miles-model" style="display:block">MID 30418 - HTF-20 Refueller</span></span>
+                          <span class="miles-tright"><span class="miles-pill miles-pill-amber">Pending Approval</span><span class="miles-chip">Single Trip</span></span>
+                        </div>
+                        <div class="miles-meta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Rajesh Kumar</div>
+                        <div class="miles-meta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Apron 3 — Fuel Point C</div>
+                        <div class="miles-meta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Expected: 12 Aug 09:30</div>
+                        <div class="miles-meta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>Starting: 51902.1</div>
+                        <div class="miles-tactions">
+                          <span class="miles-btn-approve"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.8 10A10 10 0 1 1 17 3.3"/><path d="m9 11 3 3L22 4"/></svg>Approve</span>
+                          <span class="miles-btn-x"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
+                        </div>
+                      </div>
+                      <div class="miles-tcard">
+                        <div class="miles-tsel"><span class="miles-check"></span><span>Select for bulk action</span></div>
+                        <div class="miles-thead">
+                          <span><span class="miles-tref">TRP-2411-0094</span><span class="miles-model" style="display:block">MID 21877 - MAN TGS 26.440</span></span>
+                          <span class="miles-tright"><span class="miles-pill miles-pill-amber">Pending Approval</span><span class="miles-chip">Single Trip</span></span>
+                        </div>
+                        <div class="miles-meta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Wei Ming Lim</div>
+                      </div>
+                    </div>
+                    <div class="miles-nav">
+                      <span class="miles-nav-item miles-on"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>Home</span></span>
+                      <span class="miles-fab-wrap"><span class="miles-fab"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><span class="miles-fab-l">End Detail</span></span>
+                      <span class="miles-nav-item"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span>Detail Logs</span></span>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap">
+                  <div class="st">Approval queue</div>
+                  <div class="sd">A trip cannot start until it is cleared, and a queue of them can be cleared in one action.</div>
+                </figcaption>
+              </figure>
+
+              <figure class="app-shot is-phone" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MILES · Admin dashboard</span></div>
+                <div class="app-shot-frame">
+                  <div class="miles-mock" data-mock-width="430" data-mock-minscale=".6" aria-hidden="true">
+                    <div class="miles-head">
+                      <div class="miles-head-top">
+                        <span class="miles-wordmark">MILES APP</span>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="miles-avatar">DT</span>
+                      </div>
+                      <p class="miles-title">Admin Dashboard</p>
+                    </div>
+                    <div class="miles-body">
+                      <div class="miles-tabs">
+                        <span class="miles-tab miles-on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="15" y1="22" y2="22"/><line x1="4" x2="14" y1="9" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.8a2 2 0 0 0-.6-1.4L18 5"/></svg></span>
+                        <span class="miles-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg></span>
+                      </div>
+                      <div class="miles-tpl">
+                        <div class="miles-tpl-hd">
+                          <span class="miles-tpl-h">User Account Template</span>
+                          <span class="miles-tpl-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Download</span>
+                        </div>
+                        <p class="miles-tpl-d">Download a CSV template to prepare user accounts for bulk import.</p>
+                        <p class="miles-tpl-n">Roles: driver, approver, admin (combine multiple with |). temp_password must be at least 6 characters — users will be required to change it on first login. Separate multiple vehicle categories with |. Leave department / categories blank if not applicable.</p>
+                      </div>
+                      <div class="miles-btn-add"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Add User</div>
+                      <div class="miles-btn-import"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Bulk Import Users</div>
+                      <div class="miles-sort">
+                        <span>Sort by</span>
+                        <span class="miles-select"><span class="miles-select-l">Name (A–Z)</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                      </div>
+                      <div class="miles-ucard">
+                        <span><span class="miles-uname">Daryl Tan</span><span class="miles-usq" style="display:block">Ground Support Squadron</span></span>
+                        <span class="miles-roles" style="max-width:140px"><span class="miles-role miles-role-admin">admin</span><span class="miles-role miles-role-driver">driver</span><span class="miles-role miles-role-out">2 categories</span></span>
+                        <span class="miles-uacts">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                          <svg class="miles-trash" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        </span>
+                      </div>
+                      <div class="miles-ucard">
+                        <span><span class="miles-uname">Jason Ong</span><span class="miles-usq" style="display:block">Air Movement Squadron</span></span>
+                        <span class="miles-roles"><span class="miles-role miles-role-fac">facilitator</span></span>
+                        <span class="miles-uacts">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                          <svg class="miles-trash" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        </span>
+                      </div>
+                      <div class="miles-ucard">
+                        <span><span class="miles-uname">Nurul Iman</span><span class="miles-usq" style="display:block">Ground Support Squadron</span></span>
+                        <span class="miles-roles"><span class="miles-role miles-role-app">approver</span></span>
+                        <span class="miles-uacts">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                          <svg class="miles-trash" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="miles-nav">
+                      <span class="miles-nav-item miles-on"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>Home</span></span>
+                      <span class="miles-fab-wrap"><span class="miles-fab"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 5.6C18.1 4.6 17.2 4 16.2 4H7.8c-1 0-1.9.6-2.2 1.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><span class="miles-fab-l">End Detail</span></span>
+                      <span class="miles-nav-item"><span class="miles-nav-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span>Detail Logs</span></span>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap">
+                  <div class="st">Admin dashboard</div>
+                  <div class="sd">Four roles across nine admin surfaces, and one person can hold more than one of them.</div>
+                </figcaption>
+              </figure>
+
+            </div>
+            </div>
+          </div>
           <p><a class="link-inline" href="/work#wp2">Full case study, on the Work page →</a></p>
         </div>
       </details>
@@ -4418,10 +4907,11 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     return { title: fig ? fig.textContent.trim() : '', desc: '' };
   }
 
-  // Hand-built screen mocks (.bf-mock, .mf-mock, .gr-mock, .soar-mock) each have a fixed
-  // authoring width, declared on the element as data-mock-width and
-  // defaulting to 480. A new mock family only has to join this list.
-  var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock, .soar-mock, .mavis-mock';
+  // Hand-built screen mocks (.bf-mock, .mf-mock, .gr-mock, .soar-mock,
+  // .mavis-mock, .miles-mock) each have a fixed authoring width, declared on
+  // the element as data-mock-width and defaulting to 480. A new mock family
+  // only has to join this list.
+  var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock, .soar-mock, .mavis-mock, .miles-mock';
   function mockWidth(mock) { return parseFloat(mock.getAttribute('data-mock-width')) || 480; }
   var pendingFit = null;
 
@@ -4442,7 +4932,14 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     var availableW = body.clientWidth - padH - 4;
     var availableH = (lightbox.clientHeight * 0.9) - capH - padV - 4;
     var scale = Math.min(1.7, availableW / natural, availableH / naturalHeight);
-    scale = Math.max(1, scale); // never shrink below the mock's own natural size; body scrolls if it still doesn't fit
+    // Never shrink a mock below its natural size by default — the body
+    // scrolls if it still doesn't fit. A mock TALLER than the dialog (a
+    // phone) opts out with data-mock-minscale, so it fits whole instead of
+    // being cut in half. Landscape families carry no attribute and are
+    // unaffected.
+    var floor = parseFloat(mock.getAttribute('data-mock-minscale'));
+    if (!(floor > 0)) floor = 1;
+    scale = Math.max(floor, scale);
     // The mock is transformed from its own top-left corner, which doesn't
     // grow its layout box — so the wrapper is sized to the POST-scale
     // dimensions explicitly, keeping the grid centering and overflow:auto
