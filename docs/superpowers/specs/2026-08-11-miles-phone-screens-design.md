@@ -3,7 +3,13 @@
 **Date:** 2026-08-11
 **Page:** `public/projects.html` only
 **Branch:** `release/v3-primary`
-**Status:** approved by the author, blocked on a dependency (§1)
+**Status:** shipped. Unblocked by the merge commit `ff8ce99`, which landed the row split and
+`.mavis-mock`; implemented by `bda5a1e` against
+`docs/superpowers/plans/2026-08-11-miles-phone-screens.md`.
+
+> **Three statements in this spec were measured wrong** before implementation and are corrected
+> in place below, each marked **Corrected**: the viewport in D3 and §5.2, the home fold in §6.2,
+> and the fleet-register fold in §6.3. The arithmetic that settles all three is in §3a.
 
 Adds four hand-built CSS screens to the MILES project row, rebuilt from the app's own captures.
 Registers a sixth mock family, `.miles-mock`, with the existing lightbox, and adds the page's
@@ -81,6 +87,21 @@ All six are real captures of the running app at 430x932 CSS px, `deviceScaleFact
 `reducedMotion: 'reduce'`, against mock fixtures with no backend reachable. Every PNG dimension
 above is twice the CSS pixel size: `860` wide means `430` CSS px.
 
+### 3a. The fold, measured
+
+Recorded so it is never re-derived. Every capture is `860` device px wide at
+`deviceScaleFactor: 2`, so **device px / 2 = CSS px**. The app's bottom navigation is
+`position:fixed`, confirmed by the band of page padding above it in each full-page capture. So on
+the real device:
+
+- the viewport is `932` CSS px tall = `1864` device px
+- the nav occupies the bottom `68` CSS px = `136` device px
+- **content is visible from device y=0 to y=1728**, and anything below that sits behind the nav
+
+Every "clipped at" note in §6 is that y=1728 line. It is what made D3 and two of the §6 screen
+descriptions wrong when they were first written from a whole-image reading rather than a
+band-by-band one.
+
 **Provenance rule.** Every string, number, badge colour, icon and layout decision below is read
 off those PNGs or off `MARKETING_SPEC.md`. Nothing is authored. Where a detail is not legible in
 the capture it is omitted rather than guessed.
@@ -101,7 +122,7 @@ including the four captions in §6, uses none.
 |---|---|---|
 | D1 | Family is named `.miles-mock`, not `.ml-mock` | The name the MAVIS spec reserves. Consistency across the six families beats brevity |
 | D2 | Authored at the app's real 430px width and real type scale | The mock's geometry is then the app's geometry, not an approximation of it. It also makes the lightbox a phone at life size |
-| D3 | Viewport is `430 x 860`, not the capture device's `430 x 932` | Reads as a slightly shorter phone. Nothing is distorted; the fold simply falls 72px higher. 860 also halves to a clean 430px thumbnail (§5.2) |
+| D3 | **Corrected.** Viewport is `430 x 932`, the capture device itself | `860` invents a device that does not exist, and the instruction was to use the exact screen. `932 x .5 = 466` is an equally clean half-scale thumbnail, and `430/932 = 0.461` is a real phone's proportion where `0.5` is a stubby one |
 | D4 | Four screens: home, vehicles, approvals, admin | The four the MILES marketing page itself embeds. Login and logs are held in reserve for the reasons in §3 |
 | D5 | Portrait frames via a new `.app-shot.is-phone` modifier | MILES is the first mobile app in the log and the shared frame is landscape. See §5.3 |
 | D6 | No row copy, chips, structure or count changes | All owned by the MAVIS spec. See §1 |
@@ -159,13 +180,15 @@ Half scale, which is already the house convention: `.mf-mock` and `.gr-mock` are
 .app-shot-frame .miles-mock{ width:430px; transform:scale(.5); transform-origin:top left; }
 ```
 
-`430 x .5 = 215` and `860 x .5 = 430`, so the scaled mock fills a `215 x 430` frame exactly,
-top-left anchored. No letterboxing, no centring maths, nothing overflows sideways.
+**Corrected.** `430 x .5 = 215` and `932 x .5 = 466`, so the scaled mock fills a `215 x 466` frame
+exactly, top-left anchored. No letterboxing, no centring maths, nothing overflows sideways. (This
+paragraph originally read `860 x .5 = 430` into a `215 x 430` frame, which followed from the wrong
+viewport in D3.)
 
 Each mock element is `<div class="miles-mock" data-mock-width="430" aria-hidden="true">`, matching
 how the other families declare themselves.
 
-**Height is declared**, unlike `.mf-mock`. Each screen is a fixed `860px` box with
+**Height is declared**, unlike `.mf-mock`. Each screen is a fixed `932px` box with
 `overflow:hidden`, because a phone viewport is a fixed height and the fold position is part of
 what the screen shows. Content is top-aligned and clipped at that fold, with the bottom navigation
 pinned to the bottom edge, exactly as the app renders it.
@@ -178,7 +201,7 @@ would letterbox to roughly a third of the frame's width.
 
 ```css
 .app-shot.is-phone{ width:215px; }
-.app-shot.is-phone .app-shot-frame{ aspect-ratio:auto; height:430px; }
+.app-shot.is-phone .app-shot-frame{ aspect-ratio:auto; height:466px; }
 .app-shot.is-phone .app-shot-dots{ display:none; }
 ```
 
@@ -203,9 +226,18 @@ Three lists, each **added to**, never rewritten. Read all three on disk first, b
 | I3 | The mock scale rules, near `:486-492` | Add the `.app-shot-frame .miles-mock` rule from §5.2 |
 | I4 | Each of the four figures | `data-mock-width="430"` |
 
-`fitMockScale` clamps scale between 1 and 1.7, so a `430 x 860` mock opens at natural size on any
-normal viewport, scrolling only slightly on a short window. That is the intended result: a phone
-at life size.
+**Corrected, and one addition this section did not anticipate.** `fitMockScale` clamped scale
+between a hard `1` and `1.7`. A `430 x 932` phone is taller than the dialog body on an ordinary
+laptop, so that floor would have cut the phone in half and scrolled the body rather than showing
+it whole. The implementation therefore adds a fifth registration:
+
+| # | Location | Change |
+|---|---|---|
+| I5 | `fitMockScale` | The floor becomes opt-in: `data-mock-minscale` on the mock overrides the hard `1`, defaulting to `1` when absent |
+
+Every landscape family carries no attribute and is unaffected. Each `.miles-mock` carries
+`data-mock-minscale=".6"`, so the lightbox shows a whole phone, scaled to fit, at roughly 1.5x the
+thumbnail.
 
 ---
 
@@ -253,13 +285,14 @@ Route `/home`, from `home.png`.
   - `MID 55901`, `Mercedes-Benz OC500`, amber `Pending Approval` pill, amber-tinted car tile.
     `Transit Camp — Personnel Move` with a pin, `12 Aug, 08:30 am` with a clock. A full-width red
     outlined `Cancel Request` button. Then `TRP-2411-0093`.
-- **Ongoing Detail**, white card, teal `Ongoing` pill top right. `MID 30412`, `HTF-20 Refueller`,
-  `Apron 3 — Fuel Point B`, `07:45 am`. Divider, then `TRP-2411-0087` on the left with a red
-  `Cancel` and a navy `End Detail` button on the right.
-- `Unit's Recent Details` falls past the 860px fold and is not drawn.
+- **Corrected.** The **Ongoing Detail** card falls past the fold and is **not drawn**. Its heading
+  starts at device y≈1740 and content is only visible to y=1728. `Unit's Recent Details` and the
+  card itself (`MID 30412`, `HTF-20 Refueller`, `Apron 3 — Fuel Point B`, `07:45 am`,
+  `TRP-2411-0087`, `Cancel`, `End Detail`) are all below it. The My Trip Requests card ends at
+  CSS y≈810, just clear of the nav, which is the screen's natural terminus.
 
-Caption: **Driver home**. "Quick Tools, the driver's own trip requests, and the detail currently
-running, all reachable with one thumb."
+Caption: **Driver home**. "Quick Tools, and the driver's own trip requests, all reachable with one
+thumb."
 
 ### 6.3 Screen 2: Fleet register
 
@@ -277,12 +310,13 @@ Route `/vehicles`, from `vehicles.png`.
   | 10233 | Toyota Hilux 4x4 | Utility Vehicle / AMS | `Full` green | 87610.4 km | DI: Never | Serviceable |
   | 21877 | MAN TGS 26.440 | Prime Mover / AMS | `1/2` amber | 132455 km | Inspection: 10 Aug 2026 | Serviceable |
   | 30412 | HTF-20 Refueller | Refueller / GSS | `3/4` green | 48213.6 km | Inspection: 11 Aug 2026 | Serviceable |
-  | 30418 | HTF-20 Refueller | Refueller / GSS | `Full` green | 51902.1 km | DI: Never | Serviceable |
-  | 44120 | Hyster H5.0FT | Forklift / AMTS | `1/4` orange | 0 km | Inspection: 10 Aug 2026 | **Unserviceable** |
+  | 30418 | HTF-20 Refueller | Refueller / GSS | clipped | clipped | clipped | Serviceable |
 
-  The fold falls inside card 5, so `MID 44120` shows its heading row and its red `Unserviceable`
-  pill while the rest of the card is clipped. That is the real above-the-fold view, and it is what
-  makes the status system visible on the thumbnail.
+  **Corrected.** The fold falls inside card **4**, not card 5, cutting `MID 30418` just below its
+  `Refueller` / `GSS` row and above its divider. `MID 44120`, the forklift carrying the only red
+  `Unserviceable` pill, is below the fold and is **not drawn**. The status system is still visible
+  on the thumbnail, through four green `Serviceable` pills and the `Full` / `1/2` / `3/4` fuel
+  badges, but the unserviceable case is not part of this screen.
 
 Caption: **Fleet register**. "Serviceability, fuel level, reading and inspection date for every
 vehicle, with ground support equipment in the same register."
@@ -300,7 +334,9 @@ Route `/approvals`, from `approvals.png`. The header carries a back arrow instea
   grey `Single Trip` chip beneath it; `MID 30418 - HTF-20 Refueller`; then `Rajesh Kumar`,
   `Apron 3 — Fuel Point C`, `Expected: 12 Aug 09:30` and `Starting: 51902.1`, each with its glyph;
   then a navy full-width `Approve` button beside a square red reject button.
-- Card two, `TRP-2411-0094`, begins at the fold and is clipped.
+- Card two, `TRP-2411-0094`, is cut by the fold immediately below `Wei Ming Lim` and above
+  `Ammo Dump — Escort Run`. It shows its checkbox, reference, amber pill, `Single Trip` chip,
+  `MID 21877 - MAN TGS 26.440` and that one name.
 
 Caption: **Approval queue**. "A trip cannot start until it is cleared, and a queue of them can be
 cleared in one action."
@@ -348,7 +384,12 @@ rebuilt from the app's own interface code and design tokens, not photos and not 
 
 - The row split, both rows' copy, chips, ordering and the `id="miles-mavis"` anchor. Owned by the
   MAVIS spec.
-- The project count. Recorded in §2 as a handoff, corrected by the MAVIS change.
+- ~~The project count. Recorded in §2 as a handoff, corrected by the MAVIS change.~~
+  **The handoff was only half taken.** The MAVIS change corrected the filter-pill family to `30`
+  and left both meta descriptions reading `Twenty-seven projects, …`, so the page was shipping two
+  different totals. This change corrected the prose family, which is exactly the defect §2 was
+  written to prevent. The `h1.page-title` listed in §2's table carries no number and was left
+  alone.
 - `public/work.html`, `public/index.html`, `public/experience.html`.
 - `.mavis-mock`, `.soar-mock`, `.bf-mock`, `.mf-mock`, `.gr-mock`. Untouched.
 - The `login.png` and `logs.png` screens.
