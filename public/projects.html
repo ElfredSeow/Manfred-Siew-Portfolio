@@ -2368,14 +2368,21 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
 
       <details class="log-row" data-org="RAiD" data-cat="automation">
         <summary>
-          <span class="lt">Flight Simulator Scheduling System</span>
+          <span class="lt">Simulator Assessment Duty Scheduler (SOAR)</span>
           <span class="tag tag-amber">Automation</span><span class="lorg">RAiD</span>
           <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </summary>
         <div class="log-body">
-          <p>Scheduling system for reserving simulator resources for training and assessment: online slot booking, centralised schedule management and availability visibility. Built as Lead Developer using Code Apps.</p>
+          <p>Plans simulator assessment missions across AM and PM waves, pairing a QFI with a Psych assessor on every mission. A missing half is a first-class state — flagged as a broken pair in the grid, on the assessor's own schedule, and in the dashboard's stability metric. Assessors raise covering requests with a reason and a suggested replacement; supervisors and admins approve or reject. Built as Lead Developer.</p>
+          <div><div class="lab">What it does</div>
+            <ul class="feat" role="list">
+              <li>Every weekday splits into an AM and a PM wave, with slot times and labels editable per day by an admin and copyable across days</li>
+              <li>Each mission wants a QFI and a Psych assessor; an unfilled half is tracked as a broken pair rather than left silent</li>
+              <li>Covering requests carry a reason and an optional suggested replacement, and move to History once decided</li>
+              <li>Per-assessor duty counts drive a ranked workload chart, so over-tasking is visible before it is a problem; an admin can lock a published week against further changes</li>
+            </ul></div>
           <div><div class="lab">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely. GitHub Copilot and Google AI Studio assisted the build; neither runs in the shipped app.</p></div>
-          <div><div class="lab">Built with</div><div class="chips"><span>PowerApps</span></div></div>
+          <div><div class="lab">Built with</div><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>PowerApps Code Apps</span><span>Dataverse</span></div></div>
         </div>
       </details>
 
