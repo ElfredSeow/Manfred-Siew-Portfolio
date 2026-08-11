@@ -321,6 +321,17 @@ const cal = await page.evaluate(() => {
     covering: missions.filter((m) => m.classList.contains('soar-cover-c'))
       .map((m) => m.getAttribute('data-cell')),
     unassigned: Array.prototype.slice.call(mock.querySelectorAll('.soar-unassigned')).length,
+    missions: missions.map((m) => {
+      const prs = Array.prototype.slice.call(m.querySelectorAll('.soar-pr'));
+      const q = prs.find((p) => p.querySelector('.soar-tagq'));
+      const p = prs.find((p) => p.querySelector('.soar-tagp'));
+      return {
+        cell: m.getAttribute('data-cell'),
+        sim: (m.querySelector('.soar-sim') || {}).textContent.trim(),
+        q: q ? q.textContent.replace(/^Q/, '').trim() : null,
+        p: p ? p.textContent.replace(/^P/, '').trim() : null,
+      };
+    }),
   };
 });
 
@@ -355,6 +366,23 @@ check('calendar: exactly the two captured covering missions',
   JSON.stringify(cal.covering));
 check('calendar: two Unassigned slots, one per broken pair',
   cal.found && cal.unassigned === 2, String(cal.unassigned));
+check('calendar: all 20 missions match the capture exactly — sim, Q and P per cell',
+  // The checks above assert aggregate counts and which cells are flagged,
+  // but never the actual name/simulator on any cell — a transposed name on
+  // one of the 16 unflagged missions would still pass all of them. Assert
+  // the full grid as one exact array comparison instead.
+  cal.found && JSON.stringify(cal.missions.map((m) => `${m.cell}:${m.sim}|${m.q}|${m.p}`)) === JSON.stringify([
+    'mon-w1:Sim 1|T Rahman|L Okafor', 'mon-w2:Sim 2|S Whitfield|A Delgado',
+    'mon-w3:Sim 1|K Nakamura|M Bianchi', 'mon-w4:Sim 3|R Alvarez|D Kowalski',
+    'tue-w1:Sim 2|T Rahman|M Bianchi', 'tue-w2:Sim 4|P Nguyen|L Okafor',
+    'tue-w3:Sim 1|S Whitfield|Unassigned', 'tue-w4:Sim 3|K Nakamura|A Delgado',
+    'wed-w1:Sim 5|R Alvarez|D Kowalski', 'wed-w2:Sim 2|T Rahman|A Delgado',
+    'wed-w3:Sim 4|P Nguyen|M Bianchi', 'wed-w4:Sim 1|K Nakamura|L Okafor',
+    'thu-w1:Sim 3|S Whitfield|D Kowalski', 'thu-w2:Sim 1|T Rahman|L Okafor',
+    'thu-w3:Sim 5|Unassigned|M Bianchi', 'thu-w4:Sim 2|R Alvarez|A Delgado',
+    'fri-w1:Sim 4|K Nakamura|M Bianchi', 'fri-w2:Sim 2|P Nguyen|D Kowalski',
+    'fri-w3:Sim 1|T Rahman|L Okafor', 'fri-w4:Sim 3|S Whitfield|A Delgado',
+  ]), JSON.stringify(cal.missions.map((m) => `${m.cell}:${m.sim}|${m.q}|${m.p}`)));
 const galleryOrder = await page.evaluate(() =>
   Array.prototype.slice.call(document.querySelectorAll('.soar-mock')).map((m) => m.getAttribute('data-screen')));
 check('calendar: Weekly Schedule leads the gallery, before the Dashboard screen',
