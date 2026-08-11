@@ -291,6 +291,10 @@ const cm = await page.evaluate(() => {
       id: (r.querySelector('.mavis-req-id') || {}).textContent.trim(),
       badge: (r.querySelector('.mavis-badge-ic') || {}).textContent.trim(),
       badgeClass: (r.querySelector('.mavis-badge-ic') || { className: '' }).className,
+      badgeBg: (() => {
+        const el = r.querySelector('.mavis-badge-ic');
+        return el ? getComputedStyle(el).backgroundColor : '';
+      })(),
       refid: (r.querySelector('.mavis-req-refid') || {}).textContent.trim(),
       descLabel: (r.querySelector('.mavis-req-desc-label') || {}).textContent.trim(),
       descText: (r.querySelector('.mavis-req-desc-text') || { textContent: '' }).textContent.trim(),
@@ -339,6 +343,10 @@ check('cm: badge colours per screen — amber/orange/purple, not the dashboard\'
   && cm.reqs[1].badgeClass.includes('b-orange')
   && cm.reqs[2].badgeClass.includes('b-purple'),
   cm.found ? JSON.stringify(cm.reqs.map((r) => r.badgeClass)) : 'n/a');
+check('cm: badges actually render tinted (non-transparent background), not just labelled with a colour class',
+  cm.found && cm.reqs.length === 3
+  && cm.reqs.every((r) => r.badgeBg && r.badgeBg !== 'rgba(0, 0, 0, 0)' && r.badgeBg !== 'transparent'),
+  cm.found ? JSON.stringify(cm.reqs.map((r) => r.badgeBg)) : 'n/a');
 
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
