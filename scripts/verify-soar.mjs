@@ -85,6 +85,114 @@ const bodyText = await page.evaluate(() => document.body.textContent);
 check('page: old title removed', !/Flight Simulator Scheduling System/.test(bodyText));
 check('page: old description removed', !/reserving simulator resources/.test(bodyText));
 
+// ── Check group 3: mock registration + regression on existing families ──
+const reg = await page.evaluate(() => {
+  const frameW = (sel) => {
+    const el = document.querySelector(sel);
+    return el ? getComputedStyle(el).width : null;
+  };
+  return {
+    soarCount: document.querySelectorAll('.soar-mock').length,
+    soarWidths: Array.prototype.slice.call(document.querySelectorAll('.soar-mock'))
+      .map((m) => m.getAttribute('data-mock-width')),
+    bfCount: document.querySelectorAll('.bf-mock').length,
+    mfCount: document.querySelectorAll('.mf-mock').length,
+    bfFrameW: frameW('.app-shot-frame .bf-mock'),
+    mfFrameW: frameW('.app-shot-frame .mf-mock'),
+    soarFrameW: frameW('.app-shot-frame .soar-mock'),
+  };
+});
+
+check('regression: BOLDFACE still has 3 mocks', reg.bfCount === 3, String(reg.bfCount));
+check('regression: MatFlow still has 5 mocks', reg.mfCount === 5, String(reg.mfCount));
+check('regression: .bf-mock still authored at 480px', reg.bfFrameW === '480px', reg.bfFrameW);
+check('regression: .mf-mock still authored at 720px', reg.mfFrameW === '720px', reg.mfFrameW);
+check('soar: authored at 720px', reg.soarFrameW === '720px', reg.soarFrameW);
+check('soar: every mock declares data-mock-width="720"',
+  reg.soarCount > 0 && reg.soarWidths.every((w) => w === '720'), JSON.stringify(reg.soarWidths));
+
+// ── Check group 4: the shared rail ───────────────────────────────────
+const rail = await page.evaluate(() => {
+  const mock = document.querySelector('.soar-mock');
+  if (!mock) return { found: false };
+  const wm = mock.querySelector('.soar-wordmark');
+  const cs = wm ? getComputedStyle(wm) : null;
+  return {
+    found: true,
+    nav: Array.prototype.slice.call(mock.querySelectorAll('.soar-ni')).map((n) => n.textContent.trim()),
+    active: (mock.querySelector('.soar-ni.soar-on') || {}).textContent || '',
+    wordmark: wm ? wm.textContent.trim() : '',
+    gradient: cs ? cs.backgroundImage : '',
+    clip: cs ? (cs.webkitBackgroundClip || cs.backgroundClip) : '',
+    weight: cs ? cs.fontWeight : '',
+    railText: (mock.querySelector('.soar-rail') || { textContent: '' }).textContent,
+  };
+});
+
+check('rail: five nav entries in app order', rail.found && JSON.stringify(rail.nav) ===
+  JSON.stringify(['Calendar', 'My Schedule', 'Covering', 'Dashboard', 'Admin']),
+  JSON.stringify(rail.nav));
+check('rail: wordmark reads SOAR', rail.found && rail.wordmark === 'SOAR', rail.wordmark);
+check('rail: wordmark uses the app gradient #60a5fa to #ffffff',
+  rail.found && /rgb\(96,\s*165,\s*250\)/.test(rail.gradient) && /rgb\(255,\s*255,\s*255\)/.test(rail.gradient),
+  rail.gradient);
+check('rail: wordmark is background-clip:text at weight 800',
+  rail.found && rail.clip === 'text' && rail.weight === '800', `${rail.clip}/${rail.weight}`);
+check('rail: carries the signed-in persona and version',
+  rail.found && /t\.rahman@soar\.demo/.test(rail.railText) && /v1\.0\.11/.test(rail.railText));
+
+// ── Check group 5: Operations Dashboard ──────────────────────────────
+const dash = await page.evaluate(() => {
+  const mock = document.querySelector('.soar-mock[data-screen="dashboard"]');
+  if (!mock) return { found: false };
+  return {
+    found: true,
+    active: (mock.querySelector('.soar-ni.soar-on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.soar-h1') || {}).textContent || '',
+    sub: (mock.querySelector('.soar-sub2') || {}).textContent || '',
+    tiles: Array.prototype.slice.call(mock.querySelectorAll('.soar-stat')).map((t) => ({
+      v: (t.querySelector('.soar-stat-v') || {}).textContent.trim(),
+      l: (t.querySelector('.soar-stat-l') || {}).textContent.trim(),
+      live: !!t.querySelector('.soar-live'),
+    })),
+    bars: Array.prototype.slice.call(mock.querySelectorAll('.soar-bar')).map((b) => ({
+      duty: b.getAttribute('data-duty'),
+      name: (b.querySelector('.soar-bar-l') || {}).textContent.trim(),
+      h: (b.querySelector('.soar-bar-i') || { style: {} }).style.height,
+    })),
+    axis: Array.prototype.slice.call(mock.querySelectorAll('.soar-ax')).map((a) => a.textContent.trim()),
+    stable: (mock.querySelector('.soar-stable') || {}).textContent || '',
+    gaps: (mock.querySelector('.soar-gaps') || {}).textContent || '',
+  };
+});
+
+check('dashboard: screen exists', dash.found);
+check('dashboard: Dashboard is the active nav item', dash.found && dash.active === 'Dashboard', dash.active);
+check('dashboard: heading + subtitle match the capture',
+  dash.found && dash.h1.trim() === 'Operations Dashboard'
+  && dash.sub.trim() === 'System-wide workload and stability metrics');
+check('dashboard: four LIVE stat tiles with the captured values',
+  dash.found && JSON.stringify(dash.tiles) === JSON.stringify([
+    { v: '10', l: 'Total Assessors', live: true },
+    { v: '20', l: 'Active Missions', live: true },
+    { v: '2', l: 'Pair Breaks', live: true },
+    { v: '3', l: 'Covering Requests', live: true },
+  ]), JSON.stringify(dash.tiles));
+check('dashboard: eight workload bars in ranked order',
+  dash.found && JSON.stringify(dash.bars.map((b) => `${b.name}:${b.duty}`)) === JSON.stringify([
+    'T Rahman:14', 'L Okafor:13', 'S Whitfield:12', 'A Delgado:11',
+    'K Nakamura:10', 'M Bianchi:9', 'R Alvarez:8', 'D Kowalski:7',
+  ]), JSON.stringify(dash.bars.map((b) => `${b.name}:${b.duty}`)));
+check('dashboard: bar heights are duty/16 of the plot',
+  dash.found && dash.bars.every((b) => b.h === `${(Number(b.duty) / 16) * 100}%`),
+  JSON.stringify(dash.bars.map((b) => b.h)));
+check('dashboard: y-axis is 0/4/8/12/16',
+  dash.found && JSON.stringify(dash.axis) === JSON.stringify(['16', '12', '8', '4', '0']),
+  JSON.stringify(dash.axis));
+check('dashboard: stability figures match the capture',
+  dash.found && /90\.0%/.test(dash.stable) && /\b2\b/.test(dash.gaps),
+  `${dash.stable} | ${dash.gaps}`);
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 

@@ -343,7 +343,8 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .shot-lightbox-mockwrap{ position:relative; border-radius:var(--r-sm); }
 .shot-lightbox-mockwrap .bf-mock,
 .shot-lightbox-mockwrap .mf-mock,
-.shot-lightbox-mockwrap .gr-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
+.shot-lightbox-mockwrap .gr-mock,
+.shot-lightbox-mockwrap .soar-mock{ position:absolute; top:0; left:0; transform-origin:top left; }
 .shot-lightbox-cap{ padding:.9rem 1.5rem 1.25rem; }
 .shot-lightbox-cap .st{ font-size:.9375rem; font-weight:600; color:var(--ink); }
 .shot-lightbox-cap .sd{ font-size:.8125rem; line-height:1.4; color:var(--muted); margin-top:.15rem; }
@@ -477,6 +478,30 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .bf-mock .bf-member{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:6px;font-size:12.5px}
 .bf-mock .bf-member .bf-cs{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:600;letter-spacing:.05em}
 .bf-mock .bf-badge.bf-green{background:var(--bf-success-tint);color:var(--bf-success)}
+/* Fidelity fixes below — matching src/pages/dashboard.tsx, src/components/
+   dashboard/{count-tile,task-card,status-board}.tsx, src/pages/quiz-taking.tsx
+   and src/components/dashboard/status-badge.tsx in raid-ppcoe/BOLDFACE, not
+   the earlier hand-simplified version of these three screens. */
+.bf-mock .bf-tile .bf-lbl svg{flex-shrink:0}
+.bf-mock .bf-peers{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--bf-fg-4);margin-top:3px}
+.bf-mock .bf-badge.bf-amber{background:rgba(0,118,179,.15);color:var(--bf-brand-fg)}
+.bf-mock .bf-back{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--bf-fg-2);margin-bottom:12px}
+.bf-mock .bf-progress-row{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);margin:10px 0 16px}
+.bf-mock .bf-progress-row .bf-progress{flex:1;margin:0}
+.bf-mock .bf-progress-count{font-size:10px;font-weight:600;color:var(--bf-fg-2);white-space:nowrap}
+.bf-mock .bf-sec-title{font-size:13.5px;font-weight:600;color:var(--bf-fg-1);margin:2px 0 10px}
+.bf-mock .bf-qnum{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bf-fg-4);margin:14px 0 6px}
+.bf-mock .bf-qnum:first-of-type{margin-top:0}
+.bf-mock .bf-dback{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--bf-brand-fg);background:var(--bf-bg-1);border:1px solid var(--bf-stroke-2);border-radius:8px;padding:5px 10px;margin-bottom:10px}
+.bf-mock .bf-dhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.bf-mock .bf-dsub{font-size:9.5px;color:var(--bf-fg-4);margin-bottom:12px}
+.bf-mock .bf-dtable{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:1px;background:var(--bf-stroke-2);border:1px solid var(--bf-stroke-2);border-radius:var(--bf-radius);overflow:hidden;font-size:11px}
+.bf-mock .bf-dtable>div{background:var(--bf-bg-1);padding:8px 10px}
+.bf-mock .bf-dtable>div.bf-hd{background:var(--bf-bg-2);font-weight:600;text-align:center}
+.bf-mock .bf-dtable .bf-hd small{display:block;font-weight:400;text-transform:none;letter-spacing:0;color:var(--bf-fg-4);font-size:8.5px;margin-top:1px}
+.bf-mock .bf-dtable .bf-dcell{display:flex;justify-content:center}
+.bf-mock .bf-dcs{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:600;letter-spacing:.05em;font-size:11.5px;color:var(--bf-fg-1)}
+.bf-mock .bf-dname{font-size:9px;color:var(--bf-fg-4);margin-top:1px}
 /* Gallery thumbnails (.app-shots, borrowed from FUEL Up's real-screenshot
    gallery): each .bf-mock here has no real image to crop with object-fit,
    so it is laid out at a fixed intrinsic width and scaled down to fit the
@@ -490,6 +515,10 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .app-shot-frame .mf-mock{width:720px;transform:scale(.4);transform-origin:top left}
 /* .gr-mock is authored at the same 720px half-scale as .mf-mock. */
 .app-shot-frame .gr-mock{width:720px;transform:scale(.4);transform-origin:top left}
+/* .soar-mock is authored at the same 720px half-scale as .mf-mock and
+   .gr-mock — half of the app's own 1600px capture viewport, near enough
+   that proportions carry across from the source PNGs directly. */
+.app-shot-frame .soar-mock{width:720px;transform:scale(.4);transform-origin:top left}
 @media (max-width:520px){
   .bf-mock .bf-metrics,.bf-mock .bf-vgrid{grid-template-columns:1fr}
   .bf-mock .bf-rail{width:48px}
@@ -972,6 +1001,83 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .gr-mock .gr-neworg p{font-size:6px;color:var(--gr-fg-3);line-height:1.55}
 .gr-mock .gr-neworg .gr-input{align-self:stretch;font-size:6.5px;color:var(--gr-fg-4);border:1px solid var(--gr-line);background:var(--gr-tint);border-radius:5px;padding:4px 6px}
 .gr-mock .gr-neworg .gr-primary{background:var(--gr-blue);color:#fff;font-weight:700;font-size:6.5px;padding:4px 8px;border-radius:6px}
+
+/* ── SOAR Duty Scheduler screen mockup ────────────────────────────────
+   Rebuilt in HTML/CSS from the app's own design tokens and its four
+   captured screens, the same recipe .mf-mock and .gr-mock use. Source:
+   SOAR Scheduling Marketing Content/marketing-pr/SOAR-Duty-Scheduling-App/
+   MARKETING_SPEC.md (§2 theme tokens, §3 App Fidelity Map) plus
+   screens/{calendar,dashboard,covering,admin}.png.
+   Tokens are the app's real dark palette from its src/index.css, soar-
+   prefixed. Authored at 720px; .app-shot-frame scales it to 0.4 for the
+   8:5 thumbnail and the lightbox scales it back up. As with .mf-mock and
+   .gr-mock the one liberty is legibility: text below about 7px stops
+   rendering as text, so the smallest labels sit a little above a strict
+   half-scale. Every rule is qualified with the .soar-mock ancestor so it
+   outranks this page's own descendant rules (.log-body p and friends). */
+.soar-mock{
+  --soar-bg:hsl(220,20%,10%); --soar-card:hsl(220,20%,15%); --soar-card-2:hsl(220,20%,13%);
+  --soar-border:hsl(220,20%,20%); --soar-fg:hsl(210,20%,98%);
+  --soar-primary:hsl(210,60%,50%); --soar-primary-2:#60a5fa;
+  --soar-fg-2:#cbd5e1; --soar-fg-3:#94a3b8; --soar-fg-4:#64748b;
+  --soar-am:#3b82f6; --soar-pm:#a855f7; --soar-covering:#f59e0b; --soar-break:#ef4444;
+  --soar-accent:hsl(40,90%,55%); --soar-good:#10b981;
+  --soar-mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --soar-r:10px;
+  width:720px; background:var(--soar-bg); color:var(--soar-fg);
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:11px; line-height:1.35; letter-spacing:0;
+}
+.soar-mock p,.soar-mock b,.soar-mock small,.soar-mock span,.soar-mock div,.soar-mock h4{margin:0;font-size:inherit;line-height:inherit;color:inherit;font-weight:inherit}
+.soar-mock .soar-screen{display:flex;min-height:450px;background:var(--soar-bg)}
+
+/* Rail — identical on all four screens; only .soar-on moves. */
+.soar-mock .soar-rail{width:116px;flex-shrink:0;background:var(--soar-bg);border-right:1px solid var(--soar-border);display:flex;flex-direction:column}
+.soar-mock .soar-brand{padding:13px 12px 10px}
+.soar-mock .soar-wordmark{display:block;font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.1;background-image:linear-gradient(to right,#60a5fa,#ffffff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.soar-mock .soar-sub{display:block;margin-top:1px;font-family:var(--soar-mono);font-size:6.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--soar-fg-4)}
+.soar-mock .soar-nav{padding:4px 7px;display:flex;flex-direction:column;gap:2px;flex:1}
+.soar-mock .soar-ni{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;font-size:8.5px;color:var(--soar-fg-3)}
+.soar-mock .soar-ni svg{flex-shrink:0;opacity:.85}
+.soar-mock .soar-ni.soar-on{background:rgba(59,130,246,.16);color:var(--soar-primary-2);font-weight:600}
+.soar-mock .soar-ni.soar-on svg{opacity:1}
+.soar-mock .soar-rail-ft{border-top:1px solid var(--soar-border);padding:8px 8px 6px;display:flex;flex-direction:column;gap:6px}
+.soar-mock .soar-rf{display:flex;align-items:center;gap:7px;padding:2px 4px;font-size:8.5px;color:var(--soar-fg-3)}
+.soar-mock .soar-user{display:flex;align-items:center;gap:6px;padding:2px 4px}
+.soar-mock .soar-av{width:15px;height:15px;border-radius:50%;background:var(--soar-primary);color:#fff;display:grid;place-items:center;font-size:7.5px;font-weight:700;flex-shrink:0}
+.soar-mock .soar-un{font-size:7.5px;font-weight:600;color:var(--soar-fg);line-height:1.25}
+.soar-mock .soar-ur{font-size:7px;color:var(--soar-fg-4);line-height:1.25}
+.soar-mock .soar-ver{text-align:center;font-family:var(--soar-mono);font-size:7px;color:var(--soar-fg-4)}
+
+/* Pane header — shared by all four screens. */
+.soar-mock .soar-pane{flex:1;padding:14px 16px;min-width:0}
+.soar-mock .soar-h1{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--soar-primary-2)}
+.soar-mock .soar-sub2{font-size:8.5px;color:var(--soar-fg-3);margin-top:1px}
+.soar-mock .soar-card{background:var(--soar-card);border:1px solid var(--soar-border);border-radius:var(--soar-r)}
+
+/* Dashboard */
+.soar-mock .soar-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:11px}
+.soar-mock .soar-stat{padding:9px 10px 10px}
+.soar-mock .soar-stat-top{display:flex;align-items:center;justify-content:space-between}
+.soar-mock .soar-live{font-family:var(--soar-mono);font-size:7px;letter-spacing:.16em;color:var(--soar-fg-4)}
+.soar-mock .soar-stat-v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3;margin-top:5px}
+.soar-mock .soar-stat-l{font-size:8px;color:var(--soar-fg-3)}
+.soar-mock .soar-charts{display:grid;grid-template-columns:1.75fr 1fr;gap:8px;margin-top:8px}
+.soar-mock .soar-chart{padding:11px 12px 10px}
+.soar-mock .soar-ch-h{font-size:9.5px;font-weight:700;color:var(--soar-fg)}
+.soar-mock .soar-plot{display:flex;gap:8px;margin-top:10px;height:120px}
+.soar-mock .soar-axis{display:flex;flex-direction:column;justify-content:space-between;font-size:7px;color:var(--soar-fg-4);text-align:right;padding-bottom:11px}
+.soar-mock .soar-bars{flex:1;display:flex;align-items:flex-end;gap:6px}
+.soar-mock .soar-bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.soar-mock .soar-bar-p{height:calc(100% - 11px);display:flex;align-items:flex-end}
+.soar-mock .soar-bar-i{width:100%;background:#1d2b45;border-radius:2px 2px 0 0}
+.soar-mock .soar-bar.soar-top .soar-bar-i{background:var(--soar-am)}
+.soar-mock .soar-bar-l{font-size:6.5px;color:var(--soar-fg-4);text-align:center;margin-top:3px;white-space:nowrap}
+.soar-mock .soar-donut{width:98px;height:98px;margin:12px auto 10px;display:block}
+.soar-mock .soar-krow{display:flex;align-items:center;justify-content:space-between;font-size:8.5px;color:var(--soar-fg-3);padding:2px 0}
+.soar-mock .soar-krow b{font-weight:700;font-variant-numeric:tabular-nums}
+.soar-mock .soar-stable b{color:var(--soar-primary-2)}
+.soar-mock .soar-gaps b{color:var(--soar-break)}
 
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
@@ -2383,6 +2489,98 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
             </ul></div>
           <div><div class="lab">What I learned</div><p class="note">Using Lovable to create a quick prototype on the spot to gain user feedback, deploying to PowerApps safely. GitHub Copilot and Google AI Studio assisted the build; neither runs in the shipped app.</p></div>
           <div><div class="lab">Built with</div><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>PowerApps Code Apps</span><span>Dataverse</span></div></div>
+          <div class="log-shots-wrap">
+            <div class="shots-head">
+              <div class="lab">The actual screens</div>
+              <div class="shots-nav-group" hidden>
+                <button type="button" class="shots-nav" data-shots-prev aria-label="Scroll screens left" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="shots-nav" data-shots-next aria-label="Scroll screens right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="app-shots-wrap">
+            <div class="app-shots" role="list" aria-label="SOAR Duty Scheduler app screens, rebuilt in HTML and CSS from the app's own interface code, design tokens and captured screens — not photos, not invented">
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">SOAR — Operations Dashboard</span></div>
+                <div class="app-shot-frame">
+                  <div class="soar-mock" data-mock-width="720" data-screen="dashboard" aria-hidden="true">
+                    <div class="soar-screen">
+                      <div class="soar-rail">
+                        <div class="soar-brand"><span class="soar-wordmark">SOAR</span><span class="soar-sub">Duty Scheduler</span></div>
+                        <div class="soar-nav">
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>Calendar</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>My Schedule</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg><span>Covering</span></span>
+                          <span class="soar-ni soar-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="soar-ni"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg><span>Admin</span></span>
+                        </div>
+                        <div class="soar-rail-ft">
+                          <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><span>Light Mode</span></span>
+                          <span class="soar-user"><span class="soar-av">T</span><span><span class="soar-un">t.rahman@soar.demo</span><span class="soar-ur">Admin</span></span></span>
+                          <span class="soar-rf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span>Logout</span></span>
+                          <span class="soar-ver">v1.0.11</span>
+                        </div>
+                      </div>
+                      <div class="soar-pane">
+                        <div class="soar-h1">Operations Dashboard</div>
+                        <div class="soar-sub2">System-wide workload and stability metrics</div>
+                        <div class="soar-stats">
+                          <div class="soar-card soar-stat">
+                            <div class="soar-stat-top"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="soar-live">LIVE</span></div>
+                            <div class="soar-stat-v">10</div><div class="soar-stat-l">Total Assessors</div>
+                          </div>
+                          <div class="soar-card soar-stat">
+                            <div class="soar-stat-top"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span class="soar-live">LIVE</span></div>
+                            <div class="soar-stat-v">20</div><div class="soar-stat-l">Active Missions</div>
+                          </div>
+                          <div class="soar-card soar-stat">
+                            <div class="soar-stat-top"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span class="soar-live">LIVE</span></div>
+                            <div class="soar-stat-v">2</div><div class="soar-stat-l">Pair Breaks</div>
+                          </div>
+                          <div class="soar-card soar-stat">
+                            <div class="soar-stat-top"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg><span class="soar-live">LIVE</span></div>
+                            <div class="soar-stat-v">3</div><div class="soar-stat-l">Covering Requests</div>
+                          </div>
+                        </div>
+                        <div class="soar-charts">
+                          <div class="soar-card soar-chart">
+                            <div class="soar-ch-h">Assessor Workload (Duty Count)</div>
+                            <div class="soar-plot">
+                              <div class="soar-axis"><span class="soar-ax">16</span><span class="soar-ax">12</span><span class="soar-ax">8</span><span class="soar-ax">4</span><span class="soar-ax">0</span></div>
+                              <div class="soar-bars">
+                                <div class="soar-bar soar-top" data-duty="14"><div class="soar-bar-p"><i class="soar-bar-i" style="height:87.5%"></i></div><div class="soar-bar-l">T Rahman</div></div>
+                                <div class="soar-bar" data-duty="13"><div class="soar-bar-p"><i class="soar-bar-i" style="height:81.25%"></i></div><div class="soar-bar-l">L Okafor</div></div>
+                                <div class="soar-bar" data-duty="12"><div class="soar-bar-p"><i class="soar-bar-i" style="height:75%"></i></div><div class="soar-bar-l">S Whitfield</div></div>
+                                <div class="soar-bar" data-duty="11"><div class="soar-bar-p"><i class="soar-bar-i" style="height:68.75%"></i></div><div class="soar-bar-l">A Delgado</div></div>
+                                <div class="soar-bar" data-duty="10"><div class="soar-bar-p"><i class="soar-bar-i" style="height:62.5%"></i></div><div class="soar-bar-l">K Nakamura</div></div>
+                                <div class="soar-bar" data-duty="9"><div class="soar-bar-p"><i class="soar-bar-i" style="height:56.25%"></i></div><div class="soar-bar-l">M Bianchi</div></div>
+                                <div class="soar-bar" data-duty="8"><div class="soar-bar-p"><i class="soar-bar-i" style="height:50%"></i></div><div class="soar-bar-l">R Alvarez</div></div>
+                                <div class="soar-bar" data-duty="7"><div class="soar-bar-p"><i class="soar-bar-i" style="height:43.75%"></i></div><div class="soar-bar-l">D Kowalski</div></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="soar-card soar-chart">
+                            <div class="soar-ch-h">Mission Stability</div>
+                            <svg class="soar-donut" viewBox="0 0 100 100" aria-hidden="true">
+                              <circle cx="50" cy="50" r="40" fill="none" stroke="#ef4444" stroke-width="11"/>
+                              <circle cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="11" stroke-linecap="butt" stroke-dasharray="226.19 25.13" transform="rotate(-90 50 50)"/>
+                            </svg>
+                            <div class="soar-krow soar-stable"><span>Stable Pairs</span><b>90.0%</b></div>
+                            <div class="soar-krow soar-gaps"><span>Critical Gaps</span><b>2</b></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Operations Dashboard</div><div class="sd">Live workload and stability across the whole roster, so over-tasking shows up before it becomes a problem</div></figcaption>
+              </figure>
+            </div>
+            </div>
+          </div>
         </div>
       </details>
 
@@ -2908,7 +3106,7 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
   // Hand-built screen mocks (.bf-mock, .mf-mock, .gr-mock) each have a fixed
   // authoring width, declared on the element as data-mock-width and
   // defaulting to 480. A new mock family only has to join this list.
-  var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock';
+  var MOCK_SEL = '.bf-mock, .mf-mock, .gr-mock, .soar-mock';
   function mockWidth(mock) { return parseFloat(mock.getAttribute('data-mock-width')) || 480; }
   var pendingFit = null;
 
