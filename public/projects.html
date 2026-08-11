@@ -1182,6 +1182,27 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 .mavis-mock .mavis-cmtile-label{font-size:7px;font-weight:600;color:var(--mavis-ink);margin-top:2px}
 .mavis-mock .mavis-cmtile-note{font-size:6px;color:var(--mavis-fg-3);margin-top:1px;line-height:1.3}
 
+/* Corrective Maintenance */
+.mavis-mock .mavis-cm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mavis-mock .mavis-cm-btn{background:var(--mavis-primary);color:#fff;border-radius:8px;padding:8px 14px;font-size:8px;font-weight:700;white-space:nowrap}
+.mavis-mock .mavis-cm-h2{font-size:11px;font-weight:700;color:var(--mavis-ink);margin-top:14px}
+.mavis-mock .mavis-badge-ic{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:7.5px;font-weight:700}
+.mavis-mock .mavis-req{margin-top:9px;padding:10px 12px}
+.mavis-mock .mavis-req-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mavis-mock .mavis-req-top-l{display:flex;align-items:center;gap:8px}
+.mavis-mock .mavis-req-id{font-size:12px;font-weight:800;color:var(--mavis-ink)}
+.mavis-mock .mavis-req-refid{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:7px;color:var(--mavis-fg-3)}
+.mavis-mock .mavis-req-desc-wrap{border-left:3px solid var(--mavis-primary);padding-left:8px;margin-top:8px}
+.mavis-mock .mavis-req-desc-label{font-size:6.5px;letter-spacing:.06em;font-weight:700;color:var(--mavis-fg-3)}
+.mavis-mock .mavis-req-desc-text{font-size:9px;color:var(--mavis-ink);margin-top:2px}
+.mavis-mock .mavis-req-loc{font-size:7.5px;color:var(--mavis-fg-2);margin-top:7px}
+.mavis-mock .mavis-req-loc b{color:var(--mavis-ink);font-weight:600}
+.mavis-mock .mavis-req-addl-btn{display:inline-flex;align-items:center;gap:5px;background:var(--mavis-primary);color:#fff;border-radius:7px;padding:6px 11px;font-size:7.5px;font-weight:700;margin-top:8px}
+.mavis-mock .mavis-req-footer{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--mavis-border)}
+.mavis-mock .mavis-req-reported{display:flex;align-items:center;gap:10px;font-size:7px;color:var(--mavis-fg-3)}
+.mavis-mock .mavis-req-reported span{display:inline-flex;align-items:center;gap:3px}
+.mavis-mock .mavis-req-recovery{display:inline-flex;align-items:center;border:1px solid var(--mavis-ring);color:var(--mavis-blue-fg);border-radius:999px;padding:2px 8px;font-size:6.5px;font-weight:600}
+
 /* Deliberately no narrow-viewport reflow, for the same reason .mf-mock
    has none: .gr-mock is a fixed 720×450 box that is scaled, not laid
    out responsively, so it shrinks uniformly on a phone and keeps
@@ -2022,6 +2043,102 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
                   </div>
                 </div>
                 <figcaption class="app-shot-cap"><div class="st">Fleet Overview</div><div class="sd">Availability is computed from three independent unserviceability sources, not typed in — so the dashboard and the database cannot disagree</div></figcaption>
+              </figure>
+              <figure class="app-shot" role="listitem" tabindex="0">
+                <div class="app-shot-chrome"><span class="app-shot-dots"><span></span><span></span><span></span></span><span class="app-shot-title">MAVIS — Corrective Maintenance</span></div>
+                <div class="app-shot-frame">
+                  <div class="mavis-mock" data-mock-width="720" data-screen="corrective" aria-hidden="true">
+                    <div class="mavis-nav">
+                      <div class="mavis-nav-left">
+                        <span class="mavis-wordmark">MAVIS</span>
+                        <div class="mavis-pills">
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></span>
+                          <span class="mavis-pill on"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span>Corrective Maintenance</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg><span>Preventive Maintenance</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>Workshop Status</span></span>
+                          <span class="mavis-pill"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span>Reports</span></span>
+                        </div>
+                      </div>
+                      <div class="mavis-nav-right">
+                        <span class="mavis-nav-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                        <span class="mavis-nav-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="mavis-bell-badge">2</span></span>
+                        <span class="mavis-user">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          <span class="mavis-user-text"><span class="mavis-user-name">Ops Duty Officer</span><br><span class="mavis-user-role">Admin</span></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="mavis-body">
+                      <div class="mavis-cm-head">
+                        <div>
+                          <div class="mavis-h1">Corrective Maintenance</div>
+                          <div class="mavis-sub">Manage and track vehicle defects and repairs</div>
+                        </div>
+                        <span class="mavis-cm-btn">Create New Report</span>
+                      </div>
+                      <div class="mavis-cm-h2">Active Defect Reports</div>
+
+                      <div class="mavis-card mavis-req">
+                        <div class="mavis-req-top">
+                          <div class="mavis-req-top-l">
+                            <span class="mavis-req-id">MID 4423</span>
+                            <span class="mavis-badge-ic b-amber"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Waiting for assessment</span>
+                          </div>
+                          <span class="mavis-req-refid">ID: #REQ-2026-001</span>
+                        </div>
+                        <div class="mavis-req-desc-wrap">
+                          <div class="mavis-req-desc-label">DEFECT DESCRIPTION</div>
+                          <div class="mavis-req-desc-text">Air brake pressure drops below threshold on hold</div>
+                        </div>
+                        <div class="mavis-req-loc"><b>Location:</b> Hangar 2 Apron</div>
+                        <div class="mavis-req-footer">
+                          <span class="mavis-req-reported"><span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Reported: 11 Aug 2026</span><span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>12:39 AM</span></span>
+                        </div>
+                      </div>
+
+                      <div class="mavis-card mavis-req">
+                        <div class="mavis-req-top">
+                          <div class="mavis-req-top-l">
+                            <span class="mavis-req-id">AGE 1119</span>
+                            <span class="mavis-badge-ic b-orange"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Pending CEN Endorsement</span>
+                          </div>
+                          <span class="mavis-req-refid">ID: #REQ-2026-002</span>
+                        </div>
+                        <div class="mavis-req-desc-wrap">
+                          <div class="mavis-req-desc-label">DEFECT DESCRIPTION</div>
+                          <div class="mavis-req-desc-text">Hydraulic seep at tow-arm cylinder</div>
+                        </div>
+                        <div class="mavis-req-loc"><b>Location:</b> Vehicle Park North</div>
+                        <span class="mavis-req-addl-btn"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>Raise ADDL</span>
+                        <div class="mavis-req-footer">
+                          <span class="mavis-req-reported"><span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Reported: 11 Aug 2026</span><span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>12:39 AM</span></span>
+                          <span class="mavis-req-recovery">Expected Recovery: 17 Aug 2026</span>
+                        </div>
+                      </div>
+
+                      <!-- Card 3 is deliberately cut off here, matching the source
+                           capture (screens/02-corrective-maintenance.png), which
+                           clips mid-card. Do NOT fill in a description, location
+                           or footer from MARKETING_SPEC.md §7 — that table is
+                           highly likely correct but is not what the capture
+                           shows, and this file's rule is "read off the capture",
+                           not "read off the fixture list". See design spec §5.2. -->
+                      <div class="mavis-card mavis-req" style="padding-bottom:4px">
+                        <div class="mavis-req-top">
+                          <div class="mavis-req-top-l">
+                            <span class="mavis-req-id">MID 4490</span>
+                            <span class="mavis-badge-ic b-purple"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Ready for collection</span>
+                          </div>
+                          <span class="mavis-req-refid">ID: #REQ-2026-003</span>
+                        </div>
+                        <div class="mavis-req-desc-wrap">
+                          <div class="mavis-req-desc-label">DEFECT DESCRIPTION</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption class="app-shot-cap"><div class="st">Corrective Maintenance</div><div class="sd">Every defect is a seven-state approval chain, not a status dropdown — and a deferred one (ADDL) carries its own expected-recovery date</div></figcaption>
               </figure>
             </div>
             </div>

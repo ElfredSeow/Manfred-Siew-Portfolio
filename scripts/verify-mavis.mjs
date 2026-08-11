@@ -276,6 +276,70 @@ check('dashboard: stops before PM Summary / Pending Approval / footer (spec §5.
   dash.found && !dash.hasPmSummary && !dash.hasPendingApproval && !dash.hasFooter,
   `pm=${dash.hasPmSummary} pending=${dash.hasPendingApproval} footer=${dash.hasFooter}`);
 
+// ── Check group 8: Corrective Maintenance ────────────────────────────
+const cm = await page.evaluate(() => {
+  const mock = document.querySelector('.mavis-mock[data-screen="corrective"]');
+  if (!mock) return { found: false };
+  return {
+    found: true,
+    active: (mock.querySelector('.mavis-pill.on') || {}).textContent.trim(),
+    h1: (mock.querySelector('.mavis-h1') || {}).textContent.trim(),
+    sub: (mock.querySelector('.mavis-sub') || {}).textContent.trim(),
+    btn: (mock.querySelector('.mavis-cm-btn') || {}).textContent.trim(),
+    section: (mock.querySelector('.mavis-cm-h2') || {}).textContent.trim(),
+    reqs: Array.prototype.slice.call(mock.querySelectorAll('.mavis-req')).map((r) => ({
+      id: (r.querySelector('.mavis-req-id') || {}).textContent.trim(),
+      badge: (r.querySelector('.mavis-badge-ic') || {}).textContent.trim(),
+      badgeClass: (r.querySelector('.mavis-badge-ic') || { className: '' }).className,
+      refid: (r.querySelector('.mavis-req-refid') || {}).textContent.trim(),
+      descLabel: (r.querySelector('.mavis-req-desc-label') || {}).textContent.trim(),
+      descText: (r.querySelector('.mavis-req-desc-text') || { textContent: '' }).textContent.trim(),
+      loc: (r.querySelector('.mavis-req-loc') || { textContent: '' }).textContent.trim(),
+      addlBtn: !!r.querySelector('.mavis-req-addl-btn'),
+      reported: (r.querySelector('.mavis-req-reported') || { textContent: '' }).textContent.trim(),
+      recovery: (r.querySelector('.mavis-req-recovery') || { textContent: '' }).textContent.trim(),
+    })),
+  };
+});
+
+check('cm: screen exists', cm.found);
+check('cm: Corrective Maintenance is the active nav pill', cm.found && cm.active === 'Corrective Maintenance', cm.active);
+check('cm: heading + subtitle match the capture',
+  cm.found && cm.h1 === 'Corrective Maintenance'
+  && cm.sub === 'Manage and track vehicle defects and repairs');
+check('cm: Create New Report button present', cm.found && cm.btn === 'Create New Report', cm.btn);
+check('cm: section heading reads Active Defect Reports', cm.found && cm.section === 'Active Defect Reports', cm.section);
+check('cm: three defect cards', cm.found && cm.reqs.length === 3, String(cm.reqs.length));
+check('cm: card 1 (MID 4423) matches the capture',
+  cm.found && cm.reqs[0] && cm.reqs[0].id === 'MID 4423'
+  && cm.reqs[0].badge === 'Waiting for assessment' && cm.reqs[0].refid === 'ID: #REQ-2026-001'
+  && cm.reqs[0].descLabel === 'DEFECT DESCRIPTION'
+  && cm.reqs[0].descText === 'Air brake pressure drops below threshold on hold'
+  && cm.reqs[0].loc === 'Location: Hangar 2 Apron'
+  && !cm.reqs[0].addlBtn
+  && /11 Aug 2026/.test(cm.reqs[0].reported) && /12:39 AM/.test(cm.reqs[0].reported),
+  JSON.stringify(cm.reqs[0]));
+check('cm: card 2 (AGE 1119) matches the capture, with Raise ADDL and Expected Recovery',
+  cm.found && cm.reqs[1] && cm.reqs[1].id === 'AGE 1119'
+  && cm.reqs[1].badge === 'Pending CEN Endorsement' && cm.reqs[1].refid === 'ID: #REQ-2026-002'
+  && cm.reqs[1].descText === 'Hydraulic seep at tow-arm cylinder'
+  && cm.reqs[1].loc === 'Location: Vehicle Park North'
+  && cm.reqs[1].addlBtn
+  && cm.reqs[1].recovery === 'Expected Recovery: 17 Aug 2026',
+  JSON.stringify(cm.reqs[1]));
+check('cm: card 3 (MID 4490) is deliberately cut off, matching the capture',
+  cm.found && cm.reqs[2] && cm.reqs[2].id === 'MID 4490'
+  && cm.reqs[2].badge === 'Ready for collection' && cm.reqs[2].refid === 'ID: #REQ-2026-003'
+  && cm.reqs[2].descLabel === 'DEFECT DESCRIPTION'
+  && cm.reqs[2].descText === '' && cm.reqs[2].loc === '' && cm.reqs[2].reported === '',
+  JSON.stringify(cm.reqs[2]));
+check('cm: badge colours per screen — amber/orange/purple, not the dashboard\'s red/orange/green',
+  cm.found && cm.reqs.length === 3
+  && cm.reqs[0].badgeClass.includes('b-amber')
+  && cm.reqs[1].badgeClass.includes('b-orange')
+  && cm.reqs[2].badgeClass.includes('b-purple'),
+  cm.found ? JSON.stringify(cm.reqs.map((r) => r.badgeClass)) : 'n/a');
+
 // ── Report ───────────────────────────────────────────────────────────
 await browser.close();
 
