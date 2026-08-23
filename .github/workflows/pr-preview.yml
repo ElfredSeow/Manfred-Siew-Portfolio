@@ -23,7 +23,7 @@ jobs:
       - name: Check internal links in public/
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --offline --no-progress './public/**/*.html'
+          args: --offline --no-progress --root-dir ./public --fallback-extensions html './public/**/*.html'
           fail: true
 
   preview:
