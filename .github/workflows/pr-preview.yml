@@ -1,0 +1,45 @@
+name: Deploy PR Preview
+
+# Runs on every pull request targeting main and deploys public/ to a
+# temporary Firebase Hosting preview channel so changes can be reviewed
+# before merging. The preview URL is posted back as a PR comment by
+# FirebaseExtended/action-hosting-deploy and expires automatically.
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: firebase-hosting-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Sanity checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check internal links in public/
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress --root-dir ./public --fallback-extensions html './public/**/*.html'
+          fail: true
+
+  preview:
+    name: Deploy preview
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy preview to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: manfred-siew
+          expires: 7d
