@@ -286,6 +286,18 @@ try {
     await page.evaluate(() => window.__teamsStub.themeHandler('contrast'));
     check('sdk', 'theme handler switches to contrast',
       (await cls(page)).includes('teams-theme-contrast'), await cls(page));
+
+    /* Guards a real regression: the contrast palette was originally written
+       with bare Canvas/CanvasText, which only resolve to a high-contrast
+       palette under forced-colors. In an ordinary Teams iframe they fall back
+       to white/black, silently turning High Contrast into a light theme. */
+    const hc = await page.evaluate(() => {
+      const cs = getComputedStyle(document.body);
+      return { bg: cs.backgroundColor, fg: cs.color };
+    });
+    check('sdk', 'contrast ground is truly black', hc.bg === 'rgb(0, 0, 0)', hc.bg);
+    check('sdk', 'contrast text is truly white', hc.fg === 'rgb(255, 255, 255)', hc.fg);
+
     await page.evaluate(() => window.__teamsStub.themeHandler('dark'));
 
     // Internal links carry the hosted marker.

@@ -234,26 +234,42 @@
 /* ────────────────────────────────────────────────────────────────────────
    3. .teams-theme-contrast — high contrast.
 
-   Strategy: collapse every neutral to Canvas/CanvasText, every accent to
-   LinkText/Highlight, kill shadows and decorative gradients outright, and
+   Strategy: collapse every neutral to var(--hc-canvas)/var(--hc-text), every accent to
+   var(--hc-link)/var(--hc-highlight), kill shadows and decorative gradients outright, and
    restore a visible border on every surface that used to rely on a shadow
-   for separation. System colour keywords (not literal #000/#fff) so this
-   tracks whatever palette the host's own high-contrast theme actually
-   uses, per the brief.
+   for separation.
+
+   The palette goes through --hc-* indirection rather than naming system
+   colour keywords directly. Canvas/CanvasText only resolve to a real
+   high-contrast palette when the UA is in forced-colors mode; inside an
+   ordinary Teams iframe they fall back to plain white/black, which turned
+   this theme into a light one - the opposite of what a user who selected
+   Teams' High Contrast theme asked for. So the defaults below are the
+   Windows High Contrast Black values, and the forced-colors block hands
+   control back to the real system colours when the OS genuinely is in that
+   mode.
    ──────────────────────────────────────────────────────────────────────── */
 .is-teams.teams-theme-contrast{
-  --bg:Canvas; --surface:Canvas; --tint:Canvas; --wash:Canvas;
-  --ink:CanvasText; --body:CanvasText; --muted:CanvasText;
-  --line:CanvasText; --rule:CanvasText;
+  /* Windows High Contrast Black defaults; overridden below when the UA
+     really is in forced-colors mode. */
+  --hc-canvas:#000000;
+  --hc-text:#FFFFFF;
+  --hc-link:#FFFF00;
+  --hc-highlight:#1AEBFF;
+  --hc-highlight-text:#000000;
 
-  --brand:LinkText; --brand-ink:LinkText; --brand-soft:Highlight;
+  --bg:var(--hc-canvas); --surface:var(--hc-canvas); --tint:var(--hc-canvas); --wash:var(--hc-canvas);
+  --ink:var(--hc-text); --body:var(--hc-text); --muted:var(--hc-text);
+  --line:var(--hc-text); --rule:var(--hc-text);
 
-  --sky-base:LinkText;    --sky-tint:Canvas;    --sky-ink:CanvasText;
-  --indigo-base:LinkText; --indigo-tint:Canvas; --indigo-ink:CanvasText;
-  --violet-base:LinkText; --violet-tint:Canvas; --violet-ink:CanvasText;
-  --amber-base:LinkText;  --amber-tint:Canvas;  --amber-ink:CanvasText;
-  --coral-base:LinkText;  --coral-tint:Canvas;  --coral-ink:CanvasText;
-  --mint-base:LinkText;   --mint-tint:Canvas;   --mint-ink:CanvasText;
+  --brand:var(--hc-link); --brand-ink:var(--hc-link); --brand-soft:var(--hc-highlight);
+
+  --sky-base:var(--hc-link);    --sky-tint:var(--hc-canvas);    --sky-ink:var(--hc-text);
+  --indigo-base:var(--hc-link); --indigo-tint:var(--hc-canvas); --indigo-ink:var(--hc-text);
+  --violet-base:var(--hc-link); --violet-tint:var(--hc-canvas); --violet-ink:var(--hc-text);
+  --amber-base:var(--hc-link);  --amber-tint:var(--hc-canvas);  --amber-ink:var(--hc-text);
+  --coral-base:var(--hc-link);  --coral-tint:var(--hc-canvas);  --coral-ink:var(--hc-text);
+  --mint-base:var(--hc-link);   --mint-tint:var(--hc-canvas);   --mint-ink:var(--hc-text);
 
   --sh-1:none; --sh-2:none;
 }
@@ -267,20 +283,20 @@
    the specific component rules that must win inside it (equal-specificity
    ties resolve by source order). */
 
-.is-teams.teams-theme-contrast .tag{ border:1px solid CanvasText; }
+.is-teams.teams-theme-contrast .tag{ border:1px solid var(--hc-text); }
 .is-teams.teams-theme-contrast .tag::before{ opacity:1; }
-.is-teams.teams-theme-contrast .fact-icon{ border:1px solid CanvasText; }
+.is-teams.teams-theme-contrast .fact-icon{ border:1px solid var(--hc-text); }
 
 /* .banner is an aurora gradient over var(--deep) with hardcoded white/pale
    copy (banner-name #FFFFFF, banner-lede #DDE6F8, slide-title #FFFFFF,
    etc. — none of it token-driven, because in every other theme this panel
-   stays permanently dark). Flipping --bg to Canvas without addressing this
-   would make the copy unreadable, so: flatten the panel to Canvas, drop
+   stays permanently dark). Flipping --bg to var(--hc-canvas) without addressing this
+   would make the copy unreadable, so: flatten the panel to var(--hc-canvas), drop
    every decorative gradient/blob/star-field, and force every descendant's
-   text back to CanvasText in one net rather than hunting each hardcoded
+   text back to var(--hc-text) in one net rather than hunting each hardcoded
    colour individually. */
 .is-teams.teams-theme-contrast .banner{
-  background:Canvas; border:2px solid CanvasText;
+  background:var(--hc-canvas); border:2px solid var(--hc-text);
 }
 .is-teams.teams-theme-contrast .banner::before,
 .is-teams.teams-theme-contrast .banner::after,
@@ -289,64 +305,64 @@
 .is-teams.teams-theme-contrast .banner-portrait::after{ display:none; }
 .is-teams.teams-theme-contrast .banner-copy,
 .is-teams.teams-theme-contrast .banner-copy *{
-  color:CanvasText; text-shadow:none;
+  color:var(--hc-text); text-shadow:none;
 }
 .is-teams.teams-theme-contrast .banner-dots button{
-  background:Canvas; border:1px solid CanvasText;
+  background:var(--hc-canvas); border:1px solid var(--hc-text);
 }
-.is-teams.teams-theme-contrast .banner-dots button[aria-selected="true"]{ background:Highlight; }
+.is-teams.teams-theme-contrast .banner-dots button[aria-selected="true"]{ background:var(--hc-highlight); }
 
 /* Buttons: .btn/.btn-ghost-inv/.btn-signal/.nav-link[aria-current] all
    hardcode a literal text or border colour (#FFFFFF, #33101C,
    rgba(255,255,255,.35)) on top of a token background, so the background
-   alone flipping to LinkText/Highlight isn't enough — pair each with a
+   alone flipping to var(--hc-link)/var(--hc-highlight) isn't enough — pair each with a
    colour that's actually legible against it. */
 .is-teams.teams-theme-contrast .btn{
-  background:Highlight; color:HighlightText; border:1px solid CanvasText; box-shadow:none;
+  background:var(--hc-highlight); color:var(--hc-highlight-text); border:1px solid var(--hc-text); box-shadow:none;
 }
 .is-teams.teams-theme-contrast .btn-ghost{
-  background:Canvas; color:CanvasText; border-color:CanvasText;
+  background:var(--hc-canvas); color:var(--hc-text); border-color:var(--hc-text);
 }
 .is-teams.teams-theme-contrast .btn-ghost-inv{
-  background:Canvas; color:LinkText; border-color:CanvasText;
+  background:var(--hc-canvas); color:var(--hc-link); border-color:var(--hc-text);
 }
 .is-teams.teams-theme-contrast .btn-signal{
-  background:Highlight; color:HighlightText; border:1px solid CanvasText; box-shadow:none;
+  background:var(--hc-highlight); color:var(--hc-highlight-text); border:1px solid var(--hc-text); box-shadow:none;
 }
 .is-teams.teams-theme-contrast .nav-link[aria-current="page"]{
-  background:Highlight; color:HighlightText;
+  background:var(--hc-highlight); color:var(--hc-highlight-text);
 }
-.is-teams.teams-theme-contrast .nav-bar{ background:Canvas; }
+.is-teams.teams-theme-contrast .nav-bar{ background:var(--hc-canvas); }
 .is-teams.teams-theme-contrast .nav-avatar{
-  background:Canvas; border:2px solid CanvasText; color:CanvasText; box-shadow:none;
+  background:var(--hc-canvas); border:2px solid var(--hc-text); color:var(--hc-text); box-shadow:none;
 }
 
 /* .invert (site-footer) and its children hardcode #DCE6F8 / #FFFFFF /
    #A9BADA / #93A3C2 throughout, all sized for a permanently-dark ground —
    same situation as the banner copy, smaller blast radius. */
 .is-teams.teams-theme-contrast .invert{
-  color:CanvasText; background:Canvas; border-top:2px solid CanvasText;
+  color:var(--hc-text); background:var(--hc-canvas); border-top:2px solid var(--hc-text);
 }
 .is-teams.teams-theme-contrast .invert .h1,
-.is-teams.teams-theme-contrast .invert .h2{ color:CanvasText; }
-.is-teams.teams-theme-contrast .contact-list dt{ color:CanvasText; }
+.is-teams.teams-theme-contrast .invert .h2{ color:var(--hc-text); }
+.is-teams.teams-theme-contrast .contact-list dt{ color:var(--hc-text); }
 .is-teams.teams-theme-contrast .contact-card{
-  background:Canvas; border-color:CanvasText;
+  background:var(--hc-canvas); border-color:var(--hc-text);
 }
 .is-teams.teams-theme-contrast .footnote{
-  color:CanvasText; border-top-color:CanvasText;
+  color:var(--hc-text); border-top-color:var(--hc-text);
 }
-.is-teams.teams-theme-contrast .footnote a{ color:LinkText; }
+.is-teams.teams-theme-contrast .footnote a{ color:var(--hc-link); }
 
-.is-teams.teams-theme-contrast ::selection{ background:Highlight; color:HighlightText; }
+.is-teams.teams-theme-contrast ::selection{ background:var(--hc-highlight); color:var(--hc-highlight-text); }
 
 /* Focus visibility matters most in high contrast. The token-driven
-   3px solid var(--brand) outline already resolves to LinkText here, but
-   Highlight reads as a more deliberate "this is focus, not a link" signal
+   3px solid var(--brand) outline already resolves to var(--hc-link) here, but
+   var(--hc-highlight) reads as a more deliberate "this is focus, not a link" signal
    and is the idiomatic choice for forced-colours contexts. */
 .is-teams.teams-theme-contrast a:focus-visible,
 .is-teams.teams-theme-contrast button:focus-visible{
-  outline:3px solid Highlight; outline-offset:3px;
+  outline:3px solid var(--hc-highlight); outline-offset:3px;
 }
 
 /* Deliberately left alone in contrast mode: the hand-built project-mockup
@@ -359,6 +375,22 @@
 
 
 /* ────────────────────────────────────────────────────────────────────────
+
+/* When the OS is genuinely in forced-colors mode the browser substitutes its
+   own palette anyway; defer to it so we track the user's actual theme rather
+   than assuming High Contrast Black. */
+@media (forced-colors: active){
+  .is-teams.teams-theme-contrast,
+  .is-teams.teams-theme-default,
+  .is-teams.teams-theme-dark{
+    --hc-canvas:Canvas;
+    --hc-text:CanvasText;
+    --hc-link:LinkText;
+    --hc-highlight:Highlight;
+    --hc-highlight-text:HighlightText;
+  }
+}
+
    4. MOTION — respect prefers-reduced-motion regardless of Teams theme.
 
    The page's own inline <style> already neutralises animations/transitions
