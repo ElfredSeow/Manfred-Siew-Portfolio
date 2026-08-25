@@ -374,8 +374,6 @@
    one individually was out of scope for a token-override pass. */
 
 
-/* ────────────────────────────────────────────────────────────────────────
-
 /* When the OS is genuinely in forced-colors mode the browser substitutes its
    own palette anyway; defer to it so we track the user's actual theme rather
    than assuming High Contrast Black. */
@@ -391,6 +389,8 @@
   }
 }
 
+
+/* ────────────────────────────────────────────────────────────────────────
    4. MOTION — respect prefers-reduced-motion regardless of Teams theme.
 
    The page's own inline <style> already neutralises animations/transitions
