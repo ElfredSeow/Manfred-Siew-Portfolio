@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Experience · Manfred Siew</title>
-<meta name="description" content="Trained in Aerospace Engineering, self-taught in software. The path from a Live2D animation start-up through Temasek Polytechnic and freelance Power Platform work to RAiD.">
+<title>Privacy · Manfred Siew</title>
+<meta name="description" content="How this portfolio handles data: what is collected (essentially nothing), which third parties are involved, and how to get in touch.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Manfred Siew">
-<meta property="og:title" content="Experience · Manfred Siew">
-<meta property="og:description" content="Trained in Aerospace Engineering, self-taught in software. The path from a Live2D animation start-up through Temasek Polytechnic and freelance Power Platform work to RAiD.">
-<meta property="og:url" content="https://manfred-siew.web.app/experience">
+<meta property="og:title" content="Privacy · Manfred Siew">
+<meta property="og:description" content="How this portfolio handles data: what is collected (essentially nothing), which third parties are involved, and how to get in touch.">
+<meta property="og:url" content="https://manfred-siew.web.app/privacy">
 <meta property="og:image" content="https://manfred-siew.web.app/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -180,6 +180,12 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
   .js [data-reveal]{ opacity:1; transform:none; }
   *{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; }
 }
+
+/* ── LEGAL PAGE (privacy / terms) ────────────────────────────────────────
+   No reveal-on-scroll classes are used on this page, so the reveal script
+   is intentionally omitted. .legal-stack just stacks the prose cards. */
+.legal-stack{ display:grid; gap:1.5rem; }
+.legal-updated{ margin-top:1rem; color:var(--muted); font-size:.875rem; }
 </style>
 
   <!-- Microsoft Teams personal tab: inert on the open web, activates only when hosted. -->
@@ -189,7 +195,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 
 <body>
 
-<a class="skip" href="#record">Skip to timeline</a>
+<a class="skip" href="#legal-content">Skip to content</a>
 
 <nav class="nav-dock" aria-label="Sections">
   <div class="nav-bar">
@@ -199,7 +205,7 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
       <a href="/" class="nav-link">Home</a>
       <a href="/work" class="nav-link">Work</a>
       <a href="/projects" class="nav-link">Projects</a>
-      <a href="/experience" class="nav-link" aria-current="page">Experience</a>
+      <a href="/experience" class="nav-link">Experience</a>
     </div>
     <a class="nav-icon" href="https://github.com/ElfredSeow" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
       <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
@@ -212,87 +218,112 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
 
 <section class="page-head">
   <div class="shell">
-    <div class="page-banner" data-reveal>
-      <p class="page-eyebrow">Experience</p>
-      <h1 class="page-title">The path so far.</h1>
+    <div class="page-banner">
+      <p class="page-eyebrow">Privacy</p>
+      <h1 class="page-title">Privacy policy.</h1>
       <p class="page-lede">
-        Trained in Aerospace Engineering. Self-taught in software. Two
-        disciplines, one page, and this is the order they arrived in.
+        How this portfolio handles data, in plain terms. There isn't
+        much to it, so this is short.
       </p>
     </div>
   </div>
 </section>
 
-<section class="origin-band">
+<section id="legal-content" class="record-band">
   <div class="shell shell-narrow">
-    <div class="card origin-card" data-reveal>
-      <p class="eyebrow">Where it started</p>
-      <h2 class="h2">Trained in Aerospace Engineering. Self-taught in software.</h2>
-      <p class="origin-note">
-        The formal half is Aerospace Engineering at Temasek Polytechnic, backed by
-        WorldSkills training at the Lufthansa Technical Training Center and an
-        Aircraft Maintenance qualification: work where a missed inspection is not
-        a bug report. The other half I taught myself: software development, tuning
-        Large Language Models, UI/UX design. The discipline came across intact:
-        read the manual, check the tolerance, sign your name to it. Data
-        analytics is the next thing I intend to learn the same way.
-      </p>
-    </div>
-  </div>
-</section>
+    <div class="legal-stack">
 
-<section id="record" class="record-band">
-  <div class="shell shell-narrow">
-    <div class="timeline">
-      <span class="tl-line" aria-hidden="true"></span>
-
-      <div class="card tl-item" data-hue="indigo" data-reveal>
-        <span class="tl-node" aria-hidden="true"></span>
-        <p class="num tl-date">Oct 2025 to Present · Singapore</p>
-        <h3 class="h3 tl-role">Forward Deployed Solution Architect (Intern)</h3>
-        <p class="tl-org on-indigo">RAiD (RSAF Agile innovation Digital)</p>
-        <p class="tl-desc">
-          Embedded with the units that own the problem, scoping what's actually
-          needed, then choosing the platform to match. Power Platform where
-          licensing and governance fit; React on Dataverse, or a full-stack
-          rebuild, where they don't. Plus AI agent work and the tooling the rest
-          of the team builds on.
+      <div class="card origin-card">
+        <p class="eyebrow">The short version</p>
+        <h2 class="h2">This site doesn't collect anything on its own.</h2>
+        <p class="origin-note">
+          This is a personal portfolio: static pages served from Firebase
+          Hosting. There is no backend, no database, no account system and
+          no forms to fill in. No page sets cookies, and none of the code
+          writes to <code class="num">localStorage</code> or
+          <code class="num">sessionStorage</code>. There is no analytics
+          script, no tracking pixel, and no advertising anywhere on the site.
         </p>
       </div>
 
-      <div class="card tl-item" data-hue="coral" data-reveal>
-        <span class="tl-node" aria-hidden="true"></span>
-        <p class="num tl-date">Dec 2024 to Oct 2025 · Singapore</p>
-        <h3 class="h3 tl-role">Software Engineer (Power Platform)</h3>
-        <p class="tl-org on-coral">Freelance</p>
-        <p class="tl-desc">
-          Leveraged low-code tools like PowerApps and Power Automate to develop
-          tailored automation solutions.
+      <div class="card origin-card">
+        <p class="eyebrow">What actually happens when you visit</p>
+        <h2 class="h2">Two things touch your data, because the page depends on them to render.</h2>
+        <p class="origin-note">
+          <b>Firebase Hosting</b> (a Google service) serves the files. Like
+          any web host, it keeps standard server request logs — IP address,
+          timestamp, requested path and browser user-agent — for operating
+          and securing the service. There is no separate analytics layer on
+          top of this; I don't see individual visits.
+        </p>
+        <p class="origin-note">
+          <b>Google Fonts.</b> The pages load Instrument Sans and IBM Plex
+          Mono from <span class="num">fonts.googleapis.com</span> and
+          <span class="num">fonts.gstatic.com</span>. Loading a webfont
+          means Google's font servers receive the visitor's IP address and
+          user-agent as part of serving those files, the same as any
+          external font or image request would.
+        </p>
+        <p class="origin-note">
+          That's the complete list of third parties. Nothing else is
+          contacted from any page.
         </p>
       </div>
 
-      <div class="card tl-item" data-hue="sky" data-reveal>
-        <span class="tl-node" aria-hidden="true"></span>
-        <p class="num tl-date">Dec 2023 to Present · Singapore</p>
-        <h3 class="h3 tl-role">PowerApp / Power Platform Developer</h3>
-        <p class="tl-org on-sky">Temasek Polytechnic</p>
-        <p class="tl-desc">
-          Self-taught PowerApps to automate admin work for various CCAs, enhancing
-          club efficiency.
+      <div class="card origin-card">
+        <p class="eyebrow">Inside Microsoft Teams</p>
+        <h2 class="h2">The Teams tab reads a theme colour and opens links. That's it.</h2>
+        <p class="origin-note">
+          If you're viewing this through the Teams personal tab, the page
+          also loads the Microsoft Teams JavaScript SDK from
+          <span class="num">res.cdn.office.net</span>. It is used for
+          exactly two things: reading which colour theme the Teams client
+          is in (default, dark or high contrast) so the page can match it,
+          and opening external links in your browser instead of trying to
+          navigate inside the Teams frame. The app requests no Teams
+          permissions, reads no user, chat, calendar or organisational
+          data, signs nobody in, and stores nothing about who is viewing
+          it. It is a read-only window onto the same public pages
+          described above.
         </p>
       </div>
 
-      <div class="card tl-item" data-hue="mint" data-reveal>
-        <span class="tl-node" aria-hidden="true"></span>
-        <p class="num tl-date">Apr 2021 to Jan 2023 · Singapore</p>
-        <h3 class="h3 tl-role">Freelance / Mini Start-Up</h3>
-        <p class="tl-org on-mint">Personal Company</p>
-        <p class="tl-desc">
-          Founded a business in the anime industry animating 2D models using Live2D
-          Cubism, building a portfolio with low-code platforms and practising SEO
-          strategies.
+      <div class="card origin-card">
+        <p class="eyebrow">No accounts, no sharing, no selling</p>
+        <h2 class="h2">There's nothing here to log into, and nothing to sell.</h2>
+        <p class="origin-note">
+          There is no sign-in anywhere on this site, so there are no
+          passwords or profiles to worry about. I don't run advertising,
+          retargeting or any cross-site tracking here, and there is no
+          data collected on this site to share or sell to anyone. If a
+          future version of the site ever needs a contact form or
+          something similar that changes this, this page will say so
+          before it ships.
         </p>
       </div>
+
+      <div class="card origin-card">
+        <p class="eyebrow">Children's privacy</p>
+        <h2 class="h2">Nothing here is aimed at children, and none of this changes if you are one.</h2>
+        <p class="origin-note">
+          This is a professional portfolio, not a service aimed at
+          children. Since the site collects nothing of its own regardless
+          of who is visiting, there is no age-specific handling to
+          describe beyond what is already stated above.
+        </p>
+      </div>
+
+      <div class="card origin-card">
+        <p class="eyebrow">Questions</p>
+        <h2 class="h2">Ask me directly.</h2>
+        <p class="origin-note">
+          If anything here is unclear, or you'd like more detail on any of
+          the above, email
+          <a class="link-inline" href="mailto:Manfredsiew@outlook.com">Manfredsiew@outlook.com</a>.
+        </p>
+        <p class="legal-updated">Last updated 25 August 2026.</p>
+      </div>
+
     </div>
   </div>
 </section>
@@ -325,35 +356,6 @@ a:focus-visible,button:focus-visible{ outline:3px solid var(--brand); outline-of
     </p>
   </div>
 </footer>
-
-<script>
-(function(){
-  document.documentElement.classList.add('js');
-  var els = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
-  if (!('IntersectionObserver' in window) || !els.length) {
-    els.forEach(function(el){ el.classList.add('is-visible'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if (entry.isIntersecting){
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: .1 });
-  els.forEach(function(el){ io.observe(el); });
-  // Hard fallback: guarantee every section is visible shortly after load,
-  // regardless of scroll position or how a tool (screenshot, print, crawler)
-  // captured the page. The reveal is a decorative bonus for a human who
-  // scrolls at human pace within this window; it must never be the only
-  // path to content actually appearing.
-  setTimeout(function(){
-    els.forEach(function(el){ el.classList.add('is-visible'); });
-    io.disconnect();
-  }, 1400);
-})();
-</script>
 
 </body>
 </html>
