@@ -7,6 +7,10 @@
 //   node scripts/build-teams-package.mjs            build dist/teams/manfred-siew-teams-app.zip
 //   node scripts/build-teams-package.mjs --check     validate only, do not write the zip
 //   node scripts/build-teams-package.mjs -c          same as --check
+//   node scripts/build-teams-package.mjs --host H    package for host H
+//                                                    (e.g. a Firebase preview
+//                                                    channel); the on-disk
+//                                                    manifest is not modified
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join, basename, resolve } from 'node:path';
@@ -298,9 +302,50 @@ function loadManifest(manifestPath) {
   }
 }
 
+/* Repoint every hosted URL at a different host, in memory only.
+
+   Firebase preview channels serve the site at a throwaway subdomain, so a
+   package built for testing must point there instead of at production. The
+   on-disk manifest is never touched: only the bytes that go into this zip
+   change, and validDomains gains the preview host so in-tab navigation is
+   still allowed. */
+function repointHost(manifest, host) {
+  const clone = JSON.parse(JSON.stringify(manifest));
+  const swap = (url) => {
+    try {
+      const u = new URL(url);
+      u.host = host;
+      return u.toString();
+    } catch {
+      return url;
+    }
+  };
+
+  for (const tab of clone.staticTabs || []) {
+    if (tab.contentUrl) tab.contentUrl = swap(tab.contentUrl);
+    if (tab.websiteUrl) tab.websiteUrl = swap(tab.websiteUrl);
+  }
+  clone.validDomains = [...new Set([...(clone.validDomains || []), host])];
+  return clone;
+}
+
 function main() {
   const args = process.argv.slice(2);
   const checkOnly = args.includes('--check') || args.includes('-c');
+
+  const hostFlag = args.findIndex((a) => a === '--host');
+  const hostInline = args.find((a) => a.startsWith('--host='));
+  let host = null;
+  if (hostInline) host = hostInline.slice('--host='.length);
+  else if (hostFlag !== -1) host = args[hostFlag + 1];
+  if (host !== null && (!host || host.startsWith('-'))) {
+    console.error('--host requires a hostname, e.g. --host my-project--preview-ab12cd.web.app');
+    process.exit(1);
+  }
+  if (host && /[:/]/.test(host)) {
+    console.error(`--host takes a bare hostname, not a URL or path: got "${host}"`);
+    process.exit(1);
+  }
 
   const { manifest, raw, parseError } = loadManifest(MANIFEST_PATH);
 
@@ -322,18 +367,37 @@ function main() {
 
   console.log(`Teams manifest OK (id=${manifest.id}, version=${manifest.version})`);
 
+  /* Validate the real manifest first (above), then repoint - so a bad
+     manifest is reported as a manifest problem, not a --host problem. */
+  const packaged = host ? repointHost(manifest, host) : manifest;
+  const packagedRaw = host
+    ? Buffer.from(`${JSON.stringify(packaged, null, 2)}\n`, 'utf8')
+    : raw;
+
+  if (host) {
+    console.log(`\nRepointed at ${host} for this package only.`);
+    console.log('teams/manifest.json on disk is unchanged.');
+    for (const tab of packaged.staticTabs) console.log(`  ${tab.entityId} -> ${tab.contentUrl}`);
+    const hostErrors = validateManifest(packaged, TEAMS_DIR);
+    if (hostErrors.length > 0) {
+      console.error('\nRepointed manifest FAILED validation:\n');
+      for (const err of hostErrors) console.error(`  - ${err}`);
+      process.exit(1);
+    }
+  }
+
   if (checkOnly) {
     console.log('--check: validation only, zip not written.');
     process.exit(0);
   }
 
-  const colorIconPath = join(TEAMS_DIR, manifest.icons.color);
-  const outlineIconPath = join(TEAMS_DIR, manifest.icons.outline);
+  const colorIconPath = join(TEAMS_DIR, packaged.icons.color);
+  const outlineIconPath = join(TEAMS_DIR, packaged.icons.outline);
 
   const entries = [
-    { name: 'manifest.json', data: raw },
-    { name: basename(manifest.icons.color), data: readFileSync(colorIconPath) },
-    { name: basename(manifest.icons.outline), data: readFileSync(outlineIconPath) },
+    { name: 'manifest.json', data: packagedRaw },
+    { name: basename(packaged.icons.color), data: readFileSync(colorIconPath) },
+    { name: basename(packaged.icons.outline), data: readFileSync(outlineIconPath) },
   ];
 
   const { buffer, summary } = buildZipBuffer(entries);

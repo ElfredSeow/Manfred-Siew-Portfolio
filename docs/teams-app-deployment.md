@@ -68,12 +68,49 @@ required; Teams rejects packages that bury the manifest in a folder.
 
 ## Deploy the site
 
+The Teams tab renders whatever is live at the manifest's URLs, so the site has
+to be deployed **before** sideloading or the tab loads nothing.
+
+### Try it without touching the live site
+
+Use a preview channel. It publishes to a throwaway subdomain and leaves the
+production version completely alone.
+
 ```bash
-npm run deploy               # firebase deploy --only hosting
-npm run preview              # ephemeral preview channel, expires in 7 days
+npm run preview              # prints a URL like
+                             # https://manfred-siew--preview-ab12cd.web.app
 ```
 
-Deploy the site **before** sideloading, so the URLs in the manifest resolve.
+Then build a package pointed at that channel:
+
+```bash
+npm run build:teams
+node scripts/build-teams-package.mjs --host manfred-siew--preview-ab12cd.web.app
+```
+
+`--host` rewrites every `contentUrl` / `websiteUrl` and adds the host to
+`validDomains` **in the packaged copy only** — `teams/manifest.json` on disk is
+not modified, and the repointed manifest is re-validated before it is zipped.
+Sideload that zip and the whole app runs against the preview channel.
+
+Preview channels expire (7 days with the `preview` script). When one expires
+the tab stops loading, which is the intended failure mode for a test build.
+
+Bump `version` in the manifest, or use a separate `id`, if you want the preview
+build installed alongside the production one rather than replacing it.
+
+### Publish for real
+
+```bash
+npm run deploy               # firebase deploy --only hosting
+```
+
+This overwrites the live site. Note that it also ships the changes this work
+introduced to every ordinary visitor, not just Teams users: the CSP header, and
+the `teams-tab.css` / `teams-tab.js` files each page now references. Both are
+designed to be inert outside Teams — the verification suite asserts exactly
+that — but it is still a production change, so prefer the preview channel until
+you are happy with it.
 
 ---
 
@@ -218,7 +255,7 @@ smooth edges and deterministic across runs. Teams icon rules it respects:
 
 | Change | What to do |
 | --- | --- |
-| Page content, styling, images | `npm run deploy`. Teams picks it up live. |
+| Page content, styling, images | `npm run deploy` (or `npm run preview` to stage it first). Teams picks it up live. |
 | Tab list, app name, description, icons, URLs | Bump `version` in `teams/manifest.json`, `npm run build:teams`, re-upload the zip. |
 
 Bump `version` (semver) on every manifest change — Teams uses it to detect an
