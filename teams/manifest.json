@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.20/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.20",
+  "version": "1.0.0",
+  "id": "edfbd296-2d16-47ce-8ea0-e4703d059030",
+  "packageName": "app.web.manfredsiew.portfolio",
+  "developer": {
+    "name": "Manfred Siew",
+    "websiteUrl": "https://manfred-siew.web.app",
+    "privacyUrl": "https://manfred-siew.web.app/privacy",
+    "termsOfUseUrl": "https://manfred-siew.web.app/terms"
+  },
+  "name": {
+    "short": "Manfred Siew",
+    "full": "Manfred Siew - Aerospace Engineering & Software Development"
+  },
+  "description": {
+    "short": "Portfolio: work, projects and experience of Manfred Siew.",
+    "full": "The portfolio of Manfred Siew, trained in Aerospace Engineering and self-taught in software development, currently a Forward Deployed Solution Architect (Intern) at RAiD (RSAF Agile innovation Digital).\n\nThis app pins the portfolio into Teams as a personal tab, with four pages:\n\n- Home - introduction, featured work and a snapshot of skills and tools.\n- Work - the professional track record, role by role.\n- Projects - the build log: simulation and decision support, scaling systems, enterprise applications, process automation, developer enablement and R&D, competitions and credentials.\n- Experience - education, certifications and the wider background.\n\nThe app is read-only. It presents published portfolio content and nothing else: it requests no permissions, reads no Teams or organisational data, signs nobody in, and stores nothing about the viewer."
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "accentColor": "#3E63E0",
+  "staticTabs": [
+    {
+      "entityId": "home",
+      "name": "Home",
+      "contentUrl": "https://manfred-siew.web.app/?in=teams",
+      "websiteUrl": "https://manfred-siew.web.app/",
+      "scopes": ["personal"],
+      "context": ["personalTab"]
+    },
+    {
+      "entityId": "work",
+      "name": "Work",
+      "contentUrl": "https://manfred-siew.web.app/work?in=teams",
+      "websiteUrl": "https://manfred-siew.web.app/work",
+      "scopes": ["personal"],
+      "context": ["personalTab"]
+    },
+    {
+      "entityId": "projects",
+      "name": "Projects",
+      "contentUrl": "https://manfred-siew.web.app/projects?in=teams",
+      "websiteUrl": "https://manfred-siew.web.app/projects",
+      "scopes": ["personal"],
+      "context": ["personalTab"]
+    },
+    {
+      "entityId": "experience",
+      "name": "Experience",
+      "contentUrl": "https://manfred-siew.web.app/experience?in=teams",
+      "websiteUrl": "https://manfred-siew.web.app/experience",
+      "scopes": ["personal"],
+      "context": ["personalTab"]
+    }
+  ],
+  "validDomains": [
+    "manfred-siew.web.app",
+    "manfred-siew.firebaseapp.com"
+  ],
+  "showLoadingIndicator": false,
+  "isFullScreen": false
+}

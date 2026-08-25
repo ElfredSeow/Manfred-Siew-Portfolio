@@ -6,6 +6,10 @@
   "scripts": {
     "serve": "firebase emulators:start --only hosting",
     "deploy": "firebase deploy --only hosting",
-    "preview": "firebase hosting:channel:deploy preview --expires 7d"
+    "preview": "firebase hosting:channel:deploy preview --expires 7d",
+    "build:teams-icons": "node scripts/build-teams-icons.mjs",
+    "build:teams": "node scripts/build-teams-icons.mjs && node scripts/build-teams-package.mjs",
+    "check:teams": "node scripts/build-teams-package.mjs --check",
+    "verify:teams": "node scripts/verify-teams-tab.mjs"
   }
 }
