@@ -38,6 +38,7 @@ function check(group, name, pass, detail = '') {
   results.push({ group, name, pass, detail });
   if (!pass) failed++;
 }
+const progress = (msg) => process.stderr.write(`  ... ${msg}\n`);
 
 /* --- Firebase-equivalent static server ---------------------------------- */
 function hostingHeaders() {
@@ -190,6 +191,7 @@ try {
 
   /* 3. Plain web: total no-op -------------------------------------------- */
   {
+    progress('plain web');
     const { ctx, page, errors } = await newPage(browser, { mode: 'web' });
     await page.goto(`${base}/`, { waitUntil: 'networkidle' });
     const c = await cls(page);
@@ -210,6 +212,7 @@ try {
 
   /* 4. Hosted, SDK unreachable: must degrade ------------------------------ */
   {
+    progress('hosted, SDK blocked');
     const { ctx, page, errors } = await newPage(browser, { mode: 'nosdk' });
     await page.goto(`${base}/?in=teams`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(
@@ -228,6 +231,7 @@ try {
 
   /* 5. Hosted with SDK: theme, links, notify ------------------------------ */
   {
+    progress('hosted, SDK responding');
     const { ctx, page, errors } = await newPage(browser, { mode: 'sdk', theme: 'dark' });
     await page.goto(`${base}/?in=teams`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(
@@ -278,15 +282,20 @@ try {
   }
 
   /* 6. Every page, both themes, narrow + wide: no horizontal overflow ----- */
-  for (const vp of [{ width: 360, height: 720 }, { width: 1280, height: 800 }]) {
-    for (const theme of ['default', 'dark', 'contrast']) {
-      const { ctx, page } = await newPage(browser, { mode: 'sdk', theme, viewport: vp });
+  const VIEWPORTS = [{ width: 360, height: 720 }, { width: 1280, height: 800 }];
+  for (const theme of ['default', 'dark', 'contrast']) {
+    const { ctx, page } = await newPage(browser, { mode: 'sdk', theme });
+    page.setDefaultTimeout(20000);
+    for (const vp of VIEWPORTS) {
+      await page.setViewportSize(vp);
       for (const p of PAGES) {
-        await page.goto(`${base}${p}?in=teams`, { waitUntil: 'domcontentloaded' });
-        await page.waitForFunction(
+        progress(`layout ${theme} @${vp.width} ${p}`);
+        await page.goto(`${base}${p}?in=teams`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+        const settled = await page.waitForFunction(
           () => document.documentElement.classList.contains('is-teams-sdk'),
-          null, { timeout: 15000 }
-        ).catch(() => {});
+          null, { timeout: 10000 }
+        ).then(() => true).catch(() => false);
+        check('layout', `${p} @${vp.width}px ${theme}: adapter active`, settled);
         const over = await page.evaluate(() =>
           Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
         check('layout', `${p} @${vp.width}px ${theme}: no h-overflow`, over <= 1, `${over}px`);
@@ -296,8 +305,8 @@ try {
         });
         check('layout', `${p} @${vp.width}px ${theme}: content visible`, visible);
       }
-      await ctx.close();
     }
+    await ctx.close();
   }
 } finally {
   await browser.close();
