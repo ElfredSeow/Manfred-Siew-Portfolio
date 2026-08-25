@@ -40,6 +40,22 @@ function check(group, name, pass, detail = '') {
 }
 const progress = (msg) => process.stderr.write(`  ... ${msg}\n`);
 
+/* Same-origin asset failures are ours and fail the run. External ones (fonts,
+   CDNs) depend on the network the harness happens to run on, so they are
+   surfaced as notes instead of turning the suite red. */
+const notes = [];
+function reportNet(group, failures, pageUrl) {
+  let origin;
+  try { origin = new URL(pageUrl).origin; } catch { origin = ''; }
+  const own = failures.filter((f) => f.url.startsWith(origin));
+  const external = failures.filter((f) => !f.url.startsWith(origin));
+  check(group, 'no same-origin asset failures', own.length === 0,
+    own.slice(0, 3).map((f) => `${f.url} (${f.error})`).join(' | '));
+  for (const f of external) {
+    notes.push(`${group}: external resource unreachable in this environment - ${new URL(f.url).host} (${f.error})`);
+  }
+}
+
 /* --- Firebase-equivalent static server ---------------------------------- */
 function hostingHeaders() {
   const cfg = JSON.parse(readFileSync(path.join(ROOT, 'firebase.json'), 'utf8'));
@@ -106,9 +122,23 @@ const DISABLE_SRI = `Object.defineProperty(HTMLScriptElement.prototype, 'integri
 async function newPage(browser, { mode, theme = 'default', viewport }) {
   const ctx = await browser.newContext({ viewport: viewport || { width: 1280, height: 800 } });
   const page = await ctx.newPage();
+
+  /* Separate genuine faults from environmental ones. A sandbox that cannot
+     reach fonts.googleapis.com must not be reported as a site defect - but a
+     same-origin asset failing to load genuinely is one, and so is any JS
+     exception. The generic "Failed to load resource" console line carries no
+     URL, so classification comes from requestfailed instead. */
   const errors = [];
-  page.on('pageerror', (e) => errors.push(String(e)));
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  const netFailures = [];
+  page.on('pageerror', (e) => errors.push(`pageerror: ${String(e)}`));
+  page.on('console', (m) => {
+    if (m.type() !== 'error') return;
+    if (/Failed to load resource/i.test(m.text())) return;   // see netFailures
+    errors.push(m.text());
+  });
+  page.on('requestfailed', (r) => {
+    netFailures.push({ url: r.url(), error: r.failure()?.errorText || 'unknown' });
+  });
 
   if (mode === 'sdk') {
     await page.addInitScript(DISABLE_SRI);
@@ -118,7 +148,7 @@ async function newPage(browser, { mode, theme = 'default', viewport }) {
     // web + nosdk: the CDN must never be reached.
     await page.route(SDK_HOST_GLOB, (route) => route.abort());
   }
-  return { ctx, page, errors };
+  return { ctx, page, errors, netFailures };
 }
 
 const cls = (page) => page.evaluate(() => document.documentElement.className);
@@ -192,7 +222,7 @@ try {
   /* 3. Plain web: total no-op -------------------------------------------- */
   {
     progress('plain web');
-    const { ctx, page, errors } = await newPage(browser, { mode: 'web' });
+    const { ctx, page, errors, netFailures } = await newPage(browser, { mode: 'web' });
     await page.goto(`${base}/`, { waitUntil: 'networkidle' });
     const c = await cls(page);
     check('web', 'no is-teams class', !c.includes('is-teams'), c);
@@ -206,14 +236,15 @@ try {
       return a ? a.href : '';
     });
     check('web', 'internal links not rewritten', !href.includes('in=teams'), href);
-    check('web', 'no console/page errors', errors.length === 0, errors.slice(0, 2).join(' | '));
+    check('web', 'no JS errors', errors.length === 0, errors.slice(0, 2).join(' | '));
+    reportNet('web', netFailures, page.url());
     await ctx.close();
   }
 
   /* 4. Hosted, SDK unreachable: must degrade ------------------------------ */
   {
     progress('hosted, SDK blocked');
-    const { ctx, page, errors } = await newPage(browser, { mode: 'nosdk' });
+    const { ctx, page, errors, netFailures } = await newPage(browser, { mode: 'nosdk' });
     await page.goto(`${base}/?in=teams`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(
       () => document.documentElement.classList.contains('is-teams-nosdk'),
@@ -224,15 +255,16 @@ try {
     check('nosdk', 'settles into is-teams-nosdk', c.includes('is-teams-nosdk'), c);
     check('nosdk', 'a theme class is set', /teams-theme-(default|dark|contrast)/.test(c), c);
     check('nosdk', 'page still rendered', (await page.locator('main').count()) > 0);
-    check('nosdk', 'no unhandled page errors', errors.filter(e => !/res\.cdn\.office\.net|ERR_FAILED|Failed to load/i.test(e)).length === 0,
-      errors.slice(0, 2).join(' | '));
+    check('nosdk', 'no JS errors', errors.length === 0, errors.slice(0, 2).join(' | '));
+    // The blocked SDK request is the point of this scenario, so exclude it.
+    reportNet('nosdk', netFailures.filter((f) => !/res\.cdn\.office\.net/.test(f.url)), page.url());
     await ctx.close();
   }
 
   /* 5. Hosted with SDK: theme, links, notify ------------------------------ */
   {
     progress('hosted, SDK responding');
-    const { ctx, page, errors } = await newPage(browser, { mode: 'sdk', theme: 'dark' });
+    const { ctx, page, errors, netFailures } = await newPage(browser, { mode: 'sdk', theme: 'dark' });
     await page.goto(`${base}/?in=teams`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(
       () => document.documentElement.classList.contains('is-teams-sdk'),
@@ -277,7 +309,8 @@ try {
     check('sdk', 'external link routed via app.openLink',
       Array.isArray(opened) && opened.length === 1, JSON.stringify(opened));
     check('sdk', 'stayed on the tab URL', new URL(page.url()).pathname === '/', page.url());
-    check('sdk', 'no console/page errors', errors.length === 0, errors.slice(0, 2).join(' | '));
+    check('sdk', 'no JS errors', errors.length === 0, errors.slice(0, 2).join(' | '));
+    reportNet('sdk', netFailures, page.url());
     await ctx.close();
   }
 
@@ -318,6 +351,10 @@ let group = '';
 for (const r of results) {
   if (r.group !== group) { group = r.group; console.log(`\n${group}`); }
   console.log(`  ${r.pass ? 'PASS' : 'FAIL'}  ${r.name}${r.detail && !r.pass ? `  -> ${r.detail}` : ''}`);
+}
+if (notes.length) {
+  console.log('\nnotes (environmental, not failures)');
+  for (const n of [...new Set(notes)]) console.log(`  ${n}`);
 }
 console.log(`\n${results.length - failed}/${results.length} checks passed`);
 process.exit(failed ? 1 : 0);
