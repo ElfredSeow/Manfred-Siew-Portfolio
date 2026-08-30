@@ -4867,17 +4867,38 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
 
     target.open = true;
     target.scrollIntoView({ block: 'center' });
-    var landedY = window.scrollY;
+
+    // The html rule further up sets scroll-behavior:smooth, so the
+    // scrollIntoView above kicks off an animation and returns immediately —
+    // scrollY right now, or at any instant before the animation finishes,
+    // reflects that animation in progress rather than the visitor. It can't
+    // be used to tell "the page is still moving from our own call" apart
+    // from "the visitor grabbed the page", so watch for real input instead.
+    var userMoved = false;
+    var markMoved = function () { userMoved = true; };
+    var moveEvents = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+    var watchForUserScroll = function () {
+      moveEvents.forEach(function (ev) {
+        window.addEventListener(ev, markMoved, { passive: true });
+      });
+    };
+    var stopWatching = function () {
+      moveEvents.forEach(function (ev) {
+        window.removeEventListener(ev, markMoved, { passive: true });
+      });
+    };
+    watchForUserScroll();
 
     // Screenshots and hand-built mocks in the row have no height until they
     // load, so the scroll above can land short on image-heavy rows. Correct
     // it once the images have settled — but only if the visitor hasn't
-    // scrolled on their own since we landed; don't fight them.
+    // moved the page themselves in the meantime; don't fight them.
     var corrected = false;
     var correct = function () {
       if (corrected) return;
       corrected = true;
-      if (Math.abs(window.scrollY - landedY) > 4) return;
+      stopWatching();
+      if (userMoved) return;
       target.scrollIntoView({ block: 'center' });
     };
     var pending = 0;
