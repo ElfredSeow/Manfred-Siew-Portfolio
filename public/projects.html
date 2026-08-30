@@ -4826,20 +4826,81 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     updateNav();
   }
 
-  // A link from another page (/projects#grid) should land on an
-  // open row. Without this the visitor arrives at a collapsed summary and has to
-  // work out that the thing they clicked through for is behind another click.
+  // A link from another page (/projects#grid, or /projects?p=grid) should land
+  // on an open row. Without this the visitor arrives at a collapsed summary and
+  // has to work out that the thing they clicked through for is behind another
+  // click. The query param exists alongside the fragment because a fragment
+  // never reaches a server and only survives a redirect hop (LinkedIn's
+  // lnkd.in shortener, its in-app browser) if something deliberately carries
+  // it forward — nothing here does, so shared links use ?p= instead.
+
+  // Renaming a project's slug must not break links already shared with this
+  // id, so old ids get mapped forward here instead of just vanishing.
+  var slugAliases = { 'miles-mavis': 'mavis' };
+
+  // Membership check instead of feeding visitor-controlled text straight into
+  // a selector — a malformed ?p= or #fragment should fail closed, not throw.
+  var rowIds = {};
+  rows.forEach(function (r) { rowIds[r.id] = true; });
+
+  function resolveSlug() {
+    var slug = null;
+    try { slug = new URLSearchParams(location.search).get('p'); } catch (e) { slug = null; }
+    if (!slug && location.hash) slug = location.hash.replace(/^#/, '');
+    if (!slug) return null;
+    if (slugAliases.hasOwnProperty(slug)) slug = slugAliases[slug];
+    return rowIds.hasOwnProperty(slug) ? slug : null;
+  }
+
   function openFromHash() {
-    if (!location.hash) return;
-    var hash = location.hash === '#miles-mavis' ? '#mavis' : location.hash;
-    var target;
-    try { target = document.querySelector(hash); } catch (e) { return; }
-    if (target && target.tagName === 'DETAILS') {
-      target.open = true;
-      target.scrollIntoView({ block: 'center' });
+    var slug = resolveSlug();
+    if (!slug) return;
+    var target = document.getElementById(slug);
+    if (!target || target.tagName !== 'DETAILS') return;
+
+    // The row may be hidden by a leftover org/category filter from earlier in
+    // the visit — clear it the same way the reset control does, rather than
+    // re-deriving that logic here.
+    if (target.hidden) {
+      if (reset) { reset.click(); } else { org = 'all'; cat = 'all'; apply(); }
     }
+
+    target.open = true;
+    target.scrollIntoView({ block: 'center' });
+    var landedY = window.scrollY;
+
+    // Screenshots and hand-built mocks in the row have no height until they
+    // load, so the scroll above can land short on image-heavy rows. Correct
+    // it once the images have settled — but only if the visitor hasn't
+    // scrolled on their own since we landed; don't fight them.
+    var corrected = false;
+    var correct = function () {
+      if (corrected) return;
+      corrected = true;
+      if (Math.abs(window.scrollY - landedY) > 4) return;
+      target.scrollIntoView({ block: 'center' });
+    };
+    var pending = 0;
+    target.querySelectorAll('img').forEach(function (img) {
+      if (img.complete) return;
+      pending++;
+      var onSettle = function () {
+        pending--;
+        if (pending <= 0) correct();
+      };
+      img.addEventListener('load', onSettle);
+      img.addEventListener('error', onSettle);
+    });
+    // Backstop for WebViews that don't fire load reliably, or rows whose
+    // images were already cached and never trip the listeners above.
+    setTimeout(correct, 600);
+
+    // Canonicalise to ?p=<slug> (no fragment, tracking params dropped) so a
+    // re-share of the address bar carries a clean, durable link.
+    try { history.replaceState(null, '', location.pathname + '?p=' + slug); } catch (e) { /* restricted in some in-app WebViews */ }
   }
   window.addEventListener('hashchange', openFromHash);
+  window.addEventListener('popstate', openFromHash);
   openFromHash();
 })();
 </script>
