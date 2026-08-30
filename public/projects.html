@@ -4902,19 +4902,33 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
       target.scrollIntoView({ block: 'center' });
     };
     var pending = 0;
+    var settle = function () {
+      pending--;
+      if (pending <= 0) correct();
+    };
     target.querySelectorAll('img').forEach(function (img) {
       if (img.complete) return;
       pending++;
-      var onSettle = function () {
-        pending--;
-        if (pending <= 0) correct();
-      };
-      img.addEventListener('load', onSettle);
-      img.addEventListener('error', onSettle);
+      img.addEventListener('load', settle);
+      img.addEventListener('error', settle);
     });
-    // Backstop for WebViews that don't fire load reliably, or rows whose
-    // images were already cached and never trip the listeners above.
-    setTimeout(correct, 600);
+    // Google Fonts loads async too (see the fonts.googleapis.com link in
+    // <head>) and swapping the webfont in reflows text the same way an
+    // image landing does, so it's counted the same way — one more thing
+    // pending waits on before the row is actually done moving. Some
+    // older WebViews don't expose document.fonts at all, hence the guard.
+    if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function') {
+      pending++;
+      document.fonts.ready.then(settle);
+    }
+    // Backstop for WebViews that don't fire these signals reliably at all,
+    // or rows/fonts that were already cached and never trip the listeners
+    // above. Longer than a single image's worth of slack (was 600ms)
+    // because fonts is now one of the things it's backstopping — a cold
+    // load's webfont fetch can outlast a cached image by a wide margin, and
+    // firing this before fonts.ready resolves is the same bug again with a
+    // different trigger.
+    setTimeout(correct, 1200);
 
     // Canonicalise to ?p=<slug> (no fragment, tracking params dropped) so a
     // re-share of the address bar carries a clean, durable link.
