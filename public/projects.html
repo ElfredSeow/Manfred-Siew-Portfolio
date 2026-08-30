@@ -4919,7 +4919,12 @@ Agent — <span class="bf-blank">DISCHARGE</span></p>
     // older WebViews don't expose document.fonts at all, hence the guard.
     if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function') {
       pending++;
-      document.fonts.ready.then(settle);
+      // A webfont that never arrives must still release the counter, or the
+      // correction waits on it until the backstop. Rejection is handled with
+      // the same settle as success for that reason, and because an unhandled
+      // one would surface as a page error on a page that otherwise fails
+      // closed everywhere else in this resolver.
+      try { document.fonts.ready.then(settle, settle); } catch (e) { settle(); }
     }
     // Backstop for WebViews that don't fire these signals reliably at all,
     // or rows/fonts that were already cached and never trip the listeners
